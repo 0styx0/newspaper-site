@@ -1,0 +1,174 @@
+
+#story {
+    position: relative;
+    width: 85vw;
+    margin: 0 auto;
+
+
+}
+
+article[contenteditable] .previewHidden {
+    opacity: 0.55;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+
+h4 {
+    margin-bottom: 5em;
+}
+
+#tags {
+    position: relative;
+    top: 60px;
+    padding: 10px;
+    height: 30px;
+    width: 100vw;
+    background-color: #faebd7;
+}
+
+section:first-of-type {
+    margin-top:50px;
+}
+
+
+
+p {
+    text-indent: 1.2em;
+    margin: 1em 0;
+    padding: 0;
+}
+
+table, td, th {
+    border-collapse: collapse;
+    padding: 3px;
+    border: 1px solid black;
+}
+
+
+img {
+    margin-top: 0;
+    max-width: 80%;
+    border-radius: 5px;
+    max-height: 400px;
+}
+
+h4 + img {
+   display: block;
+   margin-left: auto;
+   margin-right: auto; 
+}
+
+
+.storyContainer {
+    margin: 0 auto;
+    margin-top: 140px;
+
+
+    -moz-column-width: 350px;
+    -webkit-column-width: 350px;
+    column-width: 350px;
+
+    -moz-column-gap: 70px;
+    -webkit-column-gap: 70px;
+    column-gap: 70px;
+}
+
+/* makes columns even */
+.storyContainer p:first-child {
+    margin: 0;
+}
+
+#buttonContainer {
+    
+    position: relative;
+
+    left: 20px;
+    top:70px;
+    z-index: 2;
+}
+
+.break {
+    margin-top: 5em;
+    width: 100vw;
+    background-color: grey;
+    height: 1px;
+}
+
+#comments {
+    max-width: 22em;
+    margin: 10px auto;
+
+}
+
+.comment {
+    margin: 5px 0;
+}
+
+.content {
+    margin-top: 10px;
+}
+
+.author {
+    position: relative;
+    right: 15px;
+    bottom: 15px;
+}
+
+#reply div {
+
+    width: 90%;
+    height: 77%;
+    margin: 0 auto;
+}
+
+#reply.comment {
+    padding: 0;
+    max-width: 24rem;
+    height: 12rem;
+}
+
+
+.comment {
+    padding: 2rem;
+    height: 8rem;
+    background-color: white !important; 
+    border: 3px solid black;
+    position: relative;
+}
+
+.deleteReply {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: red;
+    color: white;
+}
+
+#reply {
+    display: none;
+}
+
+@media print {
+    
+    nav {
+        display: none;
+    }
+
+    div:not(.storyContainer) {
+        display: none;
+    }
+
+    body {
+        background-color: white;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        text-shadow: none;
+    }
+
+    h1, h2, h3 {
+        margin-top: 7vh;
+    }
+}
