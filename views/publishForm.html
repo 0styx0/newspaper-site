@@ -1,0 +1,45 @@
+
+<script defer src="/scripts/ckeditor/ckeditor.js"></script>
+<script defer type="text/javascript" src="/scripts/execCommands.min.js"></script>
+<script defer src="/scripts/publish.js"></script>
+
+  <h1> Publish Story </h1>
+
+
+  <form name="fileForm" id="uploadForm" action="/api/story" method="post" >
+
+      <label id="labelUser"> Page Name:
+          <input type="text" id="name" autofocus name="name" pattern="^[\sa-zA-Z0-9_-]+$" maxlength="75" title="Must only contain letters, numbers, -, _, and spaces" placeholder="mystory" required />
+          <abbr title="This article will be located at tabceots.com/issue/n/story/name_you_enter
+(where n is the issue number). Can be up to 75 characters long (some non-word characters such as spaces may count as more).">?</abbr>
+      </label>
+
+      <br />
+
+      <label> Tags:
+          <select name="type[]" id="tag" multiple="multiple" required >
+              <option value="news">News</option>
+              <option value="reaction">Reaction</option>
+              <option value="opinion">Opinion</option>
+               <option value="poll">Poll</option>
+               <option value="features">Features</option>
+               <option value="sports">Sports</option>
+               <option value="politics">Politics</option>
+               <option value="other">Other</option>
+
+          </select>
+      </label>
+
+      <br />
+
+
+      <label id="txtLabel"> Article: </label>
+      <button id="autoformat" type="button">Auto Format</button>
+      <textarea id="txtArea" name="txtArea" placeholder="Body Goes Here"></textarea>
+
+
+
+      <input type="submit" class="submit" name="create" value="Submit" />
+
+
+</form>

@@ -1,0 +1,41 @@
+<script defer src="/scripts/u.js"></script>
+
+<div class='container tableContainer'>
+
+<form id="journalistTable" method="post" action="/api/userGroup">
+    <h1 class='contriH1'>Journalists</h1>
+
+    <label for="sortBy">Sort By:
+        <select name="sortBy">
+            <option value="Last Name">Last Name</option>
+            <option value="Level" class="mustBeLoggedIn">Level</option>
+            <option value="Articles">Articles</option>
+            <option value="Views">Views</option>
+        </select>
+    </label>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th class="mustBeLoggedIn">Level</th>
+                <th>Articles</th>
+                <th>Views</th>
+                <th class="mustBeLevelTwo danger">Delete</th>
+            </tr>
+        </thead>
+    </table>
+
+    <label class="mustBeLoggedIn">Password:
+        <input name="pass" value="" type="password" required />
+    </label>
+    <input class="mustBeLoggedIn" name="" value="Modify Users" type="submit" />
+</form>
+</div>
+
+<div id="templates">
+    <select name="lvl[]"></select>
+    <input type="checkbox" name="delAcc[]" />
+    <input type="hidden" name="name[]" />
+</div>

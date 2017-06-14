@@ -1,0 +1,47 @@
+<script defer src="/scripts/signup.js"></script>
+
+<div class="container">
+<h1> Sign Up </h1>
+
+<form id="signupForm" action="/api/user" method="post" >
+
+    <label> Username:
+        <input class="username" id="username" autofocus name="username" type="text" pattern="[\w._-]+" title="Must be letters, numbers, ., _, or -" placeholder="jpulitzer" required />
+        <abbr title="Must not contain spaces">?</abbr>
+    </label>
+
+    <label>
+        Full Name:
+        <input type="text" autocapitalize="words" name="fullName" pattern="^[a-zA-Z.-]+\s[a-zA-Z-]+(\s[a-zA-Z]+)?$" title="First, middle initial (optional), last" placeholder="Edgar A Poe" required/>
+        <abbr title="Must contain only uppercase, lowercase, or periods and must be at least 2 words (middle name should be left as a 1 letter initial)">?</abbr>
+    </label>
+
+    <label> Password:
+        <input name="password" id="password" type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*).{6,}$" required />
+        <abbr title="Password must contain at least: 1 uppercase, 1 lowercase, 1 number, 6 character">?</abbr>
+    </label>
+
+    <label> Confirm Password:
+        <input name="confirmation" id="passConf" type="password" required/>
+        <abbr title="Must be the same as the password">?</abbr>
+    </label>
+
+    <label> Email:
+        <input name="email" id="email" type="email" pattern="^[^@]+@tabc\.org$" placeholder="example@tabc.org" required/>
+        <abbr title="Must be your TABC email.">?</abbr>
+    </label>
+
+
+   <label id="signupLvl" class="mustBeLoggedIn"> Level:
+                      <select name="lvl">
+
+                     </select>
+                    </label>
+
+              <input type="hidden" name="lvl" value="1" />
+
+
+    <input type="submit" class="submit" name="create" value="Sign Up" />
+</form>
+
+</div>

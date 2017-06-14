@@ -1,0 +1,115 @@
+<script defer src="/scripts/profile.js"></script>
+
+<div class='container tableContainer'>
+
+    <h1 class='contriH1'>Settings</h1>
+
+
+<form method='post' action=''>
+
+
+<table id="basicInfo">
+
+    <thead>
+        <tr>
+            <th class="onlyForOwnUser">Username</th>
+            <th>Name</th>
+            <th>Level</th>
+            <th>Articles</th>
+            <th>Views</th>
+        </tr>
+    </thead>
+    <tbody>
+   </tbody>
+
+</table>
+</form>
+</div>
+
+
+
+
+<div class="container tableContainer onlyForOwnUser">
+
+    <h1 class="contriH1">Options</h1>
+
+  <form method="post" action="/api/user">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>2FA</th>
+                <th>Notifications</th>
+                <th><span class="danger">Delete Account</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input name="userEmail" pattern="^[^@]+@tabc\.org$" type="email"></td>
+                <td><input name="2fa" type="checkbox"></td>
+                <td><input name="notifications" type="checkbox"></td>
+                <td><input name="delAcc" type="checkbox"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <label>Password:
+        <input name="pass" value="" type="password">
+    </label>
+
+    <input name="emailSub" value="Submit" type="submit">
+
+  </form>
+
+</div>
+
+<div class='container onlyForOwnUser'>
+    <h1>Change Password</h1>
+    <form action='/api/user' method='post'>
+
+           <label>New Password
+               <input type="password" name="newPass" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*).{6,}$" required id="password" />
+           </label>
+           <label>Confirm Password
+               <input type="password" name="passConf" required id='passConf' />
+           </label>
+           <label>Old Password
+               <input type="password" name="password" required />
+           </label>
+           <input type="submit" name="changePass" value="Change Password" />
+
+    </form>
+</div>
+
+
+<div class='container tableContainer'>
+
+<h1 class='contriH1'>Articles</h1>
+
+<form method='post' action='/api/articleGroup'>
+
+
+    <table id="articleInfo">
+
+        <thead>
+            <tr>
+                <th>Article</th>
+                <th>Published</th>
+                <th>Type</th>
+                <th>Views</th>
+                <th class="danger onlyForOwnUser">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+    </tbody>
+
+    </table>
+
+
+    <label class="onlyForOwnUser">Password:
+        <input name="pass" value="" type="password">
+    </label>
+    <input class="onlyForOwnUser" type="submit" name="submit" value="Save" />
+</form>
+</div>

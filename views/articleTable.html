@@ -1,0 +1,58 @@
+<script defer src="/scripts/modifyArticles.js"></script>
+
+<div class="container tableContainer">
+    <h1 class="contriH1">Modify Articles</h1>
+
+    <form action="" method="post" id="modForm">
+
+        <label> Issue Number:
+            <input min="1" id="issueInpt" class="issue" type="number" />
+            <button type="button" >Change</button> <!--placeholder so dumb users have somewhere to click-->
+         </label>
+
+    </form>
+<div>
+
+    <form method="post" id="articleForm" action="/api/articleGroup">
+
+        <table id="articleTable">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Date Created</th>
+                    <th>Uploaded By</th>
+                    <th>Type</th>
+                    <th>Views</th>
+                    <th>Display Order</th>
+                    <th class="danger">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <input type="hidden" name="issue" class="issue" />
+        <input type="hidden" name="password" id="copycat" />
+    </form>
+
+    <form action="/api/issue" id="updateIssueForm">
+        <label>Issue Name:
+            <input name="issueName" value="" type="text" >
+        </label>
+
+        <label>Public:
+            <select name="pub" formaction="/api/issue">
+                <option value="">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </label>
+
+        <label>Password:
+            <input name="password" value="" id="leader" type="password" required />
+        </label>
+
+        <input type="hidden" name="issue" class="issue" />
+        <input name="" value="Modify" type="submit" />
+    </form>
+
+</div>
