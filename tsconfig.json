@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "sourceMap": true,
+        "allowJs": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strict": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "forceConsistentCasingInFileNames": true,
+        /*"noEmitOnError": true,*/
+        "outDir": "./scripts/generatedJS/"
+    },
+
+    "include": [
+        "./public/scripts/**/*.ts"
+    ]
+}
