@@ -1,0 +1,24 @@
+{
+  "name": "journalism-node",
+  "version": "0.0.0",
+  "description": "Attempt to learn nodeJS through copying existing functionality from my eyeStorm repo, converting PHP to node",
+  "main": "public/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DovidM/eyeStorm-nodeJS.git"
+  },
+  "keywords": [
+    "website",
+    "nodeJS",
+    "beginner-project"
+  ],
+  "author": "DovidM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DovidM/eyeStorm-nodeJS/issues"
+  },
+  "homepage": "https://github.com/DovidM/eyeStorm-nodeJS#readme"
+}
