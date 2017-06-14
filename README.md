@@ -1,2 +1,2 @@
 # eyeStorm-nodeJS
-nodeJS version of my eyeStorm repo
+Attempt to learn nodeJS through copying existing functionality from my eyeStorm repo, converting PHP to node
