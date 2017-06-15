@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
-const Promise = require("bluebird");
-const db = Promise.promisifyAll(require("../../controller/classes/db"));
+const db = require("../../controller/classes/db");
 
 
 router.all("/", async function(req, res, next) {
