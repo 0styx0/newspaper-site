@@ -1,8 +1,12 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 
-router.all("/", function(req, res, next) {
-    res.render("mainPage", {title: "other"});
+const Promise = require("bluebird");
+const db = Promise.promisifyAll(require("../../controller/classes/db"));
+
+
+router.all("/", async function(req, res, next) {
+
+    res.send(await db.select('ID').getAsync('USERS'));
 });
 
 module.exports = router;
