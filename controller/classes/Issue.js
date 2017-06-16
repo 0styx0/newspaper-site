@@ -107,7 +107,7 @@ module.exports = class Issue {
 
         const maxIssue = (UserInstance.isLoggedIn()) ? Math.max(await this.getMax(true), await this.getMax()) : await this.getMax(true);
 
-        const issueNum = (data.issueNum) ? maxIssue : data.issueNum;
+        const issueNum = (data.issueNum) ? data.issueNum : maxIssue;
 
         // if there's no issue
         if (!issueNum) {
@@ -210,7 +210,7 @@ module.exports = class Issue {
 
         if (!issueNum || (!tagExists && /^(\d+)|all$/.test(issueNum))) {
 
-            if (issueNum > maxIssue || issueNum === "") {
+            if (issueNum > maxIssue || isNaN(+issueNum)) {
 
                 issueNum = maxIssue;
 
@@ -231,9 +231,11 @@ module.exports = class Issue {
             slides = await slidePrep[0];
         }
 
-        (await slides).map(elt => elt.img_url = elt.img_url.toString());
+        if (await slides) {
+            slides.map(elt => elt.img_url = elt.img_url.toString());
+        }
 
-        return (slides) ? await slides : [];
+        return (slides) ? slides : [];
     }
 
     /**
