@@ -24,7 +24,7 @@ fetch(`../api/previews?issueNum=${num}`, {
     document.getElementById("issueName").textContent = parsedData.name;
 
     // if no articles in the issue yet, make it the max
-    const currentIssue = parsedData.articles.length > 0 ? parsedData.articles[0].ISSUE : parsedData.maxIssue;
+    const currentIssue = parsedData.articles.length > 0 ? parsedData.articles[0].issue : parsedData.maxIssue;
 
     setupPreviews(parsedData.articles);
     createSlideshow(parsedData.slides);
@@ -47,9 +47,9 @@ function setupPreviews(articlePreviews = []) {
             const previewBoxClone = previewBox.cloneNode(true);
             previewBoxClone.removeAttribute("id");
 
-            previewBoxClone.querySelector(".content").innerHTML = article.LEDE;
-            previewBoxClone.querySelector("a.small").href = `/issue/${article.ISSUE}/story/${article.URL}`;
-            previewBoxClone.querySelector("span.small").textContent = `(${article.VIEWS} views)`;
+            previewBoxClone.querySelector(".content").innerHTML = article.lede;
+            previewBoxClone.querySelector("a.small").href = `/issue/${article.issue}/story/${article.url}`;
+            previewBoxClone.querySelector("span.small").textContent = `(${article.views} views)`;
 
             document.getElementById("mainContent").appendChild(previewBoxClone);
         });
@@ -75,8 +75,8 @@ function createSlideshow(slideInfo = []) {
 
        slideInfo.forEach(function(picArray, ind) {
 
-           const decodedPics = JSON.parse(picArray.IMG_URL);
-           const show = JSON.parse(picArray.SLIDE_IMG);
+           const decodedPics = JSON.parse(picArray.img_url);
+           const show = JSON.parse(picArray.slide_img);
 
            decodedPics.forEach(function(pic, indTwo) {
 
@@ -84,9 +84,9 @@ function createSlideshow(slideInfo = []) {
                    return;
                }
 
-               const img = `<img src="${pic}" alt="Picture from ${picArray.URL}" id="${++counter}" class="slideshowPic" />`;
+               const img = `<img src="${pic}" alt="Picture from ${picArray.url}" id="${++counter}" class="slideshowPic" />`;
 
-               const picWithLink = `<a href='/issue/${picArray.ISSUE}/story/${picArray.URL}'>${img}</a>`;
+               const picWithLink = `<a href='/issue/${picArray.issue}/story/${picArray.url}'>${img}</a>`;
 
                document.getElementById("slideLink").innerHTML += picWithLink;
 

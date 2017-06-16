@@ -1,13 +1,15 @@
 
 const dbInfo = require('../../config').DB;
 
-const Promise = require("bluebird");
 
-module.exports = Promise.promisifyAll(require("node-querybuilder").QueryBuilder({
+const bluebird = require("bluebird");
+const  mysql = require('mysql2/promise');
+
+module.exports = mysql.createConnection({
     "host": dbInfo.HOST,
     "port": dbInfo.PORT,
     "user": dbInfo.USER,
     "password": dbInfo.PASS,
-    "database": dbInfo.NAME,
-    "debug": true
-}, 'mysql', 'single'));
+    "database": dbInfo.NAME
+  });
+

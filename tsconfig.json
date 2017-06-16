@@ -14,7 +14,7 @@
         /*"noEmitOnError": true,*/
         "outDir": "./scripts/generatedJS/"
     },
-
+    
     "include": [
         "./public/scripts/**/*.ts"
     ]
