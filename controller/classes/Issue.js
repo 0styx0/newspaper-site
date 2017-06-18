@@ -146,7 +146,7 @@ module.exports = class Issue {
 
             getFrom = (getFrom == "all") ? maxIssue : getFrom;
 
-            const issueToGet = (!getFrom || (getFrom + 1) > maxIssue) ? maxIssue : getFrom;
+            const issueToGet = (!getFrom || (+getFrom + 1) > maxIssue) ? maxIssue : getFrom;
 
             pageinfo = await asyncDB.query(`SELECT url, lede, views, issue
                                              FROM pageinfo
