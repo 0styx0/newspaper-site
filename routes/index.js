@@ -11,6 +11,8 @@ function sendMainPage(req, res, next) {
   res.render('mainPage', {title: "Storm News"});
 };
 
-router.get(/issue\/\d+?\/story\/.+/, (req, res) => res.render('story', {title: req.path}));
+router.get(/issue\/\d+?\/story\/.+/, (req, res) => res.render('story', {
+  title: decodeURIComponent(req.path.split('/')[4])
+}));
 
 module.exports = router;
