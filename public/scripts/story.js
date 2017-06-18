@@ -80,7 +80,7 @@ function setupCommentsCreated(parsedData) {
 
     let comments = "";
 
-    parsedData.COMMENTS.forEach(function(comment) {
+    parsedData.comments.forEach(function(comment) {
 
         comments += `<article class="comment" id="${comment.id}">
                         <span class="author">
@@ -88,7 +88,7 @@ function setupCommentsCreated(parsedData) {
                         </span>
                         <div class="content">${comment.content}</div>`;
 
-        if (comment.AUTHORID == jwt.id || jwt.level > 2) {
+        if (comment.authorid == jwt.id || jwt.level > 2) {
             comments += `<button class="deleteReply">Delete</button>`;
         }
 
