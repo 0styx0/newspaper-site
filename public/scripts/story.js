@@ -20,14 +20,14 @@ fetch(`../../../api/story?name=${artInfo.name}&issue=${artInfo.issue}`, {
     const loggedIn = !!jwt.id;
 
     // puts the article's id as id of comment reply
-    document.getElementsByClassName("content")[0].id = parsedData.ID;
+    document.getElementsByClassName("content")[0].id = parsedData.id;
 
 
     setupCommentsCreated(parsedData);
 
     setupReplying(loggedIn);
 
-    setupArticle(parsedData.BODY, parsedData.TAGS, parsedData.CAN_EDIT);
+    setupArticle(parsedData.body, parsedData.tags, parsedData.can_edit);
 });
 
 
@@ -82,11 +82,11 @@ function setupCommentsCreated(parsedData) {
 
     parsedData.COMMENTS.forEach(function(comment) {
 
-        comments += `<article class="comment" id="${comment.ID}">
+        comments += `<article class="comment" id="${comment.id}">
                         <span class="author">
-                            <a href="/u/${comment.USERNAME}">${comment.AUTHOR_NAME}</a>
+                            <a href="/u/${comment.username}">${comment.author_name}</a>
                         </span>
-                        <div class="content">${comment.CONTENT}</div>`;
+                        <div class="content">${comment.content}</div>`;
 
         if (comment.AUTHORID == jwt.id || jwt.level > 2) {
             comments += `<button class="deleteReply">Delete</button>`;
