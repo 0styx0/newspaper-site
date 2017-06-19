@@ -35,4 +35,8 @@ router.get('/login', () => serve('stormLogin', 'Login'));
 
 router.get('/publish', () => serve('publishForm', 'Publish'));
 
+router.get('/mission', () => serve('missionView', 'Mission'));
+
+router.get('/issue', () => serve('issueTable', 'Issues'));
+
 module.exports = router;
