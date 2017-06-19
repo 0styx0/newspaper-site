@@ -19,4 +19,14 @@ router.get("/:issueNum?", async function(req, res) {
     });
 });
 
+router.put('*', async function(req, res) {
+
+    const ArticleInstance = new Article();
+    await ArticleInstance.defineInfoFor(req.body.issue, decodeURIComponent(req.body.name));
+    console.log('here');
+    ArticleInstance.edit(req.body.edit).then(() => ArticleInstance.destruct());
+
+    res.send();
+});
+
 module.exports = router

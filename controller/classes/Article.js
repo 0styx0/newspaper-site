@@ -32,8 +32,8 @@ module.exports = class Article {
 
         asyncDB.query(`UPDATE pageinfo SET created = ?, url = ?, lede = ?, img_url = ?, body = ?, issue = ?,
                         views = ?, display_order = ?, slide_img = ? WHERE id = ?`,
-                           [this._created, this._url, this._lede, json_encode(this.__pics), this._body, this._issue,
-                            this._views, this._displayOrder, json_encode(this.__slideImg), this._id]);
+                           [this._created, this._url, this._lede, JSON.stringify(this._pics), this._body, this._issue,
+                            this._views, this._displayOrder, JSON.stringify(this._slideImg), this._id]);
 
         this._tags.push(null, null); // in case of less than 3 tags
 
@@ -131,8 +131,8 @@ module.exports = class Article {
 
         await asyncDB.query(`INSERT INTO pageinfo (issue, created, url, lede, body, img_url,
                            authorid, slide_img) VALUES(?, CURDATE(), ?, ?, ?, ?, ?, ?)`,
-                           [this._issue, this._url, this._lede, this._body, json_encode(this._pics),
-                           token.id, json_encode(this._slideImg)]);
+                           [this._issue, this._url, this._lede, this._body, JSON.stringify(this._pics),
+                           token.id, JSON.stringify(this._slideImg)]);
 
        asyncDB.query(`INSERT INTO tags (art_id, tag1, tag2, tag3)
                       VALUES((SELECT id FROM pageinfo WHERE url = ? AND issue = ?), ?, ?, ?)`,
@@ -156,7 +156,7 @@ module.exports = class Article {
       *
       * @param body - article (string)
       */
-    edit(body) {
+    async edit(body) {
 
         const UserInstance = new User();
         const token = UserInstance.getJWT();
@@ -281,14 +281,16 @@ module.exports = class Article {
 
        const pics = [];
        let match;
+       const regex = /src="([^"]+)"/gi;
 
-       while (match = /src="([^"]+)"/i.exec(filteredBody)) {
+
+       while ((match = regex.exec(filteredBody)) !== null) {
            pics.push(match[1]);
        }
 
        this._pics = this._validatePics(pics);
 
-       this._slideImg.fill(1, 0, this._pics.length - 1);
+       this._slideImg.fill(1, 0, Math.max(0, this._pics.length - 1));
 
 
        if (!this._pics && !pics)  {
@@ -297,7 +299,7 @@ module.exports = class Article {
 
        this._body = filteredBody.replace(/src="[^"]+"/gi, "data-src");
 
-       const images = this._body.match(/<img.[^>]+/gi);
+       const images = this._body.match(/<img.[^>]+/gi) || [];
 
        for (let i = 0; i < images.length; i++) {
 
@@ -332,7 +334,8 @@ module.exports = class Article {
                             FROM pageinfo
                             LEFT JOIN issues
                             ON pageinfo.issue = issues.num
-                            LEFT JOIN tags ON tags.art_id = pageinfo.id
+                            LEFT JOIN tags
+                            ON tags.art_id = pageinfo.id
                             WHERE pageinfo.issue = ? AND pageinfo.url = ?`, [filteredIssue, filteredName]);
 
 
@@ -341,7 +344,6 @@ module.exports = class Article {
         }
 
         const dbVals = await allInfo[0][0];
-
         this._isPublic = dbVals.ispublic;
         this._displayOrder = dbVals.display_order;
         this._slideImg = JSON.parse(dbVals.slide_img);
@@ -555,7 +557,7 @@ module.exports = class Article {
             return false;
         }
 
-        return this.stripTags(piece);
+        return this.stripTags(piece).replace(/<section>|<\/section>/gi, ""); // sections are added in js to format
     }
 
     /**
@@ -598,17 +600,17 @@ module.exports = class Article {
 
                 fs.writeFile(url + `${i}.png`, imgData);
 
-                pics[key] = `/images/issue/${this._issue}/${this._id}/${i}.png`;
+                pic = `/images/issue/${this._issue}/${this._id}/${i}.png`;
                 i++;
             }
 
 
-            const imgFormat = (/^\//.test(pics[key])) ? "data" : foundPic[1]; // data uri or local imags
+            const imgFormat = (/^\//.test(pic)) ? "data" : foundPic[1]; // data uri or local imags
 
-            if (!new Url(pics[key]) ||
+            if (!/^https?/.test(pic) ||
                (acceptedImgExt.indexOf(imgFormat) == -1 && (pic.indexOf("googleusercontent") == -1))) {
 
-                if (!/^\//.test(pics[key])) {
+                if (!/^\//.test(pic)) {
 
                     Utilities.setHeader(400, "image");
                     return false;
@@ -672,7 +674,7 @@ module.exports = class Article {
                 return false;
             }
 
-            tags[key] = Utilities.filter(tag);
+            tag = Utilities.filter(tag);
         }
 
         return [...new Set(tags)];
@@ -728,13 +730,13 @@ module.exports = class Article {
 
             const cookie = _COOKIE['pagesViewed'];
             const cookie = stripslashes(cookie);
-            const savedCardArray = json_decode(cookie, true);
+            const savedCardArray = JSON.parse(cookie, true);
 
             if (!in_array(this.issue . this.url, savedCardArray)) {
 
                 savedCardArray[] = this.issue . this.url;
 
-                const json = json_encode(savedCardArray);
+                const json = JSON.stringify(savedCardArray);
 
                 setcookie('pagesViewed', json, null, "/");
 

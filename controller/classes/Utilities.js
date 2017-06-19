@@ -22,7 +22,7 @@ module.exports = class Utilities {
 
     static setHeader(num, thing) {
         console.warn("BAD THING", num, thing);
-        Utilities.res.status(num).send(thing);
+        Utilities.res.status(num, thing);
     }
 
     static setCookies(name, value, expires) {
