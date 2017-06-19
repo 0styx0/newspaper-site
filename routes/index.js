@@ -1,13 +1,11 @@
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
+const router = express.Router();
+const jwt = require('jwt-simple');
 const Utilities = require('../controller/classes/Utilities');
+const JWT = require('../config.json').JWT;
 
-/* home page. */
-router.all('/', sendMainPage);
-router.all('/issue/[0-9]+?', sendMainPage);
-router.all('/tag/[a-zA-Z]+', sendMainPage);
 
+// so can do stuff with cookies later
 router.use(function (req, res, next) {
 
     Utilities.req = req;
@@ -15,26 +13,30 @@ router.use(function (req, res, next) {
     next();
 });
 
-const jwt = require('jwt-simple');
-const JWT = require('../config.json').JWT;
 
 function getJWT(req) {
-  const cookie = req.cookies.jwt;
 
+  const cookie = req.cookies.jwt;
   return (cookie) ? jwt.decode(req.cookies.jwt, JWT.SECRET)[1] : {};
 }
 
-function sendMainPage(req, res, next) {
-  res.render('template', {title: "Storm News", page: 'mainPage.html', jwt: getJWT(req)});
-};
+function serve(page, title) {
 
-router.get(/issue\/\d+?\/story\/.+/, (req, res) => res.render('template', {
-  title: decodeURIComponent(req.path.split('/')[4]), page: 'story.html', jwt: getJWT(req)
-}));
+  Utilities.res.render('template', {page: page+'.html', title: title, jwt: getJWT(Utilities.req)});
+}
 
-router.get('/login', (req, res) => res.render('template', {title: 'Login', page: 'stormLogin.html', jwt: getJWT(req)}));
+/* home page. */
+const sendMainPage = () => serve('mainPage', 'Storm News')
+router.get('/', sendMainPage);
+router.get('/issue/[0-9]+?', sendMainPage);
+router.get('/tag/[a-zA-Z]+', sendMainPage);
 
 
-router.get('/publish', (req, res) => res.render('template', {title: 'Publish', page: 'publishForm.html', jwt: getJWT(req)}));
+
+router.get(/issue\/\d+?\/story\/.+/, (req) => serve('story', decodeURIComponent(req.path.split('/')[4])));
+
+router.get('/login', () => serve('stormLogin', 'Login'));
+
+router.get('/publish', () => serve('publishForm', 'Publish'));
 
 module.exports = router;

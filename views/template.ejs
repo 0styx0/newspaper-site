@@ -78,9 +78,10 @@
                                 <input id="logoutInpt" type="submit" name="logout" value="Log Out" />
                             </form>
                         </li>
-                        <li class="profile"><a href="/u/<%jwt.email%>"><%jwt.email%></a></li>
+                        <li class="profile"><a href="/u/<%- jwt.email %>"><%- jwt.email %></a></li>
                <% } %>
          <% } %>
+         <% jwt %>
     </ul>
 
 </nav>
