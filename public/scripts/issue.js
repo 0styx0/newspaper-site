@@ -16,8 +16,8 @@ fetch("../api/issue", {
 
         for (const bit in issue) {
 
-            if (bit == "NAME") {
-                issue[bit] = `<a href="/issue/${issue.NUM}">${issue[bit]}</a>`;
+            if (bit == "name") {
+                issue[bit] = `<a href="/issue/${issue.num}">${issue[bit]}</a>`;
             }
 
             trHTML += `<td>${issue[bit] || "N/A"}</td>`;

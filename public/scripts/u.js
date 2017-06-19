@@ -55,10 +55,10 @@ fetch("/api/userGroup", {
 
     tableData.forEach(function(row, i) {
 
-        const userId = row.ID;
-        delete row.ID;
-        const profileLink = row.PROFILE_LINK;
-        delete row.PROFILE_LINK;
+        const userId = row.id;
+        delete row.id;
+        const profileLink = row.profile_link;
+        delete row.profile_link;
 
         let tr = document.createElement("tr");
 
@@ -79,14 +79,14 @@ fetch("/api/userGroup", {
             const tdVal = row[cell];
             const td = document.createElement("td");
 
-            if (cell == "NAME") {
+            if (cell == "name") {
 
                 row[cell] = document.createElement("a");
                 row[cell].href = `/u/${profileLink}`;
                 row[cell].textContent = tdVal;
             }
 
-            if (cell == "LEVEL" && tdVal < userLevel) { // can't change somebody who's the same level as you
+            if (cell == "level" && tdVal < userLevel) { // can't change somebody who's the same level as you
 
 
                 const hiddenClone = hiddenIdentifier.cloneNode(true);
