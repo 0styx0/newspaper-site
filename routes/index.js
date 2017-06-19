@@ -10,6 +10,18 @@ router.use(function (req, res, next) {
 
     Utilities.req = req;
     Utilities.res = res;
+
+    const jwt = getJWT(req);
+
+    const needToBeLoggedInFor = {
+      '/modifyArticles': 3,
+      '/publish': 1
+    };
+
+    if (needToBeLoggedInFor[req.url] && (!jwt.level || jwt.level < needToBeLoggedInFor[req.url])) {
+      return Utilities.setHeader(401);
+    }
+
     next();
 });
 
@@ -38,5 +50,13 @@ router.get('/publish', () => serve('publishForm', 'Publish'));
 router.get('/mission', () => serve('missionView', 'Mission'));
 
 router.get('/issue', () => serve('issueTable', 'Issues'));
+
+router.get('/u', () => serve('journalistTable', 'Journalists'));
+
+router.get('/signup', () => serve('signupForm', 'Sign Up'));
+
+router.get(/^\/u\/\w+$/, () => serve('settingsTable', 'Profile'));
+
+router.get('/modifyArticles', () => serve('articleTable', 'Modify Articles'));
 
 module.exports = router;

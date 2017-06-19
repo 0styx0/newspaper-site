@@ -22,6 +22,7 @@ module.exports = class Utilities {
 
     static setHeader(num, thing) {
         console.warn("BAD THING", num, thing);
+        Utilities.res.status(num).send(thing);
     }
 
     static setCookies(name, value, expires) {
@@ -41,7 +42,7 @@ module.exports = class Utilities {
             Utilities.setHeader(500, 'cookie');
             return false;
         }
-        
+
         const CookieInstance = new Cookie(Utilities.req, Utilities.res);
         return CookieInstance.get(name);
     }

@@ -5,6 +5,7 @@ const previews = require('./previews');
 const story = require('./story');
 const userStatus = require('./userStatus');
 const issue = require('./issue');
+const userGroup = require('./userGroup');
 
 // for jwt getting and setting
 router.use(function (req, res, next) {
@@ -19,5 +20,6 @@ router.use('/previews', previews);
 router.use('/story', story);
 router.use('/userStatus', userStatus);
 router.use('/issue', issue);
+router.use('/userGroup', userGroup);
 
 module.exports = router;
