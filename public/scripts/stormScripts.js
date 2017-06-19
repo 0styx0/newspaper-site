@@ -296,13 +296,13 @@ multiElementAction(document.querySelectorAll("input + abbr"), function(elt) {
  */
 function getCookies() {
 
-    const decodedCookie = decodeURIComponent(document.cookie);
+   /* const decodedCookie = decodeURIComponent(document.cookie);
 
     const cookieSplit = decodedCookie.split("; ");
 
     const result = {};
 
-    cookieSplit.forEach(function(val, ind) {
+    (cookieSplit || []).forEach(function(val, ind) {
 
         const keyPair = val.split("=");
 
@@ -316,11 +316,11 @@ function getCookies() {
         result[keyPair[0]] = (keyPair[1][0] == "[") ? JSON.parse(keyPair[1]) : keyPair[1];
     });
 
-    return (result.jwt) ? result : {jwt: {
+    return (result.jwt) ? */return  {jwt: [null, {
                                             user: null,
                                             level: null,
                                             id: null
-                                        }
+                                        }]
                                     };
 }
 

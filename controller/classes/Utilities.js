@@ -41,5 +41,7 @@ module.exports = class Utilities {
             Utilities.setHeader(500, 'cookie');
             return false;
         }
+        const CookieInstance = new Cookie(Utilities.req, Utilities.res);
+        return CookieInstance.get(name);
     }
 }
