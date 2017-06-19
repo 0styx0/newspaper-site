@@ -25,13 +25,9 @@ function serve(page, title) {
   Utilities.res.render('template', {page: page+'.html', title: title, jwt: getJWT(Utilities.req)});
 }
 
+
 /* home page. */
-const sendMainPage = () => serve('mainPage', 'Storm News')
-router.get('/', sendMainPage);
-router.get('/issue/[0-9]+?', sendMainPage);
-router.get('/tag/[a-zA-Z]+', sendMainPage);
-
-
+router.get(/^(\/|\/issue\/\d+?|\/tag\/\w+)$/, () => serve('mainPage', 'Storm News'));
 
 router.get(/issue\/\d+?\/story\/.+/, (req) => serve('story', decodeURIComponent(req.path.split('/')[4])));
 
