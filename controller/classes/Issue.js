@@ -331,7 +331,7 @@ module.exports = class Issue {
         this._isPublic = true;
 
         // credit to https://stackoverflow.com/a/28431880
-        this._madePub = today.toISOString().substring(0, 10);
+        this._madePub = (new Date()).toISOString().substring(0, 10);
         return true;
     }
 

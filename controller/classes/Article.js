@@ -700,7 +700,8 @@ module.exports = class Article {
         const UserInstance = new User();
         const token = UserInstance.getJWT();
 
-        return UserInstance.isLoggedIn() && ((!this._isPublic && token.id == this._authorId) || token.level > 2);
+        const canEdit = UserInstance.isLoggedIn() && ((!this._isPublic && token.id == this._authorId) || token.level > 2);
+        return !!canEdit;
     }
 
     async exists(issue, url) {

@@ -1,4 +1,6 @@
 
+const Cookie = require('cookies');
+
 module.exports = class Utilities {
 
     /**
@@ -20,5 +22,24 @@ module.exports = class Utilities {
 
     static setHeader(num, thing) {
         console.warn("BAD THING", num, thing);
+    }
+
+    static setCookies(name, value, expires) {
+
+        if (!Utilities.req || !Utilities.res) {
+            Utilities.setHeader(500, 'cookie');
+            return false;
+        }
+
+        const CookieInstance = new Cookie(Utilities.req, Utilities.res);
+        CookieInstance.set(name, value, {/*signed: true,*/ overwrite: true})
+    }
+
+    static getCookies(name) {
+
+        if (!Utilities.req || !Utilities.res) {
+            Utilities.setHeader(500, 'cookie');
+            return false;
+        }
     }
 }
