@@ -39,6 +39,7 @@ module.exports = class Utilities {
 
         if (!Utilities.req || !Utilities.res) {
             Utilities.setHeader(500, 'cookie');
+            console.log(Utilities.res);
             return false;
         }
         const CookieInstance = new Cookie(Utilities.req, Utilities.res);
