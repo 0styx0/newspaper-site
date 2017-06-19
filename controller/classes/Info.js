@@ -199,7 +199,10 @@ module.exports = class Info {
         const UserInstance = new User();
         const asyncDB = await db;
 
-        const info = await asyncDB.query(`SELECT num, IFNULL(name, 'N/A') AS name, IFNULL(SUM(views), 0) AS views, madepub FROM issues
+        // the SUBSTRING_INDEX is to chop up everything but y-m-d
+        const info = await asyncDB.query(`SELECT num, IFNULL(name, 'N/A') AS name, IFNULL(SUM(views), 0) AS views,
+                                    SUBSTRING_INDEX(madepub, 'T', 1) AS madepub
+                                    FROM issues
                                     LEFT JOIN pageinfo
                                     ON num = issue
                                     WHERE (ispublic = 1 OR ?)
