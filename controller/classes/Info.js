@@ -129,6 +129,7 @@ module.exports = class Info {
                             ORDER BY users.l_name DESC`);
         }
 
+        queryInfo[0].push(token.level);
 
         return queryInfo[0];
     }

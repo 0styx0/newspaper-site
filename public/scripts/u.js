@@ -15,8 +15,8 @@ fetch("/api/userGroup", {
 
 
     const tableData = await data.json();
-    const cookies = getCookies();
-    const userLevel = (cookies.jwt) ? cookies.jwt[1].level : 0;
+    const cookies = await getCookies();
+    const userLevel = (cookies.level) ? cookies.level : 0;
 
 
 
@@ -65,7 +65,7 @@ fetch("/api/userGroup", {
         tbody.appendChild(tr);
 
         // if user is lower level than logged in user, can delete
-        if (row.LEVEL < userLevel) {
+        if (row.level < userLevel) {
             row.delete = deleteCheckbox.cloneNode(true);
             row.delete.value = userId;
         }

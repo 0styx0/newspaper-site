@@ -24,4 +24,11 @@ router.put('*', async function(req, res) {
 
 });
 
+router.get('*', function(req, res) {
+
+    const UserInstance = new User();
+
+    res.send(UserInstance.getJWT());
+});
+
 module.exports = router

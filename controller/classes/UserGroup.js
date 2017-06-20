@@ -64,7 +64,7 @@ module.exports = class UserGroup {
 
         let inClause = '(' + (new Array(idsToDelete.length)).fill('?').join(",") + ')';
 
-        const highestLvl = await asyncDB.catchMistakes(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete])[0][0].max;
+        const highestLvl = await asyncDB.query(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete])[0][0].max;
 
         if (!await UserInstance.checkPassword(password) || highestLvl >= token.level) {
 
@@ -76,11 +76,11 @@ module.exports = class UserGroup {
 
         delParams.unshift("Deleted");
 
-        await asyncDB.catchMistakes(`UPDATE pageinfo SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
+        await asyncDB.query(`UPDATE pageinfo SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
 
-        await asyncDB.catchMistakes(`UPDATE comments SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
+        await asyncDB.query(`UPDATE comments SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
 
-        asyncDB.catchMistakes(`DELETE FROM users WHERE id IN ${inClause}`, [idsToDelete]);
+        asyncDB.query(`DELETE FROM users WHERE id IN ${inClause}`, [idsToDelete]);
 
         Utilities.setHeader(200, "user(s) updated");
         return true;
@@ -106,14 +106,23 @@ module.exports = class UserGroup {
             Utilities.setHeader(401);
             return false;
         }
+        if (usernamesToPromote.length == 0 || !toLevel) {
+            return true;
+        }
 
-        UserInstance.defineInfoFor(token.id, true);
 
-        const inClause = (new Array(usernamesToPromote.length)).fill('?').join(',');
+        const inClause = '(' + (new Array(usernamesToPromote.length)).fill('?').join(',') + ')';
 
-        const maxPreviousLvl = await asyncDB.catchMistakes(`SELECT MAX(level) AS max
+        const maxPreviousLvlQuery = asyncDB.query(`SELECT MAX(level) AS max
                                                        FROM users WHERE username IN ${inClause}`,
-                                                       [usernamesToPromote])[0][0].max;
+                                                       usernamesToPromote);
+       let maxPreviousLvl;
+
+        await Promise.all(
+            [UserInstance.defineInfoFor(token.id, true),
+            maxPreviousLvlQuery.then(query => maxPreviousLvl = query[0][0].max)]
+        );
+
 
         if (!await UserInstance.checkPassword(password) || token.level < 2 || +toLevel > token.level || +maxPreviousLvl >= token.level) {
 
@@ -122,12 +131,10 @@ module.exports = class UserGroup {
         }
 
         const promoteParams = usernamesToPromote;
-        array_unshift(promoteParams, toLevel);
+
         promoteParams.unshift(toLevel);
 
-
-        asyncDB.catchMistakes(`UPDATE users SET level = ? WHERE TRIM(TRAILING '@tabc.org' FROM email) IN ${inClause}`,
-                         [promoteParams]);
+        asyncDB.query(`UPDATE users SET level = ? WHERE TRIM(TRAILING '@tabc.org' FROM email) IN ${inClause}`, promoteParams);
 
         Utilities.setHeader(200, "user(s) updated");
         return true;

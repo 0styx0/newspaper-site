@@ -294,34 +294,18 @@ multiElementAction(document.querySelectorAll("input + abbr"), function(elt) {
 /**
  * @return all cookies split into an array. If a cookie is JSON encoded array it is decoded
  */
-function getCookies() {
+async function getCookies() {
 
-   /* const decodedCookie = decodeURIComponent(document.cookie);
 
-    const cookieSplit = decodedCookie.split("; ");
+    const call = await fetch('/api/userStatus', {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    const result = {};
-
-    (cookieSplit || []).forEach(function(val, ind) {
-
-        const keyPair = val.split("=");
-
-        if (keyPair[0] == "jwt") {
-            const jwt = keyPair[1].split('.')[1]
-                                  .replace('-', '+')
-                                  .replace('_', '/');
-            keyPair[1] = JSON.parse(window.atob(jwt));
-        }
-
-        result[keyPair[0]] = (keyPair[1][0] == "[") ? JSON.parse(keyPair[1]) : keyPair[1];
-    });
-
-    return (result.jwt) ? */return  {jwt: [null, {
-                                            user: null,
-                                            level: null,
-                                            id: null
-                                        }]
-                                    };
+    return call.json();
 }
 
 
