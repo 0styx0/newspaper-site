@@ -104,11 +104,12 @@ module.exports = class ArticleGroup {
         const asyncDB = await db;
         const token = UserInstance.getJWT();
 
-        UserInstance.defineInfoFor(token.id, true);
 
-        const authorId = await asyncDB.query("SELECT authorid FROM pageinfo WHERE id = ?", [artId])[0][0].authorid
+        const authorId = (await asyncDB.query("SELECT authorid FROM pageinfo WHERE id = ?", [artId]))[0][0].authorid
 
         const size = newTag.length;
+
+        await UserInstance.defineInfoFor(token.id, true);
 
         if (!UserInstance.isLoggedIn() ||
             !await UserInstance.checkPassword(pass) ||
@@ -120,6 +121,8 @@ module.exports = class ArticleGroup {
         newTag.push(null, null); // so no undefined indexes
 
         asyncDB.query("UPDATE tags SET tag1 = ?, tag2 = ?, tag3 = ? WHERE art_id = ?", [newTag[0], newTag[1], newTag[2], artId]);
+
+        Utilities.setHeader(200, "article(s) updated");
 
         return true;
     }
@@ -135,10 +138,12 @@ module.exports = class ArticleGroup {
         const asyncDB = await db;
 
         const fId = Utilities.filter(id);
-        fNum = (+num > -1 && !isNaN(+num)) ? num : 0;
+        const fNum = (+num > -1 && !isNaN(+num)) ? num : 0;
 
         asyncDB.query("UPDATE pageinfo SET display_order = ? WHERE id = ?", [fNum, fId]);
 
+
+        Utilities.setHeader(200, "article(s) updated");
         return true;
     }
 
