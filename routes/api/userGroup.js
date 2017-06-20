@@ -20,4 +20,12 @@ router.put('/', function(req, res) {
 
     levels.forEach((nameArr, idx) => UserGroupInstance.promote(nameArr, idx + 1, data.password));
 });
+
+router.delete('/', function(req, res) {
+
+    const UserGroupInstance = new UserGroup();
+    const data = req.body;
+
+    UserGroupInstance.delete(data['delAcc[]'], data.password);
+});
 module.exports = router;

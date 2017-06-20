@@ -50,7 +50,6 @@ module.exports = class UserGroup {
 
         const UserInstance = new User();
         const asyncDB = await db;
-        const Utilities = new Utilities();
         const token = UserInstance.getJWT();
 
 
@@ -60,11 +59,16 @@ module.exports = class UserGroup {
             return false;
         }
 
-        UserInstance.defineInfoFor(token.id, true);
 
         let inClause = '(' + (new Array(idsToDelete.length)).fill('?').join(",") + ')';
 
-        const highestLvl = await asyncDB.query(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete])[0][0].max;
+        const highestLvlQuery = asyncDB.query(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete]);
+        let highestLvl;
+
+        await Promise.all([
+            UserInstance.defineInfoFor(token.id, true),
+            highestLvlQuery.then(result => highestLvl = result[0][0].max)
+            ]);
 
         if (!await UserInstance.checkPassword(password) || highestLvl >= token.level) {
 
@@ -76,9 +80,9 @@ module.exports = class UserGroup {
 
         delParams.unshift("Deleted");
 
-        await asyncDB.query(`UPDATE pageinfo SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
+        await asyncDB.query(`UPDATE pageinfo SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, delParams);
 
-        await asyncDB.query(`UPDATE comments SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, [delParams]);
+        await asyncDB.query(`UPDATE comments SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, delParams);
 
         asyncDB.query(`DELETE FROM users WHERE id IN ${inClause}`, [idsToDelete]);
 
