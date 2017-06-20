@@ -29,4 +29,12 @@ router.put('/', function(req, res) {
 
     return true;
 });
+
+router.delete('/', function(req, res) {
+
+    const ArticleGroupInstance = new ArticleGroup();
+
+    ArticleGroupInstance.delete(req.body['delArt[]'], req.body.password);
+});
+
 module.exports = router;

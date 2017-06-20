@@ -64,13 +64,12 @@ module.exports = class ArticleGroup {
         const asyncDB = await db;
         const UserInstance = new User();
         const token = UserInstance.getJWT();
-        UserInstance.defineInfoFor(token.id, true);
+        await UserInstance.defineInfoFor(token.id, true);
 
 
-        const inForArts = '(' + [].fill('?', 0, ids.length - 1).join(',') + ')';
+        const inForArts = '(' + (new Array(ids.length)).fill('?').join(',') + ')';
 
-        const uniqAuthors = await asyncDB.query(`SELECT DISTINCT authorid FROM pageinfo WHERE id IN ${inForArts}`,
-                                                                                                        [ids])[0];
+        const uniqAuthors = (await asyncDB.query(`SELECT DISTINCT authorid FROM pageinfo WHERE id IN ${inForArts}`, [ids]))[0];
 
 
             // not logged in, less than lvl 3 and not deleting own article, or invalid password
