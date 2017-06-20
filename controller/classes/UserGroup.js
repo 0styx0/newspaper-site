@@ -62,7 +62,7 @@ module.exports = class UserGroup {
 
         UserInstance.defineInfoFor(token.id, true);
 
-        let inClause = '(' + [].fill('?', 0, idsToDelete.length - 1).join(",") + ')';
+        let inClause = '(' + (new Array(idsToDelete.length)).fill('?').join(",") + ')';
 
         const highestLvl = await asyncDB.catchMistakes(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete])[0][0].max;
 
@@ -109,7 +109,7 @@ module.exports = class UserGroup {
 
         UserInstance.defineInfoFor(token.id, true);
 
-        const inClause = [].fill('?', 0, usernamesToPromote.length - 1).join(',');
+        const inClause = (new Array(usernamesToPromote.length)).fill('?').join(',');
 
         const maxPreviousLvl = await asyncDB.catchMistakes(`SELECT MAX(level) AS max
                                                        FROM users WHERE username IN ${inClause}`,

@@ -291,7 +291,7 @@ module.exports = class Article {
 
        this._pics = this._validatePics(pics);
 
-       this._slideImg = [].fill(1, 0, Math.max(0, this._pics.length - 1));
+       this._slideImg = (new Array(Math.max(0, this._pics.length))).fill(1);
 
 
        if (!this._pics && !pics)  {
