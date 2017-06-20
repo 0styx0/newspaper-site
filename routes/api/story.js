@@ -23,10 +23,25 @@ router.put('*', async function(req, res) {
 
     const ArticleInstance = new Article();
     await ArticleInstance.defineInfoFor(req.body.issue, decodeURIComponent(req.body.name));
-    console.log('here');
+
     ArticleInstance.edit(req.body.edit).then(() => ArticleInstance.destruct());
 
     res.send();
 });
 
+router.post('*', async function(req, res) {
+
+    const data = req.body;
+
+    if (!(data.name && data.txtArea && data['type[]'])) {
+
+        Utilities.setHeader(422, 'missing required field');
+        return;
+    }
+
+    const ArticleInstance = new Article();
+
+    res.send(await ArticleInstance.create(data.name, data.txtArea, data['type[]']));
+
+});
 module.exports = router

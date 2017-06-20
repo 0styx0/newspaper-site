@@ -3,6 +3,7 @@ const db = require('./db');
 const Utilities = require('./Utilities');
 const Purifier = require('html-purify');
 const fs = require('fs');
+const Issue = require('./Issue');
 
 module.exports = class Article {
 
@@ -138,8 +139,8 @@ module.exports = class Article {
                       VALUES((SELECT id FROM pageinfo WHERE url = ? AND issue = ?), ?, ?, ?)`,
                       [this._url, this._issue, this._tags[0], this._tags[1], this._tags[2]]);
 
-        const SendMail = new SendMail();
-        SendMail.articlePublished(this.listTags(), this._issue, this._url);    // WHEN GET AROUND, make the tags into a nice list
+      //  const SendMail = new SendMail();
+        //SendMail.articlePublished(this.listTags(), this._issue, this._url);    // WHEN GET AROUND, make the tags into a nice list
 
         Utilities.setHeader(201, "article created");
 
@@ -290,7 +291,7 @@ module.exports = class Article {
 
        this._pics = this._validatePics(pics);
 
-       this._slideImg.fill(1, 0, Math.max(0, this._pics.length - 1));
+       this._slideImg = [].fill(1, 0, Math.max(0, this._pics.length - 1));
 
 
        if (!this._pics && !pics)  {
@@ -666,7 +667,7 @@ module.exports = class Article {
             return false;
         }
 
-        for (const tag of tags) {
+        for (let tag of tags) {
 
             if (typeof tag != 'string') {
 
