@@ -25,10 +25,10 @@ function setupPage(num) {
 
         const [articleInfo, tags, issueInfo] = parsedData;
 
-        document.querySelector("input[name=issueName]").value = issueInfo.NAME;
+        document.querySelector("input[name=issueName]").value = issueInfo.name;
 
         // if issue is public, don't let changes to issue name or public status
-        if (issueInfo.ISPUBLIC == 1) {
+        if (issueInfo.ispublic == 1) {
 
             const pubSelect = document.getElementsByName("pub")[0];
 
@@ -38,8 +38,8 @@ function setupPage(num) {
         }
 
         multiElementAction(document.getElementsByClassName("issue"), (elt) => {
-            elt.max = issueInfo.MAX;
-            elt.value = issueInfo.NUM;
+            elt.max = issueInfo.max;
+            elt.value = issueInfo.num;
         });
 
         setupArticleTable(articleInfo, issueInfo, tags);
@@ -83,24 +83,24 @@ function setupArticleTable(articleInfo, issueInfo, tags) {
 
                 switch (bit) {
 
-                    case "URL":
+                    case "url":
 
-                        td += `<a href="/issue/${issueInfo.NUM}/story/${article.URL}">
+                        td += `<a href="/issue/${issueInfo.num}/story/${article.url}">
                                  ${decodeURIComponent(article[bit])}
                                </a>`;
                         break;
 
-                    case "AUTHOR_NAME":
+                    case "author_name":
 
-                        td += `<a href="/u/${article.AUTHOR_USERNAME}">${article[bit]}</a>`;
+                        td += `<a href="/u/${article.author_username}">${article[bit]}</a>`;
                         break;
 
-                    case "DISPLAY_ORDER":
+                    case "display_order":
 
                         td += `<input type="number" value="${article[bit]}" name="order[]" />`;
                         break;
 
-                    case "TAGS":
+                    case "tags":
 
                         let clone = select;
 
@@ -116,10 +116,10 @@ function setupArticleTable(articleInfo, issueInfo, tags) {
 
                         break;
 
-                    case "ART_ID":
+                    case "art_id":
 
                         td += `<input type="checkbox" value="${article[bit]}" name="delArt[]" />`;
-                        td += `<input type="hidden" name="artId[]" value="${article.ART_ID}" />`;
+                        td += `<input type="hidden" name="artId[]" value="${article.art_id}" />`;
 
                         tr += td + "</td>";
                         break article; // once it reaches here, don't go to rest of object (which is just AUTHOR_USERNAME), which isn't meant for direct user viewing
