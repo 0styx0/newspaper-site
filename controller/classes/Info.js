@@ -83,62 +83,6 @@ module.exports = class Info {
 
 
     /**
-    * @param issue - issue number
-    *
-    * @return info about articles for admins (/modifyArticles), array of associative arrays
-    *  [0] is array of "URL", "CREATED", "AUTHOR_NAME", csv of "TAGS", "VIEWS", "DISPLAY_ORDER", "art_id", "author_username"
-    *  [1] is all tags ever used for articles
-    *  [2] - "NAME", "ISPUBLIC", "NUM", "MAX"
-    */
-    async getPageInfo(issue = null) {
-
-        const UserInstance = new User();
-        const asyncDB = await db;
-        const IssueInstance = new Issue();
-        const token = UserInstance.getJWT();
-
-        if (!UserInstance.isLoggedIn() || token.level < 3) {
-            Utilities.setHeader(401);
-            return false;
-        }
-
-        const max = Math.max(IssueInstance.getMax(true), IssueInstance.getMax());
-
-        const getFrom = (issue && /^\d+?/.test(issue) && issue < max) ? issue : max;
-
-        const query = await asyncDB.query(`SELECT url, created, CONCAT(f_name, ' ', IFNULL(m_name, ''), ' ', l_name) AS author_name,
-                             CONCAT(tag1, IFNULL(CONCAT(', ', tag2), ''), IFNULL(CONCAT(', ', tag3), '')) AS tags, views, display_order,
-                             pageinfo.id AS art_id, username AS author_username
-                             FROM pageinfo
-                             LEFT JOIN users
-                             ON users.id = authorid
-                             LEFT JOIN tags
-                             ON art_id = pageinfo.id
-                             WHERE issue = ?`, [getFrom]);
-
-        const tagQuery = await asyncDB.query("SELECT DISTINCT tag1, tag2, tag3 FROM tags");
-
-        const issueQuery = asyncDB.query("SELECT name, ispublic, num FROM issues WHERE num = ?", [getFrom]);
-
-        const issueInfo = issueQuery[0];
-
-        if (!issueInfo) {
-            return false;
-        }
-
-        maxObj.max = max;
-
-        issueInfo[0] = issueInfo[0].concat(maxObj);
-
-        // merges the multi array of tags into 1 array, removes duplicate values, removes null,
-        // then extracts the values (since the indices are messed up now)
-        const uniqTags = [...new Set([...tagQuery[0]])].filter(elt => elt != null)
-
-
-        return [query[0], uniqTags].concat(issueInfo);
-    }
-
-    /**
       * @return table form with info about all users in the form array[0] = current user's level, rest of indices objects
       */
     async getUsersInfo() {
