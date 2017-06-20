@@ -22,6 +22,7 @@ module.exports = class Issue {
     async defineInfoFor(num = null) {
 
         if (!num || !/^\d+?$/.test(num)) {
+            Utilities.setHeader(422, "missing required field");
             return false;
         }
 
@@ -58,7 +59,7 @@ module.exports = class Issue {
         this._views = dbVals.views;
         this._articles = articleIds;
 
-        return dbVals.name;
+        return true;
     }
 /*
     route(method, data) {
@@ -181,9 +182,13 @@ module.exports = class Issue {
             return false;
         }
 
+
         const asyncDB = await db;
         asyncDB.query(`UPDATE issues SET ispublic = ?, name = ?, madepub = ?
                             WHERE num = ?`, [this._isPublic, this._name, this._madePub, this._num]);
+
+        Utilities.setHeader(200, "issue updated");
+        return true;
     }
 
     /**
@@ -283,7 +288,6 @@ module.exports = class Issue {
         if (!filtName) {
             return false;
         }
-
         this._name = filtName;
         this._settingChanged = true;
 

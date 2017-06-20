@@ -414,7 +414,7 @@ module.exports = class User {
 
 
         const dbVals = await allInfo[0][0];
-
+        
         if (!dbVals.id) {
             return false;
         }

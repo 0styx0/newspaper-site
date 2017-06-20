@@ -20,8 +20,7 @@ module.exports = class Utilities {
         return (args.length == 1) ? res[0] : res;
     }
 
-    static setHeader(num, thing) {
-        console.warn("BAD THING", num, thing);
+    static setHeader(num = 200, thing = '') {
         //Utilities.res.status(num, thing);
         Utilities.res.statusMessage = thing;
         Utilities.res.status(num).end();
