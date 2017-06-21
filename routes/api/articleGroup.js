@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Info = require("../../controller/classes/Info");
+const Utilities = require('../../controller/classes/Utilities');
 
 const ArticleGroup = require('../../controller/classes/ArticleGroup');
 
@@ -15,6 +16,11 @@ router.put('/', function(req, res) {
 
     const ArticleGroupInstance = new ArticleGroup();
     const data = req.body;
+
+    if (!data['artId[]']) {
+        Utilities.setHeader(422, "missing required field");
+        return false;
+    }
 
     for (let i = 0; i < data["artId[]"].length; i++) {
 

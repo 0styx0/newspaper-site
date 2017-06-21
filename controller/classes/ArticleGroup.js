@@ -69,7 +69,8 @@ module.exports = class ArticleGroup {
 
         const inForArts = '(' + (new Array(ids.length)).fill('?').join(',') + ')';
 
-        const uniqAuthors = (await asyncDB.query(`SELECT DISTINCT authorid FROM pageinfo WHERE id IN ${inForArts}`, [ids]))[0];
+
+        const uniqAuthors = (await asyncDB.query(`SELECT DISTINCT authorid FROM pageinfo WHERE id IN ${inForArts}`, ids))[0];
 
 
             // not logged in, less than lvl 3 and not deleting own article, or invalid password
@@ -79,11 +80,11 @@ module.exports = class ArticleGroup {
                 return false;
         }
 
-        asyncDB.query(`DELETE FROM comments WHERE art_id IN ${inForArts}`, [ids])
+        asyncDB.query(`DELETE FROM comments WHERE art_id IN ${inForArts}`, ids)
         .then(() =>
-        asyncDB.query(`DELETE FROM tags WHERE art_id IN ${inForArts}`, [ids]))
+        asyncDB.query(`DELETE FROM tags WHERE art_id IN ${inForArts}`, ids))
         .then(() =>
-        asyncDB.query(`DELETE FROM pageinfo WHERE id IN ${inForArts}`, [ids]));
+        asyncDB.query(`DELETE FROM pageinfo WHERE id IN ${inForArts}`, ids));
 
         return true;
     }
