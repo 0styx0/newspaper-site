@@ -9,6 +9,10 @@ fetch(`../api/user?user=${path[2]}`, {
     }
 }).then(async (data) => {
 
+    if (data.status[0] != 2) {
+        return;
+    }
+    
     const userInfo = await data.json();
 
     const basicInfo = userInfo[0];

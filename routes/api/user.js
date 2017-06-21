@@ -7,8 +7,14 @@ const UserInstance = new User();
 
 router.get("/", async function(req, res) {
 
-    await UserInstance.defineInfoFor(req.query.user);
-    res.send(await UserInstance.getAllUserInfo());
+    if(!await UserInstance.defineInfoFor(req.query.user)) {
+
+        return Utilities.setHeader(404, 'user not found');
+    }
+
+    const info = await UserInstance.getAllUserInfo();
+
+    res.send(info);
 });
 
 router.put('/', async function(req, res) {
@@ -28,10 +34,22 @@ router.put('/', async function(req, res) {
         if (req.body.userEmail) {
             UserInstance.setEmail(req.body.userEmail);
         }
-console.log('sdfs');
+
         UserInstance.destruct();
 
         Utilities.setHeader(200, 'user(s) updated');
+    }
+
+});
+
+router.delete('/', async function(req, res) {
+
+    await UserInstance.defineInfoFor(UserInstance.getJWT().id, true);
+
+    if (await UserInstance.checkPassword(req.body.password)) {
+        UserInstance.destroy(UserInstance.getJWT().id)
+
+        Utilities.setHeader(200, 'user deleted')
     }
 
 });
