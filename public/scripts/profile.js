@@ -16,7 +16,7 @@ fetch(`../api/user?user=${path[2]}`, {
 
     let currentUser;
     try {
-        currentUser = getCookies().jwt[1].id == userInfo[2].id;
+        currentUser = (await getCookies()).id == userInfo[2].id;
     }
     catch (e) {
         currentUser = false;
@@ -33,7 +33,7 @@ fetch(`../api/user?user=${path[2]}`, {
 /**
  * Sets up table containing info found in basicInfo
  *
- * @param basicInfo - object containing NAME, LEVEL, ARTICLES, VIEWS, USERNAME of user whose profile is being viewed
+ * @param basicInfo - object containing name, level, articles, views, username of user whose profile is being viewed
  * @param currentUser - boolean if user is visiting own profile
  */
 function setupBasicInfo(basicInfo, currentUser) {
@@ -52,7 +52,7 @@ function setupBasicInfo(basicInfo, currentUser) {
         let tableCell = `<td>${basicInfo[bit]}</td>`;
 
         // Username field always gets sent, but value is null if user viewing isn't logged in
-        if (bit == "USERNAME" && !basicInfo[bit]) {
+        if (bit == "username" && !basicInfo[bit]) {
 
             tableCell = "";
             continue;
@@ -68,7 +68,7 @@ function setupBasicInfo(basicInfo, currentUser) {
 /**
  * Sets up table with info about articles user has published
  *
- * @param articleInfo - array of objects containing URL, CREATED, TAGS, VIEWS, ART_ID, ISSUE of articles user has published
+ * @param articleInfo - array of objects containing url, created, tags, views, art_id, issue of articles user has published
  * @param currentUser - @see setupBasicInfo
  */
 function setupArticleTable(articleInfo, currentUser) {
@@ -81,20 +81,20 @@ function setupArticleTable(articleInfo, currentUser) {
         let rowHTML = "<tr>";
 
         // issue and id shouldn't appear in the table
-        Object.defineProperty(article, "ISSUE", {
+        Object.defineProperty(article, "issue", {
             enumerable: false
         });
 
-        Object.defineProperty(article, "ART_ID", {
+        Object.defineProperty(article, "art_id", {
             enumerable: false
         });
 
         for (const bit in article) {
 
 
-            if (bit == "URL") {
+            if (bit == "url") {
 
-                article[bit] = `<a href="/issue/${article.ISSUE}/story/${article[bit]}">
+                article[bit] = `<a href="/issue/${article.issue}/story/${article[bit]}">
                                  ${decodeURIComponent(article[bit])}
                                 </a>`;
             }
@@ -106,7 +106,7 @@ function setupArticleTable(articleInfo, currentUser) {
         if (currentUser) {
 
             rowHTML += `<td>
-                            <input type="checkbox" name="delArt[]" value="${article.ART_ID}" />
+                            <input type="checkbox" name="delArt[]" value="${article.art_id}" />
                         </td>`;
         }
 

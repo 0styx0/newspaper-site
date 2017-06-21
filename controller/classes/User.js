@@ -126,7 +126,7 @@ module.exports = class User {
         }
     }*/
 
-    async _getAllUserInfo() {
+    async getAllUserInfo() {
 
         const token = this.getJWT();
 
@@ -141,7 +141,7 @@ module.exports = class User {
             }
                         ];
 
-        const artQuery = await asyncDB.query(`SELECT url, created, CONCAT(tag1, IFNULL(CONCAT(', ', tag2), ''),
+        const artQuery = await asyncDB.query(`SELECT url, SUBSTRING_INDEX(created, 'T', 1) AS created, CONCAT(tag1, IFNULL(CONCAT(', ', tag2), ''),
                     IFNULL(CONCAT(', ', tag3), '')) AS tags, views,
                     pageinfo.id AS art_id, issue
                     FROM pageinfo
@@ -149,7 +149,7 @@ module.exports = class User {
                     ON pageinfo.issue = issues.num
                     JOIN tags
                     ON tags.art_id = pageinfo.id
-                    WHERE authorid = (id FROM users WHERE username = ?) AND (ispublic = 1 OR ?)
+                    WHERE authorid = (SELECT id FROM users WHERE username = ?) AND (ispublic = 1 OR ?)
                     ORDER BY issue, url`, [this._username, this.isLoggedIn()]);
 
 
