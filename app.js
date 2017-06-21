@@ -26,8 +26,11 @@ app.use('/api', require('./routes/api'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
+
+  res.status(404);
   err.status = 404;
-  next(err);
+
+  res.render('template', {page: 'notFound.html', title: 'Error 404', jwt: {level: 0, email: '', id: 0}})
 });
 
 // error handler
