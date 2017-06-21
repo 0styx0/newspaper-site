@@ -1,13 +1,6 @@
 const router = require('express').Router();
 const Utilities = require('../../controller/classes/Utilities');
 
-const previews = require('./previews');
-const story = require('./story');
-const userStatus = require('./userStatus');
-const issue = require('./issue');
-const userGroup = require('./userGroup');
-const articleGroup = require('./articleGroup');
-const mission = require('./mission');
 
 // for jwt getting and setting
 router.use(function (req, res, next) {
@@ -18,12 +11,12 @@ router.use(function (req, res, next) {
 });
 
 // split up route handling
-router.use('/previews', previews);
-router.use('/story', story);
-router.use('/userStatus', userStatus);
-router.use('/issue', issue);
-router.use('/userGroup', userGroup);
-router.use('/articleGroup', articleGroup);
-router.use('/mission', mission);
+router.use('/previews', require('./previews'));
+router.use('/story', require('./story'));
+router.use('/userStatus', require('./userStatus'));
+router.use('/issue', require('./issue'));
+router.use('/userGroup', require('./userGroup'));
+router.use('/articleGroup', require('./articleGroup'));
+router.use('/mission', require('./mission'));
 
 module.exports = router;
