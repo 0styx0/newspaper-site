@@ -20,10 +20,14 @@ module.exports = class Utilities {
         return (args.length == 1) ? res[0] : res;
     }
 
-    static setHeader(num = 200, thing = '') {
+    static setHeader(num = 200, thing = '', end = true) {
         //Utilities.res.status(num, thing);
         Utilities.res.statusMessage = thing;
-        Utilities.res.status(num).end();
+        Utilities.res.status(num);
+
+        if (end) {
+            Utilities.res.end();
+        }
     }
 
     static setCookies(name, value, expires) {

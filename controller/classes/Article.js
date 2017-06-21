@@ -4,6 +4,7 @@ const Utilities = require('./Utilities');
 const Purifier = require('html-purify');
 const fs = require('fs');
 const Issue = require('./Issue');
+const SendMail = require('./SendMail');
 
 module.exports = class Article {
 
@@ -139,11 +140,12 @@ module.exports = class Article {
                       VALUES((SELECT id FROM pageinfo WHERE url = ? AND issue = ?), ?, ?, ?)`,
                       [this._url, this._issue, this._tags[0], this._tags[1], this._tags[2]]);
 
-      //  const SendMail = new SendMail();
-        //SendMail.articlePublished(this.listTags(), this._issue, this._url);    // WHEN GET AROUND, make the tags into a nice list
+        const SendMailInstance = new SendMail();
+        SendMailInstance.articlePublished(this.listTags(), this._issue, this._url);    // WHEN GET AROUND, make the tags into a nice list
 
-        Utilities.setHeader(201, "article created");
 
+
+        Utilities.setHeader(201, "article created", false);
 
         return {
             url: `/issue/${this._issue}/story/${this._url}`

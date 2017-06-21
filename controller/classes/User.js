@@ -2,12 +2,7 @@
 const Utilities = require('./Utilities');
 const db = require('./db');
 const bcrypt = require('bcrypt');
-const SendMail = {
-    twoFactor: () => true,
-    emailAuth: () => true,
-    passwordRecovery: () => true
-
-}//require('./SendMail');
+const SendMail = require('./SendMail');
 const jwt = require('jwt-simple');
 const JWT = require('../../config.json').JWT;
 const randomstring = require('randomstring');
@@ -414,7 +409,7 @@ module.exports = class User {
 
 
         const dbVals = await allInfo[0][0];
-        
+
         if (!dbVals.id) {
             return false;
         }
@@ -841,7 +836,7 @@ module.exports = class User {
 
         const code = this.set2FAInfo(tommorrowDate);
 
-        SendMailInstanceemailAuth(this._email, this._username, code);
+        SendMailInstance.emailAuth(this._email, this._username, code);
 
         return true;
     }
@@ -870,8 +865,6 @@ module.exports = class User {
         if (!await this.checkAuth(lastAuth, false) || email != this._email || !await this.setPassword(newPassword, newPassword)) {
             return false;
         }
-
-        Utilities.setHeader(200, "email sent");
 
         const SendMailInstance = new SendMail();
         return SendMailInstance.passwordRecovery(newPassword, this._username, this._email);
