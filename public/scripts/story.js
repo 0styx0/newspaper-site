@@ -5,7 +5,10 @@
 const info = location.pathname.split("/");
 
 const artInfo = {'name':info[4], 'issue':info[2]};
-const jwt = getCookies().jwt[1];
+let jwt;
+
+(async () => jwt = await getCookies())();
+
 
 
 fetch(`../../../api/story?name=${artInfo.name}&issue=${artInfo.issue}`, {

@@ -1,6 +1,7 @@
 
 
-    const userLevel = getCookies().jwt[1].level;
+(async function() {
+    const userLevel = (await getCookies()).level;
 
     if (userLevel >= 1) {
 
@@ -15,3 +16,4 @@
 
         document.getElementsByName("lvl")[0].innerHTML = levels;
     }
+}());
