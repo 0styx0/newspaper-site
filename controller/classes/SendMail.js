@@ -133,8 +133,8 @@ module.exports = class SendMail {
       */
     _mail(to = [], subject, message) {
 
-
-       if (Utilities.getCookies('jwt')[1].automatedTest) {
+       const cookie = Utilities.getCookies('jwt');
+       if (cookie && cookie[1].automatedTest) {
 
            return true;
        }
@@ -172,9 +172,6 @@ module.exports = class SendMail {
             console.log('Message %s sent: %s', info.messageId, info.response);
         });
 
-        if (Utilities.res.headersSent) {
-            Utilities.setHeader(200, "email sent");
-        }
         return true;
     }
 

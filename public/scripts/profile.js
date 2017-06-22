@@ -12,7 +12,7 @@ fetch(`../api/user?user=${path[2]}`, {
     if (data.status[0] != 2) {
         return;
     }
-    
+
     const userInfo = await data.json();
 
     const basicInfo = userInfo[0];

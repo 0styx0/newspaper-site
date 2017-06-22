@@ -49,7 +49,7 @@ module.exports = class User {
                          && this.validateFullName(fullname) && this.validateEmail(email) && this.validateLevel(level);
 
 
-        if (!allInputValid || !this.uniqueEmail(email)) {
+        if (!allInputValid || !await this._uniqueEmail(email)) {
 
             return false;
         }
@@ -63,22 +63,21 @@ module.exports = class User {
         asyncDB.query(`INSERT INTO users (username, f_name, m_name, l_name, password, level, email, notifications)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                             [username, nameArr[0], nameArr[1], nameArr[2], hashedPassword,
-                            level, ".".email, 1]);
+                            level, "."+email, 1]);
 
-
-        this._email = ".".email;
+        this._email = "."+email;
         this._username = username;
-        this.sendEmailVerification();
 
+        await this.sendEmailVerification();
 
         asyncDB.query("UPDATE users SET auth = ?, auth_time = ? WHERE username = ?",
                         [this._authCode, this._authTime, username]);
 
-        Utilities.setHeader(201, "user created");
-
         if (!this.isLoggedIn()) {
             return this.login(username, password);
         }
+
+        Utilities.setHeader(201, "user created");
 
         return true;
     }
@@ -196,8 +195,8 @@ module.exports = class User {
 
         const asyncDB = await db;
 
-        const duplicate = (await asyncDB.query("SELECT email FROM users WHERE email = ? OR const email = ?",
-                         [".".email, email]))[0][0]
+        const duplicate = (await asyncDB.query("SELECT email FROM users WHERE email = ? OR email = ?",
+                         ["."+email, email]))[0][0]
 
 
         if (!await duplicate || email.indexOf("meiseles") !== -1) { // lets me have many accounts with same email
@@ -274,18 +273,15 @@ module.exports = class User {
 
         if (this._email[0] == ".") {
 
-
-            if (!this.checkAuth(code)) {
+            if (!await this.checkAuth(code)) {
 
                 if (code) { // if user actually put in a code (opposed to this being called from this.create)
                     Utilities.setHeader(400, "auth code");
                     return;
                 }
-
                 Utilities.setHeader(200, "email sent");
                 return;
             }
-
             this.makeEmailUsable();
         }
         // the check for _SESSION["user] is to make sure not to send another email every time page is refreshed
@@ -294,7 +290,7 @@ module.exports = class User {
             if (!token.id) {
 
                 Utilities.setHeader(202);
-                exit;
+                return;
             }
 
             this.changeJWT({
@@ -308,6 +304,7 @@ module.exports = class User {
 
             const SendMailInstance = new SendMail();
 
+            Utilities.setHeader(200, "email sent");
             return (SendMailInstance.twoFactor(this._email, code)) ? 0 : false;
         }
 
@@ -807,11 +804,11 @@ module.exports = class User {
       *
       * @return true
       */
-    set2FAInfo(time) {
+    async set2FAInfo(time) {
 
         const code = randomstring.generate(6);
 
-        bcrypt.hash(code, 10).then(hash => this._authCode = hash.replace(/^\$2a/, '$2y'));
+        await bcrypt.hash(code, 10).then(hash => this._authCode = hash.replace(/^\$2a/, '$2y'))
         this._authTime = time;
 
         this._settingChanged = true;
@@ -826,19 +823,17 @@ module.exports = class User {
 
         const SendMailInstance = new SendMail();
 
-        const now = new Date();
+        return Promise.resolve(new Date())
+        .then(now => {
             now.setDate(now.getDate() + 1)
-        const tommorrowDate = now
-                              .toISOString()
-                              .split("T")
-                              .join(" ")
-                              .split(".")[0];
-
-        const code = this.set2FAInfo(tommorrowDate);
-
-        SendMailInstance.emailAuth(this._email, this._username, code);
-
-        return true;
+            return now;
+        }).then(tomorrow =>
+            tomorrow.toISOString()
+            .split("T")
+            .join(" ")
+            .split(".")[0])
+        .then(data => this.set2FAInfo(data))
+        .then(code => SendMailInstance.emailAuth(this._email, this._username, code));
     }
 
 
@@ -867,6 +862,7 @@ module.exports = class User {
         }
 
         const SendMailInstance = new SendMail();
+        Utilities.setHeader(200, "email sent");
         return SendMailInstance.passwordRecovery(newPassword, this._username, this._email);
     }
 

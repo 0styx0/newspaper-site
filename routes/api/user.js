@@ -54,4 +54,13 @@ router.delete('/', async function(req, res) {
 
 });
 
+router.post('/', async function(req, res) {
+
+    const data = req.body;
+
+    if (data.username && data.fullName && data.password && data.confirmation && data.email && data.lvl) {
+
+        await UserInstance.create(data.username, data.fullName, data.password, data.confirmation, data.email, data.lvl);
+    }
+});
 module.exports = router

@@ -59,4 +59,6 @@ router.get(/^\/u\/\w+$/, () => serve('settingsTable', 'Profile'));
 
 router.get('/modifyArticles', () => serve('articleTable', 'Modify Articles'));
 
+router.get('/authLogin', () => serve('authForm', 'Two Factor Authentication'))
+
 module.exports = router;
