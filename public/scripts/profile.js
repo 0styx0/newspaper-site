@@ -9,7 +9,7 @@ fetch(`../api/user?user=${path[2]}`, {
     }
 }).then(async (data) => {
 
-    if (data.status[0] != 2) {
+    if (data.status > 200) {
         return;
     }
 

@@ -13,15 +13,17 @@ router.put('*', async function(req, res) {
     }
 
 
-    if (req.body.username && req.body.password) {
+    else if (req.body.username && req.body.password) {
         res.send(await UserInstance.login(req.body.username, req.body.password));
     }
 
-    if (req.body.logout) {
+    else if (req.body.logout) {
         return res.send(UserInstance.logout());
     }
+    else {
 
-    return res.send(Utilities.setHeader(422, "missing required field"));
+        return res.send(Utilities.setHeader(422, "missing required field"));
+    }
 
 });
 

@@ -21,7 +21,7 @@ module.exports = class Utilities {
     }
 
     static setHeader(num = 200, thing = '', end = true) {
-        //Utilities.res.status(num, thing);
+
         Utilities.res.statusMessage = thing;
         Utilities.res.status(num);
 
