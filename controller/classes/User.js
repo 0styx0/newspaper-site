@@ -412,7 +412,7 @@ module.exports = class User {
         }
 
         this._username = dbVals.username;
-        this.setFullName(`${dbVals.f_name} ${dbVals.m_name} ${dbVals.l_name}`);
+        this.setFullName(`${dbVals.f_name} ${dbVals.m_name} ${dbVals.l_name}`.replace('null ', '')); // if no middle name
         this._password = dbVals.password;
         this._id = dbVals.id;
         this._email = dbVals.email;
