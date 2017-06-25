@@ -14,11 +14,15 @@ router.put('*', async function(req, res) {
 
 
     else if (req.body.username && req.body.password) {
-        res.send(await UserInstance.login(req.body.username, req.body.password));
+        
+        const loginResult = await UserInstance.login(req.body.username, req.body.password);
+
+        return (loginResult) ? res.send(loginResult) : false;
     }
 
     else if (req.body.logout) {
-        return res.send(UserInstance.logout());
+        UserInstance.logout();
+        res.end();
     }
     else {
 

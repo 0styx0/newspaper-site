@@ -6,7 +6,7 @@ const UserInstance = new User();
 
 
 router.get("/", async function(req, res) {
-
+    
     if(!await UserInstance.defineInfoFor(req.query.user)) {
 
         return Utilities.setHeader(404, 'user not found');

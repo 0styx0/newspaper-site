@@ -58,13 +58,11 @@ module.exports = class ArticleGroup {
       *
       * @return false if user is either not lvl 3, not the author of the article provided, or incorrect password
       */
-    async delete(ids = [], password) {
+    async delete(ids = [], password, UserInstance) {
 
         const UtilitiesInstance = new Utilities();
         const asyncDB = await db;
-        const UserInstance = new User();
         const token = UserInstance.getJWT();
-        await UserInstance.defineInfoFor(token.id, true);
 
 
         const inForArts = '(' + (new Array(ids.length)).fill('?').join(',') + ')';
@@ -74,12 +72,13 @@ module.exports = class ArticleGroup {
 
 
             // not logged in, less than lvl 3 and not deleting own article, or invalid password
-        if (!UserInstance.isLoggedIn() || ([token.id] != uniqAuthors && token.level < 3) ||
+        if (!UserInstance.isLoggedIn() || (
+            ([token.id] != uniqAuthors[0].authorid || uniqAuthors.length != 1)
+             && token.level < 3) ||
             !await UserInstance.checkPassword(password)) {
-
                 return false;
         }
-
+        
         asyncDB.query(`DELETE FROM comments WHERE art_id IN ${inForArts}`, ids)
         .then(() =>
         asyncDB.query(`DELETE FROM tags WHERE art_id IN ${inForArts}`, ids))
@@ -98,23 +97,26 @@ module.exports = class ArticleGroup {
       *
       * @return false if user's less than lvl 3, not the author of article, or password is incorrect. Else true
       */
-    async setMultiTags(artId, newTag, pass) {
+    async setMultiTags(artId, newTag, pass, UserInstance) {
 
-        const UserInstance = new User();
         const asyncDB = await db;
         const token = UserInstance.getJWT();
 
 
         const authorId = (await asyncDB.query("SELECT authorid FROM pageinfo WHERE id = ?", [artId]))[0][0].authorid
 
-        const size = newTag.length;
+        if (!newTag || !artId) {
+            Utilities.setHeader(422, "missing required field");
+            return false;
+        }
 
-        await UserInstance.defineInfoFor(token.id, true);
+        const size = newTag.length;
 
         if (!UserInstance.isLoggedIn() ||
             !await UserInstance.checkPassword(pass) ||
             (UserInstance.getLevel() < 3 && UserInstance.getId() != authorId)
             || 3 - size < 0) {
+            Utilities.setHeader(401);
             return false;
         }
 
@@ -122,7 +124,6 @@ module.exports = class ArticleGroup {
 
         asyncDB.query("UPDATE tags SET tag1 = ?, tag2 = ?, tag3 = ? WHERE art_id = ?", [newTag[0], newTag[1], newTag[2], artId]);
 
-        Utilities.setHeader(200, "article(s) updated");
 
         return true;
     }
@@ -142,8 +143,6 @@ module.exports = class ArticleGroup {
 
         asyncDB.query("UPDATE pageinfo SET display_order = ? WHERE id = ?", [fNum, fId]);
 
-
-        Utilities.setHeader(200, "article(s) updated");
         return true;
     }
 
