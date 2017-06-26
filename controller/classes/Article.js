@@ -5,6 +5,7 @@ const Purifier = require('html-purify');
 const fs = require('fs');
 const Issue = require('./Issue');
 const SendMail = require('./SendMail');
+const mkdirp = require('mkdirp-promise');
 
 module.exports = class Article {
 
@@ -93,7 +94,7 @@ module.exports = class Article {
         // gets rid of random spaces, p tags, and style=""
         filteredBody = filteredBody.replace(/(&nbsp;\s)|(&nbsp;)|(<p><\/p>)|(style=\"\")/, "").trim();
 
-        if (!this._separatePics(filteredBody)) {
+        if (!await this._separatePics(filteredBody)) {
 
             Utilities.setHeader(400, "image");
             return;
@@ -179,7 +180,7 @@ module.exports = class Article {
         filteredBody = filteredBody.replace(/(<p><\/p>)|(style=\"\")/, "")
                                    .trim();
 
-        if (!this._separatePics(filteredBody) || !this._separateLede(this._body)) {
+        if (!await this._separatePics(filteredBody) || !this._separateLede(this._body)) {
 
             Utilities.setHeader(400, "image");
             return false;
@@ -280,7 +281,7 @@ module.exports = class Article {
       *
       * @return false if there's an invalid pictures (according to this.__validatePics), else returns true
       */
-    _separatePics(filteredBody) {
+    async _separatePics(filteredBody) {
 
        const pics = [];
        let match;
@@ -291,7 +292,7 @@ module.exports = class Article {
            pics.push(match[1]);
        }
 
-       this._pics = this._validatePics(pics);
+       this._pics = await this._validatePics(pics);
 
        this._slideImg = (new Array(Math.max(0, this._pics.length))).fill(1);
 
@@ -581,34 +582,36 @@ module.exports = class Article {
       *
       * @return false if invalid url, if certain extensions. Else returns pics
       */
-    _validatePics(pics = []) {
+    async _validatePics(pics = []) {
 
         const acceptedImgExt = ["jpg", "jpeg", "png", "jif", "jfif", "tiff", "tif", "gif", "bmp"];
 
         let i = 0;
 
         // can't do data pics when article is created since don't have article id yet
-        for (const pic of pics) {
+        for (let pic of pics) {
 
             const foundPic = pic.match(/^.+\.(\w{3,4})/); // img type
 
-            if (pic.indexOf(/data:image/) != -1) {
+            if (pic.indexOf(":image") != -1) {
                 // data uris are stored in actual files since can't fit in db
 
-                const url = `/../../public/images/issue/${this._issue}/${this._id}/`;
+                const url = __dirname + `/../../public/images/issue/${this._issue}/${this._id}/`;
 
                 let imgData = pic.replace(/\s/g,'+');
                 imgData =  imgData.substring(imgData.indexOf(',') + 1);
-                imgData = atob(imgData);
+                imgData = Buffer.from(imgData, 'base64');
 
-                fs.writeFile(url + `${i}.png`, imgData);
+                await mkdirp(url);
 
-                pic = `/images/issue/${this._issue}/${this._id}/${i}.png`;
+                fs.writeFile(url + `${i}.png`, imgData, console.log);
+
+                pics[i] = pic = `/images/issue/${this._issue}/${this._id}/${i}.png`;
                 i++;
             }
 
 
-            const imgFormat = (/^\//.test(pic)) ? "data" : foundPic[1]; // data uri or local imags
+            const imgFormat = (/^\//.test(pic)) ? "data" : "png" // data uri or local imags
 
             if (!/^https?/.test(pic) ||
                (acceptedImgExt.indexOf(imgFormat) == -1 && (pic.indexOf("googleusercontent") == -1))) {
