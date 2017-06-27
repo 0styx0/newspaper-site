@@ -8,7 +8,6 @@ router.get("/:issueNum?", async function(req, res) {
 
     const ArticleInstance = new Article();
     const CommentInstance = new Comment();
-    console.log(req.query.name);
 
     await ArticleInstance.defineInfoFor(req.query.issue, req.query.name);
 
@@ -35,9 +34,9 @@ router.put('*', async function(req, res) {
     const ArticleInstance = new Article();
     await ArticleInstance.defineInfoFor(req.body.issue, decodeURIComponent(req.body.name));
 
-    ArticleInstance.edit(req.body.edit).then(() => ArticleInstance.destruct());
+    await ArticleInstance.edit(req.body.edit).then(() => ArticleInstance.destruct());
 
-    res.send();
+    res.end();
 });
 
 router.post('*', async function(req, res) {

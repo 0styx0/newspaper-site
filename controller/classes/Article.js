@@ -42,6 +42,7 @@ module.exports = class Article {
 
         asyncDB.query("UPDATE tags SET tag1 = ?, tag2 = ?, tag3 = ? WHERE art_id = ?",
                        [this._tags[0], this._tags[1], this._tags[2], this._id]);
+        Utilities.setHeader(200, "edited");
         return true;
     }
 
@@ -191,8 +192,6 @@ module.exports = class Article {
         }
 
         this._settingsChanged = true;
-
-        Utilities.setHeader(200, "edited");
     }
 
     /**
