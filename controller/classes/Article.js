@@ -591,29 +591,13 @@ module.exports = class Article {
         const acceptedImgExt = ["jpg", "jpeg", "png", "jif", "jfif", "tiff", "tif", "gif", "bmp"];
 
         let i = 0;
-
+        let p = 0;
         // can't do data pics when article is created since don't have article id yet
         for (let pic of pics) {
 
             const foundPic = pic.match(/^.+\.(\w{3,4})/); // img type
 
-            if (pic.indexOf(":image") != -1) {
-                // data uris are stored in actual files since can't fit in db
-
-                const url = __dirname + `/../../public/images/issue/${this._issue}/${this._id}/`;
-
-                let imgData = pic.replace(/\s/g,'+');
-                imgData =  imgData.substring(imgData.indexOf(',') + 1);
-                imgData = Buffer.from(imgData, 'base64');
-
-                await mkdirp(url);
-
-                fs.writeFile(url + `${i}.png`, imgData, console.log);
-
-                pics[i] = pic = `/images/issue/${this._issue}/${this._id}/${i}.png`;
-                i++;
-            }
-
+            pics[p] = pic = await this._convertDataURI(pic, i);
 
             const imgFormat = (/^\//.test(pic)) ? "data" : "png" // data uri or local imags
 
@@ -626,9 +610,40 @@ module.exports = class Article {
                     return false;
                 }
             }
+            p++;
        }
 
        return (!pics) ? [] : pics;
+    }
+
+    /**
+     * Saves data URI as local file
+     *
+     * @param pic - string
+     * @param imgName - name of file to save data uri in (does not include tld)
+     *
+     * @return uri of image (if pic is data uri, it's a file relative to app.js)
+     */
+    async _convertDataURI(pic, imgName) {
+
+        if (pic.indexOf(":image") != -1) {
+            // data uris are stored in actual files since can't fit in db
+
+            const url = __dirname + `/../../public/images/issue/${this._issue}/${this._id}/`;
+
+            let imgData = pic.replace(/\s/g,'+');
+            imgData =  imgData.substring(imgData.indexOf(',') + 1);
+            imgData = Buffer.from(imgData, 'base64');
+
+            await mkdirp(url);
+
+            fs.writeFile(url + `${imgName}.png`, imgData, console.log);
+
+            return `/images/issue/${this._issue}/${this._id}/${imgName}.png`;
+        }
+        else {
+            return pic;
+        }
     }
 
     /**
