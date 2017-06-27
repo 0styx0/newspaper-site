@@ -167,6 +167,10 @@ module.exports = class Article {
 
         let filteredBody = this._validatePiece(body);
 
+        if (!this.canEdit()) {
+            return Utilities.setHeader(401);
+        }
+
         if (!filteredBody) {
 
             Utilities.setHeader(400, "article");
@@ -343,8 +347,8 @@ module.exports = class Article {
                             WHERE pageinfo.issue = ? AND pageinfo.url = ?`, [filteredIssue, filteredName]);
 
 
-        if (!await allInfo[0]) {
-            Utilities.setHeader(500);
+        if (!await allInfo[0][0]) {
+            return Utilities.setHeader(404);
         }
 
         const dbVals = await allInfo[0][0];
