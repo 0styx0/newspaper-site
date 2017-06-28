@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Article = require("../../controller/classes/Article");
 const Comment = require("../../controller/classes/Comment");
 const Utilities = require("../../controller/classes/Utilities");
+const User = require("../../controller/classes/User");
 
 
 router.get("/:issueNum?", async function(req, res) {
@@ -9,7 +10,9 @@ router.get("/:issueNum?", async function(req, res) {
     const ArticleInstance = new Article();
     const CommentInstance = new Comment();
 
-    await ArticleInstance.defineInfoFor(req.query.issue, req.query.name);
+    if (!await ArticleInstance.defineInfoFor(req.query.issue, req.query.name)) {
+        return;
+    }
 
     const body = ArticleInstance.getBody(),
     tags = ArticleInstance.listTags(),
@@ -51,7 +54,31 @@ router.post('*', async function(req, res) {
 
     const ArticleInstance = new Article();
 
-    res.send(await ArticleInstance.create(data.name, data.txtArea, data['type[]']));
+    const createResult = await ArticleInstance.create(data.name, data.txtArea, data['type[]']);
 
+    if (!res.headersSent) {
+        res.send(await createResult);
+    }
+
+});
+
+router.delete('*', async function(req, res) {
+
+    const data = req.body;
+    const UserInstance = new User();
+    const ArticleInstance = new Article();
+
+
+    if (!(data.name && data.issue && data.password) ||
+        !await UserInstance.defineInfoFor(UserInstance.getJWT().id, true) ||
+        !await UserInstance.checkPassword(data.password)) {
+
+        return Utilities.setHeader(422, 'missing required field');
+    }
+    else {
+
+        await ArticleInstance.defineInfoFor(data.issue, data.name);
+        ArticleInstance.destroy();
+    }
 });
 module.exports = router

@@ -56,6 +56,7 @@ module.exports = class Article {
         const token = UserInstance.getJWT();
 
         if (!UserInstance.isLoggedIn() || (token.level < 3 && token.id != this._authorId)) {
+            Utilities.setHeader(401);
             return false;
         }
 
@@ -65,6 +66,7 @@ module.exports = class Article {
 
         this._settingsChanged = false;
 
+        Utilities.setHeader(200);
         return true;
     }
 
@@ -138,7 +140,7 @@ module.exports = class Article {
                            [this._issue, this._url, this._lede, this._body, JSON.stringify(this._pics),
                            token.id, JSON.stringify(this._slideImg)]);
 
-       asyncDB.query(`INSERT INTO tags (art_id, tag1, tag2, tag3)
+       await asyncDB.query(`INSERT INTO tags (art_id, tag1, tag2, tag3)
                       VALUES((SELECT id FROM pageinfo WHERE url = ? AND issue = ?), ?, ?, ?)`,
                       [this._url, this._issue, this._tags[0], this._tags[1], this._tags[2]]);
 
@@ -347,7 +349,8 @@ module.exports = class Article {
 
 
         if (!await allInfo[0][0]) {
-            return Utilities.setHeader(404);
+            Utilities.setHeader(404);
+            return false;
         }
 
         const dbVals = await allInfo[0][0];
@@ -675,16 +678,14 @@ module.exports = class Article {
     /**
       * Validates tags
       *
-      * @param tags - something
+      * @param inputTtags - something
       *
       * @return false if not an array, empty array, array is not composed of strings.
       *   Else returns sanitized version of tags
       */
-    _validateTags(tags) {
+    _validateTags(inputTags = []) {
 
-        if (!Array.isArray(tags)) {
-            const tags = [tags];
-        }
+        const tags = (Array.isArray(inputTags)) ? inputTags : [inputTags];
 
         if (tags.length < 1) {
             return false;
@@ -799,9 +800,9 @@ module.exports = class Article {
 
         let toReturn = "";
 
-        for (const elt of this._tags) {
+        this._tags.forEach(elt => {
             toReturn += elt + ", ";
-        }
+        });
 
         return toReturn.substring(0, toReturn.length - 2);
     }
