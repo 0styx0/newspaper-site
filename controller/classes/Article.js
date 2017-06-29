@@ -2,10 +2,9 @@ const User = require('./User');
 const db = require('./db');
 const Utilities = require('./Utilities');
 const Purifier = require('html-purify');
-const fs = require('fs');
+const fs = require('fs-extra')
 const Issue = require('./Issue');
 const SendMail = require('./SendMail');
-const mkdirp = require('mkdirp-promise');
 
 module.exports = class Article {
 
@@ -60,9 +59,12 @@ module.exports = class Article {
             return false;
         }
 
+        fs.remove(__dirname+`/../../public/images/issue/${this._issue}/${this._id}`).catch(console.log)
+        
         await asyncDB.query("DELETE FROM comments WHERE art_id = ?", [this._id]);
         await asyncDB.query("DELETE FROM tags WHERE art_id = ?", [this._id]);
         await asyncDB.query("DELETE FROM pageinfo WHERE id = ?", [this._id]);
+
 
         this._settingsChanged = false;
 
@@ -639,9 +641,9 @@ module.exports = class Article {
             imgData =  imgData.substring(imgData.indexOf(',') + 1);
             imgData = Buffer.from(imgData, 'base64');
 
-            await mkdirp(url);
+            await fs.ensureDir(url);
 
-            fs.writeFile(url + `${imgName}.png`, imgData, console.log);
+            await fs.writeFile(url + `${imgName}.png`, imgData);
 
             return `/images/issue/${this._issue}/${this._id}/${imgName}.png`;
         }
