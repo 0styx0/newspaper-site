@@ -592,14 +592,16 @@ module.exports = class Article {
 
         const acceptedImgExt = ["jpg", "jpeg", "png", "jif", "jfif", "tiff", "tif", "gif", "bmp"];
 
-        let i = 0;
+        let dataURINum = 0;
         let p = 0;
+
         // can't do data pics when article is created since don't have article id yet
         for (let pic of pics) {
 
             const foundPic = pic.match(/^.+\.(\w{3,4})/); // img type
 
-            pics[p] = pic = await this._convertDataURI(pic, i);
+            pics[p] = pic = await this._convertDataURI(pic, dataURINum);
+            dataURINum = pic.indexOf("/images") != -1 ? dataURINum + 1 : dataURINum;
 
             const imgFormat = (/^\//.test(pic)) ? "data" : "png" // data uri or local imags
 
