@@ -60,7 +60,7 @@ module.exports = class Article {
         }
 
         fs.remove(__dirname+`/../../public/images/issue/${this._issue}/${this._id}`).catch(console.log)
-        
+
         await asyncDB.query("DELETE FROM comments WHERE art_id = ?", [this._id]);
         await asyncDB.query("DELETE FROM tags WHERE art_id = ?", [this._id]);
         await asyncDB.query("DELETE FROM pageinfo WHERE id = ?", [this._id]);
@@ -95,6 +95,19 @@ module.exports = class Article {
 
         this._authorId = token.id;
 
+        const asyncDB = await db;
+
+        const IssueInstance = new Issue();
+        const maxPub = await IssueInstance.getMax(true);
+        const maxPriv = await IssueInstance.getMax();
+
+        if (maxPub > maxPriv || (!maxPub && !maxPriv)) {
+            await IssueInstance.create();
+        }
+
+        this._issue = maxPub + 1;
+
+        const tmpId = this._id = token.id + "-" + Math.random();
 
         // gets rid of random spaces, p tags, and style=""
         filteredBody = filteredBody.replace(/(&nbsp;\s)|(&nbsp;)|(<p><\/p>)|(style=\"\")/, "").trim();
@@ -123,18 +136,6 @@ module.exports = class Article {
             return;
         }
 
-        const asyncDB = await db;
-
-        const IssueInstance = new Issue();
-        const maxPub = await IssueInstance.getMax(true);
-        const maxPriv = await IssueInstance.getMax();
-
-        if (maxPub > maxPriv || (!maxPub && !maxPriv)) {
-            IssueInstance.create();
-        }
-
-        this._issue = maxPub + 1;
-
         this._tags.push(null, null);
 
         await asyncDB.query(`INSERT INTO pageinfo (issue, created, url, lede, body, img_url,
@@ -151,6 +152,23 @@ module.exports = class Article {
 
 
 
+        await asyncDB.query("SELECT MAX(id) AS id FROM pageinfo").then(response => {
+
+            const id = response[0][0].id;
+
+            const path = __dirname + `/../../public/images/issue/${this._issue}/${tmpId}`;
+
+             return fs.pathExists(path).then(exists => {
+
+                    console.log("EX: ", exists, path);
+                if (exists) {
+                    return fs.move(path,  __dirname + `/../../public/images/issue/${this._issue}/${id}`).catch(console.log);
+                }
+                else {
+                    Promise.resolve();
+                }
+            });
+        });
         Utilities.setHeader(201, "article created", false);
 
         return {
