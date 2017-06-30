@@ -25,9 +25,21 @@ module.exports = class Comment {
 
         const asyncDB = await db;
 
-        const infoQuery = await asyncDB.query("SELECT id, content, art_id, authorid, created FROM comments WHERE id = ?", [commentId]);
+        const infoRow = (await asyncDB.query("SELECT id, content, art_id, authorid, created FROM comments WHERE id = ?", [commentId]))[0][0];
 
-        [this._id, this._content, this._artId, this._authorId, this._created] = await infoQuery[0];
+        if (!infoRow) {
+            Utilities.setHeader(404);
+            return false;
+        }
+        else {
+            this._id = infoRow.id;
+            this._content = infoRow.content;
+            this._artId = infoRow.art_id;
+            this._authorId = infoRow.authorid;
+            this._created = infoRow.created;
+            return true;
+        }
+
     }
 
     /*
@@ -49,13 +61,13 @@ module.exports = class Comment {
 
 
     /**
-    * Creates a comment. Requires user to be logged in
-    *
-    * @param issue - issue of article
-    * @param url - url of article
-    * @param text - text of comment. Must be at least 10 chars (magic num) and <= 500 chars
-    * @return id if saved successfully, else false
-    */
+       * Creates a comment. Requires user to be logged in
+       *
+       * @param issue - issue of article
+       * @param url - url of article
+       * @param text - text of comment. Must be at least 10 chars (magic num) and <= 500 chars
+       * @return id if saved successfully, else false
+       */
     async create(issue, url, text) {
 
         const UserInstance = new User();
@@ -64,18 +76,26 @@ module.exports = class Comment {
 
         const filteredText = this._stripTags(text);
 
-        const artId = (await asyncDB.query("SELECT id FROM pageinfo WHERE issue = ? AND url = ?", [issue, encodeURIComponent(url)]))[0][0].id
+        const artIdRow = (await asyncDB.query("SELECT id FROM pageinfo WHERE issue = ? AND url = ?", [issue, encodeURIComponent(url)]))[0][0];
 
         if (!UserInstance.isLoggedIn()) {
             Utilities.setHeader(401);
             return false;
         }
 
-        if (filteredText.length < 4 || filteredText.length > 500 || !artId) {
+        if (!artIdRow) {
+
+            Utilities.setHeader(404, "article");
+            return false;
+        }
+
+        if (filteredText.length < 4 || filteredText.length > 500) {
 
             Utilities.setHeader(400, "comment");
             return false;
         }
+
+        const artId = artIdRow.id;
 
         const insertRow = await asyncDB.query("INSERT INTO comments (art_id, authorid, content, created) VALUES(?, ?, ?, CURRENT_TIMESTAMP)",
         [artId, token.id, filteredText]);
@@ -92,7 +112,7 @@ module.exports = class Comment {
 
         const UserInstance = new User();
         const asyncDB = await db;
-        token = UserInstance.getJWT();
+        const token = UserInstance.getJWT();
 
         if (!UserInstance.isLoggedIn() || (token.id != this._authorId && token.level < 3)) {
 
