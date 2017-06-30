@@ -152,7 +152,8 @@ module.exports = class Comment {
 
         const query = await asyncDB.query(`SELECT comments.id, authorid,
                                      CONCAT(f_name, ' ', IFNULL(m_name, ''), ' ', l_name) AS author_name,
-                                     TRIM(TRAILING '@tabc.org' FROM email) AS profile_link, content, created
+                                     TRIM(TRAILING '@tabc.org' FROM email) AS profile_link, content,
+                                     SUBSTRING_INDEX(created, 'T', 1) AS created
                                     FROM comments
                                     LEFT JOIN users
                                     ON users.id = authorid

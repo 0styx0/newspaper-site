@@ -19,5 +19,6 @@ router.use('/userGroup', require('./userGroup'));
 router.use('/articleGroup', require('./articleGroup'));
 router.use('/mission', require('./mission'));
 router.use('/user', require('./user'));
+router.use('/comment', require('./comment'));
 
 module.exports = router;
