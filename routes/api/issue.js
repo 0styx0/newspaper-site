@@ -18,9 +18,12 @@ router.put('/', async function(req, res) {
 
     const data = req.body;
 
+    const token = UserInstance.getJWT();
 
-    if (!await IssueInstance.defineInfoFor(data.issue) || !await UserInstance.defineInfoFor(UserInstance.getJWT().id, true) ||
-!await UserInstance.checkPassword(data.password)) {
+    if (!await IssueInstance.defineInfoFor(data.issue) ||
+        !await UserInstance.defineInfoFor(token.id, true) ||
+        !await UserInstance.checkPassword(data.password) ||
+        token.level < 3) {
         Utilities.setHeader(401);
         return false;
     }
@@ -34,8 +37,7 @@ router.put('/', async function(req, res) {
         IssueInstance.setPublic(data.pub);
     }
 
-    IssueInstance.destruct();
-
+    IssueInstance.destruct().then(() => Utilities.setHeader(200, "issue updated"));
 });
 
 module.exports = router;

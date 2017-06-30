@@ -187,7 +187,6 @@ module.exports = class Issue {
         asyncDB.query(`UPDATE issues SET ispublic = ?, name = ?, madepub = ?
                             WHERE num = ?`, [this._isPublic, this._name, this._madePub, this._num]);
 
-        Utilities.setHeader(200, "issue updated");
         return true;
     }
 
@@ -326,7 +325,7 @@ module.exports = class Issue {
       */
     setPublic(status = true) {
 
-        if (!status || this._name.length == 0) {
+        if (!status || !this._name) {
 
             Utilities.setHeader(400, "status");
             return false;
