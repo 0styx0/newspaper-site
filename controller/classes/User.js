@@ -218,7 +218,7 @@ module.exports = class User {
         const asyncDB = await db;
         const token = this.getJWT();
 
-        if (this._id != token.id && token.level <= (await asyncDB.query("SELECT level FROM users WHERE id = ?", id))[0][0].level) {
+        if (this._id != token.id && token.level <= (await asyncDB.query("SELECT level FROM users WHERE id = ?", [id]))[0][0].level) {
             return false;
         }
 
@@ -229,9 +229,8 @@ module.exports = class User {
 
         const commentUpdate = asyncDB.query("UPDATE comments SET authorid = ? WHERE authorid = ?", [await deletedUserId, id]);
 
-        await Promise.all([articleUpdate, commentUpdate]);
-
-        asyncDB.query("DELETE FROM users WHERE id = ?", [id]);
+        await Promise.all([articleUpdate, commentUpdate])
+                     .then(() => asyncDB.query("DELETE FROM users WHERE id = ?", [id]));
 
         this._settingChanged = false;
 
@@ -622,7 +621,7 @@ module.exports = class User {
       */
     async checkPassword(passwordGiven = '') {
 
-        return await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
+        return passwordGiven && await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
     }
 
     /**
@@ -723,7 +722,10 @@ module.exports = class User {
       */
     validateLevel(lvl) {
 
-        if (!/^[1-3]$/.test(lvl) || lvl > Math.max(this.getJWT().level, 1)) {
+        const currentLevel = this.getJWT().level;
+        const loggedInLevel = (+!!currentLevel == 0) ? 0 : currentLevel;
+
+        if (!/^[1-3]$/.test(lvl) || lvl > Math.max(loggedInLevel, 1)) {
 
             Utilities.setHeader(400, "level");
             return false;

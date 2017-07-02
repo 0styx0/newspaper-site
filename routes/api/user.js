@@ -6,7 +6,7 @@ const UserInstance = new User();
 
 
 router.get("/", async function(req, res) {
-    
+
     if(!await UserInstance.defineInfoFor(req.query.user)) {
 
         return Utilities.setHeader(404, 'user not found');
@@ -21,7 +21,7 @@ router.put('/', async function(req, res) {
 
     await UserInstance.defineInfoFor(UserInstance.getJWT().id, true);
 
-    if (await UserInstance.checkPassword(req.body.pass)) {
+    if (await UserInstance.checkPassword(req.body.password)) {
 
         if (req.body['2fa'] !== undefined) {
             UserInstance.setTwoFactor(req.body['2fa']);
@@ -39,17 +39,26 @@ router.put('/', async function(req, res) {
 
         Utilities.setHeader(200, 'user(s) updated');
     }
+    else {
+
+        Utilities.setHeader(422);
+    }
 
 });
 
 router.delete('/', async function(req, res) {
 
-    await UserInstance.defineInfoFor(UserInstance.getJWT().id, true);
 
-    if (await UserInstance.checkPassword(req.body.password)) {
-        UserInstance.destroy(UserInstance.getJWT().id)
 
-        Utilities.setHeader(200, 'user deleted')
+    if (await UserInstance.defineInfoFor(UserInstance.getJWT().id, true) &&
+        await UserInstance.checkPassword(req.body.password)) {
+
+        await UserInstance.destroy(UserInstance.getJWT().id);
+        Utilities.setHeader(200, 'user deleted');
+    }
+    else {
+
+        Utilities.setHeader(422);
     }
 
 });
@@ -61,6 +70,9 @@ router.post('/', async function(req, res) {
     if (data.username && data.fullName && data.password && data.confirmation && data.email && data.lvl) {
 
         await UserInstance.create(data.username, data.fullName, data.password, data.confirmation, data.email, data.lvl);
+    }
+    else {
+        Utilities.setHeader(422);
     }
 });
 module.exports = router
