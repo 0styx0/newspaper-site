@@ -30,7 +30,16 @@ app.use(function(req, res, next) {
   res.status(404);
   err.status = 404;
 
-  res.render('template', {page: 'notFound.html', title: 'Error 404', jwt: {level: 0, email: '', id: 0}})
+  res.render('template', {
+    page: 'notFound.html',
+    title: 'Error 404',
+    description: 'Page Not Found", "Page not found - error 404',
+    jwt: {
+      level: 0,
+      email: '',
+      id: 0
+    }
+  })
 });
 
 // error handler
