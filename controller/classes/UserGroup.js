@@ -62,7 +62,7 @@ module.exports = class UserGroup {
 
         let inClause = '(' + (new Array(idsToDelete.length)).fill('?').join(",") + ')';
 
-        const highestLvlQuery = asyncDB.query(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, [idsToDelete]);
+        const highestLvlQuery = asyncDB.query(`SELECT MAX(level) AS max FROM users WHERE id IN ${inClause}`, idsToDelete);
         let highestLvl;
 
         await Promise.all([
@@ -84,7 +84,9 @@ module.exports = class UserGroup {
 
         await asyncDB.query(`UPDATE comments SET authorid = (SELECT id FROM users WHERE username = ?) WHERE authorid IN ${inClause}`, delParams);
 
-        asyncDB.query(`DELETE FROM users WHERE id IN ${inClause}`, [idsToDelete]);
+        idsToDelete.shift();
+
+        await asyncDB.query(`DELETE FROM users WHERE id IN ${inClause}`, idsToDelete);
 
         Utilities.setHeader(200, "user(s) updated");
         return true;
@@ -118,14 +120,14 @@ module.exports = class UserGroup {
         const inClause = '(' + (new Array(usernamesToPromote.length)).fill('?').join(',') + ')';
 
         const maxPreviousLvlQuery = asyncDB.query(`SELECT MAX(level) AS max
-                                                       FROM users WHERE username IN ${inClause}`,
+                                                       FROM users WHERE TRIM(TRAILING '@tabc.org' FROM email) IN ${inClause}`,
                                                        usernamesToPromote);
-       let maxPreviousLvl;
+        let maxPreviousLvl;
 
-        await Promise.all(
-            [UserInstance.defineInfoFor(token.id, true),
-            maxPreviousLvlQuery.then(query => maxPreviousLvl = query[0][0].max)]
-        );
+        await Promise.all([
+                UserInstance.defineInfoFor(token.id, true),
+                maxPreviousLvlQuery.then(result => maxPreviousLvl = result[0][0].max)
+            ]);
 
 
         if (!await UserInstance.checkPassword(password) || token.level < 2 || +toLevel > token.level || +maxPreviousLvl >= token.level) {
