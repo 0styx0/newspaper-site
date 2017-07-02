@@ -68,4 +68,6 @@ router.get('/modifyArticles', () => serve('articleTable', 'Modify Articles', 'Ad
 
 router.get('/authLogin', () => serve('authForm', 'Two Factor Authentication', '2 Factor Authentication", "Submit 2FA for login security'))
 
+router.get('/forgotPass', () => serve('forgotPasswd', 'Recover Account', 'Recover account in event of lost password'))
+
 module.exports = router;
