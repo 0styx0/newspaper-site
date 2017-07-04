@@ -2,8 +2,10 @@
 
     import {getCookies, edit} from './stormScripts';
 
-    const userLevel = getCookies().jwt[1].level;
+(async function() {
+    const userLevel = (await getCookies()).level;
 
     if (userLevel && userLevel > 2) {
         edit('#missionEdit', '/api/mission', {'selector':"#missionEdit"});
     }
+}());

@@ -21,8 +21,8 @@ fetch("/api/userGroup", {
 
 
     const tableData: Array<JournalistInfo> = await data.json();
-    const cookies = getCookies();
-    const userLevel = cookies.jwt[1].level || 0;
+    const cookies = await getCookies()
+    const userLevel = cookies.level || 0;
 
 
 
@@ -63,17 +63,17 @@ fetch("/api/userGroup", {
 
     tableData.forEach(function(row) {
 
-        const userId = row.ID;
-        delete row.ID;
-        const profileLink = row.PROFILE_LINK;
-        delete row.PROFILE_LINK;
+        const userId = row.id;
+        delete row.id;
+        const profileLink = row.profile_link;
+        delete row.profile_link;
 
         let tr = document.createElement("tr");
 
         tbody.appendChild(tr);
 
         // if user is lower level than logged in user, can delete
-        if (row.LEVEL < userLevel) {
+        if (row.level < userLevel) {
             row.delete = <HTMLInputElement>deleteCheckbox.cloneNode(true);
             row.delete.value = userId.toString();
         }
@@ -86,15 +86,17 @@ fetch("/api/userGroup", {
 
             const tdVal = row[cell];
             const td = document.createElement("td");
+            row[cell] = <string | HTMLElement> row[cell];
 
-            if (cell == "NAME") {
+            if (cell == "name") {
 
-                row[cell] = document.createElement("a");
-                row[cell].href = `/u/${profileLink}`;
-                row[cell].textContent = tdVal;
+                const link = document.createElement("a");
+                link.href = `/u/${profileLink}`;
+                link.textContent = tdVal;
+                td.appendChild(link);
             }
 
-            if (cell == "LEVEL" && tdVal < userLevel) { // can't change somebody who's the same level as you
+            else if (cell == "level" && tdVal < userLevel) { // can't change somebody who's the same level as you
 
 
                 const hiddenClone = <HTMLInputElement>hiddenIdentifier.cloneNode(true);
@@ -104,12 +106,10 @@ fetch("/api/userGroup", {
 
                 const selectClone = <HTMLSelectElement>select.cloneNode(true);
                 selectClone.value = tdVal;
-                row[cell] = selectClone;
+                td.appendChild(selectClone);
             }
+            else {
 
-            try { // if not a node (and so can't append), throws error, so then converted to node and success
-                td.appendChild(row[cell]);
-            } catch (e) {
                 td.appendChild(document.createTextNode(row[cell]));
             }
 

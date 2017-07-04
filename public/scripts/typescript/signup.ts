@@ -1,7 +1,8 @@
 
     import {getCookies, multiElementAction} from './stormScripts';
 
-    const userLevel = getCookies().jwt[1].level || 0;
+(async function() {
+    const userLevel = (await getCookies()).level || 0;
 
     if (userLevel >= 1) {
 
@@ -17,3 +18,4 @@
 
         document.getElementsByName("lvl")[0].innerHTML = levels;
     }
+}());

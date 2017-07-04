@@ -16,7 +16,7 @@ fetch(`../api/user?user=${path[2]}`, {
 
     let currentUser;
     try {
-        currentUser = getCookies().jwt[1].id == userInfo[2].id;
+        currentUser = (await getCookies()).id == userInfo[2].id;
     }
     catch (e) {
         currentUser = false;
@@ -86,7 +86,7 @@ interface ArticleInfo {
 /**
  * Sets up table with info about articles user has published
  *
- * @param articleInfo - array of objects containing URL, CREATED, TAGS, VIEWS, ART_ID, ISSUE of articles user has published
+ * @param articleInfo - array of objects containing URL, CREATED, tags, VIEWS, ART_ID, ISSUE of articles user has published
  * @param currentUser - @see setupBasicInfo
  */
 function setupArticleTable(articleInfo: Array<ArticleInfo>, currentUser: boolean) {

@@ -215,7 +215,7 @@ function convertFormRequestToREST(form: HTMLFormElement) {
            const status = res.status;
            const currentURL = window.location.pathname;
 
-           if (status == 201 && currentURL == "/signup" && !getCookies().jwt[1].id) {
+           if (status == 201 && currentURL == "/signup" && !(await getCookies()).id) {
 
                 return window.location.pathname = "/authLogin";
            }
@@ -314,65 +314,28 @@ multiElementAction(document.querySelectorAll("input + abbr"), function(elt: HTML
 });
 
 
-interface Cookies {
-    jwt: [
-        {
-            iat: number,
-            iss: string
-        },
-        {
-            email: string | null,
-            level: number | null,
-            id: string | null
-        }
-    ],
-    PHPSESSID?: string
+interface JWT {
+
+    email: string | null,
+    level: number | null,
+    id: string | null
 }
 
 /**
  * @return all cookies split into an array. If a cookie is JSON encoded array it is decoded
  */
-export function getCookies(): Cookies {
+export async function getCookies(): Promise<JWT> {
 
-    const decodedCookie = decodeURIComponent(document.cookie);
+    const call = await fetch('/api/userStatus', {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    const cookieSplit = decodedCookie.split("; ");
-
-    const result: any = {};
-
-
-    cookieSplit.forEach(function(val) {
-
-        const keyPair = val.split("=");
-
-        if (keyPair[0] == "jwt") {
-            const jwt = keyPair[1].split('.')[1]
-                                  .replace('-', '+')
-                                  .replace('_', '/');
-            keyPair[1] = JSON.parse(window.atob(jwt));
-        }
-
-        result[keyPair[0]] = (keyPair[1][0] == "[") ? JSON.parse(keyPair[1]) : keyPair[1];
-    });
-
-    return result;
+    return call.json();
 }
-
-
-
-// every 5 minutes check if user will be logged out for inactivity
-const checkTimeUntilLogout = window.setInterval(function() {
-
-    const JSTime = Date.now() / 1000;
-
-    const lastAction = getCookies().jwt[0].iat;
-
-    if (JSTime - lastAction < 60000000) {
-        message(0, "timeOut");
-        clearInterval(checkTimeUntilLogout);
-    }
-
-}, 300000);
 
 
 document.getElementById("artTypes")!.addEventListener("change", function() {

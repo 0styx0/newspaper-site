@@ -5,7 +5,12 @@ import {getCookies, edit, message, multiElementAction} from './stormScripts';
 const info = location.pathname.split("/");
 
 const artInfo = {'name':info[4], 'issue':info[2]};
-const jwt = getCookies().jwt[1];
+
+let jwt: any = {};
+
+(async function() {
+    jwt = (await getCookies());
+}());
 
 interface CommentInfo {
         authorid: string,
@@ -17,11 +22,11 @@ interface CommentInfo {
 };
 
 interface ArticleInfo {
-    BODY: string,
-    CAN_EDIT: boolean,
-    COMMENTS: Array<CommentInfo> // or it can be empty array
-    ID: string,
-    TAGS: string,
+    body: string,
+    can_edit: boolean,
+    comments: Array<CommentInfo> // or it can be empty array
+    id: string,
+    tags: string,
 };
 
 fetch(`../../../api/story?name=${artInfo.name}&issue=${artInfo.issue}`, {
@@ -36,14 +41,14 @@ fetch(`../../../api/story?name=${artInfo.name}&issue=${artInfo.issue}`, {
     const loggedIn = !!jwt.id;
 
     // puts the article's id as id of comment reply
-    document.getElementsByClassName("content")[0].id = parsedData.ID;
+    document.getElementsByClassName("content")[0].id = parsedData.id;
 
 
-    setupCommentsCreated(parsedData.COMMENTS);
+    setupCommentsCreated(parsedData.comments);
 
     setupReplying(loggedIn);
 
-    setupArticle(parsedData.BODY, parsedData.TAGS, parsedData.CAN_EDIT);
+    setupArticle(parsedData.body, parsedData.tags, parsedData.can_edit);
 });
 
 

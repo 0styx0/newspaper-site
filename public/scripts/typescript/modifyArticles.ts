@@ -29,7 +29,7 @@ function setupPage(num: string | number) {
 
         const [articleInfo, tags, issueInfo] = parsedData;
 
-        (<HTMLInputElement>document.querySelector("input[name=issueName]")).value = issueInfo.NAME;
+        (<HTMLInputElement>document.querySelector("input[name=issueName]")).value = issueInfo.name;
 
         // if issue is public, don't let changes to issue name or public status
         if (issueInfo.ISPUBLIC == 1) {
@@ -56,7 +56,7 @@ interface ArticleInfo {
     URL: string,
     CREATED: string,
     AUTHOR_NAME: string,
-    TAGS: string,
+    tags: string,
     VIEWS: number,
     DISPLAY_ORDER: number,
     ART_ID: string,
@@ -65,7 +65,7 @@ interface ArticleInfo {
 
 interface IssueInfo {
 
-    NAME: string | null,
+    name: string | null,
     ISPUBLIC: number,
     NUM: number,
     MAX: number
@@ -74,9 +74,9 @@ interface IssueInfo {
 /**
  * Puts info into table
  *
- * @param articleInfo - array of objects containing URL, CREATED, AUTHOR_NAME, TAGS, VIEWS, DISPLAY_ORDER, ART_ID, AUTHOR_USERNAME
+ * @param articleInfo - array of objects containing URL, CREATED, AUTHOR_NAME, tags, VIEWS, DISPLAY_ORDER, ART_ID, AUTHOR_USERNAME
  *   of all articles in the issue requested
- * @param issueInfo -  object containing NAME, ISPUBLIC, and NUM of the issue plus MAX issue
+ * @param issueInfo -  object containing name, ISPUBLIC, and NUM of the issue plus MAX issue
  * @param tags - array of all tags that have been used in any article
  */
 function setupArticleTable(articleInfo: Array<ArticleInfo>, issueInfo: IssueInfo, tags: string[]) {
@@ -123,7 +123,7 @@ function setupArticleTable(articleInfo: Array<ArticleInfo>, issueInfo: IssueInfo
                         td += `<input type="number" value="${article[bit]}" name="order[]" />`;
                         break;
 
-                    case "TAGS":
+                    case "tags":
 
                         let clone = select;
 
