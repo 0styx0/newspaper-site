@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "es6",
         "sourceMap": true,
-        "allowJs": true,
+        "allowJs": false,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "strict": true,
@@ -11,10 +11,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "forceConsistentCasingInFileNames": true,
+        "removeComments": true,
         /*"noEmitOnError": true,*/
-        "outDir": "./scripts/generatedJS/"
+        "outDir": "./public/scripts/generatedJS/"
     },
-    
+
     "include": [
         "./public/scripts/**/*.ts"
     ]
