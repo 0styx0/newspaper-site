@@ -105,7 +105,7 @@ function setupCommentsCreated(commentInfo: Array<CommentInfo>) {
 
         comments += `<article class="comment" id="${comment.id}">
                         <span class="author">
-                            <a href="/u/${comment.profile_link}">${comment.author_name}</a>
+                            <a href="../u/${comment.profile_link}">${comment.author_name}</a>
                         </span>
                         <div class="content">${comment.content}</div>`;
 
@@ -209,7 +209,7 @@ function sendReply(commentInfo: CommentReply) {
 
         const newComment = `<article class="comment" id="${commentId}">
                                 <span class="author">
-                                    <a href="/u/${jwt.email}">You</a>
+                                    <a href="../u/${jwt.email}">You</a>
                                 </span>
                                 <div class="content">${commentInfo.content}</div>
                                 <button class="deleteReply">Delete</button>

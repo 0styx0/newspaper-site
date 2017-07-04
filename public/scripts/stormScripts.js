@@ -4,7 +4,7 @@
 (function() {
 
 
-    const currentNavItem = document.querySelector("nav a[href='" + window.location.pathname + "']")
+    const currentNavItem = document.querySelector("nav a[href='." + window.location.pathname + "']")
     if (currentNavItem) {
         currentNavItem.style.color = "#f8ffff";
         currentNavItem.parentNode.style.backgroundColor = "#212d23";

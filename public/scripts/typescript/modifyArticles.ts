@@ -108,14 +108,14 @@ function setupArticleTable(articleInfo: Array<ArticleInfo>, issueInfo: IssueInfo
 
                     case "URL":
 
-                        td += `<a href="/issue/${issueInfo.NUM}/story/${article.URL}">
+                        td += `<a href="../issue/${issueInfo.NUM}/story/${article.URL}">
                                  ${decodeURIComponent(article[bit])}
                                </a>`;
                         break;
 
                     case "AUTHOR_NAME":
 
-                        td += `<a href="/u/${article.AUTHOR_USERNAME}">${article[bit]}</a>`;
+                        td += `<a href="../u/${article.AUTHOR_USERNAME}">${article[bit]}</a>`;
                         break;
 
                     case "DISPLAY_ORDER":

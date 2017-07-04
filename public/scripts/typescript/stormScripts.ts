@@ -3,7 +3,7 @@
 
 (function() {
 
-    const currentNavItem = <HTMLAnchorElement> document.querySelector("nav a[href='" + window.location.pathname + "']");
+    const currentNavItem = <HTMLAnchorElement> document.querySelector("nav a[href='." + window.location.pathname + "']");
 
     if (currentNavItem) {
         currentNavItem.style.color = '#f8ffff';

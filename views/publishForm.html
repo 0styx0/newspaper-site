@@ -1,12 +1,12 @@
 
-<script defer src="/scripts/ckeditor/ckeditor.js"></script>
-<script defer type="text/javascript" src="/scripts/execCommands.min.js"></script>
-<script defer src="/scripts/publish.js"></script>
+<script defer src="../scripts/ckeditor/ckeditor.js"></script>
+<script defer type="text/javascript" src="../scripts/execCommands.min.js"></script>
+<script defer src="../scripts/publish.js"></script>
 
   <h1> Publish Story </h1>
 
 
-  <form name="fileForm" id="uploadForm" action="/api/story" method="post" >
+  <form name="fileForm" id="uploadForm" action="../api/story" method="post" >
 
       <label id="labelUser"> Page Name:
           <input type="text" id="name" autofocus name="name" pattern="^[\sa-zA-Z0-9_-]+$" maxlength="75" title="Must only contain letters, numbers, -, _, and spaces" placeholder="mystory" required />

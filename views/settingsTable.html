@@ -1,4 +1,4 @@
-<script defer src="/scripts/profile.js"></script>
+<script defer src="../scripts/profile.js"></script>
 
 <div class='container tableContainer'>
 
@@ -33,7 +33,7 @@
 
     <h1 class="contriH1">Options</h1>
 
-  <form method="post" action="/api/user">
+  <form method="post" action="../api/user">
 
     <table>
         <thead>
@@ -66,7 +66,7 @@
 
 <div class='container onlyForOwnUser'>
     <h1>Change Password</h1>
-    <form action='/api/user' method='post'>
+    <form action='../api/user' method='post'>
 
            <label>New Password
                <input type="password" name="newPass" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*).{6,}$" required id="password" />
@@ -87,7 +87,7 @@
 
 <h1 class='contriH1'>Articles</h1>
 
-<form method='post' action='/api/articleGroup'>
+<form method='post' action='../api/articleGroup'>
 
 
     <table id="articleInfo">

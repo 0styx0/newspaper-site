@@ -1,4 +1,4 @@
-<script defer src="/scripts/modifyArticles.js"></script>
+<script defer src="../scripts/modifyArticles.js"></script>
 
 <div class="container tableContainer">
     <h1 class="contriH1">Modify Articles</h1>
@@ -13,7 +13,7 @@
     </form>
 <div>
 
-    <form method="post" id="articleForm" action="/api/articleGroup">
+    <form method="post" id="articleForm" action="../api/articleGroup">
 
         <table id="articleTable">
             <thead>
@@ -35,13 +35,13 @@
         <input type="hidden" name="password" id="copycat" />
     </form>
 
-    <form action="/api/issue" id="updateIssueForm">
+    <form action="../api/issue" id="updateIssueForm">
         <label>Issue Name:
             <input name="issueName" value="" type="text" >
         </label>
 
         <label>Public:
-            <select name="pub" formaction="/api/issue">
+            <select name="pub" formaction="../api/issue">
                 <option value="">No</option>
                 <option value="1">Yes</option>
             </select>

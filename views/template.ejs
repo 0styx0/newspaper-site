@@ -7,14 +7,14 @@
 	<meta name="description" content="<%= description %>" />
 	<meta name="google-site-verification" content="scP3iQq0RJSIb9oi5kqpf3JUyZrc8SMFVMPCo6dOJiM" />
 
-    <link rel="shortcut icon" href="/images/tabc_logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<% fileDepth %>/images/tabc_logo.png" type="image/x-icon">
     <link rel="canonical" href="https://tabceots.com" />
 
 
-	 <link type="text/css" rel="stylesheet" href="/styles/stormStyles.min.css?1.1" />
+	 <link type="text/css" rel="stylesheet" href="<% fileDepth %>/styles/stormStyles.min.css?1.1" />
 
 
-	  <script defer type="text/javascript" src="/scripts/stormScripts.js?1.1"></script>
+	  <script defer type="text/javascript" src="<% fileDepth %>/scripts/stormScripts.js?1.1"></script>
 
 </head>
 <body>
@@ -22,7 +22,7 @@
 
 
     <ul>
-        <li> <a href="/">Home</a></li>
+        <li> <a href="<% fileDepth %>/">Home</a></li>
 
 
             <label for='menuToggle'>
@@ -46,39 +46,39 @@
         </li>
 
         <% if (!jwt.level) { %>
-            <li><a href="/login">Log In</a></li>
+            <li><a href="<% fileDepth %>/login">Log In</a></li>
         <% } %>
 
-        <li><a href="/signup">
+        <li><a href="<% fileDepth %>/signup">
             <% if (jwt.level) { %>
                 Create Accounts
             <%} else {%>
                 Sign Up
             <% } %>
             </a></li>
-        <li><a href="/u">Journalists</a></li>
-        <li><a href="/mission">Mission</a></li>
-        <li><a href="/issue/">Issues</a></li>
+        <li><a href="<% fileDepth %>/u">Journalists</a></li>
+        <li><a href="<% fileDepth %>/mission">Mission</a></li>
+        <li><a href="<% fileDepth %>/issue/">Issues</a></li>
 
 
          <% if (jwt.level) { %>
 
                <% switch(jwt.level) {
                     case 3: %>
-                        <li><a href="/modifyArticles">Articles</a></li>
+                        <li><a href="<% fileDepth %>/modifyArticles">Articles</a></li>
                 <%  case 2:
                     case 1: %>
-                        <li><a href="/publish">Publish</a></li>
+                        <li><a href="<% fileDepth %>/publish">Publish</a></li>
                <% }
 
                 // separate so if have 2fa but no code yet and want to log out of that portion
                 if (jwt.id) { %>
                         <li id="logout">
-                            <form id="menuOut" method="post" action="/api/userStatus">
+                            <form id="menuOut" method="post" action="<% fileDepth %>/api/userStatus">
                                 <input id="logoutInpt" type="submit" name="logout" value="Log Out" />
                             </form>
                         </li>
-                        <li class="profile"><a href="/u/<%- jwt.email %>"><%- jwt.email %></a></li>
+                        <li class="profile"><a href="<% fileDepth %>/u/<%- jwt.email %>"><%- jwt.email %></a></li>
                <% } %>
          <% } %>
          <% jwt %>

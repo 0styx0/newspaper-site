@@ -112,7 +112,7 @@ function setupArticleTable(articleInfo: Array<ArticleInfo>, currentUser: boolean
 
             if (bit == "url") {
 
-                article[bit] = `<a href="/issue/${article.issue}/story/${article[bit]}">
+                article[bit] = `<a href="../issue/${article.issue}/story/${article[bit]}">
                                  ${decodeURIComponent(article[bit])}
                                 </a>`;
             }

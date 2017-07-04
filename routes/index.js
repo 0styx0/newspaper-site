@@ -32,13 +32,15 @@ function getJWT(req) {
   return (cookie) ? jwt.decode(req.cookies.jwt, JWT.SECRET)[1] : {};
 }
 
-function serve(page, title, description) {
+function serve(page, title, description, fileDepth = '..') {
 
   Utilities.res.render('template', {
     page: page+'.html',
     title: title,
     description: description,
-    jwt: getJWT(Utilities.req)});
+    jwt: getJWT(Utilities.req),
+    fileDepth: fileDepth
+  });
 }
 
 
@@ -47,7 +49,7 @@ router.get(/^(\/|\/issue\/\d+?|\/tag\/\w+)$/, () => serve('mainPage', 'Storm New
 
 router.get(/issue\/\d+?\/story\/.+/, (req) => {
   const storyName = decodeURIComponent(req.path.split('/')[4]);
-  serve('story', storyName, `Story about ${storyName}`)
+  serve('story', storyName, `Story about ${storyName}`, '../..')
 });
 
 router.get('/login', () => serve('stormLogin', 'Login', 'Login Screen for TABCEOTS'));

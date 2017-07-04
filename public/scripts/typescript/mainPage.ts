@@ -100,7 +100,7 @@ function createSlideshow(slideInfo = []) {
 
                const img = `<img src="${pic}" alt="Picture from ${picArray.URL}" id="${++counter}" class="slideshowPic" />`;
 
-               const picWithLink = `<a href='/issue/${picArray.ISSUE}/story/${picArray.URL}'>${img}</a>`;
+               const picWithLink = `<a href='../issue/${picArray.ISSUE}/story/${picArray.URL}'>${img}</a>`;
 
                document.getElementById("slideLink")!.innerHTML += picWithLink;
 
@@ -171,7 +171,7 @@ function setupNumberLine(curIssue: number, maxIssue: number) {
 
         while (i <= maxIssue) {
 
-            issueLinks += `<a href="/issue/${i}">${i}</a>`;
+            issueLinks += `<a href="../issue/${i}">${i}</a>`;
 
             if (i === 3 && curIssue - 2 <= maxIssue && curIssue - 2 > i) {
                 issueLinks += '...';
