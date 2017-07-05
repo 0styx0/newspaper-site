@@ -67,12 +67,19 @@ class JournalistTable extends React.Component {
     render() {
 
         const tableHeadings = ['Name', 'Articles', 'Views'];
+        let loggedInElts = [];
 
         if (jwt.level) {
             tableHeadings.push('Level');
         }
+
         if (jwt.level > 1) {
             tableHeadings.push('Delete');
+
+            loggedInElts = [
+                    <Input key={0} label="Password" name="password" type="password" required />,
+                    <input key={1} name="" value="Modify Users" type="submit" />
+                ];
         }
 
         return (
@@ -88,6 +95,9 @@ class JournalistTable extends React.Component {
                       headings={tableHeadings}
                       rows={this.state.journalistInfo}
                     />
+
+                    {loggedInElts.map(input => input)}
+
                 </div>}
 
             />
