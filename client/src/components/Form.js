@@ -1,6 +1,9 @@
 import React from 'react';
 
 
+/**
+ * @return form with action of props.action and children of props.children
+ */
 class Form extends React.Component {
 
 
