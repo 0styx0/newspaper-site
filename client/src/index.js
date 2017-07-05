@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Login from './Login';
 import Signup from './Signup';
+import JournalistTable from './JournalistTable';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -15,11 +16,13 @@ const App = () => (
             <li><Link to="./">Home</Link></li>
             <li><Link to="./login">Login</Link></li>
             <li><Link to="./signup">Signup</Link></li>
+            <li><Link to="./u">Journalists</Link></li>
         </ul>
     </nav>
     <div>
       <Route path="/login" component={Login}/>
       <Route path="/signup" component={Signup}/>
+      <Route path="/u" component={JournalistTable}/>
 
     </div>
   </div>
