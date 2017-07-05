@@ -1,5 +1,11 @@
 import React from 'react';
 
+/**
+ * @prop label, children, abbr, required @see Select
+ *
+ * @return html label as parent to props.children with text of prop.value concatted with ': ',
+   if abbr is given, that's put in too, and if required is given, a red asterisk is put in too
+ */
 function Label(props) {
 
     const label = props.value + ": ";
@@ -13,6 +19,16 @@ function Label(props) {
     )
 }
 
+/**
+ * @prop label, required, name, children - @see Select
+ * @prop abbr - optional text for abbr elt if want to give user a hint about the input
+ * @prop placeholder = html attr
+ * @prop type = html attr
+ * @prop title = html attr
+ * @prop pattern = html attr
+ *
+ * @return input elt wrapped in a @see Label
+ */
 function Input(props) {
 
 
@@ -36,6 +52,12 @@ function Input(props) {
     );
 }
 
+/**
+ * @prop label - string, contents of label element
+ * @prop required - if it exists, the select gets `required attribute
+ * @prop name - name of select
+ * @prop children - option elements
+ */
 function Select(props) {
 
     return (
