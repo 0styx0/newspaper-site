@@ -6,7 +6,6 @@ import React from 'react';
  * @prop rows - 2d array where [row][tdText]
  */
 function Table(props) {
-    console.log(props.rows)
 
     return (<table>
         <thead>
