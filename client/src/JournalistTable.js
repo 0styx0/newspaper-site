@@ -25,15 +25,27 @@ class JournalistTable extends React.Component {
 
             person.name = <a href={person.profile_link}>{person.name}</a>
 
-            delete person.profile_link;
-            delete person.id;
+            if (jwt.level > 1) {
 
-            const arr = [];
-
-            for (const bit in person) {
-                arr.push(person[bit]);
+                person.id = (person.level < jwt.level) ? <input type="checkbox" name="delAcc[]" value={person.id} /> : "N/A";
             }
-            return arr;
+
+            if (!jwt.level) {
+
+                return [
+                    person.name,
+                    person.articles,
+                    person.views,
+                ];
+            }
+
+            return [
+                person.name,
+                person.level,
+                person.articles,
+                person.views,
+                person.id
+            ];
 
         })
         this.setState({journalistInfo: journalistInfo});
@@ -71,11 +83,11 @@ class JournalistTable extends React.Component {
         let loggedInElts = [];
 
         if (jwt.level) {
-            tableHeadings.push('Level');
+            tableHeadings.splice(1, 0, 'Level');
         }
 
         if (jwt.level > 1) {
-            tableHeadings.push('Delete');
+            tableHeadings.push(<span className="danger">Delete</span>);
 
             loggedInElts = [
                     <Input key={0} label="Password" name="password" type="password" required />,
