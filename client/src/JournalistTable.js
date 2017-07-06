@@ -13,6 +13,7 @@ class JournalistTable extends React.Component {
         super();
 
         this.sortInfo = this.sortInfo.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
 
         this.state = {
             journalistInfo: [[]]
@@ -30,7 +31,7 @@ class JournalistTable extends React.Component {
             if (jwt.level > 1) {
 
                 if (person.level < jwt.level) {
-                    person.id = <input formMethod="delete" type="checkbox" name="delAcc[]" value={person.id} />
+                    person.id = <input formMethod="delete" key={person.id} type="checkbox" name="delAcc[]" value={person.id} />
                     person.level =
                         <div>
                             <select name="lvl[]" formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
@@ -47,23 +48,15 @@ class JournalistTable extends React.Component {
 
             if (!jwt.level) {
 
-                return [
-                    person.name,
-                    person.articles,
-                    person.views,
-                ];
+                delete person.id;
+                delete person.level;
             }
+            delete person.profile_link;
 
-            return [
-                person.name,
-                person.level,
-                person.articles,
-                person.views,
-                person.id
-            ];
+            return person;
+        });
 
-        })
-        this.setState({journalistInfo: journalistInfo});
+        this.setState({journalistInfo});
     }
 
     async getData() {
@@ -115,10 +108,32 @@ class JournalistTable extends React.Component {
         />);
     }
 
+    updateInfo(method, infoChanged) {
+
+        const updatedExistingUsers = this.state.journalistInfo.filter(person =>
+          (person.id.props) ? infoChanged['delAcc[]'].indexOf(person.id.props.value.toString()) === -1 : true);
+
+
+        this.setState({journalistInfo: updatedExistingUsers});
+    }
+
     render() {
 
         const tableHeadings = ['Name', 'Articles', 'Views'];
         let loggedInElts = [];
+
+        const data = this.state.journalistInfo;
+
+        // converts data to arrays so can be put into table
+        const tableData = data.map(json => {
+
+            const arr = [];
+            for (const key in json) {
+                arr.push(json[key])
+            }
+            return arr;
+        });
+
 
         if (jwt.level) {
             tableHeadings.splice(1, 0, 'Level');
@@ -142,11 +157,12 @@ class JournalistTable extends React.Component {
                      <Form
                         action="api/userGroup"
                         method={['put', 'delete']} // since delete and put are in the same form, asking to check each input separately
+                        onSubmit={this.updateInfo}
                         children={
                           <div>
                             <Table
                             headings={tableHeadings}
-                            rows={this.state.journalistInfo}
+                            rows={tableData}
                             />
                             {loggedInElts.map(input => input)}
                           </div>}

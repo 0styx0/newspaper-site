@@ -89,7 +89,7 @@ class Form extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(json)
-        }).then(this.props.onSubmit);
+        }).then(() => this.props.onSubmit(method, json));
     }
 
     render() {
