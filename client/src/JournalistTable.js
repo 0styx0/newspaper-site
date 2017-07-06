@@ -29,7 +29,20 @@ class JournalistTable extends React.Component {
 
             if (jwt.level > 1) {
 
-                person.id = (person.level < jwt.level) ? <input type="checkbox" name="delAcc[]" value={person.id} /> : "N/A";
+                if (person.level < jwt.level) {
+                    person.id = <input formMethod="delete" type="checkbox" name="delAcc[]" value={person.id} />
+                    person.level =
+                        <div>
+                            <select name="lvl[]" formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
+                                return (<option key={idx} value={idx + 1}>{idx + 1}</option>)
+                            })}</select>
+                            <input formMethod="put" type="hidden" name="name[]" value={person.profile_link}/>
+                        </div>
+
+                }
+                else {
+                    person.id = "N/A";
+                }
             }
 
             if (!jwt.level) {
@@ -125,16 +138,20 @@ class JournalistTable extends React.Component {
               heading="Journalists"
               children={
                 <div>
-                    <Form
-                        action="../api/userGroup"
-                        children={this.renderSortingOptions()}
-                    />
-                    <Table
-                      headings={tableHeadings}
-                      rows={this.state.journalistInfo}
-                    />
+                    {this.renderSortingOptions()}
+                     <Form
+                        action="api/userGroup"
+                        method={['put', 'delete']} // since delete and put are in the same form, asking to check each input separately
+                        children={
+                          <div>
+                            <Table
+                            headings={tableHeadings}
+                            rows={this.state.journalistInfo}
+                            />
+                            {loggedInElts.map(input => input)}
+                          </div>}
 
-                    {loggedInElts.map(input => input)}
+                    />
 
                 </div>}
 

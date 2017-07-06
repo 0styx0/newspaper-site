@@ -2,7 +2,9 @@ import React from 'react';
 
 
 /**
- * @return form with action of props.action and children of props.children
+ * @return form with action of props.action, children of props.children, and method of props.method.
+ *  NOTE: if a form has inputs which require different REST methods, make the method an array of methods needed,
+ * and set each individual input with its own formMethod attr
  */
 class Form extends React.Component {
 
@@ -11,38 +13,83 @@ class Form extends React.Component {
 
         this.onSubmit = this.onSubmit.bind(this);
     }
+
     onSubmit(event) {
+
 
         event.preventDefault();
         event.stopPropagation();
+        this.separateData(event.target, event.target.dataset.method);
+    }
+
+    /**
+     * Separates form elements by method (if needed), then sends to be parsed and ultimately sent to server
+     */
+    separateData(form) {
+
+        if (Array.isArray(this.props.method)) {
+
+            this.props.method.map((method) => form.querySelectorAll(`[formmethod=${method}]`))
+            .forEach((elts, idx) => this.parseData(form, elts, this.props.method[idx]));
+        }
+        else {
+            this.parseData(form, form.elements, this.props.method);
+        }
+
+    }
+
+    /**
+     * Turns elements into json {name: value} then passes to sendData
+     */
+    parseData(form, elements, method) {
 
         const formData = {};
 
-        for (let i = 0; i < event.target.elements.length; i++) {
+        for (let i = 0; i < elements.length; i++) {
 
-            const elt = event.target.elements[i];
+            const elt = elements[i];
 
             if (elt.name) {
-                formData[elt.name] = elt.value;
-            }
 
+                if (!formData[elt.name] && elt.name.indexOf("[]")) {
+                    formData[elt.name] = []
+                }
+                if (Array.isArray(formData[elt.name])) {
+                    formData[elt.name].push(elt.value);
+                }
+                else {
+
+                    formData[elt.name] = elt.value;
+                }
+            }
         }
 
-        fetch(event.target.action, {
-            method: event.target.dataset.method,
+        const passwordElt = form.querySelector("[type=password]");
+
+        formData.password = (formData.password) ? formData.password : passwordElt.value
+
+        this.sendData(form, formData, method);
+    }
+
+    /**
+     * Sends data to server, then calls the onSubmit handler that user of component may have attached
+     */
+    sendData(form, json, method) {
+console.log(json);
+        fetch(form.action, {
+            method: method,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(json)
         }).then(this.props.onSubmit);
-
     }
 
     render() {
 
         return (
-            <form action={this.props.action} data-method={this.props.method} onSubmit={this.onSubmit} >
+            <form action={this.props.action}  onSubmit={this.onSubmit} >
                 {this.props.children}
             </form>
         )
