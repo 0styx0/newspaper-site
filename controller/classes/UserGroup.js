@@ -140,7 +140,7 @@ module.exports = class UserGroup {
 
         promoteParams.unshift(toLevel);
 
-        asyncDB.query(`UPDATE users SET level = ? WHERE TRIM(TRAILING '@tabc.org' FROM email) IN ${inClause}`, promoteParams);
+        asyncDB.query(`UPDATE users SET level = ? WHERE TRIM(LEADING '.' FROM (TRIM(TRAILING '@tabc.org' FROM email))) IN ${inClause}`, promoteParams);
 
         Utilities.setHeader(200, "user(s) updated");
         return true;
