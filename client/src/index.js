@@ -6,6 +6,24 @@ import JournalistTable from './JournalistTable';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Link, Route } from 'react-router-dom'
+import {jwt} from './components/jwt';
+
+(function() {
+        fetch('http://localhost:3000/api/userStatus', {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+        }).then(data => data)
+        .then(data => data.json())
+        .then(json => {
+            jwt.level = +json.level
+            jwt.email = json.email
+            jwt.id = json.id
+        }).then(render, render);
+
+}());
 
 
 const App = () => (
@@ -28,11 +46,12 @@ const App = () => (
   </div>
 );
 
-ReactDOM.render((
-  <BrowserRouter>
-    <App/>
-  </BrowserRouter>
-), document.getElementById('root'))
-
+function render() {
+  ReactDOM.render((
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+  ), document.getElementById('root'))
+}
 
 registerServiceWorker();
