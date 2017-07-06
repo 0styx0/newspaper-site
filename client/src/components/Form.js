@@ -29,7 +29,8 @@ class Form extends React.Component {
 
         if (Array.isArray(this.props.method)) {
 
-            this.props.method.map((method) => form.querySelectorAll(`[formmethod=${method}]`))
+            this.props.method.map(method => form.querySelectorAll(`[formmethod=${method}]`))
+            .map(elts => Array.from(elts).filter(elt => elt.type !== "checkbox" || elt.checked))
             .forEach((elts, idx) => this.parseData(form, elts, this.props.method[idx]));
         }
         else {
@@ -42,6 +43,11 @@ class Form extends React.Component {
      * Turns elements into json {name: value} then passes to sendData
      */
     parseData(form, elements, method) {
+
+        // if nothing is selected
+        if (elements.length === 0) {
+            return;
+        }
 
         const formData = {};
 
@@ -75,7 +81,7 @@ class Form extends React.Component {
      * Sends data to server, then calls the onSubmit handler that user of component may have attached
      */
     sendData(form, json, method) {
-console.log(json);
+
         fetch(form.action, {
             method: method,
             credentials: "include",
