@@ -1,7 +1,8 @@
 import React from 'react';
 import Form from './components/Form';
 import {Input, Select} from './components/Input';
-import {Container, jwt} from './components/Container';
+import {Container} from './components/Container';
+import {jwt} from './components/jwt';
 
 class Signup extends React.Component {
 

@@ -1,7 +1,5 @@
 import React from 'react';
 
-let jwt = {};
-
 function Heading(props) {
 
     return (
@@ -12,22 +10,7 @@ function Heading(props) {
 
 class Container extends React.Component {
 
-    async getCookies() {
-
-        const call = await fetch('http://localhost:3000/api/userStatus', {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        return call.json();
-    }
-
     render() {
-
-        jwt = this.getCookies();
 
         return (
             <section className="container">
@@ -39,4 +22,4 @@ class Container extends React.Component {
 
 }
 
-export {Container, jwt};
+export {Container};
