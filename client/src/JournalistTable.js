@@ -110,11 +110,15 @@ class JournalistTable extends React.Component {
 
     updateInfo(method, infoChanged) {
 
-        const updatedExistingUsers = this.state.journalistInfo.filter(person =>
-          (person.id.props) ? infoChanged['delAcc[]'].indexOf(person.id.props.value.toString()) === -1 : true);
+        let updatedInfo = this.state.journalistInfo;
 
+        if (infoChanged['delAcc[]']) {
 
-        this.setState({journalistInfo: updatedExistingUsers});
+            updatedInfo = this.state.journalistInfo.filter(person =>
+            (person.id.props) ? infoChanged['delAcc[]'].indexOf(person.id.props.value.toString()) === -1 : true);
+        }
+
+        this.setState({journalistInfo: updatedInfo});
     }
 
     render() {
