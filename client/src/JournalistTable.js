@@ -12,6 +12,8 @@ class JournalistTable extends React.Component {
 
         super();
 
+        this.sortInfo = this.sortInfo.bind(this);
+
         this.state = {
             journalistInfo: [[]]
         }
@@ -61,16 +63,39 @@ class JournalistTable extends React.Component {
         });
     }
 
+    /**
+     * Handler for select elt generate in this.renderSortingOptions
+     * Sorts the table by parameter given (the selected option's index)
+     */
+    sortInfo(event) {
+
+        const sortBy = event.target.options.selectedIndex;
+
+        const copyInfo = [...this.state.journalistInfo]; // making sure not to mutate state since bad practice
+
+
+        const sortedInfo = copyInfo.sort((a, b) => {
+
+            const sortee1 = (a[sortBy].props) ? a[sortBy].props.children.split(" ")[1] : a[sortBy];
+            const sortee2 = (b[sortBy].props) ? b[sortBy].props.children.split(" ")[1] : b[sortBy];
+
+            return (isNaN(+sortee1)) ? sortee1.localeCompare(sortee2) : sortee2 - sortee1;
+        });
+
+        this.setState({journalistInfo: sortedInfo});
+    }
+
     renderSortingOptions() {
 
         const sortingOptions = ["Last Name", "Articles", "Views"];
 
         if (jwt.level) {
-            sortingOptions.push("Level");
+            sortingOptions.splice(1, 0, "Level");
         }
 
         return (<Select
           label="Sort By"
+          onChange={this.sortInfo}
           children={
               sortingOptions.map((val, idx) => <option key={idx} value={val}>{val}</option>)
           }

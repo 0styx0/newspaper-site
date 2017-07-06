@@ -66,7 +66,7 @@ function Select(props) {
             required={!!props.required}
 
             children={
-                <select name={props.name}>
+                <select name={props.name} onChange={props.onChange}>
                     {props.children}
                 </select>
             }
