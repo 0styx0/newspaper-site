@@ -57,7 +57,7 @@ class Form extends React.Component {
 
             if (elt.name) {
 
-                if (!formData[elt.name] && elt.name.indexOf("[]")) {
+                if (!formData[elt.name] && elt.name.indexOf("[]") !== -1) {
                     formData[elt.name] = []
                 }
                 if (Array.isArray(formData[elt.name])) {
