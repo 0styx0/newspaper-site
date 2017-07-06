@@ -20,6 +20,13 @@ class JournalistTable extends React.Component {
         }
     }
 
+    mirrorClass(event) {
+
+        for (const input of event.target.parentNode.querySelectorAll("input")) {
+            input.className += " changed";
+        }
+    }
+
     async componentWillMount() {
 
         const data = await this.getData();
@@ -34,7 +41,7 @@ class JournalistTable extends React.Component {
                     person.id = <input formMethod="delete" key={person.id} type="checkbox" name="delAcc[]" value={person.id} />
                     person.level =
                         <div>
-                            <select name="lvl[]" formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
+                            <select name="lvl[]" onChange={this.mirrorClass} formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
                                 return (<option key={idx} value={idx + 1}>{idx + 1}</option>)
                             })}</select>
                             <input formMethod="put" type="hidden" name="name[]" value={person.profile_link}/>

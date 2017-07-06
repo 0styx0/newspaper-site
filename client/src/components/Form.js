@@ -29,12 +29,12 @@ class Form extends React.Component {
 
         if (Array.isArray(this.props.method)) {
 
-            this.props.method.map(method => form.querySelectorAll(`[formmethod=${method}]`))
+            this.props.method.map(method => form.querySelectorAll(`[formmethod=${method}].changed`))
             .map(elts => Array.from(elts).filter(elt => elt.type !== "checkbox" || elt.checked))
             .forEach((elts, idx) => this.parseData(form, elts, this.props.method[idx]));
         }
         else {
-            this.parseData(form, form.elements, this.props.method);
+            this.parseData(form, form.querySelectorAll(".changed"), this.props.method);
         }
 
     }
@@ -92,10 +92,14 @@ class Form extends React.Component {
         }).then(() => this.props.onSubmit(method, json));
     }
 
+    registerChange(event) {
+        event.target.className += ' changed';
+    }
+
     render() {
 
         return (
-            <form action={this.props.action}  onSubmit={this.onSubmit} >
+            <form action={this.props.action}  onChange={this.registerChange} onSubmit={this.onSubmit} >
                 {this.props.children}
             </form>
         )
