@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from './components/Form';
-import {Input, Select} from './components/Input';
+import {Input, Select, SecretTwins} from './components/Input';
 import {Container} from './components/Container';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
@@ -21,13 +21,6 @@ class JournalistTable extends React.Component {
         }
     }
 
-    mirrorClass(event) {
-
-        for (const input of event.target.parentNode.querySelectorAll("input")) {
-            input.className += " changed";
-        }
-    }
-
     async componentWillMount() {
 
         const data = await this.getData();
@@ -41,13 +34,16 @@ class JournalistTable extends React.Component {
                 if (person.level < jwt.level) {
                     person.id = <input formMethod="delete" key={person.id} type="checkbox" name="delAcc[]" value={person.id} />
                     person.level =
-                        <div>
-                            <select name="lvl[]" onChange={this.mirrorClass} formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
+                        <SecretTwins
+                          original={<select name="lvl[]" onChange={this.mirrorClass} formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
                                 return (<option key={idx} value={idx + 1}>{idx + 1}</option>)
-                            })}</select>
-                            <input formMethod="put" type="hidden" name="name[]" value={person.profile_link}/>
-                        </div>
+                            })}</select>}
 
+                            props = {{
+                                name: "name[]",
+                                value: person.profile_link
+                            }}
+                        />
                 }
                 else {
                     person.id = "N/A";
