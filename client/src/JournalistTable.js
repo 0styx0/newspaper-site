@@ -16,7 +16,8 @@ class JournalistTable extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
 
         this.state = {
-            journalistInfo: [[]]
+            journalistInfoArr: [[]],
+            journalistInfoJson: [{}]
         }
     }
 
@@ -31,7 +32,7 @@ class JournalistTable extends React.Component {
 
         const data = await this.getData();
         const json = await data.json();
-        const journalistInfo = json.map(person => {
+        const journalistInfoJson = json.map(person => {
 
             person.name = <a href={person.profile_link}>{person.name}</a>
 
@@ -63,7 +64,7 @@ class JournalistTable extends React.Component {
             return person;
         });
 
-        this.setState({journalistInfo});
+        this.setJournalistInfo(journalistInfoJson);
     }
 
     async getData() {
@@ -84,8 +85,7 @@ class JournalistTable extends React.Component {
 
         const sortBy = event.target.options.selectedIndex;
 
-        const copyInfo = [...this.state.journalistInfo]; // making sure not to mutate state since bad practice
-
+        const copyInfo = [...this.state.journalistInfoArr]; // making sure not to mutate state since bad practice
 
         const sortedInfo = copyInfo.sort((a, b) => {
 
@@ -117,26 +117,21 @@ class JournalistTable extends React.Component {
 
     updateInfo(method, infoChanged) {
 
-        let updatedInfo = this.state.journalistInfo;
+        let updatedInfo = this.state.journalistInfoJson;
 
         if (infoChanged['delAcc[]']) {
 
-            updatedInfo = this.state.journalistInfo.filter(person =>
+            updatedInfo = this.state.journalistInfoJson.filter(person =>
             (person.id.props) ? infoChanged['delAcc[]'].indexOf(person.id.props.value.toString()) === -1 : true);
         }
 
-        this.setState({journalistInfo: updatedInfo});
+        this.setJournalistInfo(updatedInfo);
     }
 
-    render() {
-
-        const tableHeadings = ['Name', 'Articles', 'Views'];
-        let loggedInElts = [];
-
-        const data = this.state.journalistInfo;
+    setJournalistInfo(journalistInfoJson) {
 
         // converts data to arrays so can be put into table
-        const tableData = data.map(json => {
+        const journalistInfoArr = journalistInfoJson.map(json => {
 
             const arr = [];
             for (const key in json) {
@@ -144,6 +139,14 @@ class JournalistTable extends React.Component {
             }
             return arr;
         });
+
+        this.setState({journalistInfoArr, journalistInfoJson});
+    }
+
+    render() {
+
+        const tableHeadings = ['Name', 'Articles', 'Views'];
+        let loggedInElts = [];
 
 
         if (jwt.level) {
@@ -173,7 +176,7 @@ class JournalistTable extends React.Component {
                           <div>
                             <Table
                             headings={tableHeadings}
-                            rows={tableData}
+                            rows={this.state.journalistInfoArr}
                             />
                             {loggedInElts.map(input => input)}
                           </div>}
