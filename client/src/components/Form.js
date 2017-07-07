@@ -89,7 +89,15 @@ class Form extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(json)
-        }).then(() => this.props.onSubmit(method, json));
+        })
+        .then(() => {
+
+            for (const elt of document.querySelectorAll('[type=password]')) {
+                elt.value = '';
+            }
+        })
+        .then(() => this.props.onSubmit(method, json));
+
     }
 
     registerChange(event) {
