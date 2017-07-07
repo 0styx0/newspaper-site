@@ -259,8 +259,12 @@ table ~ label, #uploadForm label {
 }
 
 
-input:not([type="submit"]) {
+input:not([type=submit]) {
     height: 16px;
+}
+
+input[type=text] {
+
     width: 144px;
 }
 
@@ -293,7 +297,7 @@ form#updateIssueForm {
     display: none;
 }
 
-#articleTable input{
+input[type=number] {
     width: 30px;
 }
 

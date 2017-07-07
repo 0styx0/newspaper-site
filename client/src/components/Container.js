@@ -12,8 +12,10 @@ class Container extends React.Component {
 
     render() {
 
+        const className = `container ${this.props.className || ''}`;
+
         return (
-            <section className="container">
+            <section className={className}>
                 <Heading text={this.props.heading} />
                  {this.props.children}
             </section>

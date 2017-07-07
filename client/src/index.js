@@ -4,6 +4,7 @@ import Login from './Login';
 import Signup from './Signup';
 import JournalistTable from './JournalistTable';
 import IssueTable from './IssueTable';
+import ArticleTable from './ArticleTable';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Link, Route } from 'react-router-dom'
@@ -37,6 +38,7 @@ const App = () => (
             <li><Link to="./signup">Signup</Link></li>
             <li><Link to="./u">Journalists</Link></li>
             <li><Link to="./issue">Issues</Link></li>
+            {jwt.level ? <li><Link to="./modifyArticles">Articles</Link></li> : ""}
         </ul>
     </nav>
     <div>
@@ -44,6 +46,7 @@ const App = () => (
       <Route path="/signup" component={Signup}/>
       <Route path="/u" component={JournalistTable}/>
       <Route path="/issue" component={IssueTable}/>
+      {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
 
     </div>
   </div>
