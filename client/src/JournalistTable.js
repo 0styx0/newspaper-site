@@ -89,13 +89,23 @@ class JournalistTable extends React.Component {
 
         const sortedInfo = copyInfo.sort((a, b) => {
 
-            const sortee1 = (a[sortBy].props) ? a[sortBy].props.children.split(" ")[1] : a[sortBy];
-            const sortee2 = (b[sortBy].props) ? b[sortBy].props.children.split(" ")[1] : b[sortBy];
+            const sortee1 = getSortInfo(a[sortBy]);
+            const sortee2 = getSortInfo(b[sortBy]);
 
             return (isNaN(+sortee1)) ? sortee1.localeCompare(sortee2) : sortee2 - sortee1;
         });
 
-        this.setState({journalistInfo: sortedInfo});
+
+        function getSortInfo(elt) {
+
+            if (elt.props) {
+                return Array.isArray(elt.props.children) ? elt.props.children[0].props.defaultValue : elt.props.children.split(" ")[0];
+            }
+
+            return elt;
+        }
+
+        this.setJournalistInfo(sortedInfo);
     }
 
     renderSortingOptions() {
