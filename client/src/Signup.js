@@ -9,16 +9,22 @@ class Signup extends React.Component {
     renderLevelSelect() {
 
         if (jwt.level > 1) {
-
+          // adding .changed since might not want user to be more than lvl 1, and for the input, can't change it since hidden
           return (
 
             <Select
               label="Level"
+              className="changed"
+              defaultValue={1}
               name="lvl"
               children={Array(jwt.level).fill(null).map((val, idx) => <option key={idx} value={idx + 1}>{idx + 1}</option>)}
               required
             />
           );
+        }
+        else {
+
+            return (<input type="hidden" className="changed" name="lvl" value="1" />)
         }
     }
 
@@ -77,7 +83,6 @@ class Signup extends React.Component {
 
                 {this.renderLevelSelect()}
 
-                <input type="hidden" name="lvl" value="1" />
 
                 <input type="submit" className="submit" name="create" value="Sign Up" />
             </div>
@@ -90,7 +95,7 @@ class Signup extends React.Component {
             <Container
               heading="Sign Up"
               children={
-                  <Form action="../api/user" children={this.renderInputs()} />}
+                  <Form action="/api/user" method="post" children={this.renderInputs()} />}
             />
         );
     }

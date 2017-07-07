@@ -96,7 +96,12 @@ class Form extends React.Component {
                 elt.value = '';
             }
         })
-        .then(() => this.props.onSubmit(method, json));
+        .then(() => {
+            if (this.props.onSubmit) {
+
+                this.props.onSubmit(method, json)
+            }
+        });
 
     }
 

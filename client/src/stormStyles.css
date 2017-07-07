@@ -195,7 +195,7 @@ nav li:hover a {
 
 
 
-input + abbr {
+label abbr {
     padding-left: 3px;
     color: blue;
     font-size: 9pt;

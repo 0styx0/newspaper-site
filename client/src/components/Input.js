@@ -13,10 +13,39 @@ function Label(props) {
     return (
         <label>{label}
             {props.children}
-            {!!props.abbr ? <abbr title={props.abbr}>?</abbr> : ""}
             {!!props.required ? <span className="danger">*</span> : ""}
+            {!!props.abbr ? <Hint title={props.abbr} /> : ""}
         </label>
     )
+}
+
+class Hint extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            reveal: false
+        };
+    }
+
+    render() {
+
+        if (this.state.reveal) {
+
+            return (
+                <span>
+                    <abbr onClick={() => this.setState({reveal: false})} title={this.props.title}>?</abbr>
+                    <br />
+                    <div className="abbrMessage">{this.props.title}</div>
+                </span>
+                )
+        }
+        else {
+
+            return (<abbr onClick={() => this.setState({reveal: true})} title={this.props.title}>?</abbr>)
+        }
+    }
 }
 
 /**
@@ -56,6 +85,7 @@ function Input(props) {
  * @prop label - string, contents of label element
  * @prop required - if it exists, the select gets `required attribute
  * @prop name - name of select
+ * @prop className - class
  * @prop children - option elements
  */
 function Select(props) {
@@ -66,7 +96,13 @@ function Select(props) {
             required={!!props.required}
 
             children={
-                <select name={props.name} onChange={props.onChange}>
+                <select
+                  name={props.name}
+                  defaultValue={props.defaultValue}
+                  onChange={props.onChange}
+                  className={props.className}
+                  >
+
                     {props.children}
                 </select>
             }
