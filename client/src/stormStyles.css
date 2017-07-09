@@ -263,7 +263,7 @@ input:not([type=submit]) {
     height: 16px;
 }
 
-input[type=text] {
+input:not([type=number]):not([type=submit]) {
 
     width: 144px;
 }
