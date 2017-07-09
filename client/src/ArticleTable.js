@@ -19,9 +19,20 @@ class ArticleTable extends React.Component {
         };
     }
 
-    async getData() {
+    async putData(num = null) {
+
+        const data = await this.getData(num);
+        const json = await data.json();
+        this.setArticleInfo(json);
+    }
+
+    componentWillMount() {
+        this.putData();
+    }
+
+    async getData(num) {
         // NOTE: REMOVE query after done building this
-         return await fetch('/api/articleGroup?articlesFor=1', {
+         return await fetch(`/api/articleGroup?articlesFor=${num}`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json"
@@ -30,12 +41,6 @@ class ArticleTable extends React.Component {
 
     }
 
-    async componentWillMount() {
-
-        const data = await this.getData();
-        const json = await data.json();
-        this.setArticleInfo(json);
-    }
 
     setArticleInfo(data) {
 
@@ -82,25 +87,40 @@ class ArticleTable extends React.Component {
             <Container
                 heading="Articles"
                 className="tableContainer"
-                children={<Form
-                               method={['put', 'delete']}
-                              children={
-                                  <div>
+                children={
+                    <div>
+                        <Input
+                          label="Issue Number"
+                          props={{
+                            type: "number",
+                            min: 1,
+                            key: this.state.issueInfo.num,
+                            defaultValue: this.state.issueInfo.num,
+                            max: this.state.issueInfo.max,
+                            onChange: (event) => this.putData(event.target.value)
+                          }}
+                        />
+                        <Form
+                            method={['put', 'delete']}
+                            children={
+                                <div>
                                     <Table headings={headings} rows={this.state.articles}/>
 
                                     <Input
-                                      label="Issue Name"
-                                      props={{
-                                          name: "issueName",
-                                          defaultValue: this.state.issueInfo.name,
-                                          key: this.state.issueInfo.name, // makes it update when fetch info comes
-                                          disabled: !!this.state.issueInfo.ispublic,
-                                          type: "text"
-                                      }}
+                                        label="Issue Name"
+                                        props={{
+                                            name: "issueName",
+                                            defaultValue: this.state.issueInfo.name,
+                                            key: this.state.issueInfo.name, // makes it update when fetch info comes
+                                            disabled: !!this.state.issueInfo.ispublic,
+                                            type: "text"
+                                        }}
                                     />
-                                  </div>
-                          }
-                          />}
+                                </div>
+                            }
+                        />
+                    </div>
+                }
             />
         )
     }
