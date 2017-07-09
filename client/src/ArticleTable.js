@@ -2,7 +2,7 @@ import React from 'react';
 import {Container} from './components/Container';
 import Table from './components/Table';
 import Form from './components/Form';
-import {Input, Select, SecretTwins} from './components/Input';
+import {Input, SecretTwins} from './components/Input';
 
 
 
@@ -133,28 +133,7 @@ class ArticleTable extends React.Component {
                                 <div>
                                     <Table headings={headings} rows={this.state.articles}/>
 
-                                    <Input
-                                        label="Issue Name"
-                                        props={{
-                                            name: "issueName",
-                                            defaultValue: this.state.issueInfo.name,
-                                            key: this.state.issueInfo.name, // makes it update when fetch info comes
-                                            disabled: !!this.state.issueInfo.ispublic,
-                                            type: "text"
-                                        }}
-                                    />
-                                    <Select
-                                      label="Public"
-                                      props={{
-                                          name: "pub",
-                                          formAction: "api/issue",
-                                          defaultValue: this.state.issueInfo.ispublic,
-                                          key: this.state.issueInfo.ispublic,
-                                          disabled: !!this.state.issueInfo.ispublic,
-                                          children: ["No", "Yes"].map((val, idx) => <option value={idx} >{val}</option>)
-                                      }}
 
-                                    />
                                     <Input
                                       label="Password"
                                       props={{

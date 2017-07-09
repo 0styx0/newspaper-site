@@ -31,7 +31,10 @@ class Form extends React.Component {
 
             this.props.method.map(method => form.querySelectorAll(`[formmethod=${method}].changed`))
             .map(elts => Array.from(elts).filter(elt => elt.type !== "checkbox" || elt.checked))
-            .forEach((elts, idx) => this.parseData(form, elts, this.props.method[idx]));
+            .forEach((elts, idx) => {
+
+                this.parseData(form, elts, this.props.method[idx])
+            });
         }
         else {
             this.parseData(form, form.querySelectorAll(".changed"), this.props.method);
@@ -67,7 +70,10 @@ class Form extends React.Component {
                         formData[elt.name].push(selected);
                     }
                     else {
-                        formData[elt.name].push(elt.value);
+                        // in ArticleTable 2 artId named inputs with same value so that id will be submitted with display order and tags
+                        if (formData[elt.name].indexOf(elt.value) === -1) {
+                            formData[elt.name].push(elt.value);
+                        }
                     }
                 }
                 else {

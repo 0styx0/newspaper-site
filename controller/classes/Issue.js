@@ -332,6 +332,7 @@ module.exports = class Issue {
         }
 
         this._isPublic = true;
+        this._settingChanged = true;
 
         // credit to https://stackoverflow.com/a/28431880
         this._madePub = (new Date()).toISOString();
