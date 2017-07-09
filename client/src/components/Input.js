@@ -51,32 +51,25 @@ class Hint extends React.Component {
 /**
  * @prop label, required, name, children - @see Select
  * @prop abbr - optional text for abbr elt if want to give user a hint about the input
- * @prop placeholder = html attr
- * @prop type = html attr
- * @prop title = html attr
- * @prop pattern = html attr
+ * @prop props - json of any native attr wanted
  *
  * @return input elt wrapped in a @see Label
  */
+
 function Input(props) {
 
+    const input = React.cloneElement(<input />, props.props);
 
     return (
         <Label
-          value={props.label}
-          required={!!props.required}
-          abbr={props.abbr}
+        value={props.label}
+        required={!!props.props.required}
+        abbr={props.abbr}
 
-          children={
+        children={
+            input
+        }
 
-            <input
-              name={props.name}
-              type={props.type}
-              placeholder={props.placeholder}
-              pattern={props.pattern}
-              required={!!props.required}
-              title={props.title}
-            />}
         />
     );
 }
@@ -138,7 +131,7 @@ class SecretTwins extends React.Component {
         const original = React.cloneElement(this.props.original, {onChange: this.mirror});
 
         const originProps = this.props.original.props;
-        
+
         const copy = <input
                         type="hidden"
                         name={this.props.name}

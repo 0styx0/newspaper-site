@@ -2,7 +2,7 @@ import React from 'react';
 import {Container} from './components/Container';
 import Table from './components/Table';
 import Form from './components/Form';
-import {Input, Select, SecretTwins} from './components/Input';
+import {Input, SecretTwins} from './components/Input';
 
 
 

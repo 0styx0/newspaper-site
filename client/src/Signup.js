@@ -34,51 +34,61 @@ class Signup extends React.Component {
             <div>
                 <Input
                   label="Username"
-                  name="username"
-                  type="text"
-                  pattern="[\w._-]+"
-                  title="Must be letters, numbers, ., _, or -"
-                  placeholder="jpulitzer"
                   abbr="Must not contain spaces"
-                  required
+                  props={{
+                    name: "username",
+                    type: "text",
+                    pattern: "[\\w._-]+",
+                    title: "Must be letters, numbers, ., _, or -",
+                    placeholder: "jpulitzer",
+                    required: true
+                  }}
                 />
 
                 <Input
                   label="Full Name"
-                  name="fullName"
-                  type="text"
-                  pattern="^[a-zA-Z.-]+\s[a-zA-Z-]+(\s[a-zA-Z]+)?$"
-                  title="First, middle initial (optional), last"
-                  placeholder="Edgar A Poe"
                   abbr="Must contain only uppercase, lowercase, or periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
-                  required
+                  props={{
+                    name: "fullName",
+                    type: "text",
+                    pattern: "^[a-zA-Z.-]+\\s[a-zA-Z-]+(\\s[a-zA-Z]+)?$",
+                    title: "First, middle initial (optional), last",
+                    placeholder: "Edgar A Poe",
+                    required: true
+                  }}
                 />
 
                 <Input
                   label="Password"
-                  name="password"
-                  type="password"
-                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*).{6,}$"
                   abbr="Password must contain at least: 1 uppercase, 1 lowercase, 1 number, 6 character"
-                  required
+                  props={{
+                    name: "password",
+                    type: "password",
+                    pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$",
+                    required: true
+                  }}
                 />
 
                 <Input
                   label="Confirm Password"
-                  name="confirmation"
-                  type="password"
                   abbr="Must be the same as the password"
-                  required
+                  props={{
+                    name: "confirmation",
+                    type: "password",
+                    required: true
+                  }}
                 />
 
                 <Input
                   label="Email"
-                  name="email"
-                  type="email"
-                  pattern="^[^@]+@tabc\.org$"
-                  placeholder="example@tabc.org"
                   abbr="Must be your TABC email."
-                  required
+                  props={{
+                    name: "email",
+                    type: "email",
+                    pattern: "^[^@]+@tabc\\.org$",
+                    placeholder: "example@tabc.org",
+                    required: true
+                  }}
                 />
 
                 {this.renderLevelSelect()}

@@ -10,9 +10,25 @@ class LoginForm extends React.Component {
 
         return (
             <div>
-                <Input label="Username" name="username" type="text" placeholder="Username" required />
+                <Input
+                  label="Username"
+                  props={{
+                      name: "username",
+                      type: "text",
+                      placeholder: "Username",
+                      required: true
+                  }}
+                />
 
-                <Input label="Password" name="password" type="password" placeholder="Password" required />
+                <Input
+                  label="Password"
+                  props={{
+                      name: "password",
+                      type: "password",
+                      placeholder: "Password",
+                      required: true
+                  }}
+                />
 
                 <input type="submit" className="submit" value="Log In" />
                 <br />

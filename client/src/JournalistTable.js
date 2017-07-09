@@ -166,7 +166,16 @@ class JournalistTable extends React.Component {
             tableHeadings.push(<span className="danger">Delete</span>);
 
             loggedInElts = [
-                    <Input key={0} label="Password" name="password" type="password" required />,
+                    <Input
+                        key={0}
+                        label="Password"
+                        props={{
+                            key: 0,
+                            name: "password",
+                            type: "password",
+                            required: true
+                        }}
+                    />,
                     <input key={1} name="" value="Modify Users" type="submit" />
                 ];
         }
