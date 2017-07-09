@@ -22,17 +22,27 @@ class ArticleTable extends React.Component {
 
     async putData(num = null) {
 
+        const lastPath = window.location.pathname.split("/").slice(-1);
+
+        num = (isNaN(+lastPath) || ((!isNaN(num)) && num)) ? num : lastPath;
+
+
         // use cached results (don't load new info)
         if (this.state.history[num]) {
             this.setState({
                 articles: this.state.history[num].articles,
                 issueInfo: this.state.history[num].issueInfo
             });
+
+            window.history.pushState({}, `Issue ${num}`, num);
         }
         else {
 
             const data = await this.getData(num);
             const json = await data.json();
+
+            window.history.pushState({}, `Issue ${num}`, isNaN(+lastPath) ? "modifyArticles/"+json[2].num : json[2].num);
+
             this.setArticleInfo(json);
         }
     }
