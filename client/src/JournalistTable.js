@@ -115,11 +115,11 @@ class JournalistTable extends React.Component {
         return (
             <div id="sortingContainer">
                 <Select
-            label="Sort By"
-            onChange={this.sortInfo}
-            children={
-                sortingOptions.map((val, idx) => <option key={idx} value={val}>{val}</option>)
-            }
+                  label="Sort By"
+                  props={{
+                    onChange: this.sortInfo,
+                    children: sortingOptions.map((val, idx) => <option key={idx} value={val}>{val}</option>)
+                  }}
             />
         </div>);
     }

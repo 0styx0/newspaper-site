@@ -83,21 +83,14 @@ function Input(props) {
  */
 function Select(props) {
 
+    const select = React.cloneElement(<select/>, props.props);
+
     return (
         <Label
             value={props.label}
-            required={!!props.required}
-
+            required={!!props.props.required}
             children={
-                <select
-                  name={props.name}
-                  defaultValue={props.defaultValue}
-                  onChange={props.onChange}
-                  className={props.className}
-                  >
-
-                    {props.children}
-                </select>
+                select
             }
         />
     );

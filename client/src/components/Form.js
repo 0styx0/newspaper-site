@@ -61,7 +61,14 @@ class Form extends React.Component {
                     formData[elt.name] = []
                 }
                 if (Array.isArray(formData[elt.name])) {
-                    formData[elt.name].push(elt.value);
+
+                    if (elt.multiple) {
+                        const selected = Array.from(elt.selectedOptions).map(option => option.value);
+                        formData[elt.name].push(selected);
+                    }
+                    else {
+                        formData[elt.name].push(elt.value);
+                    }
                 }
                 else {
 

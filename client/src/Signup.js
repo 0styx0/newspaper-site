@@ -14,11 +14,13 @@ class Signup extends React.Component {
 
             <Select
               label="Level"
-              className="changed"
-              defaultValue={1}
-              name="lvl"
-              children={Array(jwt.level).fill(null).map((val, idx) => <option key={idx} value={idx + 1}>{idx + 1}</option>)}
-              required
+              props={{
+                className: "changed",
+                defaultValue: 1,
+                name: "lvl",
+                children: Array(jwt.level).fill(null).map((val, idx) => <option key={idx} value={idx + 1}>{idx + 1}</option>),
+                required: true
+              }}
             />
           );
         }
