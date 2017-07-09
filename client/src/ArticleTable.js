@@ -15,15 +15,26 @@ class ArticleTable extends React.Component {
 
             articles: [[]],
             tags: [], // this is all tags that exist in any article ever published
-            issueInfo: {}
+            issueInfo: {},
+            history: []
         };
     }
 
     async putData(num = null) {
 
-        const data = await this.getData(num);
-        const json = await data.json();
-        this.setArticleInfo(json);
+        // use cached results (don't load new info)
+        if (this.state.history[num]) {
+            this.setState({
+                articles: this.state.history[num].articles,
+                issueInfo: this.state.history[num].issueInfo
+            });
+        }
+        else {
+
+            const data = await this.getData(num);
+            const json = await data.json();
+            this.setArticleInfo(json);
+        }
     }
 
     componentWillMount() {
@@ -68,7 +79,14 @@ class ArticleTable extends React.Component {
                 ]
         });
 
-        this.setState({articles, issueInfo: data[2]});
+        const history = [...this.state.history];
+        history[data[2].num] = {articles, issueInfo: data[2]};
+
+        this.setState({
+            articles,
+            issueInfo: data[2],
+            history
+        });
     }
 
     render() {
