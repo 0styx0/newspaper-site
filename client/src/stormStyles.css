@@ -18,6 +18,10 @@ h1 {
     margin-bottom: 80px;
 }
 
+.mce-edit-area {
+    width: 80vw !important; /* tinymce editor */
+}
+
 @keyframes fadeOut {
 
     0% {
