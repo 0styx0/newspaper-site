@@ -70,7 +70,7 @@ class ArticleTable extends React.Component {
                 const tagArr = article.tags.split(', ');
 
                 return [
-                    <a href={`/issue/${data[1].num}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
+                    <a href={`/issue/${data[2].num}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
                     article.created,
                     <a href={`/u/${article.author_username}`}>{article.author_name}</a>,
                     <SecretTwins
