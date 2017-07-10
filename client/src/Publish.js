@@ -22,6 +22,7 @@ class Publish extends React.Component {
         super();
 
         this.readyContentForSubmit = this.readyContentForSubmit.bind(this);
+        this.autoFormat = this.autoFormat.bind(this);
 
         this.state = {
             editor: null,
@@ -87,7 +88,21 @@ class Publish extends React.Component {
     }
 
     autoFormat() {
-        //todo
+
+        const article = this.state.editor.getContent()
+
+        let formattedArticle = article.replace(/([\s\n]|<br \/>|&nbsp;)+(?=(<h1>)|(<p>))/i, "");
+
+        if (!/^<h1>([\s\S]+)<\/h1>[\s\S]*<h4>.+/.test(article)) {
+
+            formattedArticle = formattedArticle.replace(/<(\w+)>([\s\S]+?)<\/\1>/, "<h1>$2</h1>");
+
+            if (!/^<h1>([\s\S]+)<\/h1>[\s\S]*<h4>.+/.test(formattedArticle)) {
+                formattedArticle = formattedArticle.replace(/<\/h1>[\s\S]*?<(\w+)>([\s\S]+?)<\/\1>/i, "<h4>$2</h4>");
+            }
+        }
+
+        this.state.editor.setContent(formattedArticle.replace(/&nbsp;/g, ""));
     }
 
 
