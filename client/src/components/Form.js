@@ -119,7 +119,8 @@ class Form extends React.Component {
     }
 
     registerChange(event) {
-        event.target.className += ' changed';
+
+        event.target.classList.add('changed');
     }
 
     render() {
