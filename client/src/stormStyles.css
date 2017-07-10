@@ -19,7 +19,7 @@ h1 {
 }
 
 .mce-edit-area {
-    width: 80vw !important; /* tinymce editor */
+    min-width: 80vw !important; /* tinymce editor */
 }
 
 @keyframes fadeOut {
