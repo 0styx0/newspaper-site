@@ -94,8 +94,11 @@ class JournalistTable extends React.Component {
 
         function getSortInfo(elt) {
 
+
             if (elt.props) {
-                return Array.isArray(elt.props.children) ? elt.props.children[0].props.defaultValue : elt.props.children.split(" ")[0];
+
+                // sort by level, last name
+                return elt.props.original ?  elt.props.original.props.defaultValue : elt.props.children.split(" ")[0];
             }
 
             return elt;
