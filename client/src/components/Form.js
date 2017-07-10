@@ -65,7 +65,8 @@ class Form extends React.Component {
                 }
                 if (Array.isArray(formData[elt.name])) {
 
-                    if (elt.multiple) {
+                    // 2d array for /modifyArticles, but not for /publish
+                    if (elt.multiple && form.querySelectorAll("select[multiple]").length > 1) {
                         const selected = Array.from(elt.selectedOptions).map(option => option.value);
                         formData[elt.name].push(selected);
                     }
@@ -85,7 +86,10 @@ class Form extends React.Component {
 
         const passwordElt = form.querySelector("[type=password]");
 
-        formData.password = (formData.password) ? formData.password : passwordElt.value
+        if (formData.password || passwordElt) {
+
+            formData.password = (formData.password) ? formData.password : passwordElt.value
+        }
 
         this.sendData(form, formData, method);
     }

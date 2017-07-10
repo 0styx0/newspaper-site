@@ -21,8 +21,11 @@ class Publish extends React.Component {
 
         super();
 
+        this.readyContentForSubmit = this.readyContentForSubmit.bind(this);
+
         this.state = {
-            editor: null
+            editor: null,
+            content: ''
         };
     }
 
@@ -41,15 +44,6 @@ class Publish extends React.Component {
 
             this.setState({
                 editor
-            });
-
-            editor.on('keyup change', () => {
-
-              const content = editor.getContent();
-              console.log(content)
-              const parser = new tinymce.html.DomParser({validate: true});
-              console.log(parser.parse(content));
-
             });
           }
         });
@@ -82,6 +76,14 @@ class Publish extends React.Component {
               multiple: true
           }}
         />);
+    }
+
+    readyContentForSubmit() {
+
+
+        this.setState({
+            content: this.state.editor.getContent()
+        });
     }
 
     autoFormat() {
@@ -120,9 +122,9 @@ class Publish extends React.Component {
                             />
 
                            <button onClick={this.autoFormat} type="button">Auto Format</button>
-                           <textarea name="txtArea" id="editor" />
+                           <textarea name="txtArea" className="changed" value={this.state.content} id="editor" />
 
-                           <input type="submit" className="submit" name="create" value="Submit" />
+                           <input type="submit" onClick={this.readyContentForSubmit} className="submit" name="create" value="Submit" />
                          </div>
                      }
                    />
