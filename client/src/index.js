@@ -40,7 +40,7 @@ const App = () => (
             <li><Link to="/signup">Signup</Link></li>
             <li><Link to="/u">Journalists</Link></li>
             <li><Link to="/issue">Issues</Link></li>
-            {jwt.level ? <li><Link to="./modifyArticles">Articles</Link></li> : ""}
+            {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
         </ul>
     </nav>
