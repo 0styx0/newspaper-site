@@ -6,9 +6,10 @@ import JournalistTable from './JournalistTable';
 import IssueTable from './IssueTable';
 import ArticleTable from './ArticleTable';
 import Publish from './Publish';
+import Story from './Story';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
-import { BrowserRouter, Link, Route } from 'react-router-dom'
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 import {jwt} from './components/jwt';
 
 (function() {
@@ -43,15 +44,16 @@ const App = () => (
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
         </ul>
     </nav>
-    <div>
-      <Route path="/login" component={Login}/>
-      <Route path="/signup" component={Signup}/>
-      <Route path="/u" component={JournalistTable}/>
-      <Route path="/issue" component={IssueTable}/>
-      {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
-      {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
+    <Switch>
+        <Route path="/login" component={Login}/>
+        <Route path="/signup" component={Signup}/>
+        <Route path="/u" component={JournalistTable}/>
+        <Route exact path="/issue" component={IssueTable}/>
+        {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
+        {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
+        <Route path="/issue/(.*)/story/(.*)" component={Story}/>
 
-    </div>
+    </Switch>
   </div>
 );
 
