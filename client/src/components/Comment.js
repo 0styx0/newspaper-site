@@ -6,10 +6,52 @@ import {jwt} from './jwt';
  * @prop profileLink
  * @prop author
  * @prop authorid
- * @prop created
  * @prop content
+ * @prop issue
+ * @prop name
+ * @prop addComment - function, parent component should add value returned to comment list when called
  */
 class Comment extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.submit = this.submit.bind(this);
+
+        this.state = {
+            content: this.props.content,
+            author: this.props.author,
+            authorid: this.props.authorid,
+            profileLink: this.props.profileLink
+        }
+    }
+
+    submit() {
+
+        const info = {
+            issue: this.props.issue,
+            url: this.props.name,
+            content: this.state.content
+        }
+
+        fetch("/api/comment", {
+            credentials: "include",
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(info)
+        });
+
+        this.props.addComment({
+            author_name: "You",
+            authorid: jwt.id,
+            content: this.state.content,
+            created: Date.now(),
+            id: Date.now(), // random thing to be used as comment key
+            profile_link: jwt.email
+        });
+    }
 
     newComment() {
 
@@ -17,8 +59,13 @@ class Comment extends React.Component {
                     <Editable
                         canEdit={!!jwt.id /*if logged in*/}
                         buttons="basic"
+                        submit={this.submit}
                         children={
-                            <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
+                            <div
+                              onBlur={e => this.setState({content: e.target.innerHTML})}
+                              className="content"
+                              dangerouslySetInnerHTML={{__html: this.props.content}}
+                            />
                         }
                     />
                 </article>
@@ -27,18 +74,20 @@ class Comment extends React.Component {
     oldComment() {
 
         return <article className="comment">
-                <a className="author" href={this.props.profileLink}>{this.props.author}</a>
-                <div className="content">{this.props.content}</div>
+                <a className="author" href={'/u/'+this.props.profileLink}>{this.props.author}</a>
+                <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
                 <button className="deleteReply">Delete</button>
                </article>
     }
 
     switchboard() {
 
-        return !this.props.content ? this.newComment() : this.oldComment();
+
+        return !this.props.author ? this.newComment() : this.oldComment();
     }
 
     render() {
+
         return (
             this.switchboard()
         );

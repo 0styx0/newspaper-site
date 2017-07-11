@@ -2,6 +2,7 @@ import React from 'react';
 import './stormStory.min.css'
 import Editable from './components/Editable';
 import Comment from './components/Comment';
+import {jwt} from './components/jwt';
 
 class Story extends React.Component {
 
@@ -71,6 +72,9 @@ class Story extends React.Component {
 
     render() {
 
+        // the concat makes the space for a new comment
+        const commentsToRender = (jwt.id) ? this.state.comments.concat(['']) : this.state.comments;
+        
         return (
             <div>
                 <div id="tags">Tag(s): {this.state.tags}</div>
@@ -98,16 +102,23 @@ class Story extends React.Component {
                 <div className="break" />
 
                 <div id="comments">
-                    {this.state.comments.concat(['']).map((comment, idx) =>
 
-                        <Comment
+                    {commentsToRender.map((comment, idx) =>
+
+                       <Comment
                           author={comment.author_name}
                           profileLink={comment.profile_link}
                           authorid={comment.authorid}
                           content={comment.content}
-                          created={comment.created}
+                          issue={this.state.issue}
+                          name={this.state.name}
                           key={comment.id || this.state.comments.length + 1}
-                        />
+                          addComment={comment => {
+                              this.setState({
+                                  comments: this.state.comments.concat(comment)
+                                })
+                          }}
+                       />
                     )}
                 </div>
            </div>
