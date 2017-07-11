@@ -74,7 +74,7 @@ class Story extends React.Component {
 
         // the concat makes the space for a new comment
         const commentsToRender = (jwt.id) ? this.state.comments.concat(['']) : this.state.comments;
-        
+
         return (
             <div>
                 <div id="tags">Tag(s): {this.state.tags}</div>
@@ -112,12 +112,18 @@ class Story extends React.Component {
                           content={comment.content}
                           issue={this.state.issue}
                           name={this.state.name}
-                          key={comment.id || this.state.comments.length + 1}
-                          addComment={comment => {
+                          key={idx}
+                          id={comment.id}
+                          addComment={comment =>
                               this.setState({
                                   comments: this.state.comments.concat(comment)
                                 })
-                          }}
+                          }
+                          deleteComment={(id) =>
+                              this.setState({
+                                  comments: this.state.comments.filter((comment => comment.id !== id))
+                              })
+                          }
                        />
                     )}
                 </div>

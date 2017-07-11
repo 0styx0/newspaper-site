@@ -10,6 +10,7 @@ import {jwt} from './jwt';
  * @prop issue
  * @prop name
  * @prop addComment - function, parent component should add value returned to comment list when called
+ * @prop deleteComment - function, parent component should delete comment with id returned
  */
 class Comment extends React.Component {
 
@@ -17,12 +18,14 @@ class Comment extends React.Component {
         super(props);
 
         this.submit = this.submit.bind(this);
+        this.delete = this.delete.bind(this);
 
         this.state = {
             content: this.props.content,
             author: this.props.author,
             authorid: this.props.authorid,
-            profileLink: this.props.profileLink
+            profileLink: this.props.profileLink,
+            id: this.props.id
         }
     }
 
@@ -53,6 +56,24 @@ class Comment extends React.Component {
         });
     }
 
+    delete() {
+
+        const info = {
+            id: this.props.id
+        }
+
+         fetch("/api/comment", {
+            credentials: "include",
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(info)
+        });
+
+        this.props.deleteComment(this.props.id);
+    }
+
     newComment() {
 
         return <article id="reply" className="comment">
@@ -72,11 +93,14 @@ class Comment extends React.Component {
     }
 
     oldComment() {
-
+        
         return <article className="comment">
                 <a className="author" href={'/u/'+this.props.profileLink}>{this.props.author}</a>
                 <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
-                <button className="deleteReply">Delete</button>
+                {this.props.content !== "deleted" &&  (jwt.level > 2 || jwt.id === this.props.authorid) ?
+                    <button className="deleteReply" onClick={this.delete}>Delete</button> :
+                    ''
+                }
                </article>
     }
 
