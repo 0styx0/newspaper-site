@@ -5,11 +5,10 @@ import commands from './execCommands.min.js'
 /**
  * @prop content - html
  * @prop canEdit - boolean
- * @prop location - after this.props.children.props.children, where else to go until reach node that want to edit
  *
- * @return lets content be edited and renders a bar of buttons that can edit the html of props.content if props.canEdit = true
+ * @return lets content be edited and renders a bar of buttons that can edit the html of props.children if props.canEdit = true
  */
-class EditableHTML extends React.Component {
+class Editable extends React.Component {
 
     constructor() {
         super();
@@ -23,8 +22,13 @@ class EditableHTML extends React.Component {
 
     renderEditButtons() {
 
-        if (this.props.canEdit) {
-            return commands.map((command, idx) => <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>);
+        if (this.props.canEdit && this.props.buttons) {
+            return (
+                <div id="buttonContainer">
+                    {commands.map((command, idx) => <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>)}
+                </div>
+            );
+
         }
     }
 
@@ -65,24 +69,24 @@ class EditableHTML extends React.Component {
 
     componentWillMount() {
 
-        const content = React.cloneElement(this.props.kids.content, {contentEditable: this.props.canEdit});
-        this.props.kids.content = content;
-        const kids = Object.values(this.props.kids).map((elt, idx) => React.cloneElement(elt, {key: idx}));
+        const content = React.cloneElement(this.props.children, {contentEditable: this.props.canEdit});
 
-        this.setState({content: kids});
+        this.setState({content});
     }
 
     render() {
 
         return (
             <div>
-                <div id="buttonContainer">
-                    {this.renderEditButtons()}
-                </div>
+                {this.renderEditButtons()}
                 {this.state.content}
             </div>
         );
     }
 }
 
-export default EditableHTML;
+Editable.defaultProps = {
+    buttons: true
+}
+
+export default Editable;
