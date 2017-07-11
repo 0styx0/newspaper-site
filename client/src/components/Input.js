@@ -96,6 +96,40 @@ function Select(props) {
     );
 }
 
+// Form's onChange doesn't fire if defaultChecked is true and then uncheck box, so creating this
+class Checkbox extends React.Component {
+
+    constructor() {
+        super();
+
+        this.handleToggles = this.handleToggles.bind(this);
+
+        this.state = {
+            checked: null
+        }
+    }
+
+    handleToggles(e) {
+
+        e.target.classList.add("changed")
+
+        this.setState({
+            value: e.target.checked ? "true" : ''
+        });
+    }
+    
+    render() {
+
+        const checkbox = React.cloneElement(<input />, this.props);
+
+        return React.cloneElement(checkbox, {
+            value: this.state.value,
+            onClick: this.handleToggles,
+            type: "checkbox"
+        });
+    }
+}
+
 /**
  * Creates 2 inputs - one that's hidden and one that's not, with the same value
  * When the visible one changes, both get the .changed class which allows them to be submitted
@@ -147,5 +181,6 @@ class SecretTwins extends React.Component {
 export {
     Input,
     Select,
-    SecretTwins
+    SecretTwins,
+    Checkbox
 };
