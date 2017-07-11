@@ -27,7 +27,7 @@ class JournalistTable extends React.Component {
         const json = await data.json();
         const journalistInfoJson = json.map(person => {
 
-            person.name = <a href={person.profile_link}>{person.name}</a>
+            person.name = <a href={"/u/"+person.profile_link}>{person.name}</a>
 
             if (jwt.level > 1) {
 
