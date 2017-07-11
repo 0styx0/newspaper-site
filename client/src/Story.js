@@ -1,6 +1,6 @@
 import React from 'react';
-import commands from './execCommands.min.js'
 import './stormStory.min.css'
+import EditableHTML from './components/EditableHTML';
 
 class Story extends React.Component {
 
@@ -43,16 +43,24 @@ class Story extends React.Component {
         });
     }
 
+
     render() {
-        return <div>
 
-                   <div id="tags">Tag(s): {this.state.tags}</div>
-                   <article id="story" contentEditable={this.state.canEdit} >
-                       <div dangerouslySetInnerHTML={{__html: this.state.heading}}/>
+        return <EditableHTML
+                        canEdit={this.state.canEdit}
+                        location={[1]}
+                        key={this.state.id}
+                        kids={{
 
-                       <section className="storyContainer" dangerouslySetInnerHTML={{__html: this.state.body}}/>
-                   </article>
-               </div>
+                            "0": <div id="tags">Tag(s): {this.state.tags}</div>,
+                            "content": <article id="story" >
+
+                                <div dangerouslySetInnerHTML={{__html: this.state.heading}}/>
+
+                                <section className="storyContainer" dangerouslySetInnerHTML={{__html: this.state.body}}/>
+                            </article>
+                        }}
+               />
     }
 }
 
