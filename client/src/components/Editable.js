@@ -3,8 +3,10 @@ import commands from './execCommands.min.js'
 
 
 /**
- * @prop content - html
+ * @prop children - 1 elt to make editable
  * @prop canEdit - boolean
+ * @prop buttons - (optional) boolean if should render buttons as well
+ * @prop submit - runs when the submit button is clicked. If this is not given, nothing will happen when submit is clicked
  *
  * @return lets content be edited and renders a bar of buttons that can edit the html of props.children if props.canEdit = true
  */
@@ -26,6 +28,8 @@ class Editable extends React.Component {
             return (
                 <div id="buttonContainer">
                     {commands.map((command, idx) => <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>)}
+                    <br />
+                    <button onClick={this.props.submit}>Submit</button>
                 </div>
             );
 

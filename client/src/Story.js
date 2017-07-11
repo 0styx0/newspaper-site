@@ -7,6 +7,9 @@ class Story extends React.Component {
     constructor() {
         super();
 
+
+        this.submit = this.submit.bind(this);
+
         this.state = {
 
             heading: "",
@@ -14,15 +17,19 @@ class Story extends React.Component {
             canEdit: false,
             comments: [],
             tags: "",
-            id: null
+            id: null,
+            issue: null,
+            name: null
         }
     }
 
     async componentWillMount() {
 
-        const url = window.location.pathname.split("/");
 
-        const article = await fetch(`/api/story?issue=${url[2]}&name=${url[4]}`, {
+        const url = window.location.pathname.split("/");
+        await this.setState({issue: window.location.pathname.split("/")[2], name: url[4]});
+
+        const article = await fetch(`/api/story?issue=${this.state.issue}&name=${this.state.name}`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json"
@@ -30,7 +37,7 @@ class Story extends React.Component {
         })
         .then(data => data.json());
 
-        const heading = article.body.match(/^[\s\S]+?<\/h4>/);
+        const heading = article.body.match(/^[\s\S]+?<\/h4>/)[0];
         const body = article.body.replace(heading, "");
 
         this.setState({
@@ -43,6 +50,23 @@ class Story extends React.Component {
         });
     }
 
+    submit() {
+
+        const info = {
+            edit: this.state.heading + this.state.body,
+            issue: this.state.issue,
+            name: this.state.name
+        }
+
+        fetch("/api/story", {
+            credentials: "include",
+            method: "put",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(info)
+        });
+    }
 
     render() {
 
@@ -53,9 +77,10 @@ class Story extends React.Component {
 
                     <Editable
                         canEdit={this.state.canEdit}
+                        submit={this.submit}
                         key={this.state.id}
                         children={
-                                <header dangerouslySetInnerHTML={{__html: this.state.heading}}/>
+                                <header onBlur={e => this.setState({heading: e.target.innerHTML})} dangerouslySetInnerHTML={{__html: this.state.heading}}/>
                         }
                     />
 
@@ -64,7 +89,7 @@ class Story extends React.Component {
                         key={this.state.id + 1}
                         buttons={false}
                         children={
-                            <section className="storyContainer" dangerouslySetInnerHTML={{__html: this.state.body}}/>
+                            <section onBlur={e => this.setState({body: e.target.innerHTML})} className="storyContainer" dangerouslySetInnerHTML={{__html: this.state.body}}/>
                         }
                     />
                 </article>
