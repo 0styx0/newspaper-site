@@ -12,7 +12,7 @@ class Table extends React.Component {
         return (<table>
             <thead>
                 <tr>
-                    {this.props.headings.map((text, idx) => <th key={idx}>{text}</th>)}
+                    {this.props.headings.map((text, idx) => <th key={idx}> {text[0].toUpperCase() + text.slice(1)}</th>)}
                 </tr>
             </thead>
             <tbody>
