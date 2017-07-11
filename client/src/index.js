@@ -43,7 +43,7 @@ const App = () => (
             <li><Link to="/issue">Issues</Link></li>
             {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
-            {jwt.level ? <li><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
+            {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
         </ul>
     </nav>
     <Switch>
