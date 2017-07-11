@@ -12,14 +12,14 @@ class UserArticleTable extends React.Component {
         super(props);
 
         this.state = {
-            articles: this.props.articleInfo
+            articles: this.props.articles
         }
     }
 
     render() {
 
         if (!this.state.articles) {
-            return;
+            return <span />; // random useless thing
         }
 
         const headings = [
@@ -27,7 +27,7 @@ class UserArticleTable extends React.Component {
             "Published",
             "Type",
             "Views",
-            <span className="danger">Delete</span>
+            jwt.email === this.props.user ? <span className="danger">Delete</span> : null
         ];
 
         const articles = this.state.articles.map(article => [
@@ -35,7 +35,7 @@ class UserArticleTable extends React.Component {
             article.created,
             article.tags,
             article.views,
-            jwt.email === this.state.user ? <input type="checkbox" name="delArt[]" value={article.art_id} /> : null
+            jwt.email === this.props.user ? <input type="checkbox" name="delArt[]" value={article.art_id} /> : null
         ]);
 
         return (
@@ -57,7 +57,7 @@ class UserArticleTable extends React.Component {
                                     props={{
                                         type: "password",
                                         name: "password",
-                                        required: true
+                                        required: true,
                                     }}
                                 />
                                 <input type="submit" />
@@ -73,56 +73,22 @@ class UserArticleTable extends React.Component {
 
 }
 
-class Profile extends React.Component {
+class ModifiableUserInfo extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            personalInfo: {},
-            userInfo: {},
-            articleInfo: [],
-            user: window.location.pathname.split("/")[2]
+            info: this.props.info
         }
     }
 
-    async componentWillMount() {
-
-        const json = await fetch(`/api/user?user=${this.state.user}`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(data => data.json());
-
-        this.setState({
-            userInfo: json[0],
-            articleInfo: json[1],
-            personalInfo: json[2]
-        })
-
-    }
-
-    renderPublicUserInfo() {
-
-        return (
-            <Container
-                className="tableContainer"
-                children={<Table
-                    headings={Object.keys(this.state.userInfo)}
-                    rows={[Object.values(this.state.userInfo)]}
-                    />
-                }
-            />
-        );
-    }
-
-    renderPersonalInfo() {
-
-        const info = this.state.personalInfo;
+    render() {
+console.log(this.state)
+        const info = this.state.info;
 
         if (!info) {
-            return;
+            return <span />;
         }
 
         const headings = [
@@ -180,13 +146,72 @@ class Profile extends React.Component {
 
     }
 
+}
+
+function PublicUserInfo(props) {
+
+    return (
+        <Container
+            className="tableContainer"
+            children={<Table
+                headings={Object.keys(props.info)}
+                rows={[Object.values(props.info)]}
+                />
+            }
+        />
+    );
+}
+
+class Profile extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            personalInfo: {},
+            userInfo: {},
+            articleInfo: [],
+            user: window.location.pathname.split("/")[2]
+        }
+    }
+
+    async componentWillMount() {
+
+        const json = await fetch(`/api/user?user=${this.state.user}`, {
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(data => data.json());
+
+        this.setState({
+            userInfo: json[0],
+            articleInfo: json[1],
+            personalInfo: json[2]
+        })
+
+    }
+
+
+
 
     render() {
+
         return (
             <div>
-                {this.renderPublicUserInfo()}
-                {this.renderPersonalInfo()}
-                <UserArticleTable articles={this.props.articleInfo}/>
+                <PublicUserInfo
+                    key={this.state.userInfo.name}
+                    info={this.state.userInfo}
+                />
+                <ModifiableUserInfo
+                    key={this.state.personalInfo.id /*forces update*/}
+                    info={this.state.personalInfo}
+                />
+                <UserArticleTable
+                    key={this.state.articleInfo /*forces update*/}
+                    user={this.state.user}
+                    articles={this.state.articleInfo}
+                />
             </div>
 
         )
