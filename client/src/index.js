@@ -6,6 +6,7 @@ import JournalistTable from './JournalistTable';
 import IssueTable from './IssueTable';
 import ArticleTable from './ArticleTable';
 import Publish from './Publish';
+import Profile from './Profile';
 import Story from './Story';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -42,16 +43,18 @@ const App = () => (
             <li><Link to="/issue">Issues</Link></li>
             {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
+            {jwt.level ? <li><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
         </ul>
     </nav>
     <Switch>
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
-        <Route path="/u" component={JournalistTable}/>
+        <Route exact path="/u" component={JournalistTable}/>
         <Route exact path="/issue" component={IssueTable}/>
         {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
         <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+        <Route path="/u/(.*)" component={Profile}/>
 
     </Switch>
   </div>
