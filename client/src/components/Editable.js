@@ -5,7 +5,7 @@ import commands from './execCommands.min.js'
 /**
  * @prop children - 1 elt to make editable
  * @prop canEdit - boolean
- * @prop buttons - (optional) boolean if should render buttons as well
+ * @prop buttons - if true (default), show all buttons. If "basic" show subset. If false, show none
  * @prop submit - runs when the submit button is clicked. If this is not given, nothing will happen when submit is clicked
  *
  * @return lets content be edited and renders a bar of buttons that can edit the html of props.children if props.canEdit = true
@@ -26,8 +26,15 @@ class Editable extends React.Component {
 
         if (this.props.canEdit && this.props.buttons) {
             return (
-                <div id="buttonContainer">
-                    {commands.map((command, idx) => <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>)}
+                <div id={this.props.buttons === true ? "buttonContainer" : ""}>
+                    {commands.map((command, idx) => {
+
+                        if ((this.props.buttons === "basic" && command.basic) || this.props.buttons === true) {
+                            return <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>
+                        }
+                        return null;
+                    })}
+
                     <br />
                     <button onClick={this.props.submit}>Submit</button>
                 </div>

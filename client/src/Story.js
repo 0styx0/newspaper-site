@@ -1,6 +1,7 @@
 import React from 'react';
 import './stormStory.min.css'
 import Editable from './components/Editable';
+import Comment from './components/Comment';
 
 class Story extends React.Component {
 
@@ -93,6 +94,22 @@ class Story extends React.Component {
                         }
                     />
                 </article>
+
+                <div className="break" />
+
+                <div id="comments">
+                    {this.state.comments.concat(['']).map((comment, idx) =>
+
+                        <Comment
+                          author={comment.author_name}
+                          profileLink={comment.profile_link}
+                          authorid={comment.authorid}
+                          content={comment.content}
+                          created={comment.created}
+                          key={comment.id || this.state.comments.length + 1}
+                        />
+                    )}
+                </div>
            </div>
         );
     }
