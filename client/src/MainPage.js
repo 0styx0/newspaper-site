@@ -139,10 +139,10 @@ class MainPage extends React.Component {
     async componentWillMount() {
 
         this.setState({
-            currentIssue: window.location.pathname[2]
+            currentIssue: window.location.pathname.split("/")[2]
         });
 
-        const json = await fetch(`/api/previews?issueNum=${this.state.currentIssue}`, {
+        const json = await fetch(`/api/previews?issueNum=${window.location.pathname.split("/")[2] || ''}`, {
                                 credentials: "include",
                                 headers: {
                                     "Content-Type": "application/json"
