@@ -52,9 +52,12 @@ class Slideshow extends React.Component {
     constructor(props) {
         super(props);
 
+        this.switchActiveImage = this.switchActiveImage.bind(this);
 
         this.state = {
-            slideInfo: this.separateImages(this.props.images)
+            slideInfo: this.separateImages(this.props.images),
+            images: [],
+            activeImg: 0
         }
     }
 
@@ -81,17 +84,49 @@ class Slideshow extends React.Component {
         return imageInfo;
     }
 
+    componentWillMount() {
+console.log("MOUTING");
+        const imagesWithLinks = this.state.slideInfo.map((img => <a href={img.url}><img alt="" className="slideshowPic" src={img.img} /></a>))
+
+        this.setState({
+            images: imagesWithLinks
+        });
+
+    }
+
+    switchActiveImage(event) {
+
+        this.setState({
+            activeImg: this.state.activeImg + 1
+        })
+
+    }
+
     render() {
 
-        return <div>
 
-                    <div id="slideShow">
-                        <a id="slideLink" href="">
-                            <img id="placeholderPic" src="../images/tabc_logo.png" alt="Pictures in articles - slideshow" />
-                        </a>
-                    </div>
+        if (!this.state.images[this.state.activeImg]) {
+            return <span />
+        }
 
-                </div>
+        const imgClone = React.cloneElement(this.state.images[this.state.activeImg], {
+            children: React.cloneElement(this.state.images[this.state.activeImg].props.children, {
+
+                className: "slideshowPic activePic"
+            }),
+            onAnimationIteration: () => this.setState({
+                activeImg: (this.state.activeImg + 1) % this.state.images.length
+            })
+        })
+
+        return (
+
+            <div id="slideShow">
+                {imgClone}
+            </div>
+        );
+
+
     }
 }
 
@@ -151,8 +186,8 @@ class MainPage extends React.Component {
                 <div id="mainContent">
                     <Slideshow key={this.state.slides} images={this.state.slides}/>
                     {this.state.articles.map((article => <Preview key={article.url} {...article} />))}
-                    <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
                 </div>
+                <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
                 <footer id="credits" className="small">Created by <a href="https://dovidm.com">Dovid Meiseles</a> ('18)</footer>
             </div>
 
