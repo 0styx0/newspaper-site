@@ -73,11 +73,19 @@ class Slideshow extends React.Component {
                     })))
         });
 
+        if (imageInfo.length === 0) {
+
+            imageInfo.push({
+                img: "../images/tabc_logo.png",
+                url: "/"
+            });
+        }
+
         return imageInfo;
     }
 
     componentWillMount() {
-console.log("MOUTING");
+
         const imagesWithLinks = this.state.slideInfo.map((img => <a href={img.url}><img alt="" className="slideshowPic" src={img.img} /></a>))
 
         this.setState({
