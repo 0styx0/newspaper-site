@@ -63,9 +63,9 @@ const App = () => (
         <Route exact path="/issue" component={IssueTable}/>
         {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
+        <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+        <Route path="/issue/(.*)" component={MainPage}/>
         <Route path="/" component={MainPage}/>
-        <Route path="/issue/(.*)/story/(.*)" component={MainPage}/>
-        <Route path="/issue/(.*)" component={Story}/>
         <Route path="/u/(.*)" component={Profile}/>
 
     </Switch>
