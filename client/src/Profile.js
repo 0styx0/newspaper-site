@@ -162,6 +162,54 @@ function PublicUserInfo(props) {
     );
 }
 
+function ChangePassword() {
+
+    return (
+        <Container
+            heading="Change Password"
+            children={
+                <Form
+                    method="put"
+                    action="/api/user"
+                    children={
+                        <div>
+                            <Input
+                                label="New Password"
+                                props={{
+                                    pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$",
+                                    name: "newPass",
+                                    type: "password",
+                                    required: true
+                                }}
+
+                            />
+                            <Input
+                                label="Confirm Password"
+                                props={{
+                                    pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$",
+                                    name: "passConf",
+                                    type: "password",
+                                    required: true
+                                }}
+                            />
+                            <Input
+                                label="Old Password"
+                                props={{
+                                    pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$",
+                                    name: "password",
+                                    type: "password",
+                                    required: true
+                                }}
+                            />
+                            <input type="submit" value="Change Password" />
+                        </div>
+                    }
+                />
+            }
+        />
+    )
+}
+
 class Profile extends React.Component {
 
     constructor() {
@@ -192,9 +240,6 @@ class Profile extends React.Component {
 
     }
 
-
-
-
     render() {
 
         return (
@@ -207,6 +252,7 @@ class Profile extends React.Component {
                     key={this.state.personalInfo.id /*forces update*/}
                     info={this.state.personalInfo}
                 />
+                {jwt.email === this.state.user ? <ChangePassword /> : ""}
                 <UserArticleTable
                     key={this.state.articleInfo /*forces update*/}
                     user={this.state.user}
