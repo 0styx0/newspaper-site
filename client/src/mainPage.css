@@ -23,7 +23,7 @@ header, body > h1 {
 }
 
 
-h2 {
+header > h2 {
     margin: 3% 0;
     text-shadow: none;
 }

@@ -1,13 +1,5 @@
 import React from 'react';
 import './mainPage.css';
-/*
-<!-- for use in js (to copy) -->
-<div id="template" className="preview">
-    <div className="content"></div>
-    <a className="small">Read More</a>
-    <span className="small"></span>
-</div>
-*/
 
 function Preview(props) {
 
@@ -15,7 +7,7 @@ function Preview(props) {
         <div className="preview">
             <div className="content" dangerouslySetInnerHTML={{__html: props.lede}} />
             <a className="small" href={`/issue/${props.issue}/story/${props.url}`}>Read More</a>
-            <span className="small">({props.views} views)</span>
+            <span className="small"> ({props.views} views)</span>
         </div>
     )
 }
