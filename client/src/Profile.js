@@ -84,10 +84,8 @@ class ModifiableUserInfo extends React.Component {
     }
 
     render() {
-console.log(this.state)
-        const info = this.state.info;
 
-        if (!info) {
+        if (!this.state.info) {
             return <span />;
         }
 
@@ -99,18 +97,20 @@ console.log(this.state)
         ];
 
         const row = [
-            info.email,
+            this.state.info.email,
             <Checkbox
                 formMethod="put"
                 name="2fa"
-                defaultChecked={info.twoFactor}
+                data-pass={this.state.info.twoFactor}
+                defaultChecked={this.state.info.twoFactor}
             />,
             <Checkbox
                 formMethod="put"
                 name="notifications"
-                defaultChecked={info.notificationStatus}
+                data-pass={this.state.info.notificationStatus}
+                defaultChecked={this.state.info.notificationStatus}
             />,
-            <input formMethod="delete" type="checkbox" name="delAcc" value={info.id} />
+            <input formMethod="delete" type="checkbox" name="delAcc" value={this.state.info.id} />
         ];
 
         return (

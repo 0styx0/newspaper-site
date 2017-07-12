@@ -30,11 +30,10 @@ class Form extends React.Component {
         if (Array.isArray(this.props.method)) {
 
             this.props.method.map(method => form.querySelectorAll(`[formmethod=${method}].changed`))
-            .map(elts => Array.from(elts).filter(elt => elt.type !== "checkbox" || elt.checked || elt.defaultChecked))
-            .forEach((elts, idx) => {
-
-                this.parseData(form, elts, this.props.method[idx])
-            });
+            .map(elts => Array.from(elts).filter(elt => {
+                return elt.type !== "checkbox" || elt.checked || elt.dataset.pass
+            }))
+            .forEach((elts, idx) => this.parseData(form, elts, this.props.method[idx]));
         }
         else {
             this.parseData(form, form.querySelectorAll(".changed"), this.props.method);

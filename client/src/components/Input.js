@@ -117,7 +117,7 @@ class Checkbox extends React.Component {
             value: e.target.checked ? "true" : ''
         });
     }
-    
+
     render() {
 
         const checkbox = React.cloneElement(<input />, this.props);
