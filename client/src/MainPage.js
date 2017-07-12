@@ -1,4 +1,5 @@
 import React from 'react';
+import './mainPage.css';
 /*
 <!-- for use in js (to copy) -->
 <div id="template" className="preview">
@@ -7,6 +8,17 @@ import React from 'react';
     <span className="small"></span>
 </div>
 */
+
+function Preview(props) {
+
+    return (
+        <div className="preview">
+            <div className="content" dangerouslySetInnerHTML={{__html: props.lede}} />
+            <a className="small" href={`/issue/${props.issue}/story/${props.url}`}>Read More</a>
+            <span className="small">({props.views} views)</span>
+        </div>
+    )
+}
 
 class Numberline extends React.Component {
 
@@ -47,7 +59,7 @@ class Slideshow extends React.Component {
 
     render() {
 
-        return <div id="mainContent">
+        return <div>
 
                     <div id="slideShow">
                         <a id="slideLink" href="">
@@ -68,7 +80,8 @@ class MainPage extends React.Component {
             issueName: "",
             maxIssue: 1,
             currentIssue: '',
-
+            articles: [],
+            slides: []
         }
     }
 
@@ -78,11 +91,18 @@ class MainPage extends React.Component {
             currentIssue: window.location.pathname[2]
         });
 
-        fetch(`/api/previews?issueNum=${this.state.currentIssue}`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
+        const json = await fetch(`/api/previews?issueNum=${this.state.currentIssue}`, {
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            }).then(data => data.json());
+
+        this.setState({
+            issueName: json.name,
+            maxIssue: json.maxIssue,
+            slides: json.slides,
+            articles: json.articles
         });
     }
 
@@ -104,8 +124,11 @@ class MainPage extends React.Component {
         return (
             <div>
                 {this.renderHeader()}
-                <Slideshow />
-                <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
+                <div id="mainContent">
+                    <Slideshow />
+                    {this.state.articles.map((article => <Preview key={article.url} {...article} />))}
+                    <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
+                </div>
                 <footer id="credits" className="small">Created by <a href="https://dovidm.com">Dovid Meiseles</a> ('18)</footer>
             </div>
 
