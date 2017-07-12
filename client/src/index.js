@@ -51,7 +51,7 @@ const App = () => (
                                    children={<input className="changed" id="logoutInpt" type="submit" name="logout" value="Log Out" />}
                              />
                          </li>
-                        : ""}}
+                        : ""}
             {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
         </ul>
     </nav>
