@@ -7,6 +7,7 @@ import IssueTable from './IssueTable';
 import ArticleTable from './ArticleTable';
 import Publish from './Publish';
 import Profile from './Profile';
+import MainPage from './MainPage';
 import Story from './Story';
 import Form from './components/Form';
 import './stormStyles.css';
@@ -62,7 +63,9 @@ const App = () => (
         <Route exact path="/issue" component={IssueTable}/>
         {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
-        <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+        <Route path="/" component={MainPage}/>
+        <Route path="/issue/(.*)/story/(.*)" component={MainPage}/>
+        <Route path="/issue/(.*)" component={Story}/>
         <Route path="/u/(.*)" component={Profile}/>
 
     </Switch>
