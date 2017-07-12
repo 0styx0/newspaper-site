@@ -65,7 +65,7 @@ const App = () => (
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
         <Route path="/issue/(.*)/story/(.*)" component={Story}/>
         <Route path="/issue/(.*)" component={MainPage}/>
-        <Route path="/" component={MainPage}/>
+        <Route exact path="/" component={MainPage}/>
         <Route path="/u/(.*)" component={Profile}/>
 
     </Switch>
