@@ -26,6 +26,17 @@ class Numberline extends React.Component {
         allIssues.splice(5, this.props.current - 10, "...")  // gets 1-5 and 5 before currentIssue
         allIssues.splice(15, allIssues.length - 20, "...") // start at 10 so keep 1-5 and 5 before current issue
 
+        // get rid of trailing ...
+        for (let i = allIssues.length - 1; i > allIssues.length - 2; i--) {
+
+            if (allIssues[i] === "...") {
+                allIssues.pop();
+            }
+            else {
+                break;
+            }
+        }
+
         return allIssues;
     }
 
