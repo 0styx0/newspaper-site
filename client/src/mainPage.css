@@ -190,10 +190,16 @@ header > q {
     display: none;
 }
 
+
 #issueRange {
     position: relative;
-    left: 48vw;
     top: 60px;
+    text-align: center;
+    display: inherit;
+}
+
+#issueRange a {
+    margin: 0 2px;
 }
 
 #credits {
