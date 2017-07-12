@@ -237,7 +237,8 @@ class Profile extends React.Component {
             personalInfo: {},
             userInfo: {},
             articleInfo: [],
-            user: window.location.pathname.split("/")[2]
+            user: window.location.pathname.split("/")[2],
+            changed: 0
         }
     }
 
@@ -253,7 +254,8 @@ class Profile extends React.Component {
         this.setState({
             userInfo: json[0],
             articleInfo: json[1],
-            personalInfo: json[2]
+            personalInfo: json[2],
+            changed: 1
         })
 
     }
@@ -263,16 +265,16 @@ class Profile extends React.Component {
         return (
             <div>
                 <PublicUserInfo
-                    key={this.state.userInfo.name}
+                    key={this.state.changed}
                     info={this.state.userInfo}
                 />
                 <ModifiableUserInfo
-                    key={this.state.personalInfo /*forces update*/}
+                    key={this.state.changed + 1 /*forces update*/}
                     info={this.state.personalInfo}
                 />
                 {jwt.email === this.state.user ? <ChangePassword /> : ""}
                 <UserArticleTable
-                    key={this.state.articleInfo /*forces update*/}
+                    key={this.state.changed + 2 /*forces update*/}
                     user={this.state.user}
                     articles={this.state.articleInfo}
                 />
