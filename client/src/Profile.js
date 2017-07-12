@@ -27,16 +27,27 @@ class UserArticleTable extends React.Component {
             "Published",
             "Type",
             "Views",
-            jwt.email === this.props.user ? <span className="danger">Delete</span> : null
         ];
 
-        const articles = this.state.articles.map(article => [
-            <a href={`/issue/${article.issue}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
-            article.created,
-            article.tags,
-            article.views,
-            jwt.email === this.props.user ? <input type="checkbox" name="delArt[]" value={article.art_id} /> : null
-        ]);
+        if (jwt.email === this.props.user) {
+
+            headings.push(<span className="danger">Delete</span>);
+        }
+
+        const articles = this.state.articles.map(article => {
+
+            const artInfo = [
+                <a href={`/issue/${article.issue}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
+                article.created,
+                article.tags,
+                article.views
+            ];
+
+            if (jwt.email === this.props.user) {
+                artInfo.push(<input type="checkbox" name="delArt[]" value={article.art_id} />);
+            }
+            return artInfo;
+        });
 
         return (
             <Container
@@ -150,12 +161,19 @@ class ModifiableUserInfo extends React.Component {
 
 function PublicUserInfo(props) {
 
+    const headingsJSON = props.info;
+
+    if (!headingsJSON.username) {
+        delete headingsJSON.username;
+    }
+
+
     return (
         <Container
             className="tableContainer"
             children={<Table
-                headings={Object.keys(props.info)}
-                rows={[Object.values(props.info)]}
+                headings={Object.keys(headingsJSON)}
+                rows={[Object.values(headingsJSON)]}
                 />
             }
         />
@@ -249,7 +267,7 @@ class Profile extends React.Component {
                     info={this.state.userInfo}
                 />
                 <ModifiableUserInfo
-                    key={this.state.personalInfo.id /*forces update*/}
+                    key={this.state.personalInfo /*forces update*/}
                     info={this.state.personalInfo}
                 />
                 {jwt.email === this.state.user ? <ChangePassword /> : ""}
