@@ -49,12 +49,36 @@ class Numberline extends React.Component {
 
 class Slideshow extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
 
         this.state = {
-            images: []
+            slideInfo: this.separateImages(this.props.images)
         }
+    }
+
+    /**
+     * Splits array of objects {img_url: json string array, slide_img: json string array of 0 or 1, issue: int, url: string}
+     * into array of objects {img: image url, url: url of article}
+     */
+    separateImages(images) {
+
+       const imageInfo = [];
+
+       images.forEach((val) => {
+            const img_url = JSON.parse(val.img_url)
+            const display = JSON.parse(val.slide_img);
+
+
+            img_url.filter((img, idx) => +display[idx] !== 0)
+                    .forEach((img => imageInfo.push({
+                        img,
+                        url: `/issue/${val.issue}/story/${val.url}`
+                    })))
+        });
+
+        return imageInfo;
     }
 
     render() {
@@ -125,7 +149,7 @@ class MainPage extends React.Component {
             <div>
                 {this.renderHeader()}
                 <div id="mainContent">
-                    <Slideshow />
+                    <Slideshow key={this.state.slides} images={this.state.slides}/>
                     {this.state.articles.map((article => <Preview key={article.url} {...article} />))}
                     <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
                 </div>
