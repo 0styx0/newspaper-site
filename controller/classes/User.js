@@ -611,7 +611,7 @@ module.exports = class User {
             return false;
         }
 
-        return Utilities.filter(password);
+        return password;
     }
 
     /**

@@ -31,6 +31,10 @@ router.put('/', async function(req, res) {
             UserInstance.setNotificationStatus(req.body.notifications);
         }
 
+        if (req.body.newPass) {
+            await UserInstance.setPassword(req.body.newPass, req.body.passConf);
+        }
+
         if (req.body.userEmail) {
             UserInstance.setEmail(req.body.userEmail);
         }
