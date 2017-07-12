@@ -63,15 +63,19 @@ class UserArticleTable extends React.Component {
                                     rows={articles}
                                 />
 
-                                <Input
-                                    label="Password"
-                                    props={{
-                                        type: "password",
-                                        name: "password",
-                                        required: true,
-                                    }}
-                                />
-                                <input type="submit" />
+                                {jwt.email === this.props.user ?
+                                    <div>
+                                        <Input
+                                            label="Password"
+                                            props={{
+                                                type: "password",
+                                                name: "password",
+                                                required: true,
+                                            }}
+                                        />
+                                        <input type="submit" />
+                                    </div>
+                                : ""}
                             </div>
                         }
                     />
