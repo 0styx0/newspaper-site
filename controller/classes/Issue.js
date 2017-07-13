@@ -21,7 +21,7 @@ module.exports = class Issue {
       */
     async defineInfoFor(num = null) {
 
-        if (!num || !/^\d+?$/.test(num)) {
+        if (!num || !/^(\d+)|(\w+)?$/.test(num)) {
             Utilities.setHeader(422, "missing required field");
             return false;
         }
