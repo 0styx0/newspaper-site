@@ -9,6 +9,7 @@ import Publish from './Publish';
 import Profile from './Profile';
 import MainPage from './MainPage';
 import Story from './Story';
+import TagSelect from './components/TagSelect';
 import Form from './components/Form';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -39,6 +40,7 @@ const App = () => (
 
         <ul>
             <li><Link to="/">Home</Link></li>
+            <li><TagSelect /></li>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Signup</Link></li>
             <li><Link to="/u">Journalists</Link></li>
@@ -64,6 +66,7 @@ const App = () => (
         {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
         <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+        <Route path="/tag/(.*)" component={MainPage}/>
         <Route path="/issue/(.*)" component={MainPage}/>
         <Route exact path="/" component={MainPage}/>
         <Route path="/u/(.*)" component={Profile}/>
