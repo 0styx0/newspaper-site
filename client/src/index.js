@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Login from './Login';
+import Logout from './Logout';
 import Signup from './Signup';
 import JournalistTable from './JournalistTable';
 import IssueTable from './IssueTable';
@@ -11,7 +12,6 @@ import MainPage from './MainPage';
 import Mission from './Mission';
 import Story from './Story';
 import TagSelect from './components/TagSelect';
-import Form from './components/Form';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
@@ -49,20 +49,7 @@ const App = () => (
             <li><Link to="/issue">Issues</Link></li>
             {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
-            {jwt.level ? <li id="logout">
-                             <Form
-                                  method="put"
-                                  action="/api/userStatus"
-                                   children={<input
-                                               className="changed"
-                                               id="logoutInpt"
-                                               type="submit"
-                                               name="logout"
-                                               value="Log Out"
-                                               onClick={() => jwt.level = 0}
-                                             />}
-                             />
-                         </li>
+            {jwt.level ? <li id="logout"><Logout /></li>
                         : ""}
             {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
         </ul>

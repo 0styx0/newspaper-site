@@ -6,6 +6,12 @@ import {jwt} from './components/jwt';
 
 class LoginForm extends React.Component {
 
+    constructor() {
+        super();
+
+        this.setJWT = this.setJWT.bind(this);
+    }
+
     renderInputs() {
 
         return (
@@ -53,6 +59,11 @@ class LoginForm extends React.Component {
             jwt.level = +json.level
             jwt.email = json.email
             jwt.id = json.id
+
+            if (jwt.level) {
+
+                this.props.history.push('/publish');
+            }
         })
     }
 
