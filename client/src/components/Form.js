@@ -96,29 +96,26 @@ class Form extends React.Component {
     /**
      * Sends data to server, then calls the onSubmit handler that user of component may have attached
      */
-    sendData(form, json, method) {
+    async sendData(form, json, method) {
 
-        fetch(form.action, {
+        const result = await fetch(form.action, {
             method: method,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(json)
-        })
-        .then(() => {
+        }).then(data => data.json());
 
-            for (const elt of document.querySelectorAll('[type=password]')) {
-                elt.value = '';
-            }
-        })
-        .then(() => {
-            if (this.props.onSubmit) {
 
-                this.props.onSubmit(method, json)
-            }
-        });
+        for (const elt of document.querySelectorAll('[type=password]')) {
+            elt.value = '';
+        }
 
+        if (this.props.onSubmit) {
+
+            this.props.onSubmit(method, json, result);
+        }
     }
 
     registerChange(event) {

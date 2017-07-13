@@ -23,6 +23,7 @@ class Publish extends React.Component {
 
         this.readyContentForSubmit = this.readyContentForSubmit.bind(this);
         this.autoFormat = this.autoFormat.bind(this);
+        this.redirect = this.redirect.bind(this);
 
         this.state = {
             editor: null,
@@ -105,7 +106,13 @@ class Publish extends React.Component {
         this.state.editor.setContent(formattedArticle.replace(/&nbsp;/g, ""));
     }
 
+    redirect(method, json, submissionResult) {
 
+        if (submissionResult.url) {
+
+            this.props.history.push(submissionResult.url)
+        }
+    }
 
     render() {
 
@@ -116,6 +123,7 @@ class Publish extends React.Component {
                    <Form
                      method="post"
                      action="api/story"
+                     onSubmit={this.redirect}
                      children={
                          <div>
                             {this.renderTags()}
