@@ -42,8 +42,8 @@ const App = () => (
         <ul>
             <li><Link to="/">Home</Link></li>
             <li><TagSelect /></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Signup</Link></li>
+            {jwt.level ? "" : <li><Link to="/login">Login</Link></li>}
+            <li><Link to="/signup">Create Account</Link></li>
             <li><Link to="/u">Journalists</Link></li>
             <li><Link to="/mission">Mission</Link></li>
             <li><Link to="/issue">Issues</Link></li>
