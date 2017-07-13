@@ -8,6 +8,7 @@ import ArticleTable from './ArticleTable';
 import Publish from './Publish';
 import Profile from './Profile';
 import MainPage from './MainPage';
+import Mission from './Mission';
 import Story from './Story';
 import TagSelect from './components/TagSelect';
 import Form from './components/Form';
@@ -44,6 +45,7 @@ const App = () => (
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Signup</Link></li>
             <li><Link to="/u">Journalists</Link></li>
+            <li><Link to="/mission">Mission</Link></li>
             <li><Link to="/issue">Issues</Link></li>
             {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
             {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
@@ -62,6 +64,7 @@ const App = () => (
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
         <Route exact path="/u" component={JournalistTable}/>
+        <Route path="/mission" component={Mission}/>
         <Route exact path="/issue" component={IssueTable}/>
         {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
         {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
