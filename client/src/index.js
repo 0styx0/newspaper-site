@@ -53,7 +53,14 @@ const App = () => (
                              <Form
                                   method="put"
                                   action="/api/userStatus"
-                                   children={<input className="changed" id="logoutInpt" type="submit" name="logout" value="Log Out" />}
+                                   children={<input
+                                               className="changed"
+                                               id="logoutInpt"
+                                               type="submit"
+                                               name="logout"
+                                               value="Log Out"
+                                               onClick={() => jwt.level = 0}
+                                             />}
                              />
                          </li>
                         : ""}
