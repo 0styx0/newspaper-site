@@ -23,17 +23,12 @@ router.put('/', function(req, res) {
 
     const filteredEdit = ArticleInstance.stripTags(req.body.edit);
 
-    fs.writeFile(__dirname+'/../../views/missionView.html', "<link type='text/css' rel='stylesheet' href='/styles/stormStory.min.css?1.1' />" +
-
-                                                            "<script defer src='/scripts/execCommands.min.js'></script>"+
-                                                            "\n<script defer src='/scripts/mission.js'></script>"+
-                                                            "\n<div class='container'>\n"+
-
+    fs.writeFile(__dirname+'/../../client/public/missionView.html',
+                                                                "<div class='container'>"+
                                                                 "<h1>Mission</h1>\n"+
                                                                 "<div id='missionEdit'>"+
                                                                     filteredEdit +
-                                                                "</div>"+
-                                                                "</div>", (err) => console.log(err));
+                                                                "</div></div>", (err) => console.log(err));
     Utilities.setHeader(200, "mission edited");
 });
 

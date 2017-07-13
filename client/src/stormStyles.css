@@ -18,6 +18,10 @@ body {
     margin-bottom: 80px;
 }
 
+.noH1Margin h1 {
+    margin-bottom: 0;
+}
+
 .mce-edit-area {
     min-width: 80vw !important; /* tinymce editor */
 }
