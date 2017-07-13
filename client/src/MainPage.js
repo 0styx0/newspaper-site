@@ -15,36 +15,66 @@ class MainPage extends React.Component {
             maxIssue: 1,
             currentIssue: '',
             articles: [],
-            slides: []
+            slides: [],
+            history: {}
         }
     }
 
-    async componentWillMount() {
+    componentWillMount() {
 
-        this.setState({
-            currentIssue: window.location.pathname.split("/")[2]
-        });
+        this.getPreviews();
+    }
 
-        const json = await fetch(`/api/previews?issueNum=${window.location.pathname.split("/")[2] || ''}`, {
+    async getPreviews() {
+
+
+        const issue = window.location.pathname.split("/")[2];
+
+
+
+        if (this.state.history[issue]) {
+
+            return this.setState({
+                issueName: this.state.history[issue].name,
+                maxIssue: this.state.history[issue].maxIssue,
+                slides: this.state.history[issue].slides,
+                articles: this.state.history[issue].articles,
+                currentIssue: issue
+            });
+        }
+
+        const json = await fetch(`/api/previews?issueNum=${issue || ''}`, {
                                 credentials: "include",
                                 headers: {
                                     "Content-Type": "application/json"
                                 }
                             }).then(data => data.json());
 
-        this.setState({
+        const history = JSON.parse(JSON.stringify(this.state.history));
+
+        history[issue || ''] = {
             issueName: json.name,
             maxIssue: json.maxIssue,
             slides: json.slides,
             articles: json.articles
+        }
+
+        this.setState({
+            issueName: json.name,
+            maxIssue: json.maxIssue,
+            slides: json.slides,
+            articles: json.articles,
+            currentIssue: issue,
+            history
         });
+
     }
 
     renderHeader() {
         return (
                 <header>
                    <h1>
-                       <img src="../images/tabc_logo.png" alt="TABC Logo" />
+                       <img src="/images/tabc_logo.png" alt="TABC Logo" />
                        Eye Of The Storm
                    </h1>
                    <q>A Clearer View Of TABC</q>
@@ -53,10 +83,18 @@ class MainPage extends React.Component {
         );
     }
 
+    componentWillUpdate() {
+
+        if (this.state.currentIssue !== window.location.pathname.split("/")[2]) {
+
+            this.getPreviews();
+        }
+    }
+
     render() {
 
         return (
-            <div>
+            <div key={window.location.pathname}>
                 {this.renderHeader()}
                 <div id="mainContent">
                     <Slideshow key={this.state.slides} images={this.state.slides}/>
