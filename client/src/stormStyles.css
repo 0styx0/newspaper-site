@@ -166,7 +166,7 @@ label[for=menuToggle], #menuToggle {
     }
 
 
-    #menuToggle:checked ~ li {
+    #menuToggle:checked ~ li:not(:first-of-type) {
 
         display: block;
         animation: showItems 800ms forwards;
@@ -174,7 +174,7 @@ label[for=menuToggle], #menuToggle {
         float: none;
     }
 
-    #menuToggle:not(:checked) ~ li {
+    #menuToggle:not(:checked) ~ li:not(:first-of-type) {
 
         display: block;
         animation: hideItems 800ms forwards;
@@ -188,6 +188,10 @@ label[for=menuToggle], #menuToggle {
 nav a {
   color: #aeaeae;
   display: block;
+}
+
+nav form {
+    display: inline;
 }
 
 nav li:hover {

@@ -35,42 +35,59 @@ import {jwt} from './components/jwt';
 }());
 
 
-const App = () => (
-  <div>
-    <nav>
+class App extends React.Component {
 
-        <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><TagSelect /></li>
-            {jwt.level ? "" : <li><Link to="/login">Login</Link></li>}
-            <li><Link to="/signup">Create Account</Link></li>
-            <li><Link to="/u">Journalists</Link></li>
-            <li><Link to="/mission">Mission</Link></li>
-            <li><Link to="/issue">Issues</Link></li>
-            {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
-            {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
-            {jwt.level ? <li id="logout"><Logout /></li>
-                        : ""}
-            {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
-        </ul>
-    </nav>
-    <Switch>
-        <Route path="/login" component={Login}/>
-        <Route path="/signup" component={Signup}/>
-        <Route exact path="/u" component={JournalistTable}/>
-        <Route path="/mission" component={Mission}/>
-        <Route exact path="/issue" component={IssueTable}/>
-        {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
-        {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
-        <Route path="/issue/(.*)/story/(.*)" component={Story}/>
-        <Route path="/tag/(.*)" component={MainPage}/>
-        <Route path="/issue/(.*)" component={MainPage}/>
-        <Route exact path="/" component={MainPage}/>
-        <Route path="/u/(.*)" component={Profile}/>
+    componentWillUpdate() {
+        document.getElementById("menuToggle").checked = false;
+    }
 
-    </Switch>
-  </div>
-);
+    render() {
+
+        return (
+        <div>
+            <nav>
+
+                <ul>
+
+                    <label htmlFor='menuToggle'>
+                        <li className='showMenu hidden'> ||| </li>
+                    </label>
+
+                    <input id='menuToggle' tabIndex="-1" type='checkbox' />
+
+                    <li><Link to="/">Home</Link></li>
+                    <li><TagSelect /></li>
+                    {jwt.level ? "" : <li><Link to="/login">Login</Link></li>}
+                    <li><Link to="/signup">Create Account</Link></li>
+                    <li><Link to="/u">Journalists</Link></li>
+                    <li><Link to="/mission">Mission</Link></li>
+                    <li><Link to="/issue">Issues</Link></li>
+                    {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
+                    {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
+                    {jwt.level ? <li id="logout"><Logout /></li>
+                                : ""}
+                    {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
+                </ul>
+            </nav>
+            <Switch>
+                <Route path="/login" component={Login}/>
+                <Route path="/signup" component={Signup}/>
+                <Route exact path="/u" component={JournalistTable}/>
+                <Route path="/mission" component={Mission}/>
+                <Route exact path="/issue" component={IssueTable}/>
+                {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
+                {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
+                <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+                <Route path="/tag/(.*)" component={MainPage}/>
+                <Route path="/issue/(.*)" component={MainPage}/>
+                <Route exact path="/" component={MainPage}/>
+                <Route path="/u/(.*)" component={Profile}/>
+
+            </Switch>
+        </div>
+        );
+    }
+}
 
 function render() {
   ReactDOM.render((
@@ -78,6 +95,15 @@ function render() {
       <App/>
     </BrowserRouter>
   ), document.getElementById('root'))
+
+    // prevents user seeing navbar roll up
+    Array.from(document.getElementsByTagName("li")).forEach(elt => elt.style.opacity = "0");
+
+    window.setTimeout(function() {
+        Array.from(document.getElementsByTagName("li")).forEach(elt => elt.style.opacity = "1");
+    }, 700);
+
+
 }
 
 registerServiceWorker();
