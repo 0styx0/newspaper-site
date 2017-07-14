@@ -3,6 +3,7 @@ import Form from './components/Form';
 import {Input} from './components/Input';
 import {Container} from './components/Container';
 import {jwt} from './components/jwt';
+import A from './components/A';
 
 class LoginForm extends React.Component {
 
@@ -39,7 +40,7 @@ class LoginForm extends React.Component {
                 <input type="submit" className="submit" value="Log In" />
                 <br />
 
-                <a href="forgotPass">Forgot your password?</a>
+                <A href="forgotPass" text="Forgot your password?" router={this} />
             </div>
         )
 

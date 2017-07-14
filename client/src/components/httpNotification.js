@@ -43,12 +43,19 @@ const httpStatusMessages = {
         "Issue Updated": "Updates have been saved.",
         "Mission Edited": "Update has been saved."
     },
+
+    "201": {
+        "User Created": 'Account has been created. A verification email has been sent.'
+    }
 };
 
 function httpNotification(method, statusCode) {
-    Notification({
-        body: httpStatusMessages[method][statusCode]
-    });
+
+    if (httpStatusMessages[method] && httpStatusMessages[method][statusCode]) {
+        Notification({
+            body: httpStatusMessages[method][statusCode]
+        });
+    }
 }
 
 export default httpNotification;

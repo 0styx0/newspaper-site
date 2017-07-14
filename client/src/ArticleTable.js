@@ -3,7 +3,7 @@ import {Container} from './components/Container';
 import Table from './components/Table';
 import Form from './components/Form';
 import {Input, SecretTwins} from './components/Input';
-
+import A from './components/A';
 
 
 class ArticleTable extends React.Component {
@@ -70,9 +70,17 @@ class ArticleTable extends React.Component {
                 const tagArr = article.tags.split(', ');
 
                 return [
-                    <a href={`/issue/${data[2].num}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
+                    <A
+                      router={this}
+                      href={`/issue/${data[2].num}/story/${article.url}`}
+                      text={decodeURIComponent(article.url)}
+                    />,
                     article.created,
-                    <a href={`/u/${article.author_username}`}>{article.author_name}</a>,
+                    <A
+                      router={this}
+                      href={`/u/${article.author_username}`}
+                      text={article.author_name}
+                    />,
                     <SecretTwins
                         original={<select name="tag[]" formMethod="put" defaultValue={tagArr} required multiple>{data[1].map((val) =>
                             <option key={val} defaultValue={val}>{val}</option>

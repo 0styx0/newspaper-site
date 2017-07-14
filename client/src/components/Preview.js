@@ -1,11 +1,19 @@
 import React from 'react';
+import A from './A';
 
 function Preview(props) {
 
     return (
         <div className="preview">
             <div className="content" dangerouslySetInnerHTML={{__html: props.lede}} />
-            <a className="small" href={`/issue/${props.issue}/story/${props.url}`}>Read More</a>
+            <A
+              props={{
+                  className: "small"
+              }}
+              href={`/issue/${props.issue}/story/${props.url}`}
+              text="Read More"
+              router={props.router}
+            />
             <span className="small"> ({props.views} views)</span>
         </div>
     )

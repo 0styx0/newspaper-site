@@ -1,4 +1,5 @@
 import React from 'react';
+import A from './A';
 
 class Slideshow extends React.Component {
 
@@ -47,7 +48,14 @@ class Slideshow extends React.Component {
 
     componentWillMount() {
 
-        const imagesWithLinks = this.state.slideInfo.map((img => <a href={img.url}><img alt="" className="slideshowPic" src={img.img} /></a>))
+        const imagesWithLinks = this.state.slideInfo.map((img =>
+                                  <A
+                                    router={this.props.router}
+                                    href={img.url}
+                                    props={{
+                                      children: <img alt="" className="slideshowPic" src={img.img} />
+                                    }}
+                                  />));
 
         this.setState({
             images: imagesWithLinks
@@ -71,13 +79,15 @@ class Slideshow extends React.Component {
         }
 
         const imgClone = React.cloneElement(this.state.images[this.state.activeImg], {
-            children: React.cloneElement(this.state.images[this.state.activeImg].props.children, {
+            props: {
+                children: React.cloneElement(this.state.images[this.state.activeImg].props.props.children, {
 
                 className: "slideshowPic activePic"
             }),
             onAnimationIteration: () => this.setState({
                 activeImg: (this.state.activeImg + 1) % this.state.images.length
             })
+            }
         })
 
         return (

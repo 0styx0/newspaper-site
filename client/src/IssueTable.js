@@ -4,7 +4,7 @@ import {Container} from './components/Container';
 import {jwt} from './components/jwt';
 import Form from './components/Form';
 import {Input} from './components/Input';
-
+import A from './components/A';
 
 class IssueTable extends React.Component {
 
@@ -35,7 +35,7 @@ class IssueTable extends React.Component {
                        name="issueName"
                        defaultValue={issue.name}
                      />
-                   : <a href={'/issue/'+issue.num}>{issue.name}</a>,
+                   : <A href={'/issue/'+issue.num} text={issue.name} router={this} />,
                  issue.views,
                  (jwt.level > 2 && !issue.madepub) ?
                                       <select name="pub">

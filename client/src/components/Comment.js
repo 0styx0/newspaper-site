@@ -1,6 +1,7 @@
 import React from 'react';
 import Editable from './Editable';
 import {jwt} from './jwt';
+import A from './A';
 
 /**
  * @prop profileLink
@@ -11,6 +12,7 @@ import {jwt} from './jwt';
  * @prop name
  * @prop addComment - function, parent component should add value returned to comment list when called
  * @prop deleteComment - function, parent component should delete comment with id returned
+ * @prop router @see ./A
  */
 class Comment extends React.Component {
 
@@ -93,9 +95,9 @@ class Comment extends React.Component {
     }
 
     oldComment() {
-        
+
         return <article className="comment">
-                <a className="author" href={'/u/'+this.props.profileLink}>{this.props.author}</a>
+                <A className="author" href={'/u/'+this.props.profileLink} text={this.props.author} router={this.props.router}/>
                 <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
                 {this.props.content !== "deleted" &&  (jwt.level > 2 || jwt.id === this.props.authorid) ?
                     <button className="deleteReply" onClick={this.delete}>Delete</button> :

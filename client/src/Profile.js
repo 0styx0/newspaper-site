@@ -4,7 +4,7 @@ import Form from './components/Form';
 import {Input, Checkbox} from './components/Input';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
-
+import A from './components/A';
 
 class UserArticleTable extends React.Component {
 
@@ -37,7 +37,11 @@ class UserArticleTable extends React.Component {
         const articles = this.state.articles.map(article => {
 
             const artInfo = [
-                <a href={`/issue/${article.issue}/story/${article.url}`}>{decodeURIComponent(article.url)}</a>,
+                <A
+                  href={`/issue/${article.issue}/story/${article.url}`}
+                  text={decodeURIComponent(article.url)}
+                  router={this}
+                />,
                 article.created,
                 article.tags,
                 article.views

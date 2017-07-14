@@ -4,7 +4,7 @@ import {Input, Select, SecretTwins} from './components/Input';
 import {Container} from './components/Container';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
-
+import A from './components/A';
 
 class JournalistTable extends React.Component {
 
@@ -27,7 +27,7 @@ class JournalistTable extends React.Component {
         const json = await data.json();
         const journalistInfoJson = json.map(person => {
 
-            person.name = <a href={"/u/"+person.profile_link}>{person.name}</a>
+            person.name = <A href={"/u/"+person.profile_link} text={person.name} router={this}/>
 
             if (jwt.level > 1) {
 
