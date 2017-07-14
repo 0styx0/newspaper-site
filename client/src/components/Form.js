@@ -1,5 +1,7 @@
 import React from 'react';
 import httpNotification from './httpNotification';
+import fetchFromApi from '../helpers/fetchFromApi';
+
 
 /**
  * @return form with action of props.action, children of props.children, and method of props.method.
@@ -98,14 +100,8 @@ class Form extends React.Component {
      */
     async sendData(form, json, method) {
 
-        const result = await fetch(form.action, {
-            method: method,
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(json)
-        }).then(data => {
+        const result = await fetchFromApi(form.action, method, json)
+        .then(data => {
 
             httpNotification(data.status, data.statusText);
 

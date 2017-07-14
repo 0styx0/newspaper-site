@@ -2,6 +2,8 @@ import React from 'react';
 import Editable from './components/Editable';
 import {jwt} from './components/jwt';
 import httpNotification from './components/httpNotification';
+import fetchFromApi from './helpers/fetchFromApi';
+
 
 class Mission extends React.Component {
 
@@ -27,15 +29,8 @@ class Mission extends React.Component {
     save() {
 
 
-        fetch("/api/mission", {
-            credentials: "include",
-            method: "put",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        fetchFromApi("mission", "put", {
                 edit: this.state.content
-            })
         })
         .then((response) => {
 

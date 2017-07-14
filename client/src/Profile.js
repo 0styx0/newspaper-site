@@ -5,6 +5,8 @@ import {Input, Checkbox} from './components/Input';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
 import A from './components/A';
+import fetchFromApi from './helpers/fetchFromApi';
+
 
 class UserArticleTable extends React.Component {
 
@@ -59,7 +61,7 @@ class UserArticleTable extends React.Component {
                 children={
                     <Form
                         method="delete"
-                        action="/api/articleGroup"
+                        action="articleGroup"
                         children={
                             <div>
                                 <Table
@@ -139,7 +141,7 @@ class ModifiableUserInfo extends React.Component {
                 children={
                     <Form
                         method={["put", "delete"]}
-                        action="/api/user"
+                        action="user"
                         children={
                             <div>
                                 <Table
@@ -196,7 +198,7 @@ function ChangePassword() {
             children={
                 <Form
                     method="put"
-                    action="/api/user"
+                    action="user"
                     children={
                         <div>
                             <Input
@@ -252,12 +254,8 @@ class Profile extends React.Component {
 
     async componentWillMount() {
 
-        const json = await fetch(`/api/user?user=${this.state.user}`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(data => data.json());
+        const json = await fetchFromApi(`user?user=${this.state.user}`)
+                             .then(data => data.json());
 
         this.setState({
             userInfo: json[0],

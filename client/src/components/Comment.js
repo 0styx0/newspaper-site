@@ -2,6 +2,8 @@ import React from 'react';
 import Editable from './Editable';
 import {jwt} from './jwt';
 import A from './A';
+import fetchFromApi from '../helpers/fetchFromApi';
+
 
 /**
  * @prop profileLink
@@ -39,14 +41,7 @@ class Comment extends React.Component {
             content: this.state.content
         }
 
-        fetch("/api/comment", {
-            credentials: "include",
-            method: "post",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(info)
-        });
+        fetchFromApi("comment", "post", info);
 
         this.props.addComment({
             author_name: "You",
@@ -64,14 +59,7 @@ class Comment extends React.Component {
             id: this.props.id
         }
 
-         fetch("/api/comment", {
-            credentials: "include",
-            method: "delete",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(info)
-        });
+        fetchFromApi("comment", "delete", info);
 
         this.props.deleteComment(this.props.id);
     }

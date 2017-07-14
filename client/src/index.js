@@ -16,15 +16,11 @@ import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 import {jwt} from './components/jwt';
+import fetchFromApi from './helpers/fetchFromApi';
 
 (function() {
-        fetch('http://localhost:3000/api/userStatus', {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-        }).then(data => data)
+        fetchFromApi('userStatus')
+        .then(data => data)
         .then(data => data.json())
         .then(json => {
             jwt.level = +json.level

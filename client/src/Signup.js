@@ -107,7 +107,7 @@ class Signup extends React.Component {
             <Container
               heading="Sign Up"
               children={
-                  <Form action="/api/user" method="post" children={this.renderInputs()} />}
+                  <Form action="user" method="post" children={this.renderInputs()} />}
             />
         );
     }

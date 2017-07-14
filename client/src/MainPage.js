@@ -3,6 +3,7 @@ import './mainPage.css';
 import Numberline from './components/Numberline';
 import Slideshow from './components/Slideshow';
 import Preview from './components/Preview';
+import fetchFromApi from './helpers/fetchFromApi';
 
 
 class MainPage extends React.Component {
@@ -43,12 +44,8 @@ class MainPage extends React.Component {
             });
         }
 
-        const json = await fetch(`/api/previews?issueNum=${issue || ''}`, {
-                                credentials: "include",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                }
-                            }).then(data => data.json());
+        const json = await fetchFromApi(`previews?issueNum=${issue || ''}`)
+                             .then(data => data.json());
 
         const history = JSON.parse(JSON.stringify(this.state.history));
 

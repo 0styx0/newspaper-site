@@ -4,6 +4,7 @@ import Editable from './components/Editable';
 import Comment from './components/Comment';
 import {jwt} from './components/jwt';
 import httpNotification from './components/httpNotification';
+import fetchFromApi from './helpers/fetchFromApi';
 
 class Story extends React.Component {
 
@@ -32,12 +33,7 @@ class Story extends React.Component {
         const url = window.location.pathname.split("/");
         await this.setState({issue: window.location.pathname.split("/")[2], name: url[4]});
 
-        const article = await fetch(`/api/story?issue=${this.state.issue}&name=${this.state.name}`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+        const article = await fetchFromApi(`story?issue=${this.state.issue}&name=${this.state.name}`)
         .then(data => data.json());
 
         const heading = article.body.match(/^[\s\S]+?<\/h4>/)[0];
@@ -61,14 +57,7 @@ class Story extends React.Component {
             name: this.state.name
         }
 
-        fetch("/api/story", {
-            credentials: "include",
-            method: "put",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(info)
-        })
+        fetchFromApi("story", "put", info)
         .then((response) => {
 
             httpNotification(response.status, response.statusText);

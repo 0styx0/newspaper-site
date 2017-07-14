@@ -5,6 +5,8 @@ import {jwt} from './components/jwt';
 import Form from './components/Form';
 import {Input} from './components/Input';
 import A from './components/A';
+import fetchFromApi from './helpers/fetchFromApi';
+
 
 class IssueTable extends React.Component {
 
@@ -18,12 +20,7 @@ class IssueTable extends React.Component {
 
     async componentWillMount() {
 
-        const rawData = await fetch('/api/issue', {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+        const rawData = await fetchFromApi('issue');
 
         const data = await rawData.json();
 

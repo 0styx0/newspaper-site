@@ -4,6 +4,7 @@ import {Input} from './components/Input';
 import {Container} from './components/Container';
 import {jwt} from './components/jwt';
 import A from './components/A';
+import fetchFromApi from './helpers/fetchFromApi';
 
 class LoginForm extends React.Component {
 
@@ -48,15 +49,10 @@ class LoginForm extends React.Component {
 
     setJWT() {
 
-        fetch('http://localhost:3000/api/userStatus', {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-        }).then(data => data)
-        .then(data => data.json())
-        .then(json => {
+        fetchFromApi('userStatus')
+         .then(data => data)
+         .then(data => data.json())
+         .then(json => {
             jwt.level = +json.level
             jwt.email = json.email
             jwt.id = json.id

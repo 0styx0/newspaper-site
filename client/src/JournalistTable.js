@@ -5,6 +5,8 @@ import {Container} from './components/Container';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
 import A from './components/A';
+import fetchFromApi from './helpers/fetchFromApi';
+
 
 class JournalistTable extends React.Component {
 
@@ -65,12 +67,7 @@ class JournalistTable extends React.Component {
 
     async getData() {
 
-        return await fetch("/api/userGroup", {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+        return await fetchFromApi("userGroup");
     }
 
     /**

@@ -4,7 +4,7 @@ import Table from './components/Table';
 import Form from './components/Form';
 import {Input, SecretTwins} from './components/Input';
 import A from './components/A';
-
+import fetchFromApi from './helpers/fetchFromApi';
 
 class ArticleTable extends React.Component {
 
@@ -53,12 +53,7 @@ class ArticleTable extends React.Component {
 
     async getData(num) {
         // NOTE: REMOVE query after done building this
-         return await fetch(`/api/articleGroup?articlesFor=${num}`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+         return await fetchFromApi(`articleGroup?articlesFor=${num}`);
 
     }
 
@@ -146,7 +141,7 @@ class ArticleTable extends React.Component {
                         />
                         <Form
                             method={['put', 'delete']}
-                            action="../api/articleGroup" // up 1 directory since pushing history changes in this.putData()
+                            action="articleGroup" // up 1 directory since pushing history changes in this.putData()
                             children={
                                 <div>
                                     <Table headings={headings} rows={this.state.articles}/>
