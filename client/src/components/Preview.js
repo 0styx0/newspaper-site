@@ -1,19 +1,18 @@
 import React from 'react';
-import A from './A';
+import { Link } from 'react-router-dom';
 
 function Preview(props) {
 
     return (
         <div className="preview">
             <div className="content" dangerouslySetInnerHTML={{__html: props.lede}} />
-            <A
-              props={{
-                  className: "small"
-              }}
-              href={`/issue/${props.issue}/story/${props.url}`}
-              text="Read More"
-              router={props.router}
-            />
+
+            <Link
+              className="small"
+              to={`/issue/${props.issue}/story/${props.url}`}
+            >
+              Read More
+            </Link>
             <span className="small"> ({props.views} views)</span>
         </div>
     )

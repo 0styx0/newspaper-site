@@ -4,9 +4,8 @@ import {Input, Select, SecretTwins} from './components/Input';
 import {Container} from './components/Container';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
-import A from './components/A';
 import fetchFromApi from './helpers/fetchFromApi';
-
+import { Link } from 'react-router-dom';
 
 class JournalistTable extends React.Component {
 
@@ -29,7 +28,7 @@ class JournalistTable extends React.Component {
         const json = await data.json();
         const journalistInfoJson = json.map(person => {
 
-            person.name = <A href={"/u/"+person.profile_link} text={person.name} router={this}/>
+            person.name = <Link to={"/u/"+person.profile_link}>{person.name}</Link>
 
             if (jwt.level > 1) {
 

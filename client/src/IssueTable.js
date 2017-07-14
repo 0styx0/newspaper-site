@@ -4,9 +4,8 @@ import {Container} from './components/Container';
 import {jwt} from './components/jwt';
 import Form from './components/Form';
 import {Input} from './components/Input';
-import A from './components/A';
 import fetchFromApi from './helpers/fetchFromApi';
-
+import { Link } from 'react-router-dom';
 
 class IssueTable extends React.Component {
 
@@ -32,7 +31,7 @@ class IssueTable extends React.Component {
                        name="issueName"
                        defaultValue={issue.name}
                      />
-                   : <A href={'/issue/'+issue.num} text={issue.name} router={this} />,
+                   : <Link to={'/issue/'+issue.num}>{issue.name}</Link>,
                  issue.views,
                  (jwt.level > 2 && !issue.madepub) ?
                                       <select name="pub">

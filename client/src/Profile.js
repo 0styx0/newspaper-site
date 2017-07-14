@@ -4,8 +4,9 @@ import Form from './components/Form';
 import {Input, Checkbox} from './components/Input';
 import Table from './components/Table';
 import {jwt} from './components/jwt';
-import A from './components/A';
 import fetchFromApi from './helpers/fetchFromApi';
+import { Link } from 'react-router-dom';
+
 
 
 class UserArticleTable extends React.Component {
@@ -39,11 +40,9 @@ class UserArticleTable extends React.Component {
         const articles = this.state.articles.map(article => {
 
             const artInfo = [
-                <A
-                  href={`/issue/${article.issue}/story/${article.url}`}
-                  text={decodeURIComponent(article.url)}
-                  router={this}
-                />,
+                <Link to={`/issue/${article.issue}/story/${article.url}`}>
+                    {article.url}
+                </Link>,
                 article.created,
                 article.tags,
                 article.views

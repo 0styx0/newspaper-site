@@ -94,10 +94,10 @@ class MainPage extends React.Component {
             <div key={window.location.pathname}>
                 {this.renderHeader()}
                 <div id="mainContent">
-                    <Slideshow key={this.state.slides} images={this.state.slides} router={this} />
-                    {this.state.articles.map((article => <Preview router={this} key={article.url} {...article} />))}
+                    <Slideshow key={this.state.slides} images={this.state.slides} />
+                    {this.state.articles.map((article => <Preview key={article.url} {...article} />))}
                 </div>
-                <Numberline max={this.state.maxIssue} router={this} current={this.state.currentIssue}/>
+                <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
                 <footer id="credits" className="small">Created by <a href="https://dovidm.com">Dovid Meiseles</a> ('18)</footer>
             </div>
 

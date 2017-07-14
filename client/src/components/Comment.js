@@ -1,9 +1,8 @@
 import React from 'react';
 import Editable from './Editable';
 import {jwt} from './jwt';
-import A from './A';
 import fetchFromApi from '../helpers/fetchFromApi';
-
+import { Link } from 'react-router-dom'
 
 /**
  * @prop profileLink
@@ -14,7 +13,6 @@ import fetchFromApi from '../helpers/fetchFromApi';
  * @prop name
  * @prop addComment - function, parent component should add value returned to comment list when called
  * @prop deleteComment - function, parent component should delete comment with id returned
- * @prop router @see ./A
  */
 class Comment extends React.Component {
 
@@ -85,7 +83,7 @@ class Comment extends React.Component {
     oldComment() {
 
         return <article className="comment">
-                <A className="author" href={'/u/'+this.props.profileLink} text={this.props.author} router={this.props.router}/>
+                <Link className="author" to={'/u/'+this.props.profileLink}>{this.props.author}</Link>
                 <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
                 {this.props.content !== "deleted" &&  (jwt.level > 2 || jwt.id === this.props.authorid) ?
                     <button className="deleteReply" onClick={this.delete}>Delete</button> :

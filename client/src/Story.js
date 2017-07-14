@@ -108,7 +108,6 @@ class Story extends React.Component {
                           name={this.state.name}
                           key={idx}
                           id={comment.id}
-                          router={this}
                           addComment={comment =>
                               this.setState({
                                   comments: this.state.comments.concat(comment)

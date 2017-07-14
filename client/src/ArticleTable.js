@@ -3,8 +3,8 @@ import {Container} from './components/Container';
 import Table from './components/Table';
 import Form from './components/Form';
 import {Input, SecretTwins} from './components/Input';
-import A from './components/A';
 import fetchFromApi from './helpers/fetchFromApi';
+import { Link } from 'react-router-dom'
 
 class ArticleTable extends React.Component {
 
@@ -65,17 +65,9 @@ class ArticleTable extends React.Component {
                 const tagArr = article.tags.split(', ');
 
                 return [
-                    <A
-                      router={this}
-                      href={`/issue/${data[2].num}/story/${article.url}`}
-                      text={decodeURIComponent(article.url)}
-                    />,
+                    <Link to={`/issue/${data[2].num}/story/${article.url}`}>{decodeURIComponent(article.url)}</Link>,
                     article.created,
-                    <A
-                      router={this}
-                      href={`/u/${article.author_username}`}
-                      text={article.author_name}
-                    />,
+                    <Link to={`/u/${article.author_username}`}>{article.author_name}</Link>,
                     <SecretTwins
                         original={<select name="tag[]" formMethod="put" defaultValue={tagArr} required multiple>{data[1].map((val) =>
                             <option key={val} defaultValue={val}>{val}</option>

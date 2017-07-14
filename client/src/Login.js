@@ -3,8 +3,8 @@ import Form from './components/Form';
 import {Input} from './components/Input';
 import {Container} from './components/Container';
 import {jwt} from './components/jwt';
-import A from './components/A';
 import fetchFromApi from './helpers/fetchFromApi';
+import { Link } from 'react-router-dom';
 
 class LoginForm extends React.Component {
 
@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
                 <input type="submit" className="submit" value="Log In" />
                 <br />
 
-                <A href="forgotPass" text="Forgot your password?" router={this} />
+                <Link to="forgotPass">Forgot your password?</Link>
             </div>
         )
 
