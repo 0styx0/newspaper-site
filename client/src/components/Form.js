@@ -1,5 +1,5 @@
 import React from 'react';
-
+import httpNotification from './httpNotification';
 
 /**
  * @return form with action of props.action, children of props.children, and method of props.method.
@@ -105,7 +105,12 @@ class Form extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(json)
-        }).then(data => data.json());
+        }).then(data => {
+
+            httpNotification(data.status, data.statusText);
+
+            return data.json();
+        });
 
 
         for (const elt of document.querySelectorAll('[type=password]')) {

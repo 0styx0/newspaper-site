@@ -1,6 +1,7 @@
 import React from 'react';
 import Editable from './components/Editable';
 import {jwt} from './components/jwt';
+import httpNotification from './components/httpNotification';
 
 class Mission extends React.Component {
 
@@ -35,6 +36,10 @@ class Mission extends React.Component {
             body: JSON.stringify({
                 edit: this.state.content
             })
+        })
+        .then((response) => {
+
+            httpNotification(response.status, response.statusText);
         });
 
     }

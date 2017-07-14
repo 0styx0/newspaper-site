@@ -38,6 +38,7 @@ import {jwt} from './components/jwt';
 class App extends React.Component {
 
     componentWillUpdate() {
+        // so rolled down navar won't be there after clicking link
         document.getElementById("menuToggle").checked = false;
     }
 
@@ -48,11 +49,10 @@ class App extends React.Component {
             <nav>
 
                 <ul>
-
+                    {/*for responsiveness */}
                     <label htmlFor='menuToggle'>
                         <li className='showMenu hidden'> ||| </li>
                     </label>
-
                     <input id='menuToggle' tabIndex="-1" type='checkbox' />
 
                     <li><Link to="/">Home</Link></li>

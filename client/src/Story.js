@@ -3,6 +3,7 @@ import './stormStory.min.css'
 import Editable from './components/Editable';
 import Comment from './components/Comment';
 import {jwt} from './components/jwt';
+import httpNotification from './components/httpNotification';
 
 class Story extends React.Component {
 
@@ -67,6 +68,10 @@ class Story extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(info)
+        })
+        .then((response) => {
+
+            httpNotification(response.status, response.statusText);
         });
     }
 
