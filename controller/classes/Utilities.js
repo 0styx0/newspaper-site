@@ -22,9 +22,10 @@ module.exports = class Utilities {
 
     static setHeader(num = 200, thing = '', end = true) {
 
-        Utilities.res.statusMessage = thing.split(" ")
+        Utilities.res.statusMessage = (thing) ? thing.split(" ")
                                            .map(word => word[0].toLocaleUpperCase() + word.substr(1))
-                                           .join(" ");
+                                           .join(" ")
+                                           : null;
         Utilities.res.status(num);
 
         if (end) {

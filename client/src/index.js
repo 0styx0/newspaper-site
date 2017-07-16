@@ -11,6 +11,7 @@ import Profile from './Profile';
 import MainPage from './MainPage';
 import Mission from './Mission';
 import Story from './Story';
+import ForgotPassword from './ForgotPassword';
 import TagSelect from './components/TagSelect';
 import './stormStyles.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -78,6 +79,7 @@ class App extends React.Component {
                 <Route path="/issue/(.*)" component={MainPage}/>
                 <Route exact path="/" component={MainPage}/>
                 <Route path="/u/(.*)" component={Profile}/>
+                <Route path="/forgotPass" component={ForgotPassword}/>
 
             </Switch>
         </div>

@@ -19,7 +19,16 @@ router.get("/", async function(req, res) {
 
 router.put('/', async function(req, res) {
 
-    await UserInstance.defineInfoFor(UserInstance.getJWT().id, true);
+    if (req.body.lastAuth && req.body.email) {
+
+        await UserInstance.defineInfoFor(req.body.user)
+                          .then(() => UserInstance.forgotPassword(req.body.email, req.body.lastAuth));
+    }
+    else {
+
+        await UserInstance.defineInfoFor(UserInstance.getJWT().id, true);
+    }
+
 
     if (await UserInstance.checkPassword(req.body.password)) {
 

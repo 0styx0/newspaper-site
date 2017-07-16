@@ -621,7 +621,7 @@ module.exports = class User {
       */
     async checkPassword(passwordGiven = '') {
 
-        return passwordGiven && await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
+        return this._password && await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
     }
 
     /**
@@ -844,7 +844,7 @@ module.exports = class User {
       */
     async checkAuth(toCheck, timeMatters = true) {
 
-        return await bcrypt.compare(toCheck, this._authCode.replace(/^\$2y/, '$2a')) && (!timeMatters || Date.parse(this._authTime) - Date.now() > 0);
+        return this._authCode && await bcrypt.compare(toCheck, this._authCode.replace(/^\$2y/, '$2a')) && (!timeMatters || Date.parse(this._authTime) - Date.now() > 0);
     }
 
     /**
@@ -857,7 +857,7 @@ module.exports = class User {
       */
     async forgotPassword(email, lastAuth) {
 
-        const newPassword = randomstring(30);
+        const newPassword = randomstring.generate(30);
 
         if (!await this.checkAuth(lastAuth, false) || email != this._email || !await this.setPassword(newPassword, newPassword)) {
             return false;
