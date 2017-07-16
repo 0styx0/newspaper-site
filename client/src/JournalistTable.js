@@ -186,7 +186,7 @@ class JournalistTable extends React.Component {
                 <div>
                     {this.renderSortingOptions()}
                      <Form
-                        action="api/userGroup"
+                        action="/api/userGroup"
                         method={['put', 'delete']} // since delete and put are in the same form, asking to check each input separately
                         onSubmit={this.updateInfo}
                         children={

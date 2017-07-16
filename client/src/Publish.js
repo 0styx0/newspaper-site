@@ -122,7 +122,7 @@ class Publish extends React.Component {
                  children={
                    <Form
                      method="post"
-                     action="api/story"
+                     action="/api/story"
                      onSubmit={this.redirect}
                      children={
                          <div>

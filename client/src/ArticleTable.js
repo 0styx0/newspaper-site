@@ -133,7 +133,7 @@ class ArticleTable extends React.Component {
                         />
                         <Form
                             method={['put', 'delete']}
-                            action="articleGroup" // up 1 directory since pushing history changes in this.putData()
+                            action="/api/articleGroup" // up 1 directory since pushing history changes in this.putData()
                             children={
                                 <div>
                                     <Table headings={headings} rows={this.state.articles}/>

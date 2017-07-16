@@ -60,7 +60,7 @@ class UserArticleTable extends React.Component {
                 children={
                     <Form
                         method="delete"
-                        action="articleGroup"
+                        action="/api/articleGroup"
                         children={
                             <div>
                                 <Table
@@ -140,7 +140,7 @@ class ModifiableUserInfo extends React.Component {
                 children={
                     <Form
                         method={["put", "delete"]}
-                        action="user"
+                        action="/api/user"
                         children={
                             <div>
                                 <Table
@@ -197,7 +197,7 @@ function ChangePassword() {
             children={
                 <Form
                     method="put"
-                    action="user"
+                    action="/api/user"
                     children={
                         <div>
                             <Input

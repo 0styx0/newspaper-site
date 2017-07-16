@@ -32,7 +32,7 @@ class Logout extends React.Component {
             <span>
                 <Form
                     method="put"
-                    action="userStatus"
+                    action="/api/userStatus"
                     onSubmit={this.onLogout}
                     children={<input
                                 className="changed"

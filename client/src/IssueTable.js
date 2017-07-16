@@ -53,7 +53,7 @@ class IssueTable extends React.Component {
                 heading="Issues"
                 children={
                     <Form
-                      action="api/issue"
+                      action="/api/issue"
                       method="put"
                       children={
                           <div>

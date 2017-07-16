@@ -69,7 +69,7 @@ class LoginForm extends React.Component {
         return (
             <Container heading="Login"
                 children={
-                    <Form action="api/userStatus" method="put" onSubmit={this.setJWT} children={this.renderInputs()} />
+                    <Form action="/api/userStatus" method="put" onSubmit={this.setJWT} children={this.renderInputs()} />
                         }
             />
         );
