@@ -98,6 +98,6 @@ class Editable extends React.Component {
 
 Editable.defaultProps = {
     buttons: true
-}
+};
 
 export default Editable;

@@ -2,7 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import {Input} from './components/Input';
 import {Container} from './components/Container';
-import {jwt} from './components/jwt';
+import {jwt, setJWT} from './components/jwt';
 import fetchFromApi from './helpers/fetchFromApi';
 import { Link } from 'react-router-dom';
 
@@ -47,21 +47,16 @@ class LoginForm extends React.Component {
 
     }
 
-    setJWT() {
+    async setJWT(method, json, result) {
 
-        fetchFromApi('userStatus')
-         .then(data => data)
-         .then(data => data.json())
-         .then(json => {
-            jwt.level = +json.level
-            jwt.email = json.email
-            jwt.id = json.id
+        if (await (setJWT()).level) {
 
-            if (jwt.level) {
+            this.props.history.push('/publish');
+        }
+        else if (result.statusText === "Email Sent") {
 
-                this.props.history.push('/publish');
-            }
-        })
+            this.props.history.push('/authLogin');
+        }
     }
 
     render() {

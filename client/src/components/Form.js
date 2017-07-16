@@ -99,7 +99,7 @@ class Form extends React.Component {
      */
     async sendData(form, json, method) {
 
-        const result = await fetch(form.action, {
+        fetch(form.action, {
             credentials: "include",
             method,
             headers: {
@@ -111,17 +111,18 @@ class Form extends React.Component {
 
             httpNotification(data.status, data.statusText);
 
-            return data.json();
+            if (this.props.onSubmit) {
+
+                this.props.onSubmit(method, json, data);
+            }
+
+
+            return data.headers.get("content-length") > 0 && data.json();
         });
 
 
         for (const elt of document.querySelectorAll('[type=password]')) {
             elt.value = '';
-        }
-
-        if (this.props.onSubmit) {
-
-            this.props.onSubmit(method, json, result);
         }
     }
 

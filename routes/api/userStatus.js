@@ -9,6 +9,10 @@ router.put('*', async function(req, res) {
     if (req.body.authCode) {
 
         await UserInstance.login(UserInstance.getJWT().email, req.body.password, req.body.authCode);
+
+        if (!res.headersSent) {
+            res.end();
+        }
         return UserInstance.destruct(); // save email change
     }
 
