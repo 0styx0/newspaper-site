@@ -39,6 +39,8 @@ module.exports = class Utilities {
             Utilities.setHeader(500, 'cookie');
             return false;
         }
+        // so can see cookie that is set before request is sent back with the set-cookie header
+        Utilities[name] = value;
 
         const CookieInstance = new Cookie(Utilities.req, Utilities.res);
         CookieInstance.set(name, value, {/*signed: true,*/ overwrite: true})
@@ -52,6 +54,6 @@ module.exports = class Utilities {
         }
 
         const CookieInstance = new Cookie(Utilities.req, Utilities.res);
-        return CookieInstance.get(name);
+        return Utilities[name] || CookieInstance.get(name)
     }
 }

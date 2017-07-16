@@ -8,14 +8,15 @@ router.put('*', async function(req, res) {
 
     if (req.body.authCode) {
 
-        res.send(await UserInstance.login(UserInstance.getJWT().email, req.body.password, req.body.authCode))
+        await UserInstance.login(UserInstance.getJWT().email, req.body.password, req.body.authCode);
         return UserInstance.destruct(); // save email change
     }
 
 
     else if (req.body.username && req.body.password) {
-        
+
         const loginResult = await UserInstance.login(req.body.username, req.body.password);
+        UserInstance.destruct();
 
         return (loginResult) ? res.send(loginResult) : false;
     }

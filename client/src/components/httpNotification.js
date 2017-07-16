@@ -5,6 +5,7 @@ const httpStatusMessages = {
     "400": {
 
         "Invalid Username": "Username must be 1 word and less than 20 letters.",
+        "Password": "Incorrect password",
         "Invalid Name": `Must have first and last name, and an optional middle name,
             which if given must be at most 3 letters.`,
         "Invalid Level": "Level must be 1-3.",
@@ -46,6 +47,10 @@ const httpStatusMessages = {
 
     "201": {
         "User Created": 'Account has been created. A verification email has been sent.'
+    },
+
+    "500": {
+        "Internal Server Error": "Unknown error. Please try again."
     }
 };
 

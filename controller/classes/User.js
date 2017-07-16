@@ -283,10 +283,11 @@ module.exports = class User {
             }
             this.makeEmailUsable();
         }
-        // the check for _SESSION["user] is to make sure not to send another email every time page is refreshed
-        if (this._twoFactorEnabled && !this.checkAuth(code)) {
 
-            if (!token.id) {
+        // the check for _SESSION["user] is to make sure not to send another email every time page is refreshed
+        if (this._twoFactorEnabled && !await this.checkAuth(code)) {
+
+            if (code && token.id) {
 
                 Utilities.setHeader(202);
                 return;
@@ -296,15 +297,15 @@ module.exports = class User {
                 id: this._id
             });  // put in 2 places to not send many emails if refresh auth page
 
-            const now = new Date();
-            now.setMinutes(now.getMinutes() + 15);
+            const fifteenMinutes = new Date(Date.now());
+            fifteenMinutes.setMinutes(fifteenMinutes.getMinutes() + 15);
 
-            const code = this.set2FAInfo(now.toISOString().substring(0, 10));
+            const authCode = await this.set2FAInfo(fifteenMinutes);
 
             const SendMailInstance = new SendMail();
 
             Utilities.setHeader(200, "email sent");
-            return (SendMailInstance.twoFactor(this._email, code)) ? 0 : false;
+            return (SendMailInstance.twoFactor(this._email, authCode)) ? 0 : false;
         }
 
         this.changeJWT({
@@ -327,17 +328,16 @@ module.exports = class User {
 
         const prevValues = this.getJWT();
 
+        for (const idx in fieldValues) {
+            prevValues[idx] = fieldValues[idx];
+        }
+
         const token = [
             {
                 iss: "https://tabceots.com",
                 iat: Date.now()
             },
-            {
-                email: fieldValues.email ? fieldValues.email : prevValues.email || null,
-                level: fieldValues.level ? fieldValues.level : prevValues.level || null,
-                id: fieldValues.id ? fieldValues.id : prevValues._id || null,
-                automatedTest: !!fieldValues.automatedTest
-            }
+            prevValues
         ];
 
         const encodedJWT = jwt.encode(token, JWT.SECRET);
@@ -810,7 +810,7 @@ module.exports = class User {
 
         const code = randomstring.generate(6);
 
-        await bcrypt.hash(code, 10).then(hash => this._authCode = hash.replace(/^\$2a/, '$2y'))
+        this._authCode = await bcrypt.hash(code, 10).then(hash => this._authCode = hash.replace(/^\$2a/, '$2y'))
         this._authTime = time;
 
         this._settingChanged = true;
@@ -844,7 +844,12 @@ module.exports = class User {
       */
     async checkAuth(toCheck, timeMatters = true) {
 
-        return this._authCode && await bcrypt.compare(toCheck, this._authCode.replace(/^\$2y/, '$2a')) && (!timeMatters || Date.parse(this._authTime) - Date.now() > 0);
+        return !!this._authCode &&
+               await bcrypt.compare(toCheck, this._authCode.replace(/^\$2y/, '$2a')) &&
+               (
+                 !timeMatters ||
+                 Date.parse(this._authTime) - Date.now() > 0
+               );
     }
 
     /**
