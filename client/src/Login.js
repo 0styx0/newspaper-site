@@ -2,8 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import {Input} from './components/Input';
 import {Container} from './components/Container';
-import {jwt, setJWT} from './components/jwt';
-import fetchFromApi from './helpers/fetchFromApi';
+import {setJWT} from './components/jwt';
 import { Link } from 'react-router-dom';
 
 class LoginForm extends React.Component {
@@ -49,7 +48,9 @@ class LoginForm extends React.Component {
 
     async setJWT(method, json, result) {
 
-        if (await (setJWT()).level) {
+        const jwt = await setJWT();
+        
+        if (jwt.level) {
 
             this.props.history.push('/publish');
         }

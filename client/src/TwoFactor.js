@@ -2,7 +2,7 @@ import React from 'react';
 import {Container} from './components/Container';
 import Form from './components/Form';
 import {Input} from './components/Input';
-import {jwt, setJWT} from './components/jwt';
+import {setJWT} from './components/jwt';
 
 class TwoFactor extends React.Component {
 

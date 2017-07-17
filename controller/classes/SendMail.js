@@ -113,7 +113,7 @@ module.exports = class SendMail {
 
         const message = "Your new password is <br />"+
                       newPassword
-                      +"<br /> You are strongly advised to <a href='https://tabceots.com/u/{username}'>change</a> "+
+                      +`<br /> You are strongly advised to <a href='https://tabceots.com/u/${username}'>change</a> `+
                       "it as soon as possible."+
                       "<br />To prevent passwords from being forgotten, consider using a password manager such as "+
                       "1Password or LastPass";

@@ -13,7 +13,7 @@ function ForgotPassword() {
 
               <Form
                   action="/api/user"
-                  method="post"
+                  method="put"
                   children={
                       <div>
                           <Input

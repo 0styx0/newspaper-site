@@ -18,11 +18,12 @@ router.get("/", async function(req, res) {
 });
 
 router.put('/', async function(req, res) {
-
+console.log(req.body)
     if (req.body.lastAuth && req.body.email) {
 
         await UserInstance.defineInfoFor(req.body.user)
-                          .then(() => UserInstance.forgotPassword(req.body.email, req.body.lastAuth));
+                          .then(() => UserInstance.forgotPassword(req.body.email, req.body.lastAuth))
+                          .then(() => UserInstance.destruct());
     }
     else {
 
