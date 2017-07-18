@@ -162,7 +162,7 @@ module.exports = class SendMail {
             subject: subject,
             html: message
         };
-
+        
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

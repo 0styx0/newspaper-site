@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const Utilities = require('../../controller/classes/Utilities');
-const Comment = require('../../controller/classes/Comment');
+const Utilities = require('../classes/Utilities');
+const Comment = require('../classes/Comment');
 
 const CommentInstance = new Comment();
 

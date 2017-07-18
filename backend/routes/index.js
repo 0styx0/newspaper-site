@@ -1,5 +1,11 @@
 const router = require('express').Router();
-const Utilities = require('../../controller/classes/Utilities');
+const Utilities = require('../classes/Utilities');
+
+const jwt = require('jwt-simple');
+
+const JWT = require('../../config.json').JWT;
+
+
 
 
 // for jwt getting and setting

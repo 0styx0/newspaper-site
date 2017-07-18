@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const User = require("../../controller/classes/User");
-const Utilities = require("../../controller/classes/Utilities");
+const User = require("../classes/User");
+const Utilities = require("../classes/Utilities");
+
 
 router.put('*', async function(req, res) {
 
@@ -18,7 +19,7 @@ router.put('*', async function(req, res) {
 
 
     else if (req.body.username && req.body.password) {
-        
+
         const loginResult = await UserInstance.login(req.body.username, req.body.password);
         UserInstance.destruct();
 

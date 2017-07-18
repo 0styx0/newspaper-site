@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const Article = require("../../controller/classes/Article");
-const Comment = require("../../controller/classes/Comment");
-const Utilities = require("../../controller/classes/Utilities");
-const User = require("../../controller/classes/User");
+const Article = require("../classes/Article");
+const Comment = require("../classes/Comment");
+const Utilities = require("../classes/Utilities");
+const User = require("../classes/User");
 
 
 router.get("/:issueNum?", async function(req, res) {

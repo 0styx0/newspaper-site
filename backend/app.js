@@ -7,7 +7,10 @@ var bodyParser = require('body-parser');
 
 
 var app = express();
-
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -29,8 +32,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/', require('./routes/index'));
-app.use('/api', require('./routes/api'));
+app.use('/api', require('./routes/'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

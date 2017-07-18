@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Issue = require("../../controller/classes/Issue");
+const Issue = require("../classes/Issue");
 
 router.get("/:issueNum?", async function(req, res) {
 

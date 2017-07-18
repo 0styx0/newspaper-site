@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const Info = require('../../controller/classes/Info');
-const UserGroup = require('../../controller/classes/UserGroup');
+const Info = require('../classes/Info');
+const UserGroup = require('../classes/UserGroup');
 
 router.get("/", async function(req, res) {
 

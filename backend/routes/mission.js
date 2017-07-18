@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const User = require("../../controller/classes/User");
-const Article = require("../../controller/classes/Article");
-const Utilities = require("../../controller/classes/Utilities");
+const User = require("../classes/User");
+const Article = require("../classes/Article");
+const Utilities = require("../classes/Utilities");
 const fs = require('fs');
 
 router.put('/', function(req, res) {

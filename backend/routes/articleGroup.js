@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const Info = require("../../controller/classes/Info");
-const Utilities = require('../../controller/classes/Utilities');
-const User = require('../../controller/classes/User');
-const ArticleGroup = require('../../controller/classes/ArticleGroup');
+const Info = require("../classes/Info");
+const Utilities = require('../classes/Utilities');
+const User = require('../classes/User');
+const ArticleGroup = require('../classes/ArticleGroup');
 
 router.get('/', async function(req, res) {
 

@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "start-all": "npm start | npm --prefix ./client/ start",
-    "install-all": "npm --prefix ./ install && npm --prefix ./client/ install"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^1.0.2",

@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require("../../controller/classes/User");
-const Utilities = require('../../controller/classes/Utilities');
+const User = require("../classes/User");
+const Utilities = require('../classes/Utilities');
 
 const UserInstance = new User();
 
@@ -18,7 +18,7 @@ router.get("/", async function(req, res) {
 });
 
 router.put('/', async function(req, res) {
-    
+
     if (req.body.lastAuth && req.body.email) {
 
         await UserInstance.defineInfoFor(req.body.user)
