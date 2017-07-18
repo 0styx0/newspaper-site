@@ -83,12 +83,11 @@ class Signup extends React.Component {
 
                 <Input
                   label="Email"
-                  abbr="Must be your TABC email."
+                  abbr="Must be your assigned email."
                   props={{
                     name: "email",
                     type: "email",
-                    pattern: "^[^@]+@tabc\\.org$",
-                    placeholder: "example@tabc.org",
+                    pattern: "^[^@]+@\\w+\\.\\w+$",
                     required: true
                   }}
                 />

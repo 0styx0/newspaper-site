@@ -4,7 +4,7 @@ const db = require('./db');
 const bcrypt = require('bcrypt');
 const SendMail = require('./SendMail');
 const jwt = require('jwt-simple');
-const JWT = require('../../config.json').JWT;
+const {unused1, unused2 , JWT, EMAIL_HOST} = require('../../config.json');
 const randomstring = require('randomstring');
 
 module.exports = class User {
@@ -263,7 +263,7 @@ module.exports = class User {
             return false;
         }
 
-        // get email. Match .words2018@tabc.org, name.nextName@tabc.org, and only takes words@2018 or name.nextName
+        // get email. Match .words2018@domain.tld, name.nextName@domain.tld, and only takes words@2018 or name.nextName
         const emailInfo = this._email.match(/\w+\.?\d?\w+/)[0];
 
         this.changeJWT({
@@ -388,7 +388,7 @@ module.exports = class User {
                                 FROM users
                                 LEFT JOIN issues ON (ispublic = 1 OR ?)
                                 LEFT JOIN pageinfo ON issue = num AND authorid = users.id
-                                WHERE username = ? OR TRIM('.' FROM TRIM('@tabc.org' FROM users.email)) = ? LIMIT 1`,
+                                WHERE username = ? OR TRIM('.' FROM TRIM(TRAILING SUBSTRING(email, INSTR(email, "@")) FROM email)) = ? LIMIT 1`,
                                 [this.isLoggedIn(), filtWhereClause, filtWhereClause]);
         }
         else {
@@ -450,7 +450,7 @@ module.exports = class User {
 
         const asyncDB = await db;
         return !!(await asyncDB.query(`SELECT id FROM users WHERE username = ?
-        OR TRIM('@tabc.org' FROM email) = ?`, [username, username]))[0][0].id
+        OR TRIM(TRAILING SUBSTRING(email, INSTR(email, "@")) FROM email) = ?`, [username, username]))[0][0].id
     }
 
     /**
@@ -654,11 +654,11 @@ module.exports = class User {
     /**
       * @param email - to be checked
       *
-      * @return false if invalid email format or doesn't end with (digits or word.word) and @tabc.org, return filtered email
+      * @return false if invalid email format or doesn't end with (digits or word.word) and @see config.json EMAIL_HOST, return filtered email
       */
     validateEmail(email) {
 
-         if (!/^(?:(?:\w+\d{4})|(?:[a-z]+\.[a-z]+))@tabc\.org$/.test(email)) {
+         if (EMAIL_HOST.indexOf('@') !== -1 && !new RegExp('^(?:(?:\\w+\\d{4})|(?:[a-z]+\\.[a-z]+))'+EMAIL_HOST+'$', 'i').test(email)) {
 
             Utilities.setHeader(400, "email");
             return false;

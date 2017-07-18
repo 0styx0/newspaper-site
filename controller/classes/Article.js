@@ -160,7 +160,6 @@ module.exports = class Article {
 
              return fs.pathExists(path).then(exists => {
 
-                    console.log("EX: ", exists, path);
                 if (exists) {
                     return fs.move(path,  __dirname + `/../../public/images/issue/${this._issue}/${id}`).catch(console.log);
                 }

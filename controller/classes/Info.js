@@ -1,7 +1,7 @@
 
 const User = require("./User");
 const db = require("./db");
-let Issue = require("./Issue");
+const Issue = require("./Issue");
 
 module.exports = class Info {
 
@@ -100,9 +100,7 @@ module.exports = class Info {
                 COUNT(pageinfo.id) AS articles,
                 IFNULL(SUM(pageinfo.views), 0) AS views, users.id,
                 TRIM(
-                    LEADING '.' FROM TRIM(
-                        TRAILING '@tabc.org' FROM email
-                        )
+                    LEADING '.' FROM TRIM(TRAILING SUBSTRING(email, INSTR(email, "@")) FROM email)
                     ) AS profile_link
                 FROM users
                 LEFT JOIN pageinfo
@@ -118,9 +116,7 @@ module.exports = class Info {
                             COUNT(pageinfo.id) AS articles,
                             IFNULL(SUM(views), 0) AS views, users.id,
                             TRIM(
-                                LEADING '.' FROM TRIM(
-                                    TRAILING '@tabc.org' FROM email
-                                    )
+                                LEADING '.' FROM TRIM(TRAILING SUBSTRING(email, INSTR(email, "@")) FROM email)
                                 ) AS profile_link
                             FROM users
                             LEFT JOIN pageinfo

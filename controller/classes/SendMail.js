@@ -1,15 +1,15 @@
 
 const nodemailer = require('nodemailer');
 const db = require('./db');
-const EMAIL = require('./../../config.json').EMAIL;
 const Utilities = require('./Utilities');
+const {unused1, EMAIL, unused, EMAIL_HOST} = require('../../config.json');
 
 module.exports = class SendMail {
 
     /**
       * Given proper parameters, this emails a user
       *
-      * @param email - valid email address (lowercase.lowercase@tabc.org OR lettersnnnn@tabc.org where n is a digit)
+      * @param email - valid email address (lowercase.lowercase@domain.tld OR lettersnnnn@domain.tld where n is a digit)
       * @param subject - string that will be sent at email subject
       * @param message - string, will be sent as email body
       *
@@ -139,7 +139,7 @@ module.exports = class SendMail {
            return true;
        }
 
-        to = to.filter((elt) => /^[\w\.]+@tabc\.org$/.test(elt));
+        to = to.filter((elt) => new RegExp('^[\\w\\.]+'+EMAIL_HOST+'$', 'i').test(elt));
 
         if (!to) {
             return true;

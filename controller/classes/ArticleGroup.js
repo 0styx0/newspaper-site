@@ -78,7 +78,7 @@ module.exports = class ArticleGroup {
             !await UserInstance.checkPassword(password)) {
                 return false;
         }
-        
+
         asyncDB.query(`DELETE FROM comments WHERE art_id IN ${inForArts}`, ids)
         .then(() =>
         asyncDB.query(`DELETE FROM tags WHERE art_id IN ${inForArts}`, ids))

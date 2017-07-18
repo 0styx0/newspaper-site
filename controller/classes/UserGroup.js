@@ -120,7 +120,7 @@ module.exports = class UserGroup {
         const inClause = '(' + (new Array(usernamesToPromote.length)).fill('?').join(',') + ')';
 
         const maxPreviousLvlQuery = asyncDB.query(`SELECT MAX(level) AS max
-                                                       FROM users WHERE TRIM(TRAILING '@tabc.org' FROM email) IN ${inClause}`,
+                                                       FROM users WHERE TRIM(TRAILING SUBSTRING(email, INSTR(email, "@")) FROM email) IN ${inClause}`,
                                                        usernamesToPromote);
         let maxPreviousLvl;
 
@@ -140,7 +140,14 @@ module.exports = class UserGroup {
 
         promoteParams.unshift(toLevel);
 
-        asyncDB.query(`UPDATE users SET level = ? WHERE TRIM(LEADING '.' FROM (TRIM(TRAILING '@tabc.org' FROM email))) IN ${inClause}`, promoteParams);
+        asyncDB.query(`UPDATE users SET level = ? WHERE TRIM(
+                LEADING '.' FROM TRIM(
+                    TRAILING SUBSTRING(
+                                 email, INSTR(email, "@")
+                              )
+                    FROM email)
+            )
+            IN ${inClause}`, promoteParams);
 
         Utilities.setHeader(200, "user(s) updated");
         return true;
