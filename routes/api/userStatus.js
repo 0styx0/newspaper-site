@@ -18,7 +18,7 @@ router.put('*', async function(req, res) {
 
 
     else if (req.body.username && req.body.password) {
-
+        
         const loginResult = await UserInstance.login(req.body.username, req.body.password);
         UserInstance.destruct();
 

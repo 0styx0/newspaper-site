@@ -3,6 +3,7 @@ const db = require("./db");
 const Utilities = require("./Utilities");
 const User = require("./User");
 const Info = require("./Info");
+const moment = require("moment");
 
 module.exports = class Issue {
 
@@ -334,8 +335,8 @@ module.exports = class Issue {
         this._isPublic = true;
         this._settingChanged = true;
 
-        // credit to https://stackoverflow.com/a/28431880
-        this._madePub = (new Date()).toISOString();
+        this._madePub = moment().format('YYYY-MM-DD');
+
         return true;
     }
 

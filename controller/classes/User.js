@@ -621,7 +621,7 @@ module.exports = class User {
       */
     async checkPassword(passwordGiven = '') {
 
-        return this._password && await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
+        return this._password && passwordGiven && await bcrypt.compare(passwordGiven, this._password.replace(/^\$2y/, '$2a'));
     }
 
     /**
