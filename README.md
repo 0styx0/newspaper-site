@@ -93,8 +93,6 @@
 <ol>
     <li>Go to phymyadmin and create a database (whatever name you want)</li>
     <li>Go into that database's <code>import</code> tab and choose <code>schema.sql</code> from this project's root and upload it</li>
-    <li>Execute the following sql command (replacing the question marks with actual info) <code>INSERT INTO users (username, f_name, m_name, l_name, password, level, email, notifications) VALUES (?, ?, ?, ?, ?, ?, ?, ?)</code>(see the Database Information <a href="#dbUsersInfo">users section</a> for more)
-    </li>
 </ol>
 
 <h3 id="configFile">Config File</h3>
@@ -129,7 +127,7 @@
 <h3>Firing Up</h3>
 
 <ol>
-    <li><code>node ./install-all</code>//this installs nodejs modules needed for backend and frontend</li>
+    <li><code>node ./install-all -email your_email -password secure_password </code>//this installs nodejs modules needed for backend and frontend, and creates an account with the username "admin" with the email and password passed in</li>
     <li><code>node ./start-all</code>//starts front and backend servers</li>
     <li>Go to <a href="http://localhost:3001">http://localhost:3001</a> in your browser</li>
 </ol>
