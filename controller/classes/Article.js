@@ -59,7 +59,7 @@ module.exports = class Article {
             return false;
         }
 
-        fs.remove(__dirname+`/../../public/images/issue/${this._issue}/${this._id}`).catch(console.log)
+        fs.remove(__dirname+`/../../client/public/images/issue/${this._issue}/${this._id}`).catch(console.log)
 
         await asyncDB.query("DELETE FROM comments WHERE art_id = ?", [this._id]);
         await asyncDB.query("DELETE FROM tags WHERE art_id = ?", [this._id]);
@@ -156,12 +156,12 @@ module.exports = class Article {
 
             const id = response[0][0].id;
 
-            const path = __dirname + `/../../public/images/issue/${this._issue}/${tmpId}`;
+            const path = __dirname + `/../../client/public/images/issue/${this._issue}/${tmpId}`;
 
              return fs.pathExists(path).then(exists => {
 
                 if (exists) {
-                    return fs.move(path,  __dirname + `/../../public/images/issue/${this._issue}/${id}`).catch(console.log);
+                    return fs.move(path,  __dirname + `/../../client/public/images/issue/${this._issue}/${id}`).catch(console.log);
                 }
                 else {
                     Promise.resolve();
