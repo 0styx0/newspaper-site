@@ -39,7 +39,7 @@
       <details>
         <summary>Level 2 users</summary>
           <ul>
-              <li>Can delete users less than themselves</li> 
+              <li>Can delete users less than themselves</li>
               <li>Create other users of the same level</li>
           </ul>
       </details>
@@ -93,7 +93,7 @@
 <h3 id="configFile">Config File</h3>
 
 <p>Create a file called <code>config.json</code> in the project root and write</p>
-<pre> 
+<pre>
      {
         "DB": {
             "HOST": your_server_host,
@@ -151,7 +151,7 @@
     <li>
       <details>
         <summary>
-          <code>node ./install-all -email your_email -password secure_password</code>
+          <code>node ./install-all -email your_email -password secure_password</code>(note: bcrypt module might cause problems. Rerun the command if that happens and it should work
         </summary>
         <ul>
           <li>Installs nodejs modules needed for backend and frontend</li>

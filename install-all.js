@@ -103,4 +103,9 @@ async function createAdmin() {
     process.exit();
 }
 
-installModules();
+try {
+    installModules();
+}
+catch(error) {
+    console.err(error + "\n\n Please run the command again.");
+}
