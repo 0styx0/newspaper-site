@@ -89,11 +89,6 @@
     <li><code>cd eyeStorm-nodeJS</code></li>
 </ol>
 
-<h3>Database Setup</h3>
-<ol>
-    <li>Go to phymyadmin and create a database (whatever name you want)</li>
-    <li>Go into that database's <code>import</code> tab and choose <code>schema.sql</code> from this project's root and upload it</li>
-</ol>
 
 <h3 id="configFile">Config File</h3>
 
@@ -104,9 +99,9 @@
         "DB": {
             "HOST": your_database_host,
             "PORT": port_of_your_mysql_database,
-            "USER": your_database_username,
+            "USER": your_database_username_for_this_project,
             "PASS": your_database_password,
-            "NAME": your_database_name_created_in_bullet_3
+            "NAME": your_database_name_created_in_bullet_3 // the actual database will be created in the next step
         },
         "EMAIL": {
             "ADDR": your_email_address,
@@ -126,8 +121,20 @@
 
 <h3>Firing Up</h3>
 
+<p>You MUST have filled out config.json before this step</p>
+
 <ol>
-    <li><code>node ./install-all -email your_email -password secure_password </code>//this installs nodejs modules needed for backend and frontend, and creates an account with the username "admin" with the email and password passed in</li>
+    <li>
+      <details>
+        <summary>
+          <code>node ./install-all -email your_email -password secure_password</code>
+        </summary>
+        <ul>
+          <li>Installs nodejs modules needed for backend and frontend</li>
+          <li>Uploads database schema to the database named in config.json</li>
+          <li>Creates an account with the username "admin" with the email and password passed in</li>
+        </ul>
+    </li>
     <li><code>node ./start-all</code>//starts front and backend servers</li>
     <li>Go to <a href="http://localhost:3001">http://localhost:3001</a> in your browser</li>
 </ol>
@@ -135,7 +142,9 @@
 
 <h1>Database Information</h1>
 
-<h3 id="dbUsersInfo">Users</h3>
+<p>Note: You don't need to know any of this to use the project</p>
+
+<h3 id="dbUsersInfo">users</h3>
 <ul>
     <li><code>username</code>, <code>f_name</code>, <code>m_name</code> (optional), <code>l_name</code> - 1 word</li>
     <li><code>email</code> - must end with <a href="#configFile">config.json</a>'s EMAIL_HOST (or anything, if EMAIL_HOST is '*'</li>
@@ -145,7 +154,7 @@
     <li><code>auth_time</code> - regular old timestamp</li>
 </ul>
 
-<h3>Pageinfo</h3>
+<h3>pageinfo</h3>
 <ul>
     <li><code>created</code> - timestamp when article was created</li>
     <li><code>url</code> - url of where, relative to the root directory, the article with be located</li>
