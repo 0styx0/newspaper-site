@@ -133,7 +133,7 @@ module.exports = class SendMail {
       */
     _mail(to = [], subject, message) {
 
-       const cookie = Utilities.getCookies('jwt');
+       const cookie = Utilities.getCookies('eyeStorm-jwt');
        if (cookie && cookie[1].automatedTest) {
 
            return true;

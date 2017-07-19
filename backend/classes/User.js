@@ -342,13 +342,13 @@ module.exports = class User {
 
         const encodedJWT = jwt.encode(token, JWT.SECRET);
 
-        Utilities.setCookies('jwt', encodedJWT);
+        Utilities.setCookies('eyeStorm-jwt', encodedJWT);
     }
 
 
     getJWT() {
 
-        const jwtCookie = Utilities.getCookies('jwt');
+        const jwtCookie = Utilities.getCookies('eyeStorm-jwt');
 
         const token = (jwtCookie) ? jwt.decode(jwtCookie, JWT.SECRET)[1] : {};
 
@@ -357,7 +357,7 @@ module.exports = class User {
 
     getJWTHeaders() {
 
-        const jwtCookie = Utilities.getCookies('jwt');
+        const jwtCookie = Utilities.getCookies('eyeStorm-jwt');
 
         return (jwtCookie) ? jwt.decode(jwtCookie, JWT_SECRET)[0] : null;
     }
@@ -433,7 +433,7 @@ module.exports = class User {
       */
     logout() {
 
-        Utilities.setCookies('jwt', null);
+        Utilities.setCookies('eyeStorm-jwt', null);
     }
 
     /**
