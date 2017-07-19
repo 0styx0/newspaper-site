@@ -97,11 +97,11 @@
     <pre> 
      {
         "DB": {
-            "HOST": your_database_host,
-            "PORT": port_of_your_mysql_database,
-            "USER": your_database_username_for_this_project,
-            "PASS": your_database_password,
-            "NAME": your_database_name_created_in_bullet_3 // the actual database will be created in the next step
+            "HOST": your_server_host,
+            "PORT": port_of_your_mysql_server,
+            "USER": your_sql_server_username,
+            "PASS": your_sql_server_password,
+            "NAME": random_database_name // the actual database will be created in the next step
         },
         "EMAIL": {
             "ADDR": your_email_address,
