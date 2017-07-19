@@ -23,12 +23,45 @@ function installModules() {
             console.log("Completed installation for", command[1][1]);
 
             if (i === 1) {
-                createAdmin();
+                initializeDatabase();
             }
         });
     });
 }
 
+
+async function initializeDatabase() {
+
+    const DB = require('./config.json').DB;
+    const fs = require.main.require('./backend/node_modules/fs-extra');
+    const mysql = require.main.require('./backend/node_modules/mysql2/promise');
+
+    fs.readFile('schema.sql', 'utf8', async (err, data) => {
+
+        const connection = mysql.createConnection({
+            host: DB.HOST,
+            port: DB.PORT,
+            user: DB.USER,
+            password: DB.PASS,
+            multipleStatements: true
+        });
+
+        const asyncDB = await connection;
+
+
+        await asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${DB.NAME}`);
+        await asyncDB.query(`USE ${DB.NAME}`);
+
+        try {
+            await asyncDB.query(data);
+        }
+        catch(error) {
+            console.warn("Database schema not set up: There is already content in it");
+        }
+
+        createAdmin();
+    });
+}
 
 async function createAdmin() {
 
