@@ -652,7 +652,7 @@ module.exports = class Article {
         if (pic.indexOf(":image") != -1) {
             // data uris are stored in actual files since can't fit in db
 
-            const url = __dirname + `/../../public/images/issue/${this._issue}/${this._id}/`;
+            const url = __dirname + `/../../client/public/images/issue/${this._issue}/${this._id}/`;
 
             let imgData = pic.replace(/\s/g,'+');
             imgData =  imgData.substring(imgData.indexOf(',') + 1);
