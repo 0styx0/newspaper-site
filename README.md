@@ -92,9 +92,8 @@
 
 <h3 id="configFile">Config File</h3>
 
-<ol>
-    <li>Create a file called <code>config.json</code> in the project root and write
-    <pre> 
+<p>Create a file called <code>config.json</code> in the project root and write</p>
+<pre> 
      {
         "DB": {
             "HOST": your_server_host,
@@ -115,9 +114,34 @@
         },
         "EMAIL_HOST": "@example.com" // only emails with that host will be allowed to create account. Put "*" to allow all emails
      }
-    </pre>
-    </li>
-</ol>
+</pre>
+
+<details>
+  <summary>Example file</summary>
+  <pre>
+    {
+        "DB": {
+            "HOST": "localhost",
+            "PORT": 8889,
+            "USER": "dovidm",
+            "PASS": "lhHioh 6eofhw807 oibf oWsdfgw9e iuf",
+            "NAME": "newspaper"
+        },
+        "EMAIL": {
+            "ADDR": "me@dovidm.com",
+            "PASS": "dsf9nlYsafne h435rpwVab dkls3vbieot h4 lwekbPEfle5afnjklsGdh",
+            "HOST": "smtp.dovidm.com",
+            "PORT": 587,
+            "NAME": "Dovid M"
+        },
+        "JWT": {
+            "SECRET": "dNs;fhdas8FRf093845o sd0eKw034y0 wldkc W sfd"
+        },
+        "EMAIL_HOST": "@dovidm.com"
+    }
+  </pre>
+</details>
+
 
 <h3>Firing Up</h3>
 
