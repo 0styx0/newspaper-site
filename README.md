@@ -105,7 +105,7 @@
         },
         "EMAIL": {
             "ADDR": your_email_address,
-            "PASS": your_email_password",
+            "PASS": your_email_password,
             "HOST": your_email_host (something like "smtp.gmail.com"),
             "PORT": your_email_port,
             "NAME": your_email_display_name (what people might see in addition to your email address, usually in angle brackets)
