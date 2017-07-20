@@ -1,0 +1,30 @@
+
+/* these input styles don't go in the Input component since
+that's meant for labelled inputs and many times these types of inputs
+are not labelled (they may be in a table or something)*/
+input:required {
+    margin-right: 3px;
+}
+
+input[type=number] {
+    width: 30px;
+}
+
+@media (max-width: 760px) {
+
+    input[type=submit]:not(#logoutInpt) {
+        display: block;
+        text-align: left;
+        margin-top: 5px;
+    }
+
+}
+.submit {
+    margin-right: 3%;
+    margin-top: 7px;
+    margin-left: 16vw;
+}
+
+
+
+

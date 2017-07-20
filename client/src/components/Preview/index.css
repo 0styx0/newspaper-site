@@ -1,0 +1,78 @@
+.preview {
+    text-shadow: none;
+    padding: 7px;
+    margin: 20px;
+    border: 1px solid black;
+    position: relative;
+    top: 30px;
+    width: 220px;
+    height: 300px;
+    text-align: center;
+}
+
+
+.preview h1, .preview h2, .preview h3 {
+    font-size: 0.9em;
+    text-shadow: 0px 0px 0px #000;
+    margin: 0;
+    margin-top: 15px;
+    padding: 0;
+}
+
+ .preview h4, .preview h5, .preview h6 {
+    font-size: 0.7em;
+ }
+
+.preview h1, .preview h2, .preview h3, .preview h4, .preview h5, .preview h6 {
+    margin-bottom: 5px;
+}
+
+.preview p {
+    margin-top: 19px;
+    text-indent: 1.2em;
+}
+
+.preview  a {
+    position: relative;
+    top: 4px;
+}
+
+.preview span {
+    position: relative;
+    top: 4px;
+
+}
+
+.content {
+    overflow: hidden;
+    text-align: left;
+    height: 270px;
+}
+
+/* just in case*/
+.content img {
+    display: none;
+}
+
+/* creates fade */
+.content:after {
+  position: absolute;
+  bottom: 37px;
+  height: 40%;
+  width: 96%;
+  content: "";
+  background: linear-gradient(to top,
+     rgba(253,247,239, 1),
+     rgba(253,247,239, 0)
+  );
+
+}
+
+.content {
+    margin-top: 10px
+}
+
+.previewHidden {
+    display: none;
+}
+

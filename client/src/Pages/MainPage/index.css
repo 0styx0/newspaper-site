@@ -1,0 +1,72 @@
+#mainContent {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+header h1 {
+    margin-top: 9vh;
+}
+header, body > h1 {
+    margin: 0px 0 3% 0;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+header > h2 {
+    margin: 3% 0;
+    text-shadow: none;
+}
+
+
+h1 > img {
+
+    height: 2.2em;
+    position: relative;
+    top: 30px;
+}
+
+
+header > q {
+    font-style: italic;
+    left: 40px;
+    position: relative;
+    top: 5px;
+}
+
+/* gets slideshow in middle */
+#slideShow + div {
+    order: -1;
+}
+
+@media (max-width: 1155px) {
+
+	#slideShow {
+
+        order: -1;
+        margin-right: 90px;
+	}
+
+	#mainContent {
+   	    padding: 0 19vw;
+	}
+}
+
+#issueRange {
+    position: relative;
+    top: 60px;
+    text-align: center;
+    display: inherit;
+}
+
+
+#credits {
+    position: relative;
+    top: 150px;
+    background-color: tan;
+    text-indent: 2em;
+    color: white;
+}

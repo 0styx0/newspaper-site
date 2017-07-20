@@ -1,0 +1,14 @@
+table,
+td,
+th {
+    border-collapse: collapse;
+    padding: 1vw;
+    border: 1px solid #000;
+    text-align: center;
+    border-spacing: 0px;
+}
+
+table ~ label {
+    text-align: left;
+}
+

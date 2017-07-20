@@ -1,0 +1,4 @@
+input:not([type=number]):not([type=submit]):not([type=checkbox]) {
+    height: 16px;
+    width: 144px;
+}

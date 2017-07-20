@@ -1,0 +1,13 @@
+
+#buttonContainer {
+
+    position: relative;
+    left: 20px;
+    top: 70px;
+    z-index: 2
+}
+
+article[contenteditable] .previewHidden {
+    opacity: .55
+}
+

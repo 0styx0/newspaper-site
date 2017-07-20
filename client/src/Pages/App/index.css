@@ -1,0 +1,132 @@
+nav {
+    background-color: #3f3f3f;
+    list-style-type: none;
+    height: 50px;
+    width: 100%;
+    box-shadow:0px 5px 5px black;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+}
+
+
+nav ul {
+    height: 100%;
+    margin-left: 20px;
+}
+
+nav li {
+    list-style-type: none;
+    text-align: center;
+    height: 100%;
+    line-height: 320%;
+    display: inline-block;
+    padding: 0 10px;
+    border-radius: 3px;
+}
+
+@keyframes hideItems {
+    0% {
+        height: 50px;
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+    }
+}
+
+@keyframes showItems {
+    0% {
+        height: 0%;
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        height: 50px;
+        border-bottom: 0.01px solid black;
+    }
+}
+
+
+label[for=menuToggle], #menuToggle {
+    display: none;
+}
+
+
+@media (max-width: 900px) {
+
+    nav ul {
+        margin: 0;
+    }
+
+
+    label[for=menuToggle], #menuToggle {
+        display: inline;
+    }
+
+    nav li:not(:first-of-type) {
+        display: none;
+    }
+
+    nav li {
+        background-color: #3f3f3f;
+    }
+
+    #menuToggle {
+        opacity: 0;
+        position: absolute;
+        bottom: 60px; /* put above top of screen*/
+    }
+
+
+
+    .showMenu {
+
+        color: rgb(200, 200, 140);
+        transform: rotate(90deg);
+        float: right;
+    }
+
+
+    #menuToggle:checked ~ li:not(:first-of-type) {
+
+        display: block;
+        animation: showItems 800ms forwards;
+        text-align: left;
+        float: none;
+    }
+
+    #menuToggle:not(:checked) ~ li:not(:first-of-type) {
+
+        display: block;
+        animation: hideItems 800ms forwards;
+        text-align: left;
+        float: none;
+
+    }
+
+}
+
+nav a {
+  color: #aeaeae;
+  display: block;
+}
+
+nav form {
+    display: inline;
+}
+
+nav li:hover {
+    background-color: #333333;
+}
+
+nav li:hover a {
+  color: #f8ffff;
+  text-decoration: none;
+}
+
+#logout, .profile {
+    float: right;
+}
+

@@ -1,0 +1,9 @@
+.mce-edit-area {
+    min-width: 80vw !important; /* tinymce editor */
+}
+
+#uploadForm label {
+    text-align: left;
+}
+
+

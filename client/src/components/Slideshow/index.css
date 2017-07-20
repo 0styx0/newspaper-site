@@ -1,0 +1,48 @@
+.slideshowPic, #placeholderPic {
+    max-width: 100%;
+    max-height: 300px;
+    width: 500px; /* width and height are also specified in js to overide inline styles */
+    height: 320px;
+    margin: 0 50px;
+    border: 2px solid black;
+}
+
+#slideShow {
+
+    position: relative;
+    align-self: center;
+    text-align: center;
+}
+
+#placeholderPic {
+    display: inline;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+.activePic {
+    animation: fade 10s forwards infinite;
+}
+
+.slideshowPic:not(.activePic) {
+    display: none;
+}
+
+@media (max-width: 1155px) {
+
+	.slideshowPic {
+        max-height: 100%;
+	}
+}

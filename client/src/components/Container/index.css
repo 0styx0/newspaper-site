@@ -1,0 +1,36 @@
+.container h1 {
+    margin-bottom: 80px;
+}
+
+.container {
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 760px) {
+
+    .tableContainer {
+        align-items: flex-start;
+    }
+
+    .tableContainer h1 {
+        align-self: center;
+    }
+}
+
+.tableContainer {
+    overflow-y: hidden;
+    height: 100%;
+    margin: 0 20px;
+}
+
+.container input[type=submit] {
+    margin-bottom: 100px;
+}
+
+
+
