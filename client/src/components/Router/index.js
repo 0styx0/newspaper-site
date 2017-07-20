@@ -1,26 +1,26 @@
 import React from 'react';
-import Login from '../Login';
-import Logout from '../../components/Logout';
-import Signup from '../Signup';
-import JournalistTable from '../JournalistTable';
-import IssueTable from '../IssueTable';
-import ArticleTable from '../ArticleTable';
-import Publish from '../Publish';
-import Profile from '../Profile';
-import MainPage from '../MainPage';
-import Mission from '../Mission';
-import Story from '../Story';
-import ForgotPassword from '../ForgotPassword';
-import TwoFactor from '../TwoFactor';
-import TagSelect from '../../components/TagSelect';
+import Login from '../../Pages/Login';
+import Logout from '../Logout';
+import Signup from '../../Pages/Signup';
+import JournalistTable from '../../Pages/JournalistTable';
+import IssueTable from '../../Pages/IssueTable';
+import ArticleTable from '../../Pages/ArticleTable';
+import Publish from '../../Pages/Publish';
+import Profile from '../../Pages/Profile';
+import MainPage from '../../Pages/MainPage';
+import Mission from '../../Pages/Mission';
+import Story from '../../Pages/Story';
+import ForgotPassword from '../../Pages/ForgotPassword';
+import TwoFactor from '../../Pages/TwoFactor';
+import TagSelect from '../TagSelect';
 import { Link, Route, Switch } from 'react-router-dom'
-import {jwt} from '../../components/jwt';
+import {jwt} from '../jwt';
 import fetchFromApi from '../../helpers/fetchFromApi';
 
 import './index.css';
 
 
-export default class App extends React.Component {
+export default class Router extends React.Component {
 
     constructor() {
         super();
@@ -58,6 +58,7 @@ export default class App extends React.Component {
                 <ul key={this.state.jwt}>
                     {/*for responsiveness */}
                     <label htmlFor='menuToggle'>
+                    <span className="container" />
                         <li className='showMenu hidden'> ||| </li>
                     </label>
                     <input id='menuToggle' tabIndex="-1" type='checkbox' />
