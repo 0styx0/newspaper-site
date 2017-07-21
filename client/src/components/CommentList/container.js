@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CommentContainer from './Comment/container';
-import Comment from './Comment';
 
 import EditableCommentContainer from './EditableComment/container';
 import {jwt} from '../jwt';
@@ -36,7 +35,7 @@ export default class CommentListContainer extends React.Component {
 
         const Comments = this.state.Comments.slice();
 
-        Comments.push(<Comment
+        Comments.push(<CommentContainer
                         content={content}
                         authorid={jwt.id}
                         profileLink={jwt.email}

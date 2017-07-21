@@ -25,7 +25,7 @@ class CommentContainer extends React.Component {
 
     /**
      * Sends request to server to delete the comment
-     * 
+     *
      * Rerenders the Comment making it clear that it was deleted
      */
     delete() {
