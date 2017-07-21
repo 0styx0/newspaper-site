@@ -1,5 +1,5 @@
 import React from 'react';
-import Hint from './Hint';
+import HintContainer from './Hint/container';
 
 import './index.css';
 
@@ -17,7 +17,7 @@ export default function Label(props) {
         <label>{label}
             {props.children}
             {!!props.required ? <span className="danger">*</span> : ""}
-            {!!props.abbr ? <Hint title={props.abbr} /> : ""}
+            {!!props.abbr ? <HintContainer title={props.abbr} /> : ""}
         </label>
     )
 }
