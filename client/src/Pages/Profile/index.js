@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../../components/Container';
 import Form from '../../components/Form';
 import Input from '../../components/Form/Input';
-import Checkbox from '../../components/Form/Checkbox';
+import CheckboxContainer from '../../components/Form/Checkbox/container';
 import Table from '../../components/Table';
 import {jwt} from '../../components/jwt';
 import fetchFromApi from '../../helpers/fetchFromApi';
@@ -119,13 +119,13 @@ class ModifiableUserInfo extends React.Component {
 
         const row = [
             this.state.info.email,
-            <Checkbox
+            <CheckboxContainer
                 formMethod="put"
                 name="2fa"
                 data-pass={this.state.info.twoFactor}
                 defaultChecked={this.state.info.twoFactor}
             />,
-            <Checkbox
+            <CheckboxContainer
                 formMethod="put"
                 name="notifications"
                 data-pass={this.state.info.notificationStatus}

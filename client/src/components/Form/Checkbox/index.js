@@ -1,38 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './index.css';
 
-// Form's onChange doesn't fire if defaultChecked is true and then uncheck box, so creating this
-export default class Checkbox extends React.Component {
 
-    constructor() {
-        super();
+export default function Checkbox(props) {
 
-        this.handleToggles = this.handleToggles.bind(this);
+    const checkbox = React.cloneElement(<input />, props.props);
 
-        this.state = {
-            checked: null
-        }
-    }
-
-    handleToggles(e) {
-
-        e.target.classList.add("changed")
-
-        this.setState({
-            value: e.target.checked ? "true" : ''
-        });
-    }
-
-    render() {
-
-        const checkbox = React.cloneElement(<input />, this.props);
-
-        return React.cloneElement(checkbox, {
-            value: this.state.value,
-            onClick: this.handleToggles,
-            type: "checkbox"
-        });
-    }
+    return React.cloneElement(checkbox, {
+        value: props.value,
+        onClick: props.handleToggles,
+        type: "checkbox"
+    });
 }
 
+Checkbox.propTypes = {
+    value: PropTypes.oneOf(['checked', '']), // html value attr
+    handleToggles: PropTypes.func, // what to do when checkbox is toggled
+    props: PropTypes.object
+}
