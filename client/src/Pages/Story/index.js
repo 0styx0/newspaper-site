@@ -1,5 +1,5 @@
 import React from 'react';
-import Editable from '../../components/Editable';
+import EditableContainer from '../../components/Editable/container';
 import CommentListContainer from '../../components/CommentList/container';
 import CommentContainer from '../../components/CommentList/Comment/container';
 import httpNotification from '../../components/Notification';
@@ -93,7 +93,7 @@ class Story extends React.Component {
                 <div id="tags">Tag(s): {this.state.tags}</div>
                 <article id="story">
 
-                    <Editable
+                    <EditableContainer
                         canEdit={this.state.canEdit}
                         submit={this.submit}
                         key={this.state.id}
@@ -102,10 +102,10 @@ class Story extends React.Component {
                         }
                     />
 
-                    <Editable
+                    <EditableContainer
                         canEdit={this.state.canEdit}
                         key={this.state.id + 1}
-                        buttons={false}
+                        buttons="none"
                         children={
                             <section onBlur={e => this.setState({body: e.target.innerHTML})} className="storyContainer" dangerouslySetInnerHTML={{__html: this.state.body}}/>
                         }

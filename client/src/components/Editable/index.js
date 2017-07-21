@@ -1,104 +1,46 @@
 import React from 'react';
-import commands from './execCommands.min.js'
+import PropTypes from 'prop-types'
 
+import commands from './execCommands.min.js'
 import './index.css';
 
+
+
 /**
- * @prop children - 1 elt to make editable
- * @prop canEdit - boolean
- * @prop buttons - if true (default), show all buttons. If "basic" show subset. If false, show none
- * @prop submit - runs when the submit button is clicked. If this is not given, nothing will happen when submit is clicked
- *
- * @return lets content be edited and renders a bar of buttons that can edit the html of props.children if props.canEdit = true
+ * @return an editable version of whatever element is passed as `content`
  */
-class Editable extends React.Component {
+function Editable(props) {
 
-    constructor() {
-        super();
+    return (
+        <div>
+            <div id={props.buttons === "all" ? "buttonContainer" : ""}>
+                {commands.map((command, idx) => {
 
-        this.handleEdits = this.handleEdits.bind(this);
+                    if (((props.buttons === "basic" && command.basic) || props.buttons === "all")
+                        && document.queryCommandSupported(command.cmd)) {
 
-        this.state = {
-            content: ""
-        }
-    }
+                        return <button key={idx} className={command.cmd} onClick={props.handleEdits}>{command.cmd}</button>
+                    }
+                    return null;
+                })}
 
-    renderEditButtons() {
-
-        if (this.props.canEdit && this.props.buttons) {
-            return (
-                <div id={this.props.buttons === true ? "buttonContainer" : ""}>
-                    {commands.map((command, idx) => {
-
-                        if ((this.props.buttons === "basic" && command.basic) || this.props.buttons === true) {
-                            return <button key={idx} className={command.cmd} onClick={this.handleEdits}>{command.cmd}</button>
-                        }
-                        return null;
-                    })}
-
-                    <br />
-                    <button onClick={this.props.submit}>Submit</button>
-                </div>
-            );
-
-        }
-    }
-
-
-    handleEdits(event) {
-
-        if (event.target.classList.contains('hideFromPreview')) {
-            return this.toggleClassOnElementSelected("previewHidden");
-        }
-
-        const value = event.target.className === "createLink" ?
-                          prompt(`Insert where you would like to link to
-                (make sure to include the https:// if linking to an outside site)`)
-                                                              : null;
-
-        document.execCommand(event.target.className, false, value);
-    }
-
-    /**
-     * Adds a class to user-highlighted element
-     *
-     * @param className - name of class to add
-     */
-    toggleClassOnElementSelected(className) {
-
-        const eltAnchor = window.getSelection().anchorNode;
-
-        if (window.getSelection().anchorNode.children) { // if selected elt is an img
-            window.getSelection().anchorNode.children[0].classList.toggle(className);
-        }
-        else {
-
-            const eltToChange = (eltAnchor.nodeType === Node.TEXT_NODE) ? eltAnchor.parentNode : eltAnchor.lastElementChild;
-            eltToChange.classList.toggle(className);
-        }
-    }
-
-
-    componentWillMount() {
-
-        const content = React.cloneElement(this.props.children, {contentEditable: this.props.canEdit});
-
-        this.setState({content});
-    }
-
-    render() {
-
-        return (
-            <div>
-                {this.renderEditButtons()}
-                {this.state.content}
+                <br />
+                <button onClick={props.submit}>Submit</button>
             </div>
+            {props.content}
+        </div>
         );
-    }
+}
+
+Editable.propTypes = {
+    handleEdits: PropTypes.func.isRequired, // whenever a formatting button is clicked (bold, italic, etc)
+    submit: PropTypes.func, // what to do when user wants to save the edit
+    content: PropTypes.element.isRequired, // what element is being edited
+    buttons: PropTypes.oneOf(["all", "basic", "none"]) // all buttons, or just a subset of them
 }
 
 Editable.defaultProps = {
-    buttons: true
+    buttons: "all"
 };
 
 export default Editable;

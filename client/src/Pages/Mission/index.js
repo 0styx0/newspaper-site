@@ -1,5 +1,5 @@
 import React from 'react';
-import Editable from '../../components/Editable';
+import EditableContainer from '../../components/Editable/container';
 import {jwt} from '../../components/jwt';
 import httpNotification from '../../components/Notification';
 import fetchFromApi from '../../helpers/fetchFromApi';
@@ -42,7 +42,7 @@ class Mission extends React.Component {
 
     render() {
 
-        return <Editable
+        return <EditableContainer
                     key={this.state.content}
                     canEdit={jwt.level > 2}
                     submit={this.save}

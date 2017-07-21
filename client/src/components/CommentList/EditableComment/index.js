@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Editable from '../../Editable';
-
-import {jwt} from '../../jwt';
+import EditableContainer from '../../Editable/container';
+import { jwt } from '../../jwt'
 
 import '../Comment/index.css';
 import './index.css';
@@ -11,9 +10,9 @@ import './index.css';
 export default function EditableComment(props) {
 
     return <article id="reply" className="comment">
-                <Editable
-                    canEdit={!!jwt.id /*if logged in*/}
+                <EditableContainer
                     buttons="basic"
+                    canEdit={!!jwt.id}
                     submit={props.onSubmit}
                     children={
                         <div
