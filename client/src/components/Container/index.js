@@ -1,29 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './index.css';
 
-function Heading(props) {
 
-    return (
-        <h1>{props.text}</h1>
-    )
-}
+export default function Container(props) {
 
-
-class Container extends React.Component {
-
-    render() {
-
-        const className = `container ${this.props.className || ''}`;
+        const className = `container ${props.className || ''}`;
 
         return (
             <section className={className}>
-                <Heading text={this.props.heading} />
-                 {this.props.children}
+                <h1>{props.heading}</h1>
+                {props.children}
             </section>
         )
-    }
-
 }
 
-export {Container};
+Container.propTypes = {
+
+    heading: PropTypes.string,
+    className: PropTypes.string, // in addition to the default `container` class if wanted
+    children: PropTypes.node.isRequired
+}

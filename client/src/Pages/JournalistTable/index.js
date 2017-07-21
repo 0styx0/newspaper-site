@@ -3,7 +3,7 @@ import Form from '../../components/Form';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import SecretTwins from '../../components/Form/SecretTwins';
-import {Container} from '../../components/Container';
+import Container from '../../components/Container';
 import Table from '../../components/Table';
 import {jwt} from '../../components/jwt';
 import fetchFromApi from '../../helpers/fetchFromApi';

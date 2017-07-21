@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from '../../components/Form';
 import Input from '../../components/Form/Input';
-import {Container} from '../../components/Container';
+import Container from '../../components/Container';
 import {setJWT} from '../../components/jwt';
 import { Link } from 'react-router-dom';
 

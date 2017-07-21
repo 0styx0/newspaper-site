@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container} from '../../components/Container';
+import Container from '../../components/Container';
 import Form from '../../components/Form';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
