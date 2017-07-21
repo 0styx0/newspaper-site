@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import HintContainer from './Hint/container';
 
 import './index.css';
@@ -22,3 +24,9 @@ export default function Label(props) {
     )
 }
 
+Label.propTypes = {
+    value: PropTypes.string.isRequired,
+    required: PropTypes.bool,
+    abbr: PropTypes.string,
+    children: PropTypes.element.isRequired
+}
