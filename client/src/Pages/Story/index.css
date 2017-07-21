@@ -64,11 +64,6 @@ h4+img {
     height: 1px
 }
 
-#comments {
-    max-width: 22em;
-    margin: 10px auto
-}
-
 @media print {
     div:not(.storyContainer),
     nav {

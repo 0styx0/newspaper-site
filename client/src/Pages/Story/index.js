@@ -1,7 +1,7 @@
 import React from 'react';
 import Editable from '../../components/Editable';
-import Comment from '../../components/Comment';
-import {jwt} from '../../components/jwt';
+import CommentList from '../../components/CommentList';
+import Comment from '../../components/CommentList/Comment';
 import httpNotification from '../../components/Notification';
 import fetchFromApi from '../../helpers/fetchFromApi';
 
@@ -40,11 +40,13 @@ class Story extends React.Component {
         const heading = article.body.match(/^[\s\S]+?<\/h4>/)[0];
         const body = article.body.replace(heading, "");
 
+
+
         this.setState({
             heading,
             body: body,
             canEdit: article.can_edit,
-            comments: article.comments,
+            comments: this.createCommentList(article.comments),
             tags: article.tags,
             id: article.id
         });
@@ -65,10 +67,26 @@ class Story extends React.Component {
         });
     }
 
-    render() {
+    createCommentList(commentData) {
 
-        // the concat makes the space for a new comment
-        const commentsToRender = (jwt.id) ? this.state.comments.concat(['']) : this.state.comments;
+        const comments = commentData.map((comment, idx) =>
+
+            <Comment
+                author={comment.author_name}
+                profileLink={comment.profile_link}
+                authorid={comment.authorid}
+                content={comment.content}
+                issue={+this.state.issue}
+                name={this.state.name}
+                key={idx}
+                id={comment.id}
+            />
+        )
+
+        this.setState({comments})
+    }
+
+    render() {
 
         return (
             <div>
@@ -97,30 +115,11 @@ class Story extends React.Component {
                 <div className="break" />
 
                 <div id="comments">
-
-                    {commentsToRender.map((comment, idx) =>
-
-                       <Comment
-                          author={comment.author_name}
-                          profileLink={comment.profile_link}
-                          authorid={comment.authorid}
-                          content={comment.content}
-                          issue={this.state.issue}
-                          name={this.state.name}
-                          key={idx}
-                          id={comment.id}
-                          addComment={comment =>
-                              this.setState({
-                                  comments: this.state.comments.concat(comment)
-                                })
-                          }
-                          deleteComment={(id) =>
-                              this.setState({
-                                  comments: this.state.comments.filter((comment => comment.id !== id))
-                              })
-                          }
-                       />
-                    )}
+                    <CommentList
+                      issue={this.state.issue}
+                      name={this.state.name}
+                      Comments={this.state.comments}
+                    />
                 </div>
            </div>
         );
