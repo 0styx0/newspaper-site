@@ -1,6 +1,6 @@
 import React from 'react';
 import Editable from '../../components/Editable';
-import CommentList from '../../components/CommentList';
+import CommentListContainer from '../../components/CommentList/container';
 import CommentContainer from '../../components/CommentList/Comment/container';
 import httpNotification from '../../components/Notification';
 import fetchFromApi from '../../helpers/fetchFromApi';
@@ -115,7 +115,7 @@ class Story extends React.Component {
                 <hr />
 
                 <div id="comments">
-                    <CommentList
+                    <CommentListContainer
                       issue={this.state.issue}
                       name={this.state.name}
                       Comments={this.state.comments}
