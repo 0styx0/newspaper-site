@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Label from '../Label';
 
 import './index.css';
@@ -10,22 +12,26 @@ import './index.css';
  *
  * @return input elt wrapped in a @see Label
  */
-
 export default function Input(props) {
 
     const input = React.cloneElement(<input />, props.props);
 
     return (
         <Label
-        value={props.label}
-        required={!!props.props.required}
-        abbr={props.abbr}
-
-        children={
-            input
-        }
-
+            value={props.label}
+            required={!!props.props.required}
+            abbr={props.abbr}
+            children={
+                input
+            }
         />
     );
 }
 
+
+Input.propTypes = {
+
+    props: PropTypes.objectOf(PropTypes.any).isRequired,
+    label: PropTypes.string.isRequired,
+    abbr: PropTypes.string
+}
