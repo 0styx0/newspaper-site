@@ -1,61 +1,36 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import Editable from '../../Editable';
-import fetchFromApi from '../../../helpers/fetchFromApi';
+
 import {jwt} from '../../jwt';
 
-/**
- * @prop name
- * @prop issue
- * @prop addToList
- */
-export default class EditableComment extends React.Component {
+import '../Comment/index.css';
+import './index.css';
 
-    constructor() {
-        super();
 
-        this.save = this.save.bind(this);
+export default function EditableComment(props) {
 
-        this.state = {
-            content: ''
-        }
-    }
-
-    save() {
-
-        this.props.addToList(this.state.content);
-
-        const info = {
-            issue: this.props.issue,
-            url: this.props.name,
-            content: this.state.content
-        }
-
-        fetchFromApi("comment", "post", info);
-    }
-
-    render() {
-
-        return <article id="reply" className="comment">
-                    <Editable
-                        canEdit={!!jwt.id /*if logged in*/}
-                        buttons="basic"
-                        submit={this.save}
-                        children={
-                            <div
-                              onBlur={e => this.setState({content: e.target.innerHTML})}
-                              className="content"
-                            />
-                        }
-                    />
-                </article>
-    }
-
+    return <article id="reply" className="comment">
+                <Editable
+                    canEdit={!!jwt.id /*if logged in*/}
+                    buttons="basic"
+                    submit={props.onSubmit}
+                    children={
+                        <div
+                            onBlur={props.onBlur}
+                            className="content"
+                        />
+                    }
+                />
+            </article>
 }
+
 
 EditableComment.propTypes = {
 
-    issue: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired // use case: saving current progress when use clicks away (specifically, this event must fire when clicking submit, and the input event was too frequent for my taste)
 }
+
+
+

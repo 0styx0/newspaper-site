@@ -1,74 +1,28 @@
 import React from 'react';
-import {jwt} from '../../jwt';
-import fetchFromApi from '../../../helpers/fetchFromApi';
 import { Link } from 'react-router-dom'
-
 import PropTypes from 'prop-types';
 
 import './index.css';
 
 /**
- * @prop profileLink
- * @prop author
- * @prop authorid
- * @prop content
- * @prop id?
+ *@param props - @see Comment.propTypes
  */
-class Comment extends React.Component {
+export default function Comment(props) {
 
-    constructor(props) {
-        super(props);
+    return <article className="comment">
+                <Link className="author" to={'/u/'+props.profileLink}>{props.author}</Link>
+                <div className="content" dangerouslySetInnerHTML={{__html: props.content}} />
+                {props.deleteButton ? <button className="deleteReply" onClick={props.deleteButton}>Delete</button> : ''}
+            </article>
 
-        this.delete = this.delete.bind(this);
 
-        this.state = {
-            content: this.props.content,
-            author: this.props.author
-        }
-    }
-
-    delete() {
-
-        this.setState({
-            content: 'deleted',
-            author: 'Deleted User'
-        });
-
-        const info = {
-            id: this.props.id
-        }
-
-        fetchFromApi("comment", "delete", info);
-    }
-
-    render() {
-
-        let deleteButton = <span />;
-
-        if (this.props.content !== "deleted" &&
-            (jwt.level > 2 || jwt.id === this.props.authorid) &&
-            this.props.id // new comments won't have or be able to have an id
-            ) {
-
-            deleteButton = <button className="deleteReply" onClick={this.delete}>Delete</button>;
-        }
-
-        return <article className="comment">
-                    <Link className="author" to={'/u/'+this.props.profileLink}>{this.state.author}</Link>
-                    <div className="content" dangerouslySetInnerHTML={{__html: this.state.content}} />
-                    {deleteButton}
-               </article>
-    }
 }
 
 Comment.propTypes = {
 
-    profileLink: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    authorid: PropTypes.number.isRequired,
-    content: PropTypes.string.isRequired,
-    // addComment: PropTypes.func.isRequired,
-    // deleteComment: PropTypes.func.isRequired
+    profileLink: PropTypes.string.isRequired, // email username (ex: username@email.tld)
+    author: PropTypes.string.isRequired, // first middle? last name
+    content: PropTypes.string.isRequired, // html string
+    deleteButton: PropTypes.func // if given, a button will be created where `deleteButton` will be the click handler
 }
 
-export default Comment;

@@ -70,7 +70,7 @@ export default class CommentList extends React.Component {
         const Comments = this.state.Comments.length === 0 ? [] : [...this.state.Comments];
 
         if (jwt.level) {
-            Comments.push(<EditableComment addToList={this.add} name={this.props.name} issue={this.props.issue} />);
+            Comments.push(<EditableCommentContainer addToList={this.add} name={this.props.name} issue={this.props.issue} />);
         }
 
 

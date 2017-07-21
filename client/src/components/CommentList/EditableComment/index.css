@@ -1,0 +1,29 @@
+#reply .content {
+    width: 90%;
+    height: 77%;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+#reply .comment {
+    padding: 0;
+    max-width: 24rem;
+    height: 12rem
+}
+
+#reply > div {
+    height: 100%;
+}
+
+/* row of buttons */
+#reply > div:first-child {
+    position: absolute;
+    top: 0;
+}
+/* the submit button */
+#reply > div:first-child button:last-child {
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+}
+

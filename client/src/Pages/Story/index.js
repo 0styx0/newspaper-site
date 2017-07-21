@@ -1,7 +1,7 @@
 import React from 'react';
 import Editable from '../../components/Editable';
 import CommentList from '../../components/CommentList';
-import Comment from '../../components/CommentList/Comment';
+import CommentContainer from '../../components/CommentList/Comment/container';
 import httpNotification from '../../components/Notification';
 import fetchFromApi from '../../helpers/fetchFromApi';
 
@@ -71,7 +71,7 @@ class Story extends React.Component {
 
         const comments = commentData.map((comment, idx) =>
 
-            <Comment
+            <CommentContainer
                 author={comment.author_name}
                 profileLink={comment.profile_link}
                 authorid={comment.authorid}
