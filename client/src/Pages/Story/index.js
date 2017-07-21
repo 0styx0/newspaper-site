@@ -112,7 +112,7 @@ class Story extends React.Component {
                     />
                 </article>
 
-                <div className="break" />
+                <hr />
 
                 <div id="comments">
                     <CommentList

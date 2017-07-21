@@ -23,13 +23,15 @@ class Comment extends React.Component {
 
         this.state = {
             content: this.props.content,
+            author: this.props.author
         }
     }
 
     delete() {
 
         this.setState({
-            content: 'deleted'
+            content: 'deleted',
+            author: 'Deleted User'
         });
 
         const info = {
@@ -52,8 +54,8 @@ class Comment extends React.Component {
         }
 
         return <article className="comment">
-                    <Link className="author" to={'/u/'+this.props.profileLink}>{this.props.author}</Link>
-                    <div className="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
+                    <Link className="author" to={'/u/'+this.props.profileLink}>{this.state.author}</Link>
+                    <div className="content" dangerouslySetInnerHTML={{__html: this.state.content}} />
                     {deleteButton}
                </article>
     }

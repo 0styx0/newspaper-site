@@ -26,7 +26,7 @@ export default class CommentList extends React.Component {
     constructor() {
         super();
 
-        ['add', 'remove'].forEach(method => this[method] = this[method].bind(this));
+        ['add'].forEach(method => this[method] = this[method].bind(this));
 
         this.state = {
             Comments: []
@@ -50,11 +50,6 @@ export default class CommentList extends React.Component {
         })
     }
 
-    remove() {
-
-    }
-
-
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.Comments) {
@@ -75,7 +70,7 @@ export default class CommentList extends React.Component {
         const Comments = this.state.Comments.length === 0 ? [] : [...this.state.Comments];
 
         if (jwt.level) {
-            Comments.push(<EditableComment name={this.props.name} issue={this.props.issue} />);
+            Comments.push(<EditableComment addToList={this.add} name={this.props.name} issue={this.props.issue} />);
         }
 
 
@@ -87,7 +82,6 @@ export default class CommentList extends React.Component {
                 Comments.map((comment, idx) => {
                     return React.cloneElement(comment, {
                         key: idx,
-                        addToList: this.add
                     })
                 })
             }

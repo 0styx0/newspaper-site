@@ -57,10 +57,8 @@ h4+img {
     margin: 0
 }
 
-.break {
+hr {
     margin-top: 5em;
-    width: 100vw;
-    background-color: grey;
     height: 1px
 }
 
