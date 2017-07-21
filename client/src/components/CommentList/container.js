@@ -8,7 +8,6 @@ import EditableCommentContainer from './EditableComment/container';
 import {jwt} from '../jwt';
 
 import CommentList from './';
-import './index.css';
 
 
 
