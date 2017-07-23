@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '../../components/Container';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 
 
@@ -11,7 +11,7 @@ function ForgotPassword() {
           heading="Recover Password"
           children={
 
-              <Form
+              <FormContainer
                   action="/api/user"
                   method="put"
                   children={

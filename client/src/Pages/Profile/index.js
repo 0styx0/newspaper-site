@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '../../components/Container';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import CheckboxContainer from '../../components/Form/Checkbox/container';
 import Table from '../../components/Table';
@@ -59,7 +59,7 @@ class UserArticleTable extends React.Component {
             <Container
                 heading="Articles"
                 children={
-                    <Form
+                    <FormContainer
                         method="delete"
                         action="/api/articleGroup"
                         children={
@@ -139,7 +139,7 @@ class ModifiableUserInfo extends React.Component {
                 heading="Options"
                 className="tableContainer"
                 children={
-                    <Form
+                    <FormContainer
                         method={["put", "delete"]}
                         action="/api/user"
                         children={
@@ -196,7 +196,7 @@ function ChangePassword() {
         <Container
             heading="Change Password"
             children={
-                <Form
+                <FormContainer
                     method="put"
                     action="/api/user"
                     children={

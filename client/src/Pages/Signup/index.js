@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
@@ -109,7 +109,7 @@ class Signup extends React.Component {
             <Container
               heading="Sign Up"
               children={
-                  <Form action="/api/user" method="post" children={this.renderInputs()} />}
+                  <FormContainer action="/api/user" method="post" children={this.renderInputs()} />}
             />
         );
     }

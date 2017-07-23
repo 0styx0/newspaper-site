@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '../../components/Container';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import tinymce from 'tinymce';
@@ -122,7 +122,7 @@ class Publish extends React.Component {
         return <Container
                  heading="Publish Story"
                  children={
-                   <Form
+                   <FormContainer
                      method="post"
                      action="/api/story"
                      onSubmit={this.redirect}

@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '../../components/Container';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import {setJWT} from '../../components/jwt';
 
@@ -24,7 +24,7 @@ class TwoFactor extends React.Component {
         return <Container
                 heading="Authenticate"
                 children={
-                    <Form
+                    <FormContainer
                         action="/api/userStatus"
                         method="put"
                         onSubmit={this.onSubmit}

@@ -2,7 +2,7 @@ import React from 'react';
 import Table from '../../components/Table';
 import Container from '../../components/Container';
 import {jwt} from '../../components/jwt';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import fetchFromApi from '../../helpers/fetchFromApi';
 import { Link } from 'react-router-dom';
@@ -52,7 +52,7 @@ class IssueTable extends React.Component {
             <Container
                 heading="Issues"
                 children={
-                    <Form
+                    <FormContainer
                       action="/api/issue"
                       method="put"
                       children={

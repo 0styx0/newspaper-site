@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from '../Form';
+import FormContainer from '../Form/container';
 import {jwt} from '../jwt';
 
 import { Redirect } from 'react-router'
@@ -30,7 +30,7 @@ class Logout extends React.Component {
 
         return (
             <span>
-                <Form
+                <FormContainer
                     method="put"
                     action="/api/userStatus"
                     onSubmit={this.onLogout}

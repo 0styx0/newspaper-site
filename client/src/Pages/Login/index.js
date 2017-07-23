@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Container from '../../components/Container';
 import {setJWT} from '../../components/jwt';
@@ -67,7 +67,7 @@ class LoginForm extends React.Component {
         return (
             <Container heading="Login"
                 children={
-                    <Form action="/api/userStatus" method="put" onSubmit={this.setJWT} children={this.renderInputs()} />
+                    <FormContainer action="/api/userStatus" method="put" onSubmit={this.setJWT} children={this.renderInputs()} />
                         }
             />
         );

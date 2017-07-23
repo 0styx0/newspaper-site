@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
 import fetchFromApi from '../../helpers/fetchFromApi';
@@ -132,7 +132,7 @@ class ArticleTable extends React.Component {
                             onChange: (event) => this.putData(event.target.value)
                           }}
                         />
-                        <Form
+                        <FormContainer
                             method={['put', 'delete']}
                             action="/api/articleGroup" // up 1 directory since pushing history changes in this.putData()
                             children={

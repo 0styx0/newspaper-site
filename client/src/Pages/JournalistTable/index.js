@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from '../../components/Form';
+import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
@@ -189,7 +189,7 @@ class JournalistTable extends React.Component {
               children={
                 <div>
                     {this.renderSortingOptions()}
-                     <Form
+                     <FormContainer
                         action="/api/userGroup"
                         method={['put', 'delete']} // since delete and put are in the same form, asking to check each input separately
                         onSubmit={this.updateInfo}
