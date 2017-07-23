@@ -128,7 +128,7 @@ export default class FormContainer extends React.Component {
         }
     }
 
-    oChange(event) {
+    onChange(event) {
 
         event.target.classList.add('changed');
     }
