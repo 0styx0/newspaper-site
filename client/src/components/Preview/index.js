@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import './index.css';
 
-function Preview(props) {
+export default function Preview(props) {
 
     return (
         <div className="preview">
@@ -20,6 +21,9 @@ function Preview(props) {
     )
 }
 
-
-
-export default Preview;
+Preview.propTypes = {
+    lede: PropTypes.string.isRequired,
+    views: PropTypes.number.isRequired,
+    issue: PropTypes.number.isRequired,
+    url: PropTypes.string.isRequired
+}
