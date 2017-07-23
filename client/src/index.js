@@ -6,12 +6,12 @@ import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
-import App from './components/Router';
+import RouterContainer from './components/Router/container';
 
 
 ReactDOM.render((
   <BrowserRouter basename="/">
-    <App/>
+    <RouterContainer />
   </BrowserRouter>
 ), document.getElementById('root'))
 

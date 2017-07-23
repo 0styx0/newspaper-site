@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link, Route, Switch } from 'react-router-dom'
+
 import Login from '../../Pages/Login';
 import Logout from '../Logout';
 import Signup from '../../Pages/Signup';
@@ -13,49 +15,20 @@ import Story from '../../Pages/Story';
 import ForgotPassword from '../../Pages/ForgotPassword';
 import TwoFactor from '../../Pages/TwoFactor';
 import TagSelect from '../TagSelect';
-import { Link, Route, Switch } from 'react-router-dom'
+
 import {jwt} from '../jwt';
-import fetchFromApi from '../../helpers/fetchFromApi';
 
 import './index.css';
 
 
-export default class Router extends React.Component {
 
-    constructor() {
-        super();
+export default function Router() {
 
-        this.state = {
-            jwt: {}
-        }
-    }
-
-    componentWillUpdate() {
-        // so rolled down navar won't be there after clicking link
-        document.getElementById("menuToggle").checked = false;
-    }
-
-    componentWillMount() {
-
-        fetchFromApi('userStatus')
-        .then(data => data)
-        .then(data => data.json())
-        .then(json => {
-            jwt.level = +json.level
-            jwt.email = json.email
-            jwt.id = json.id
-
-            this.setState({jwt});
-        });
-    }
-
-    render() {
-
-        return (
+    return (
         <div>
             <nav>
 
-                <ul key={this.state.jwt}>
+                <ul key={jwt}>
                     {/*for responsiveness */}
                     <label htmlFor='menuToggle'>
                     <span className="container" />
@@ -96,5 +69,4 @@ export default class Router extends React.Component {
             </Switch>
         </div>
         );
-    }
 }
