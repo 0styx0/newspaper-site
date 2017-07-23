@@ -14,7 +14,7 @@ import MissionContainer from '../../Pages/Mission/container';
 import Story from '../../Pages/Story';
 import ForgotPassword from '../../Pages/ForgotPassword';
 import TwoFactor from '../../Pages/TwoFactor';
-import TagSelect from '../TagSelect';
+import SelectTagPreview from '../TagSelect/SelectTagPreview';
 
 import {jwt} from '../jwt';
 
@@ -22,7 +22,7 @@ import './index.css';
 
 
 
-export default function Router() {
+export default function Router(props) {
 
     return (
         <div>
@@ -37,7 +37,7 @@ export default function Router() {
                     <input id='menuToggle' tabIndex="-1" type='checkbox' />
 
                     <li><Link to="/">Home</Link></li>
-                    <li><TagSelect /></li>
+                    <li><SelectTagPreview /></li>
                     {jwt.level ? "" : <li><Link to="/login">Login</Link></li>}
                     <li><Link to="/signup">Create Account</Link></li>
                     <li><Link to="/u">Journalists</Link></li>

@@ -3,6 +3,7 @@ import Container from '../../components/Container';
 import Table from '../../components/Table';
 import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
+import TagSelect from '../../components/TagSelect';
 import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
 import fetchFromApi from '../../helpers/fetchFromApi';
 import { Link } from 'react-router-dom'
@@ -70,9 +71,15 @@ class ArticleTable extends React.Component {
                     article.created,
                     <Link to={`/u/${article.author_username}`}>{article.author_name}</Link>,
                     <SecretTwinsContainer
-                        original={<select name="tag[]" formMethod="put" defaultValue={tagArr} required multiple>{data[1].map((val) =>
-                            <option key={val} defaultValue={val}>{val}</option>
-                        )}</select>}
+                        original={<TagSelect
+                                    props={{
+                                        name: "tag[]",
+                                        formMethod: "put",
+                                        multiple: true,
+                                        defaultValue: tagArr,
+                                        required: true,
+                                    }}
+                                  />}
                         props={{
                             name: "artId[]",
                             value: article.art_id

@@ -2,7 +2,8 @@ import React from 'react';
 import Container from '../../components/Container';
 import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
-import Select from '../../components/Form/Select';
+import TagSelect from '../../components/TagSelect';
+import Label from '../../components/Form/Label';
 import tinymce from 'tinymce';
 import 'tinymce/themes/modern';
 import 'tinymce/plugins/wordcount';
@@ -60,26 +61,20 @@ class Publish extends React.Component {
 
     renderTags() {
 
-        const tags = [
-            'news',
-            'reaction',
-            'opinion',
-            'poll',
-            'features',
-            'sports',
-            'politics',
-            'other'
-        ];
-
-        return (<Select
-          label="Tags"
-          props={{
-              name: "type[]",
-              children: tags.map(tag => <option value={tag}>{tag[0].toUpperCase() + tag.slice(1)}</option>),
-              required: true,
-              multiple: true
-          }}
-        />);
+        return (
+            <Label
+              value="Tags"
+              children={
+                <TagSelect
+                    props={{
+                        name: "type[]",
+                        multiple: true,
+                        required: true
+                    }}
+                />
+              }
+            />
+            );
     }
 
     readyContentForSubmit() {

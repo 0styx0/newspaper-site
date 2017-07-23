@@ -1,58 +1,36 @@
 import React from 'react';
-import { Redirect } from 'react-router'
-
-class TagSelect extends React.Component {
-
-    constructor() {
-        super();
-
-        this.state = {
-            redirect: false
-        }
-        this.onChange = this.onChange.bind(this);
-    }
-    // I wonder if I can render MainPage from here
-
-    onChange(event) {
+import PropTypes from 'prop-types';
 
 
-        this.setState({
-            redirect: `/tag/${event.target.value}`
-        })
-    }
+export default function TagSelect(props) {
 
+    const tags = [
+                    'news',
+                    'reaction',
+                    'opinion',
+                    'poll',
+                    'features',
+                    'sports',
+                    'politics',
+                    'other'
+                ];
 
-    render() {
+    const options = props.tags.concat(tags).map((val =>
+            <option key={val} value={val}>{val[0].toUpperCase() + val.slice(1)}</option>
+        ));
 
-        const tags = [
-                'Current Issue',
-                'news',
-                'reaction',
-                'opinion',
-                'poll',
-                'features',
-                'sports',
-                'politics',
-                'other'
-            ];
+    const select = <select
+                     children={options}
+                   />
 
-        return (
-            <span key={this.state.redirect}>
-            <select value={window.location.pathname.split("/")[2] || "../"} onChange={this.onChange}>
-                {tags.map((val => {
-                    if (val === "Current Issue") {
-                        return <option key={val} value="../">{val[0].toUpperCase() + val.slice(1)}</option>
-                    }
-                    return <option key={val} value={val}>{val[0].toUpperCase() + val.slice(1)}</option>
-                }))}
-            </select>
-            {this.state.redirect ? <Redirect to={this.state.redirect} /> : ""}
-
-            </span>
-
-        )
-    }
-
+    return React.cloneElement(select, props.props);
 }
 
-export default TagSelect;
+TagSelect.defaultProps = {
+    tags: []
+}
+
+TagSelect.propTypes = {
+    tags: PropTypes.arrayOf(PropTypes.string),
+    props: PropTypes.object,
+}
