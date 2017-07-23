@@ -8,7 +8,7 @@ import ArticleTable from '../../Pages/ArticleTable';
 import Publish from '../../Pages/Publish';
 import Profile from '../../Pages/Profile';
 import MainPage from '../../Pages/MainPage';
-import Mission from '../../Pages/Mission';
+import MissionContainer from '../../Pages/Mission/container';
 import Story from '../../Pages/Story';
 import ForgotPassword from '../../Pages/ForgotPassword';
 import TwoFactor from '../../Pages/TwoFactor';
@@ -81,7 +81,7 @@ export default class Router extends React.Component {
                 <Route path="/login" component={Login}/>
                 <Route path="/signup" component={Signup}/>
                 <Route exact path="/u" component={JournalistTable}/>
-                <Route path="/mission" component={Mission}/>
+                <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTable}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
                 {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}

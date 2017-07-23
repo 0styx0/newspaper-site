@@ -1,61 +1,27 @@
 import React from 'react';
 import EditableContainer from '../../components/Editable/container';
 import {jwt} from '../../components/jwt';
-import httpNotification from '../../helpers/Notification';
-import fetchFromApi from '../../helpers/fetchFromApi';
+import PropTypes from 'prop-types';
 
 import './index.css';
 
-class Mission extends React.Component {
 
-    constructor() {
-        super();
+export default function Mission(props) {
 
-        this.save = this.save.bind(this);
-
-        this.state = {
-            content: ""
-        }
-    }
-
-    async componentWillMount() {
-
-        const mission = await fetch("./missionView.html")
-                                .then(data => data.text());
-        this.setState({
-            content: mission
-        });
-    }
-
-    save() {
-
-
-        fetchFromApi("mission", "put", {
-                edit: this.state.content
-        })
-        .then((response) => {
-
-            httpNotification(response.status, response.statusText);
-        });
-
-    }
-
-    render() {
-
-        return <EditableContainer
-                    key={this.state.content}
-                    canEdit={jwt.level > 2}
-                    submit={this.save}
-                    children={<div
-                                className="mission"
-                                dangerouslySetInnerHTML={{__html: this.state.content}}
-                                onBlur={e => this.setState({
-                                    content: e.target.innerHTML
-                                })}
-                              />}
-
-                />
-    }
+    return <EditableContainer
+                key={props.content}
+                canEdit={jwt.level > 2}
+                submit={props.submit}
+                children={<div
+                            className="mission"
+                            dangerouslySetInnerHTML={{__html: props.content}}
+                            onBlur={props.save}
+                            />}
+            />
 }
 
-export default Mission;
+Mission.propTypes = {
+    content: PropTypes.string.isRequired,
+    submit: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired
+}
