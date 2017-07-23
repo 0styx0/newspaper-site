@@ -1,5 +1,5 @@
 import React from 'react';
-import Numberline from '../../components/Numberline';
+import NumberlineContainer from '../../components/Numberline/container';
 import Slideshow from '../../components/Slideshow';
 import Preview from '../../components/Preview';
 import fetchFromApi from '../../helpers/fetchFromApi';
@@ -97,7 +97,7 @@ class MainPage extends React.Component {
                     <Slideshow key={this.state.slides} images={this.state.slides} />
                     {this.state.articles.map((article => <Preview key={article.url} {...article} />))}
                 </div>
-                <Numberline max={this.state.maxIssue} current={this.state.currentIssue}/>
+                <NumberlineContainer max={this.state.maxIssue} current={this.state.currentIssue}/>
                 <footer id="credits" className="small">Created by <a href="https://dovidm.com">Dovid Meiseles</a> ('18)</footer>
             </div>
 
