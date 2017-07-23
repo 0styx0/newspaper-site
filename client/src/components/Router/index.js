@@ -6,7 +6,7 @@ import Logout from '../Logout';
 import Signup from '../../Pages/Signup';
 import JournalistTable from '../../Pages/JournalistTable';
 import IssueTable from '../../Pages/IssueTable';
-import ArticleTable from '../../Pages/ArticleTable';
+import ArticleTableContainer from '../../Pages/ArticleTable/container';
 import Publish from '../../Pages/Publish';
 import Profile from '../../Pages/Profile';
 import MainPage from '../../Pages/MainPage';
@@ -56,7 +56,7 @@ export default function Router(props) {
                 <Route exact path="/u" component={JournalistTable}/>
                 <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTable}/>
-                {jwt.level ? <Route path="/modifyArticles" component={ArticleTable}/> : ""}
+                {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
                 {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
                 <Route path="/issue/(.*)/story/(.*)" component={Story}/>
                 <Route path="/tag/(.*)" component={MainPage}/>
