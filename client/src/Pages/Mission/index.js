@@ -1,7 +1,7 @@
 import React from 'react';
 import EditableContainer from '../../components/Editable/container';
 import {jwt} from '../../components/jwt';
-import httpNotification from '../../components/Notification';
+import httpNotification from '../../helpers/Notification';
 import fetchFromApi from '../../helpers/fetchFromApi';
 
 import './index.css';

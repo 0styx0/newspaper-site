@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import httpNotification from '../Notification';
+import httpNotification from '../../helpers/Notification';
 
 import Form from './';
 
