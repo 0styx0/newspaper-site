@@ -59,12 +59,34 @@ class MainPage extends React.Component {
         this.setState({
             issueName: json.name,
             maxIssue: json.maxIssue,
-            slides: json.slides,
+            slides: this.filterSlideInfo(json.slides),
             articles: json.articles,
             currentIssue: issue,
             history
         });
 
+    }
+
+    filterSlideInfo(images) {
+
+        if (!images) {
+            return [];
+        }
+
+        const imageInfo = [];
+
+        images.forEach((val) => {
+            const imgUrl = JSON.parse(val.img_url)
+            const display = JSON.parse(val.slide_img);
+
+            imgUrl.filter((img, idx) => +display[idx] !== 0)
+                    .forEach((img => imageInfo.push({
+                        img,
+                        url: `/issue/${val.issue}/story/${val.url}`
+                    })))
+        });
+
+        return imageInfo;
     }
 
     renderHeader() {
