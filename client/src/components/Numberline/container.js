@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Numberline from './';
@@ -19,7 +20,7 @@ export default class NumberlineContainer extends React.Component {
         }
     }
 
-    getData() {
+    componentWillReceiveProps() {
 
         const allIssues = Array(this.props.max)
                                .fill(0)
@@ -52,7 +53,7 @@ export default class NumberlineContainer extends React.Component {
     }
 
     render() {
-        return <Numberline lineContent={this.state.line} />
+        return <Numberline key={this.props.current} lineContent={this.state.line} />
     }
 }
 

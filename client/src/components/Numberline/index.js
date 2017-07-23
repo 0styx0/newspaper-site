@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './index.css';
 
@@ -10,7 +11,7 @@ function Numberline(props) {
 }
 
 Numberline.propTypes = {
-    lineContent: PropTypes.arrayOf(PropTypes.string).isRequired
+    lineContent: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element])).isRequired
 }
 
 export default Numberline;
