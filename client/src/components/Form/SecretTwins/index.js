@@ -1,45 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './index.css';
 
 /**
- * Creates 2 inputs - one that's hidden and one that's not, with the same value
- * When the visible one changes, both get the .changed class which allows them to be submitted
- *
- * @prop original - element to copy off of and return together with copy
- * @prop props - json with any extra properties for hidden elt. Must include name
+ * @return div with a hidden input with @prop `mirror` going off every onChange event
  */
-export default class SecretTwins extends React.Component {
+export default function SecretTwins(props) {
 
-    constructor() {
-        super();
+        const original = React.cloneElement(props.original, {onChange: props.mirror});
 
-        this.mirror = this.mirror.bind(this);
-
-        this.state = {
-            className: ''
-        }
-    }
-
-    mirror() {
-        this.setState({className: 'changed'});
-    }
-
-    render() {
-
-        const original = React.cloneElement(this.props.original, {onChange: this.mirror});
-
-        const originProps = this.props.original.props;
+        const originProps = props.original.props;
 
         const copy = <input
                         type="hidden"
-                        name={this.props.name}
-                        value={this.props.value || originProps.value}
+                        name={props.name}
+                        value={props.value || originProps.value}
                         formMethod={originProps.formMethod}
-                        className={this.state.className}
+                        className={props.className}
                       />
 
-        const copyWithCustom = React.cloneElement(copy, this.props.props);
+        const copyWithCustom = React.cloneElement(copy, props.props);
 
         return (
             <div>
@@ -47,5 +28,12 @@ export default class SecretTwins extends React.Component {
                 {copyWithCustom}
             </div>
         )
-    }
+}
+
+SecretTwins.propTypes = {
+    original: PropTypes.element.isRequired,
+    mirror: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired, // for hidden "mirror" input
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    className: PropTypes.string
 }

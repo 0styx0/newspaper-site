@@ -2,7 +2,7 @@ import React from 'react';
 import Form from '../../components/Form';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
-import SecretTwins from '../../components/Form/SecretTwins';
+import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
 import {jwt} from '../../components/jwt';
@@ -39,7 +39,7 @@ class JournalistTable extends React.Component {
                 if (person.level < jwt.level) {
                     person.id = <input formMethod="delete" key={person.id} type="checkbox" name="delAcc[]" value={person.id} />
                     person.level =
-                        <SecretTwins
+                        <SecretTwinsContainer
                           original={<select name="lvl[]" onChange={this.mirrorClass} formMethod="put" defaultValue={person.level}>{Array(jwt.level).fill(null).map((val, idx) => {
                                 return (<option key={idx} value={idx + 1}>{idx + 1}</option>)
                             })}</select>}
