@@ -1,4 +1,4 @@
-import Notification from './components/Notification';
+import Notification from './helpers/Notification';
 
 // In production, we register a service worker to serve assets from local cache.
 
