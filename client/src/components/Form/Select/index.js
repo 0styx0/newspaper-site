@@ -1,14 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Label from '../Label';
 
 import './index.css';
 
 /**
  * @prop label - string, contents of label element
- * @prop required - if it exists, the select gets `required attribute
- * @prop name - name of select
- * @prop className - class
- * @prop children - option elements
+ * @prop props - object of attributes of select
  */
 export default function Select(props) {
 
@@ -25,3 +24,7 @@ export default function Select(props) {
     );
 }
 
+Select.propTypes = {
+    label: PropTypes.string.isRequired,
+    props: PropTypes.object
+}
