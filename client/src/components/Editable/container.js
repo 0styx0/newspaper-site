@@ -58,7 +58,7 @@ class EditableContainer extends React.Component {
         const content = React.cloneElement(this.props.children, {contentEditable: this.props.canEdit});
 
         if (!this.props.canEdit) {
-            return <span />
+            return this.props.children;
         }
 
         return <Editable
