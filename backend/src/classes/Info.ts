@@ -3,7 +3,7 @@ const User = require("./User");
 const db = require("./db");
 const Issue = require("./Issue");
 
-module.exports = class Info {
+export default class Info {
 
 
     /**

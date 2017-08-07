@@ -4,7 +4,7 @@ import { dbInfo } from '../../config';
 
 import * as  mysql from 'mysql2/promise';
 
-module.exports = mysql.createConnection({
+export default mysql.createConnection({
     "host": dbInfo.HOST,
     "port": dbInfo.PORT,
     "user": dbInfo.USER,

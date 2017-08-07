@@ -3,7 +3,7 @@ import User from './User';
 import db from './db';
 import Utilities from './Utilities';
 
-module.exports = class UserGroup {
+export default class UserGroup {
 
 
    /*

@@ -8,7 +8,7 @@ import db from './db';
   * Represents a comment to an article
   * RI: Comments must be at most 500 chars and at least 10
   */
-module.exports = class Comment {
+export default class Comment {
 
     constructor() {
 

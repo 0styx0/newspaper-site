@@ -7,7 +7,7 @@ import * as jwt from 'jwt-simple';
 import {unused1, unused2 , JWT, EMAIL_HOST} from '../../config.json';
 import * as randomstring from 'randomstring';
 
-module.exports = class User {
+export default class User {
 
     constructor() {
 

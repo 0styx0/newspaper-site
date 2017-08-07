@@ -5,7 +5,7 @@ const User = require("./User");
 const Info = require("./Info");
 const moment = require("moment");
 
-module.exports = class Issue {
+export default class Issue {
 
     constructor() {
 

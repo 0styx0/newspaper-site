@@ -29,4 +29,4 @@ router.delete('/', function(req, res) {
 
     UserGroupInstance.delete(data['delAcc[]'], data.password);
 });
-module.exports = router;
+export default router;

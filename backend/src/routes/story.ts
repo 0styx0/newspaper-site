@@ -82,4 +82,4 @@ router.delete('*', async function(req, res) {
         ArticleInstance.destroy();
     }
 });
-module.exports = router
+export default router

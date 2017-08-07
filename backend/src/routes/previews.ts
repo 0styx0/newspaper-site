@@ -15,4 +15,4 @@ router.get("/:issueNum?", async function(req, res) {
     res.send(await previews);
 });
 
-module.exports = router;
+export default router;

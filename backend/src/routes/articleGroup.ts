@@ -1,6 +1,5 @@
 import * as express from 'express';
 const router = express.Router();
-const Info = require("../classes/Info");
 import Utilities from '../classes/Utilities';
 import User from '../classes/User';
 import ArticleGroup from '../classes/ArticleGroup';
@@ -64,4 +63,4 @@ router.delete('/', async function(req, res) {
     }
 });
 
-module.exports = router;
+export default router;

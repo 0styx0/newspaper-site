@@ -4,7 +4,7 @@ import db from './db';
 import Utilities from './Utilities';
 import {unused1, EMAIL, unused, EMAIL_HOST} from '../../config.json';
 
-module.exports = class SendMail {
+export default class SendMail {
 
     /**
       * Given proper parameters, this emails a user

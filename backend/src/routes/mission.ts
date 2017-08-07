@@ -28,4 +28,4 @@ router.put('/', function(req, res) {
     Utilities.setHeader(200, "mission edited");
 });
 
-module.exports = router;
+export default router;

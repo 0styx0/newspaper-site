@@ -3,7 +3,7 @@ import User from './User';
 import Utilities from './Utilities';
 import Issue from './Issue';
 
-module.exports = class ArticleGroup {
+export default class ArticleGroup {
 
 
    /*

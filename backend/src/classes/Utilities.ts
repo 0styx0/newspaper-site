@@ -1,7 +1,7 @@
 
 import * as Cookie from 'cookies';
 
-module.exports = class Utilities {
+export default class Utilities {
 
     /**
       *

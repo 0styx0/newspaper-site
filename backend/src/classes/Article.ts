@@ -6,7 +6,7 @@ import * as fs from 'fs-extra'
 import Issue from './Issue';
 import SendMail from './SendMail';
 
-module.exports = class Article {
+export default class Article {
 
     constructor() {
 

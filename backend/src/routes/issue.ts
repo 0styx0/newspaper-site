@@ -41,4 +41,4 @@ router.put('/', async function(req, res) {
     IssueInstance.destruct().then(() => Utilities.setHeader(200, "issue updated"));
 });
 
-module.exports = router;
+export default router;

@@ -90,4 +90,4 @@ router.post('/', async function(req, res) {
         Utilities.setHeader(422);
     }
 });
-module.exports = router
+export default router

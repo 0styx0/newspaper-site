@@ -45,4 +45,4 @@ router.get('*', function(req, res) {
     res.send(UserInstance.getJWT());
 });
 
-module.exports = router
+export default router

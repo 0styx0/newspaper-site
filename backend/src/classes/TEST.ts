@@ -5,7 +5,7 @@ const JWT = {
     SECRET: "test"
 };
 
-module.exports = function changeJWT(fieldValues = {}) {
+export default function changeJWT(fieldValues = {}) {
 
     const token = [
         {

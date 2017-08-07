@@ -28,4 +28,4 @@ router.use('/mission', require('./mission'));
 router.use('/user', require('./user'));
 router.use('/comment', require('./comment'));
 
-module.exports = router;
+export default router;
