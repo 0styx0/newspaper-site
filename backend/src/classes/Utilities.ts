@@ -1,5 +1,5 @@
 
-const Cookie = require('cookies');
+import * as Cookie from 'cookies';
 
 module.exports = class Utilities {
 

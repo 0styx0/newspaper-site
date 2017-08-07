@@ -1,6 +1,7 @@
-const router = require('express').Router();
-const Utilities = require('../classes/Utilities');
-const Comment = require('../classes/Comment');
+import * as express from 'express';
+const router = express.Router();
+import Utilities from '../classes/Utilities';
+import Comment from '../classes/Comment';
 
 const CommentInstance = new Comment();
 

@@ -1,10 +1,10 @@
-const User = require('./User');
-const db = require('./db');
-const Utilities = require('./Utilities');
-const Purifier = require('html-purify');
-const fs = require('fs-extra')
-const Issue = require('./Issue');
-const SendMail = require('./SendMail');
+import User from './User';
+import db from './db';
+import Utilities from './Utilities';
+import * as Purifier from 'html-purify';
+import * as fs from 'fs-extra'
+import Issue from './Issue';
+import SendMail from './SendMail';
 
 module.exports = class Article {
 

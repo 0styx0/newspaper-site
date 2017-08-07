@@ -1,8 +1,8 @@
 
-const User = require('./User');
-const Utilities = require('./Utilities');
-const Purifier = require('html-purify');
-const db = require('./db');
+import User from './User';
+import Utilities from './Utilities';
+import * as Purifier from 'html-purify';
+import db from './db';
 
 /**
   * Represents a comment to an article

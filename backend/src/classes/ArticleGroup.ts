@@ -1,7 +1,7 @@
-const db = require('./db');
-const User = require('./User');
-const Utilities = require('./Utilities');
-const Issue = require('./Issue');
+import db from './db';
+import User from './User';
+import Utilities from './Utilities';
+import Issue from './Issue';
 
 module.exports = class ArticleGroup {
 

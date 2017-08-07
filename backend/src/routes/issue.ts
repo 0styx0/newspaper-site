@@ -1,4 +1,5 @@
-const router = require('express').Router();
+import * as express from 'express';
+const router = express.Router();
 const Info = require("../classes/Info");
 const Issue = require("../classes/Issue");
 const User = require("../classes/User");

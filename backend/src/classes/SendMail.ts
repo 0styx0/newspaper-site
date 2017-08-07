@@ -1,8 +1,8 @@
 
-const nodemailer = require('nodemailer');
-const db = require('./db');
-const Utilities = require('./Utilities');
-const {unused1, EMAIL, unused, EMAIL_HOST} = require('../../config.json');
+import * as nodemailer from 'nodemailer';
+import db from './db';
+import Utilities from './Utilities';
+import {unused1, EMAIL, unused, EMAIL_HOST} from '../../config.json';
 
 module.exports = class SendMail {
 
@@ -162,7 +162,7 @@ module.exports = class SendMail {
             subject: subject,
             html: message
         };
-        
+
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

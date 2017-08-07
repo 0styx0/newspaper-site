@@ -1,8 +1,8 @@
 
-const dbInfo = require('../../config').DB;
+import { dbInfo } from '../../config';
 
 
-const  mysql = require('mysql2/promise');
+import * as  mysql from 'mysql2/promise';
 
 module.exports = mysql.createConnection({
     "host": dbInfo.HOST,

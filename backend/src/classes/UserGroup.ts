@@ -1,7 +1,7 @@
 
-const User = require('./User');
-const db = require('./db');
-const Utilities = require('./Utilities');
+import User from './User';
+import db from './db';
+import Utilities from './Utilities';
 
 module.exports = class UserGroup {
 

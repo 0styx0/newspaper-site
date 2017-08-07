@@ -1,6 +1,7 @@
-const router = require('express').Router();
-const Info = require('../classes/Info');
-const UserGroup = require('../classes/UserGroup');
+import * as express from 'express';
+const router = express.Router();
+import Info from '../classes/Info';
+import UserGroup from '../classes/UserGroup';
 
 router.get("/", async function(req, res) {
 

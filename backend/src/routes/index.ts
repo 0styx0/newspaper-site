@@ -1,9 +1,10 @@
-const router = require('express').Router();
-const Utilities = require('../classes/Utilities');
+import * as express from 'express';
+const router = express.Router();
+import Utilities from '../classes/Utilities';
 
-const jwt = require('jwt-simple');
+import * as jwt from 'jwt-simple';
 
-const JWT = require('../../config.json').JWT;
+import { JWT } from 'json!../../config.json';
 
 
 

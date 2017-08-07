@@ -1,8 +1,9 @@
-const router = require('express').Router();
+import * as express from 'express';
+const router = express.Router();
 const User = require("../classes/User");
 const Article = require("../classes/Article");
 const Utilities = require("../classes/Utilities");
-const fs = require('fs');
+import * as fs from 'fs';
 
 router.put('/', function(req, res) {
 

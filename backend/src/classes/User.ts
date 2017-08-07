@@ -1,11 +1,11 @@
 
-const Utilities = require('./Utilities');
-const db = require('./db');
-const bcrypt = require('bcrypt');
-const SendMail = require('./SendMail');
-const jwt = require('jwt-simple');
-const {unused1, unused2 , JWT, EMAIL_HOST} = require('../../config.json');
-const randomstring = require('randomstring');
+import Utilities from './Utilities';
+import db from './db';
+import * as bcrypt from 'bcrypt';
+import SendMail from './SendMail';
+import * as jwt from 'jwt-simple';
+import {unused1, unused2 , JWT, EMAIL_HOST} from '../../config.json';
+import * as randomstring from 'randomstring';
 
 module.exports = class User {
 
