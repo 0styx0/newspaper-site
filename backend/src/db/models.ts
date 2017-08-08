@@ -85,7 +85,8 @@ const Users = sequelize.define('users', {
         }
     },
 }, {
-    underscored: true
+    underscored: true,
+    timestamps: true
 });
 
 
@@ -124,7 +125,8 @@ const Issues = sequelize.define('issues', {
   },
 },
 {
-    underscored: true
+    underscored: true,
+    timestamps: true
 });
 
 
@@ -246,6 +248,7 @@ const PageInfo = sequelize.define('pageinfo', {
 }, {
     paranoid: true,
     underscored: true, // consisten with preexisting fields
+    timestamps: true
 });
 
 const Tags = sequelize.define('tags', {
@@ -283,7 +286,8 @@ const Tags = sequelize.define('tags', {
         },
     }
 }, {
-    underscored: true
+    underscored: true,
+    timestamps: true
 });
 
 
@@ -326,7 +330,8 @@ const Comments = sequelize.define('comments', {
     },
 }, {
     paranoid: true,
-    underscored: true
+    underscored: true,
+    timestamps: true
 });
 
 
