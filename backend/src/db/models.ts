@@ -86,7 +86,7 @@ const Users = sequelize.define('users', {
         }
     },
     underscored: true,
-    timestamps: true,
+    timestamps: false,
     indexes: [
         {
             unique: true,
@@ -133,7 +133,7 @@ const Issues = sequelize.define('issues', {
         }
     },
     underscored: true,
-    timestamps: true
+    timestamps: false
 });
 
 
@@ -255,7 +255,7 @@ const PageInfo = sequelize.define('pageinfo', {
     },
     paranoid: true,
     underscored: true, // consisten with preexisting fields
-    timestamps: true,
+    timestamps: false,
     indexes: [
         {
             unique: true,
@@ -265,7 +265,7 @@ const PageInfo = sequelize.define('pageinfo', {
     ]
 });
 
-const Tags = sequelize.define('tags', {
+sequelize.define('tags', {
     id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -301,7 +301,7 @@ const Tags = sequelize.define('tags', {
     }
 }, {
     underscored: true,
-    timestamps: true,
+    timestamps: false,
     indexes: [
         {
             unique: true,
@@ -312,7 +312,7 @@ const Tags = sequelize.define('tags', {
 });
 
 
-const Comments = sequelize.define('comments', {
+sequelize.define('comments', {
     id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -352,5 +352,7 @@ const Comments = sequelize.define('comments', {
 }, {
     paranoid: true,
     underscored: true,
-    timestamps: true
+    timestamps: false
 });
+
+export default sequelize;

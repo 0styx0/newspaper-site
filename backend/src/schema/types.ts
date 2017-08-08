@@ -1,6 +1,4 @@
 import {
-  graphql,
-  GraphQLSchema,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -16,9 +14,18 @@ const Users = new GraphQLObjectType({
     fields: () => ({
         id: {type: new GraphQLNonNull(GraphQLID)},
         username: {type: new GraphQLNonNull(GraphQLString)},
-        firstName: {type: new GraphQLNonNull(GraphQLString)},
-        middleName: {type: new GraphQLNonNull(GraphQLString)},
-        lastName: {type: new GraphQLNonNull(GraphQLString)},
+        firstName: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: (user) => user.f_name
+        },
+        middleName: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: (user) => user.m_name
+        },
+        lastName: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: (user) => user.l_name
+        },
         email: {type: new GraphQLNonNull(GraphQLString)},
         level: {type: new GraphQLNonNull(GraphQLInt)},
         notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
@@ -40,8 +47,9 @@ const Articles = new GraphQLObjectType({
         dateCreated: {type: new GraphQLNonNull(GraphQLString)},
         lede: {type: new GraphQLNonNull(GraphQLString)},
         body: {type: new GraphQLNonNull(GraphQLString)},
+        article: {type: new GraphQLNonNull(GraphQLString)},
         imgUrl: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
-        slideImg: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        slideImages: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         issue: {type: new GraphQLNonNull(GraphQLInt)},
         views: {type: new GraphQLNonNull(GraphQLInt)},
         displayOrder: {type: new GraphQLNonNull(GraphQLInt)},
