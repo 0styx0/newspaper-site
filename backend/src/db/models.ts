@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelze';
 import { sequelize } from './connection';
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
 const { EMAIL_HOST } = require('../../../config.json');
@@ -80,6 +81,34 @@ const Users = sequelize.define('users', {
     }
 });
 
+
+const Issues = sequelize.define('issues', {
+     num: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    madepub: {
+        type: Sequelize.Date,
+        allowNull: true, // only filled when made public, so before that should be null
+        validate: {
+            isBefore: new Date(Date.now() + 1)
+        }
+    },
+    name: {
+        type: Sequelize.STRING,
+        validate: {
+            is: /^[\sa-zA-Z0-9_-]+$/
+        },
+        allowNull: false
+    },
+    ispublic: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+});
+
+
 const PageInfo = sequelize.define('pageinfo', {
     id: {
         type: Sequelize.UUID,
@@ -95,7 +124,7 @@ const PageInfo = sequelize.define('pageinfo', {
         }
     },
     url: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(75),
         validate: {
             is: /^[\sa-zA-Z0-9_-]+$/
         },
@@ -164,7 +193,7 @@ const PageInfo = sequelize.define('pageinfo', {
         }
     },
     display_order: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED(2),
         validate: {
             defaultValue: 0,
             allowNull: false
@@ -174,10 +203,92 @@ const PageInfo = sequelize.define('pageinfo', {
 
 });
 
+const Tags = sequelize.define('tags', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    art_id: {
+        type: Sequelize.UUID,
+        references: {
+            model: PageInfo,
+            key: 'id'
+        }
+    },
+    tag1: {
+        type: Sequelize.STRING(15),
+        allowNull: false,
+        validate: {
+            is: /^[\sa-zA-Z0-9_-]+$/
+        },
+    },
+    tag2: {
+        type: Sequelize.STRING(15),
+        allowNull: true,
+        validate: {
+            is: /^[\sa-zA-Z0-9_-]+$/
+        },
+    },
+    tag3: {
+        type: Sequelize.STRING(15),
+        allowNull: true,
+        validate: {
+            is: /^[\sa-zA-Z0-9_-]+$/
+        },
+    }
+});
 
 
-// TODO: Find out how to use this
-// queryInterface.addConstraint('Items', ['minor', 'major'], {
-//   type: 'unique',
-//   name: 'custom_unique_constraint_name'
-// });
+const Comments = sequelize.define('comments', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    art_id: {
+        type: Sequelize.UUID,
+        references: {
+            model: PageInfo,
+            key: 'id'
+        }
+    },
+    authorid: {
+        type: Sequelize.UUID,
+        references: {
+            model: PageInfo,
+            key: 'id'
+        }
+    },
+    content: {
+        type: Sequelize.STRING(500),
+        allowNull: false,
+        validate: {
+            isLength: {
+                min: 4 // random number, just don't want comments too short
+            }
+        },
+    },
+    created: {
+        type: Sequelize.Date,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+        validate: {
+            isBefore: new Date(Date.now() + 1)
+        }
+    },
+});
+
+
+Sequelize.addConstraint('Users', ['f_name', 'm_name', 'l_name'], {
+  type: 'unique',
+  name: 'unique_user_names'
+});
+Sequelize.addConstraint('Tags', ['tag1', 'tag2', 'tag3'], {
+  type: 'unique',
+  name: 'unique_tags'
+});
+Sequelize.addConstraint('PageInfo', ['url', 'issue'], {
+  type: 'unique',
+  name: 'unique_urls'
+});
