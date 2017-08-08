@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
-const { DB } = require('../../../config.json');
+const { DB } = require('../../config.json');
 
 const sequelize = new Sequelize(DB.NAME, DB.USER, DB.PASS, {
   host: DB.HOST,
