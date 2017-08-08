@@ -1,4 +1,3 @@
-import { Sequelize } from 'sequelze';
 import { sequelize } from './connection';
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
 const { EMAIL_HOST } = require('../../../config.json');
@@ -68,7 +67,7 @@ const Users = sequelize.define('users', {
         type: Sequelize.TEXT
     },
     auth_time: {
-        type: Sequelize.Date
+        type: Sequelize.DATE
     },
     password: {
         type: Sequelize.TEXT,
@@ -78,15 +77,22 @@ const Users = sequelize.define('users', {
                 min: 6
             }
         }
-    },
+    }
+}, {
     getterMethods: {
         fullName: () => {
             return `${this.f_name} ${this.m_name ? this.m_name + ' ' : ''}${this.l_name}`;
         }
     },
-}, {
     underscored: true,
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        {
+            unique: true,
+            name: 'unique_names',
+            fields: ['f_name', 'm_name', 'l_name']
+        }
+    ]
 });
 
 
@@ -97,7 +103,7 @@ const Issues = sequelize.define('issues', {
         autoIncrement: true
     },
     madepub: {
-        type: Sequelize.Date,
+        type: Sequelize.DATE,
         allowNull: true, // only filled when made public, so before that should be null
         validate: {
             isBefore: new Date(Date.now() + 1)
@@ -113,7 +119,9 @@ const Issues = sequelize.define('issues', {
     ispublic: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
-    },
+    }
+},
+{
     validate: {
 
         publicIssueWithName() {
@@ -122,9 +130,7 @@ const Issues = sequelize.define('issues', {
                 throw new Error('Require name if issue will be public');
             }
         }
-  },
-},
-{
+    },
     underscored: true,
     timestamps: true
 });
@@ -137,7 +143,7 @@ const PageInfo = sequelize.define('pageinfo', {
         autoIncrement: true
     },
     created: {
-        type: Sequelize.Date,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
         validate: {
@@ -220,12 +226,13 @@ const PageInfo = sequelize.define('pageinfo', {
         }
     },
     display_order: {
-        type: Sequelize.INTEGER.UNSIGNED(2),
+        type: Sequelize.INTEGER(2).UNSIGNED,
         validate: {
             defaultValue: 0,
             allowNull: false
         }
-    },
+    }
+}, {
     getterMethods:{
 
         slideImages: () => {
@@ -244,11 +251,17 @@ const PageInfo = sequelize.define('pageinfo', {
                 }
             });
         }
-    }
-}, {
+    },
     paranoid: true,
     underscored: true, // consisten with preexisting fields
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        {
+            unique: true,
+            name: 'unique_urls',
+            fields: ['url', 'issue']
+        }
+    ]
 });
 
 const Tags = sequelize.define('tags', {
@@ -287,7 +300,14 @@ const Tags = sequelize.define('tags', {
     }
 }, {
     underscored: true,
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        {
+            unique: true,
+            name: 'unique_tags',
+            fields: ['tag1', 'tag2', 'tag3']
+        }
+    ]
 });
 
 
@@ -321,7 +341,7 @@ const Comments = sequelize.define('comments', {
         },
     },
     created: {
-        type: Sequelize.Date,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
         validate: {
@@ -332,18 +352,4 @@ const Comments = sequelize.define('comments', {
     paranoid: true,
     underscored: true,
     timestamps: true
-});
-
-
-Sequelize.addConstraint('Users', ['f_name', 'm_name', 'l_name'], {
-  type: 'unique',
-  name: 'unique_user_names'
-});
-Sequelize.addConstraint('Tags', ['tag1', 'tag2', 'tag3'], {
-  type: 'unique',
-  name: 'unique_tags'
-});
-Sequelize.addConstraint('PageInfo', ['url', 'issue'], {
-  type: 'unique',
-  name: 'unique_urls'
 });
