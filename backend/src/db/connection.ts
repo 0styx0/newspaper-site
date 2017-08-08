@@ -16,4 +16,4 @@ const connection = sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-export default connection;
+export { connection, sequelize };
