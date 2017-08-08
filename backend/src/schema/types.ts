@@ -82,8 +82,15 @@ const Issues = new GraphQLObjectType({
             resolve: (issue) => db.models.pageinfo.findAll({
                 where: sanitize({issue: issue.num})
             })
+        },
+        views: {
+            type: new GraphQLNonNull(GraphQLInt),
+            resolve: async (issue) => db.models.pageinfo.sum('views', {
+                where: {
+                    issue: sanitize(issue.num)
+                }
+            })
         }
-
     })
 });
 

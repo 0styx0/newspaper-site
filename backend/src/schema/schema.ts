@@ -6,7 +6,7 @@ import {
   GraphQLString,
   GraphQLInt,
   GraphQLID,
-//   GraphQLBoolean,
+  GraphQLBoolean,
   GraphQLList
 } from 'graphql';
 
@@ -51,8 +51,16 @@ const Query = new GraphQLObjectType({
            description: 'Issues',
            args: {
                num: {type: GraphQLID},
+               public: {type: GraphQLBoolean}
            },
-           resolve: (_, args) => db.models.issues.findAll({where: sanitize(args)})
+           resolve: (_, args: {num?: string; public?: boolean; ispublic?: number}) => {
+
+               if ('public' in args) {
+                   args.ispublic = +args.public;
+                   delete args.public;
+               }
+               return db.models.issues.findAll({where: sanitize(args)})
+           }
        },
       comments: {
            type: new GraphQLList(Comments),
