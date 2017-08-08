@@ -76,7 +76,10 @@ const Issues = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLBoolean),
             resolve: (issue) => !!issue.ispublic
         },
-        datePublished: {type: new GraphQLNonNull(GraphQLString)},
+        datePublished: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: (issue) => issue.madepub
+        },
         articles: {
             type: new GraphQLNonNull(Articles),
             resolve: (issue) => db.models.pageinfo.findAll({
