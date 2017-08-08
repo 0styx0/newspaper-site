@@ -32,7 +32,8 @@ function installModules() {
 
 async function initializeDatabase() {
 
-    const DB = require('./config.json').DB;
+    let DB = require('./backend/dist/config');
+    DB = DB.default.DB
     const fs = require.main.require('./backend/node_modules/fs-extra');
     const mysql = require.main.require('./backend/node_modules/mysql2/promise');
 
