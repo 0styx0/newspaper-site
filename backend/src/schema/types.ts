@@ -8,6 +8,10 @@ import {
   GraphQLList
 } from 'graphql';
 
+import db from '../db/models';
+import sanitize from '../helpers/sanitize';
+
+
 const Users = new GraphQLObjectType({
     name: 'Users',
     description: 'Account holders of the site',
@@ -47,6 +51,7 @@ const Articles = new GraphQLObjectType({
         dateCreated: {type: new GraphQLNonNull(GraphQLString)},
         lede: {type: new GraphQLNonNull(GraphQLString)},
         body: {type: new GraphQLNonNull(GraphQLString)},
+        url: {type: new GraphQLNonNull(GraphQLString)},
         article: {type: new GraphQLNonNull(GraphQLString)},
         imgUrl: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         slideImages: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
@@ -54,6 +59,10 @@ const Articles = new GraphQLObjectType({
         views: {type: new GraphQLNonNull(GraphQLInt)},
         displayOrder: {type: new GraphQLNonNull(GraphQLInt)},
         authorId: {type: new GraphQLNonNull(GraphQLID)},
+        author: {
+            type: new GraphQLNonNull(Users),
+            resolve: (user) => db.models.users.findById(sanitize(user.authorid))
+        }
     })
 });
 
@@ -62,9 +71,19 @@ const Issues = new GraphQLObjectType({
     description: 'Issues - Every article has one',
     fields: () => ({
         num: {type: new GraphQLNonNull(GraphQLID)},
-        name: {type: new GraphQLNonNull(GraphQLString)},
-        public: {type: new GraphQLNonNull(GraphQLBoolean)},
+        name: {type: GraphQLString},
+        public: {
+            type: new GraphQLNonNull(GraphQLBoolean),
+            resolve: (issue) => !!issue.ispublic
+        },
         datePublished: {type: new GraphQLNonNull(GraphQLString)},
+        articles: {
+            type: new GraphQLNonNull(Articles),
+            resolve: (issue) => db.models.pageinfo.findAll({
+                where: sanitize({issue: issue.num})
+            })
+        }
+
     })
 });
 
@@ -72,10 +91,21 @@ const Comments = new GraphQLObjectType({
     name: 'Comments',
     description: 'Comments in articles',
     fields: () => ({
-        artId: {type: new GraphQLNonNull(GraphQLID)},
-        authorId: {type: new GraphQLNonNull(GraphQLID)},
+        id: {type: new GraphQLNonNull(GraphQLID)},
+        artId: {
+            type: new GraphQLNonNull(GraphQLID),
+            resolve: (comment) => comment.art_id
+        },
+        authorId: {
+            type: new GraphQLNonNull(GraphQLID),
+            resolve: (comment) => comment.authorid
+        },
         content: {type: new GraphQLNonNull(GraphQLString)},
         dateCreated: {type: new GraphQLNonNull(GraphQLString)},
+        author: {
+            type: new GraphQLNonNull(Users),
+            resolve: (user) => db.models.users.findById(sanitize(user.authorid))
+        }
     })
 });
 
@@ -83,7 +113,11 @@ const Tags = new GraphQLObjectType({
    name: 'Tags',
    description: 'Tags of articles',
    fields: () => ({
-        artId: {type: new GraphQLNonNull(GraphQLID)},
+       id: {type: new GraphQLNonNull(GraphQLID)},
+        artId: {
+            type: new GraphQLNonNull(GraphQLID),
+            resolve: (tag) => tag.art_id
+        },
         tag1: {type: new GraphQLNonNull(GraphQLString)},
         tag2: {type: new GraphQLNonNull(GraphQLString)},
         tag3: {type: new GraphQLNonNull(GraphQLString)},

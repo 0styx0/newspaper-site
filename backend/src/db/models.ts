@@ -137,7 +137,7 @@ const Issues = sequelize.define('issues', {
 });
 
 
-const PageInfo = sequelize.define('pageinfo', {
+const Articles = sequelize.define('pageinfo', {
     id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -256,6 +256,7 @@ const PageInfo = sequelize.define('pageinfo', {
     paranoid: true,
     underscored: true, // consisten with preexisting fields
     timestamps: false,
+    freezeTableName: true,
     indexes: [
         {
             unique: true,
@@ -274,7 +275,7 @@ sequelize.define('tags', {
     art_id: {
         type: Sequelize.UUID,
         references: {
-            model: PageInfo,
+            model: Articles,
             key: 'id'
         }
     },
@@ -321,14 +322,14 @@ sequelize.define('comments', {
     art_id: {
         type: Sequelize.UUID,
         references: {
-            model: PageInfo,
+            model: Articles,
             key: 'id'
         }
     },
     authorid: {
         type: Sequelize.UUID,
         references: {
-            model: PageInfo,
+            model: Users,
             key: 'id'
         }
     },

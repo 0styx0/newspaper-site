@@ -1,10 +1,10 @@
 import {
 //   graphql,
   GraphQLSchema,
-  GraphQLNonNull,
+//   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
-//   GraphQLInt,
+  GraphQLInt,
   GraphQLID,
 //   GraphQLBoolean,
   GraphQLList
@@ -12,10 +12,10 @@ import {
 
 import {
     Users,
-    // Articles,
-    // Issues,
-    // Comments,
-    // Tags
+    Articles,
+    Issues,
+    Comments,
+    Tags
 } from './types';
 
 import sanitize from '../helpers/sanitize';
@@ -35,6 +35,44 @@ const Query = new GraphQLObjectType({
            },
            resolve: (_, args) => db.models.users.findAll({where: sanitize(args)})
        },
+       articles: {
+           type: new GraphQLList(Articles),
+           description: 'Articles',
+           args: {
+               id: {type: GraphQLID},
+               authorid: {type: GraphQLID},
+               url: {type: GraphQLString},
+               issue: {type: GraphQLInt},
+           },
+           resolve: (_, args) => db.models.pageinfo.findAll({where: sanitize(args)})
+       },
+       issues: {
+           type: new GraphQLList(Issues),
+           description: 'Issues',
+           args: {
+               num: {type: GraphQLID},
+           },
+           resolve: (_, args) => db.models.issues.findAll({where: sanitize(args)})
+       },
+      comments: {
+           type: new GraphQLList(Comments),
+           description: 'Comments',
+           args: {
+               id: {type: GraphQLID},
+               authorid: {type: GraphQLID},
+               artId: {type: GraphQLID},
+           },
+           resolve: (_, args) => db.models.comments.findAll({where: sanitize(args)})
+       },
+      tags: {
+           type: new GraphQLList(Tags),
+           description: 'Tags of articles',
+           args: {
+               artId: {type: GraphQLID},
+           },
+           resolve: (_, args) => db.models.tags.findAll({where: sanitize(args)})
+       }
+
    })
 });
 
