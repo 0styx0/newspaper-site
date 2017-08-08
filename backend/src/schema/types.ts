@@ -33,6 +33,19 @@ const Users = new GraphQLObjectType({
         email: {type: new GraphQLNonNull(GraphQLString)},
         level: {type: new GraphQLNonNull(GraphQLInt)},
         notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
+        views: {
+            type: GraphQLInt,
+            resolve: (user) => db.models.pageinfo.sum('views', {
+                where: {authorid: sanitize(user.id)}
+            })
+        },
+        articles: {
+            type: GraphQLInt,
+            resolve: (user) => db.models.pageinfo.count({
+                where: {authorid: sanitize(user.id)}
+            })
+
+        }
 
         /* // PRIVATE types. Putting them here just to complete the db table
         // don't use these
