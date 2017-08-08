@@ -1,6 +1,7 @@
 import { sequelize } from './connection';
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
-const { EMAIL_HOST } = require('../../config.json');
+import config from '../../config';
+const EMAIL_HOST = config.EMAIL_HOST;
 
 const Users = sequelize.define('users', {
     id: {
