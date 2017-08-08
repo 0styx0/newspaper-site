@@ -77,7 +77,7 @@ const Issues = new GraphQLObjectType({
             resolve: (issue) => !!issue.ispublic
         },
         datePublished: {
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
             resolve: (issue) => issue.madepub
         },
         articles: {

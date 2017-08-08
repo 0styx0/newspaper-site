@@ -22,12 +22,17 @@ app.use(cookieParser());
 
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3001");
-  //res.header("Access-Control-Allow-Origin", "http://localhost:5000");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  // res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  next();
+
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET, PUT");
+
+  if (req.method === 'OPTIONS') {
+      res.status(200);
+      return res.end();
+  }
+  next()
 });
 
 // app.use('/api', require('./routes/'));
@@ -50,6 +55,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, ()=> {
+app.listen(4000, ()=> {
   console.log(`App listening on port 3000`);
 });

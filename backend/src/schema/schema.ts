@@ -59,7 +59,10 @@ const Query = new GraphQLObjectType({
                    args.ispublic = +args.public;
                    delete args.public;
                }
-               return db.models.issues.findAll({where: sanitize(args)})
+               return db.models.issues.findAll({
+                   where: sanitize(args),
+                   order: [['num', 'DESC']]
+                })
            }
        },
       comments: {
@@ -84,8 +87,36 @@ const Query = new GraphQLObjectType({
    })
 });
 
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    description: 'Mutate data',
+    fields: () => ({
+        updateIssue: {
+            type: Issues,
+            description: 'Alter the latest issue',
+            args: {
+                name: {type: GraphQLString},
+                public: {type: GraphQLBoolean}
+            },
+            resolve: async (_, args) => {
+
+                const maxIssueRow = await db.models.issues.findOne({
+                                    order: [ [ 'num', 'DESC' ]],
+                                });
+
+                await db.models.issues.update(sanitize(args), {
+                    where: {
+                        num: maxIssueRow.dataValues.num
+                    }
+                });
+
+                return Object.assign(maxIssueRow.dataValues, args); // optimistic that update worked
+            }
+        }
+    })
+})
 
 export default new GraphQLSchema({
   query: Query,
-//   mutation: Mutation
+  mutation: Mutation
 });
