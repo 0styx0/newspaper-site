@@ -78,7 +78,14 @@ const Users = sequelize.define('users', {
                 min: 6
             }
         }
-    }
+    },
+    getterMethods: {
+        fullName: () => {
+            return `${this.f_name} ${this.m_name ? this.m_name + ' ' : ''}${this.l_name}`;
+        }
+    },
+}, {
+    underscored: true
 });
 
 
@@ -106,6 +113,18 @@ const Issues = sequelize.define('issues', {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
+    validate: {
+
+        publicIssueWithName() {
+
+            if (!this.name && this.ispublic) {
+                throw new Error('Require name if issue will be public');
+            }
+        }
+  },
+},
+{
+    underscored: true
 });
 
 
@@ -151,6 +170,9 @@ const PageInfo = sequelize.define('pageinfo', {
         allowNull: false,
         validate: {
             isJSON: true,
+        },
+        get() {
+            return JSON.parse(this.getDataValue('img_url'));
         }
     },
     slide_img: {
@@ -159,6 +181,9 @@ const PageInfo = sequelize.define('pageinfo', {
         validate: {
             isJSON: true,
             is: /\[[0-1,]*\]/
+        },
+        get() {
+            return JSON.parse(this.getDataValue('slide_img'));
         }
     },
     issue: {
@@ -199,8 +224,28 @@ const PageInfo = sequelize.define('pageinfo', {
             allowNull: false
         }
     },
+    getterMethods:{
 
+        slideImages: () => {
 
+            const slideshowImages = this.slide_img;
+            return this.img_url.filter((img: string, i: number) => !!+slideshowImages[i]);
+        },
+        article: () => {
+
+            let content = this.lede + this.body;
+
+            (this.img_url || []).forEach((img: string) => {
+
+                if (content.indexOf("data-src") !== -1) {
+                    content = content.replace('data-src', `src='${img}'`);
+                }
+            });
+        }
+    }
+}, {
+    paranoid: true,
+    underscored: true, // consisten with preexisting fields
 });
 
 const Tags = sequelize.define('tags', {
@@ -237,6 +282,8 @@ const Tags = sequelize.define('tags', {
             is: /^[\sa-zA-Z0-9_-]+$/
         },
     }
+}, {
+    underscored: true
 });
 
 
@@ -277,6 +324,9 @@ const Comments = sequelize.define('comments', {
             isBefore: new Date(Date.now() + 1)
         }
     },
+}, {
+    paranoid: true,
+    underscored: true
 });
 
 
