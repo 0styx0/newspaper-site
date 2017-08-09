@@ -1,133 +1,154 @@
 import * as React from 'react';
-import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
-import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-import {jwt} from '../../components/jwt';
-import fetchFromApi from '../../helpers/fetchFromApi';
+import { jwt } from '../../components/jwt';
 import { Link } from 'react-router-dom';
+
+import { compose, graphql } from 'react-apollo';
+import { UserQuery, UserUpdate } from '../../graphql/users';
 
 import './index.css';
 
-// interface Person {
-//     name: string;
-//     id: string;
-//     level: number;
-//     profile_link: string;
-// }
-
-interface TablePerson {
-    name: JSX.Element;
-    id: JSX.Element | string;
-    level: JSX.Element | number;
-    profile_link: JSX.Element;
-}
 interface State {
-    journalistInfoArr: [TablePerson]
-    journalistInfoJson: [TablePerson]
+    journalistInfoArr:  (string | number | JSX.Element)[][]; // should be User[], just as html
+    usersToDelete: Array<string | undefined>;
+    idLevelMap: Map<string, number>;
 }
 
-class JournalistTable extends React.Component<{}, State> {
+interface User {
+    articles: number;
+    views: number;
+    level: number;
+    id: string;
+    profileLink: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+}
+
+interface Props {
+    data: {
+        loading: boolean;
+        users: User[];
+    },
+    userUpdate: Function;
+}
+
+class JournalistTable extends React.Component<Props, State> {
 
     constructor() {
 
         super();
 
         this.sortInfo = this.sortInfo.bind(this);
-        this.updateInfo = this.updateInfo.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.onidLevelMap = this.onidLevelMap.bind(this);
+
+
+        this.state = {
+            journalistInfoArr: [],
+            usersToDelete: [] as Array<string | undefined>,
+            idLevelMap: new Map()
+        };
     }
 
-    async componentWillMount() {
+    componentDidUpdate() {
 
-        const data = await this.getData();
-        const json = await data.json();
-        const journalistInfoJson: [TablePerson] = json.map((person: TablePerson) => {
+        if (this.props.data.loading || this.state.journalistInfoArr!.length > 0) {
+            return;
+        }
 
-            person.name = <Link to={"/u/"+person.profile_link}>{person.name}</Link>;
-
-            if (jwt.level > 1) {
-
-                if (person.level < jwt.level) {
-                    person.id = <input formMethod="delete" key={person.id as string} type="checkbox" name="delAcc[]" value={person.id as string} />
-
-                    const select = <select name="lvl[]" defaultValue={person.level.toString()}>
-                                      {Array(jwt.level).fill(null).map((val, idx) =>
-                                        <option key={idx} value={idx + 1}>{idx + 1}</option>
-                                      )}
-                                    </select>;
-
-                    person.level =
-                        <SecretTwinsContainer
-                          original={React.cloneElement(select, {formMethod: 'put'})}
-                          props = {{
-                              name: "name[]",
-                              value: person.profile_link
-                          }}
-                        />
-                }
-                else {
-                    person.id = "N/A";
-                }
-            }
-
-            if (!jwt.level) {
-
-                delete person.id;
-                delete person.level;
-            }
-            delete person.profile_link;
-
-            return person;
+        this.setState({
+            journalistInfoArr: this.formatDataForTable(this.props.data.users)
         });
-
-        this.setJournalistInfo(journalistInfoJson);
     }
 
-    async getData() {
+    formatDataForTable(userData: User[]) {
 
-        return await fetchFromApi("userGroup");
+        return userData.map((person: User) => {
+
+            const fullName = `${person.firstName} ${person.middleName ? person.middleName + ' ' : ''}${person.lastName}`;
+            const profileLink = <Link to={"/u/"+person.profileLink}>{fullName}</Link>;
+
+            let deleteBox: JSX.Element | string = "N/A";
+            let level: JSX.Element | number = person.level;
+
+            if (person.level < jwt.level) {
+
+                deleteBox = <input
+                                onChange={this.onDelete as any}
+                                key={person.id}
+                                type="checkbox"
+                                name="delAcc[]"
+                            />
+
+                level = <select
+                          name="lvl[]"
+                          onChange={((e: Event) => this.onidLevelMap(e, person.id)) as any}
+                          defaultValue={person.level.toString()}
+                        >
+                            {Array(jwt.level).fill(null).map((val, idx) =>
+                                // fill with levels until and including current user's level
+                                <option key={idx} value={idx + 1}>{idx + 1}</option>
+                            )}
+                        </select>;
+            }
+
+            let info: (number | string | JSX.Element)[] = [
+                profileLink,
+                level,
+                person.articles,
+                person.views
+            ];
+
+            return jwt.level < 2 ? info : info.concat(deleteBox);
+        });
     }
 
     /**
      * Handler for select elt generate in this.renderSortingOptions
-     * Sorts the table by parameter given (the selected option's index)
+     * Sorts the table by parameter given (the selected option)
      */
     sortInfo(event: Event) {
 
-        const sortBy = (event.target as HTMLSelectElement).options.selectedIndex;
+        const sortBy = (event.target as HTMLSelectElement).value;
 
-        const copyInfo = [...this.state.journalistInfoArr] as [TablePerson]; // making sure not to mutate state since bad practice
+        const userData = this.props.data.users.slice();
 
-        const sortedInfo = copyInfo.sort((a, b) => {
+        const sortedData = userData.sort((a: User, b: User) =>
+          // the .slice checks if data is a string or not
+          a[sortBy].slice ? a[sortBy].localeCompare(b[sortBy]) : a[sortBy] - b[sortBy]);
 
-            const sortee1 = getSortInfo(a[sortBy]);
-            const sortee2 = getSortInfo(b[sortBy]);
-
-            return (isNaN(+sortee1)) ? sortee1.localeCompare(sortee2) : sortee2 - sortee1;
+        this.setState({
+            journalistInfoArr: this.formatDataForTable(sortedData)
         });
-
-
-        function getSortInfo(elt: JSX.Element) {
-
-            if (elt.props) {
-                // sort by level, last name
-                return elt.props.original ?  elt.props.original.props.defaultValue : elt.props.children.split(" ")[0];
-            }
-
-            return elt;
-        }
-
-        this.setJournalistInfo(sortedInfo);
     }
 
     renderSortingOptions() {
 
-        const sortingOptions = ["Last Name", "Articles", "Views"];
+        const sortingOptions = [ // view: what user sees, value: index of @see User interface
+            {
+                view: 'Last Name',
+                value: 'lastName'
+            },
+            {
+                view: "Articles",
+                value: 'articles'
+            },
+            {
+                view: "Views",
+                value: 'views'
+            }
+        ];
 
         if (jwt.level) {
-            sortingOptions.splice(1, 0, "Level");
+            sortingOptions.splice(1, 0, {
+                view: 'Level',
+                value: 'level'
+            });
         }
 
         return (
@@ -136,38 +157,62 @@ class JournalistTable extends React.Component<{}, State> {
                   label="Sort By"
                   props={{
                     onChange: this.sortInfo,
-                    children: sortingOptions.map((val, idx) => <option key={idx} value={val}>{val}</option>)
+                    children: sortingOptions.map((val) => <option key={val.view} value={val.value}>{val.view}</option>)
                   }}
-            />
-        </div>);
+                />
+            </div>);
     }
 
-    updateInfo(method: string, infoChanged: Object) {
+    onidLevelMap(e: Event, id: string) {
 
-        let updatedInfo = this.state.journalistInfoJson;
+        const target = e.target as HTMLSelectElement;
+        const mapCopy = new Map(this.state.idLevelMap);
 
-        if (infoChanged['delAcc[]']) {
+        mapCopy.set(id, +target.value);
 
-            updatedInfo = (this.state.journalistInfoJson as any).filter((person: any): any =>
-            ((person.id as JSX.Element).props) ? infoChanged['delAcc[]'].indexOf((person.id as JSX.Element).props.value.toString()) === -1 : true);
-        }
-
-        this.setJournalistInfo(updatedInfo);
+        this.setState({
+            idLevelMap: mapCopy
+        });
     }
 
-    setJournalistInfo(journalistInfoJson: [TablePerson]) {
+    onDelete(e: Event) {
 
-        // converts data to arrays so can be put into table
-        const journalistInfoArr: [TablePerson][] = journalistInfoJson.map(json => {
+        const target = e.target as HTMLInputElement;
 
-            let arr: [TablePerson] = [] as any;
-            for (const key in json) {
-                arr.push(json[key])
+        this.setState({
+            usersToDelete:  this.state.usersToDelete.slice().concat(target.value)
+        })
+    }
+
+    onSubmit(e: Event) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const data: {level: number; ids: string[]}[] = [];
+
+        Array.from(this.state.idLevelMap as Map<string, number>).forEach(mapping => {
+
+            const [id, level] = mapping;
+
+            const indexOfLevel = data.findIndex(elt => elt.level === level);
+
+            if (indexOfLevel !== -1) {
+                data[indexOfLevel].ids.push(id);
             }
-            return arr;
+            else {
+                data[data.length] = {
+                    level,
+                    ids: [id]
+                }
+            }
         });
 
-        this.setState({journalistInfoArr: journalistInfoArr as any as [TablePerson], journalistInfoJson});
+        this.props.userUpdate({
+            variables: {
+                data
+            }
+        })
     }
 
     render() {
@@ -204,26 +249,25 @@ class JournalistTable extends React.Component<{}, State> {
               children={
                 <div>
                     {this.renderSortingOptions()}
-                     <FormContainer
-                        action="/api/userGroup"
-                        method={['put', 'delete']} // since delete and put are in the same form, asking to check each input separately
-                        onSubmit={this.updateInfo as any}
-                        children={
-                          <div>
+                    <form onSubmit={this.onSubmit as any}>
+                        <div>
                             <Table
-                            headings={tableHeadings}
-                            rows={this.state.journalistInfoArr}
+                                headings={tableHeadings}
+                                rows={this.state.journalistInfoArr}
                             />
                             {loggedInElts.map(input => input)}
-                          </div>}
-
-                    />
-
+                        </div>
+                    </form>
                 </div>}
-
             />
         );
     }
 }
 
-export default JournalistTable;
+const JournalistTableTableWithData = compose(
+    graphql(UserQuery),
+    graphql(UserUpdate, {name: 'userUpdate'}),
+)(JournalistTable as any);
+
+
+export default JournalistTableTableWithData;

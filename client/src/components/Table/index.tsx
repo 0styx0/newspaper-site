@@ -4,7 +4,7 @@ import './index.css';
 
 interface Props {
     headings: Array<Element | JSX.Element | string>;
-    rows: Array<any>;
+    rows: any[][];
 };
 
 
