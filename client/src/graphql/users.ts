@@ -15,7 +15,7 @@ const UserQuery = gql`
     }
 `;
 
-const UserUpdate= gql`
+const UserUpdate = gql`
     mutation updateUsers($data: [IdLevelList]) {
         updateUsers(data: $data) {
             id
@@ -25,7 +25,16 @@ const UserUpdate= gql`
     }
 `;
 
+const UserDelete = gql`
+    mutation deleteUsers($ids: [ID]) {
+        deleteUsers(ids: $ids) {
+            id
+        }
+    }
+`;
+
 export {
     UserQuery,
-    UserUpdate
+    UserUpdate,
+    UserDelete
 }

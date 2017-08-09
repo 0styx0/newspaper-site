@@ -155,6 +155,27 @@ const Mutation = new GraphQLObjectType({
                     });
                 });
             }
+        },
+        deleteUsers: {
+            type: new GraphQLList(Users),
+            description: 'Delete users',
+            args: {
+                ids: {
+                    type: new GraphQLList(GraphQLID)
+                }
+            },
+            resolve: (_, args: {ids: string[]}) => {
+
+                const sanitized: typeof args = sanitize(args);
+
+                db.models.users.destroy({
+                    where: {
+                        id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                });
+            }
         }
     })
 });

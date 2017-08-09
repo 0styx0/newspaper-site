@@ -7,13 +7,13 @@ import { jwt } from '../../components/jwt';
 import { Link } from 'react-router-dom';
 
 import { compose, graphql } from 'react-apollo';
-import { UserQuery, UserUpdate } from '../../graphql/users';
+import { UserQuery, UserUpdate, UserDelete } from '../../graphql/users';
 
 import './index.css';
 
 interface State {
     journalistInfoArr:  (string | number | JSX.Element)[][]; // should be User[], just as html
-    usersToDelete: Array<string | undefined>;
+    usersToDelete: Set<string | undefined>;
     idLevelMap: Map<string, number>;
 }
 
@@ -34,6 +34,7 @@ interface Props {
         users: User[];
     },
     userUpdate: Function;
+    userDelete: Function;
 }
 
 class JournalistTable extends React.Component<Props, State> {
@@ -45,12 +46,12 @@ class JournalistTable extends React.Component<Props, State> {
         this.sortInfo = this.sortInfo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
-        this.onidLevelMap = this.onidLevelMap.bind(this);
+        this.onIdLevelMap = this.onIdLevelMap.bind(this);
 
 
         this.state = {
             journalistInfoArr: [],
-            usersToDelete: [] as Array<string | undefined>,
+            usersToDelete: new Set(),
             idLevelMap: new Map()
         };
     }
@@ -83,11 +84,12 @@ class JournalistTable extends React.Component<Props, State> {
                                 key={person.id}
                                 type="checkbox"
                                 name="delAcc[]"
+                                value={person.id}
                             />
 
                 level = <select
                           name="lvl[]"
-                          onChange={((e: Event) => this.onidLevelMap(e, person.id)) as any}
+                          onChange={((e: Event) => this.onIdLevelMap(e, person.id)) as any}
                           defaultValue={person.level.toString()}
                         >
                             {Array(jwt.level).fill(null).map((val, idx) =>
@@ -163,7 +165,7 @@ class JournalistTable extends React.Component<Props, State> {
             </div>);
     }
 
-    onidLevelMap(e: Event, id: string) {
+    onIdLevelMap(e: Event, id: string) {
 
         const target = e.target as HTMLSelectElement;
         const mapCopy = new Map(this.state.idLevelMap);
@@ -179,19 +181,20 @@ class JournalistTable extends React.Component<Props, State> {
 
         const target = e.target as HTMLInputElement;
 
+        const copySet = new Set(this.state.usersToDelete);
+
+        target.checked ? copySet.add(target.value) : copySet.delete(target.value);
+
         this.setState({
-            usersToDelete:  this.state.usersToDelete.slice().concat(target.value)
-        })
+            usersToDelete: copySet
+        });
     }
 
-    onSubmit(e: Event) {
-
-        e.preventDefault();
-        e.stopPropagation();
+    formatLevelChanges(idLevelMap: Map<string, number>) {
 
         const data: {level: number; ids: string[]}[] = [];
 
-        Array.from(this.state.idLevelMap as Map<string, number>).forEach(mapping => {
+        Array.from(idLevelMap).forEach(mapping => {
 
             const [id, level] = mapping;
 
@@ -208,11 +211,33 @@ class JournalistTable extends React.Component<Props, State> {
             }
         });
 
-        this.props.userUpdate({
-            variables: {
-                data
-            }
-        })
+        return data;
+    }
+
+    onSubmit(e: Event) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const data = this.formatLevelChanges(this.state.idLevelMap);
+
+        if (data.length > 0) {
+
+            this.props.userUpdate({
+                variables: {
+                    data
+                }
+            });
+        }
+
+        if (this.state.usersToDelete.size > 0) {
+
+            this.props.userDelete({
+                variables: {
+                    ids: [...this.state.usersToDelete]
+                }
+            });
+        }
     }
 
     render() {
@@ -267,6 +292,7 @@ class JournalistTable extends React.Component<Props, State> {
 const JournalistTableTableWithData = compose(
     graphql(UserQuery),
     graphql(UserUpdate, {name: 'userUpdate'}),
+    graphql(UserDelete, {name: 'userDelete'})
 )(JournalistTable as any);
 
 
