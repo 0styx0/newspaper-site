@@ -35,16 +35,19 @@ const Users = new GraphQLObjectType({
         notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
         views: {
             type: GraphQLInt,
-            resolve: (user) => db.models.pageinfo.sum('views', {
+            resolve: (user) => +db.models.pageinfo.sum('views', {
                 where: {authorid: sanitize(user.id)}
-            })
+            }) || 0 // don't know why I need + and || but I do
         },
         articles: {
             type: GraphQLInt,
             resolve: (user) => db.models.pageinfo.count({
                 where: {authorid: sanitize(user.id)}
             })
-
+        },
+        profileLink: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: user => user.email.split('@')[0]
         }
 
         /* // PRIVATE types. Putting them here just to complete the db table

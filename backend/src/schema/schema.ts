@@ -1,13 +1,14 @@
 import {
 //   graphql,
   GraphQLSchema,
-//   GraphQLNonNull,
+  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
   GraphQLID,
   GraphQLBoolean,
-  GraphQLList
+  GraphQLList,
+  GraphQLInputObjectType
 } from 'graphql';
 
 import {
@@ -112,9 +113,51 @@ const Mutation = new GraphQLObjectType({
 
                 return Object.assign(maxIssueRow.dataValues, args); // optimistic that update worked
             }
+        },
+        updateUsers: {
+            type: new GraphQLList(Users),
+            description: 'Modify user data',
+            args: {
+                data: {
+                    type: new GraphQLList(
+                        new GraphQLInputObjectType({
+                            name: 'IdLevelList',
+                            description: 'Format: {ids: string[]; level: number}[]',
+                            // description: 'Format: {id: string[]; level: number}[]',
+                            fields: {
+                                ids: {
+                                    type: new GraphQLNonNull(new GraphQLList(GraphQLID))
+                                },
+                                level: {
+                                    type: new GraphQLNonNull(GraphQLInt)
+                                }
+                            }
+                        })
+                    )
+                }
+            },
+            resolve: (_, args: {data: {ids: string[]; level: number}[]}) => {
+
+                const sanitized: typeof args = sanitize(args);
+
+                sanitized.data.forEach(level => {
+
+                    db.models.users.update(
+                        {
+                            level: level.level
+                        },
+                        {
+                        where: {
+                            id: {
+                                $in: level.ids
+                            }
+                        }
+                    });
+                });
+            }
         }
     })
-})
+});
 
 export default new GraphQLSchema({
   query: Query,
