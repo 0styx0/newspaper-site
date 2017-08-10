@@ -81,23 +81,22 @@ describe('<JournalistTable>', () => {
          * Finds JournalistTable and remounts it with fresh props
          * Also finds the `select` element that is being tested
          */
-        beforeEach(() => {
-
-            wrapper = setup()
+        function setupSelect() {
+            wrapper = setup();
 
             sortingSelect = wrapper.find('#sortingContainer select');
             component = wrapper.find(JournalistTable).node;
 
             component.componentWillReceiveProps({data});
-        });
+        }
 
         /**
          * Simulates a change event to sorting select and sets its value to @param value
          */
-        const setSelectValue = (value: string) => {
+        function setSelectValue (value: string) {
 
             sortingSelect.node.value = value;
-            sortingSelect.simulate('change')
+            sortingSelect.simulate('change');
 
             expect(sortingSelect.node.value).toEqual(value);
         }
@@ -105,38 +104,66 @@ describe('<JournalistTable>', () => {
         /**
          * When the `option` to be sorted is a number, for example, 'level'
          */
-        const testNumberSorting = (option: string, sortingIdices: Object) => {
+        function testNumberSorting(option: string, sortingIdices: Object) {
 
             setSelectValue(option);
 
             const expected = data.users.
-                                 sort((a, b) => a[option] - b[option])
+                                 sort((a, b) => +a[option] - +b[option])
                                  .map(user => user[option]);
 
             expect(component.state.userInfo.map((user: User) => user[sortingIdices[option]])).toEqual(expected)
         }
 
+        beforeEach(setupSelect);
+
+
         describe('when logged in', () => {
 
-            localStorageMock.setItem('jwt', JSON.stringify([,{level: 2}]))
+            const sortingIdices = {
+                lastName: 0,
+                level: 1,
+                articles: 2,
+                views: 3
+            };
 
-            it('sorts by level correctly (even when some levels are `select`s)', () => {
+            it('and level 1, can sort by level (regular number)', () => {
 
+                localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
+                setupSelect();
 
+                setSelectValue('level');
+                testNumberSorting('level', sortingIdices);
+            });
+
+            it('and above level 1, can sort by level (mixed `select` and number)', () => {
+
+                localStorageMock.setItem('jwt', JSON.stringify([,{level: 2}]));
+                setupSelect();
+
+                const expected = data.users.
+                                 sort((a, b) => a.level - b.level)
+                                 .map(user => user.level);
+
+                expect(component.state.userInfo.map((user: User) =>
+
+                    user[sortingIdices.level].props ?
+                     +user[sortingIdices.level].props.defaultValue :
+                     user[sortingIdices.level])
+
+                ).toEqual(expected);
             });
         });
 
         describe('when not logged in (and no access to level)', () => {
 
-            localStorageMock.clear();
+            beforeAll(() => localStorageMock.removeItem('jwt'));
 
             const sortingIdices = {
                 lastName: 0,
                 articles: 1,
                 views: 2
             };
-
-            // it('can sort by level', () => testNumberSorting('level'));
 
             it('can sort by lastName', () => {
 
@@ -146,9 +173,9 @@ describe('<JournalistTable>', () => {
                                 .users
                                 .sort((a, b) => a.lastName.localeCompare(b.lastName))
                                 .map(user =>
-                                `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`
+                                  `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`
                                 );
-                
+
                 expect(component.state.userInfo.map((user: User) =>
                 user[sortingIdices.lastName].props.children)
                 ).toEqual(expected);
