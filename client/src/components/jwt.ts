@@ -7,16 +7,16 @@ interface jwt {
 
 let jwt: jwt = {
     id: '',
-    level: 1,
+    level: Math.random(),
     email: ''
 };
 
-async function setJWT() {
+async function setJWT(jwt: jwt) {
 
     jwt = {
-        level: 1,
-        id: '',
-        email: ''
+        level: jwt.level || 1,
+        id: jwt.id,
+        email: jwt.email
     };
     return jwt;
 }

@@ -3,8 +3,10 @@ import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-import { jwt } from '../../components/jwt';
+// import { jwt } from '../../components/jwt';
 import { Link } from 'react-router-dom';
+
+import twoDimensionalSorter from '../../helpers/twoDimensionalSorter';
 
 import { compose, graphql } from 'react-apollo';
 import { UserQuery, UserUpdate, UserDelete } from '../../graphql/users';
@@ -12,12 +14,12 @@ import { UserQuery, UserUpdate, UserDelete } from '../../graphql/users';
 import './index.css';
 
 interface State {
-    journalistInfoArr:  (string | number | JSX.Element)[][]; // should be User[], just as html
+    userInfo:  (string | number | JSX.Element)[][]; // should be User[], just as html
     usersToDelete: Set<string | undefined>;
     idLevelMap: Map<string, number>;
 }
 
-interface User {
+export interface User {
     articles: number;
     views: number;
     level: number;
@@ -37,10 +39,22 @@ interface Props {
     userDelete: Function;
 }
 
-class JournalistTable extends React.Component<Props, State> {
+/**
+ * Creates a table with info about users in it
+ *
+ * Anyone can see users' name (along with link to profile), number of articles, and total views that person has
+ *
+ * Logged in users can also see users' levels
+ *
+ * Logged in users with a level greater than one in the table can also modify that user's level and delete account
+ */
+export class JournalistTable extends React.Component<Props, State> {
+
+    private jwt = window.localStorage.getItem('jwt') ?
+                    JSON.parse(window.localStorage.getItem('jwt') as string)[1] :
+                    {level: 0};
 
     constructor() {
-
         super();
 
         this.sortInfo = this.sortInfo.bind(this);
@@ -50,23 +64,37 @@ class JournalistTable extends React.Component<Props, State> {
 
 
         this.state = {
-            journalistInfoArr: [],
+            userInfo: [],
             usersToDelete: new Set(),
             idLevelMap: new Map()
         };
     }
 
-    componentDidUpdate() {
+    /**
+     * If data is loaded, sets state.userInfo to result of {@see this.formatDataForTable}
+     */
+    componentWillReceiveProps(props: Props) {
 
-        if (this.props.data.loading || this.state.journalistInfoArr!.length > 0) {
+        if (props.data.loading || this.state.userInfo!.length > 0) {
             return;
         }
 
         this.setState({
-            journalistInfoArr: this.formatDataForTable(this.props.data.users)
+            userInfo: this.formatDataForTable(props.data.users)
         });
     }
 
+    /**
+     * Transforms raw {User[]} data to jsx
+     *
+     * name becomes link to user's profile
+     *
+     * if current user's level is greater than user in table:
+     *   * level becomes a `select` element with options 1 - current user's level
+     *   * a `input[type=checkbox, value=user.id]` is created to enabled deletion of account
+     *
+     * @return 2d array of [profileLink, level, articles, views]
+     */
     formatDataForTable(userData: User[]) {
 
         return userData.map((person: User) => {
@@ -77,7 +105,7 @@ class JournalistTable extends React.Component<Props, State> {
             let deleteBox: JSX.Element | string = "N/A";
             let level: JSX.Element | number = person.level;
 
-            if (person.level < jwt.level) {
+            if (person.level < this.jwt.level) {
 
                 deleteBox = <input
                                 onChange={this.onDelete as any}
@@ -92,7 +120,7 @@ class JournalistTable extends React.Component<Props, State> {
                           onChange={((e: Event) => this.onIdLevelMap(e, person.id)) as any}
                           defaultValue={person.level.toString()}
                         >
-                            {Array(jwt.level).fill(null).map((val, idx) =>
+                            {Array(this.jwt.level).fill(null).map((val, idx) =>
                                 // fill with levels until and including current user's level
                                 <option key={idx} value={idx + 1}>{idx + 1}</option>
                             )}
@@ -101,31 +129,33 @@ class JournalistTable extends React.Component<Props, State> {
 
             let info: (number | string | JSX.Element)[] = [
                 profileLink,
-                level,
                 person.articles,
                 person.views
             ];
 
-            return jwt.level < 2 ? info : info.concat(deleteBox);
+            switch(this.jwt.level) {
+                case 3:
+                case 2:
+                    info.push(deleteBox)
+                case 1:
+                    info.splice(1, 0, level)
+                default:
+                    return info;
+            }
         });
     }
 
     /**
-     * Handler for select elt generate in this.renderSortingOptions
-     * Sorts the table by parameter given (the selected option)
+     * Sorts by target.value
      */
     sortInfo(event: Event) {
 
         const sortBy = (event.target as HTMLSelectElement).value;
 
-        const userData = this.props.data.users.slice();
-
-        const sortedData = userData.sort((a: User, b: User) =>
-          // the .slice checks if data is a string or not
-          a[sortBy].slice ? a[sortBy].localeCompare(b[sortBy]) : a[sortBy] - b[sortBy]);
+        const sortedData = twoDimensionalSorter(this.props.data.users.slice(), sortBy) as User[];
 
         this.setState({
-            journalistInfoArr: this.formatDataForTable(sortedData)
+            userInfo: this.formatDataForTable(sortedData)
         });
     }
 
@@ -146,7 +176,7 @@ class JournalistTable extends React.Component<Props, State> {
             }
         ];
 
-        if (jwt.level) {
+        if (this.jwt.level) {
             sortingOptions.splice(1, 0, {
                 view: 'Level',
                 value: 'level'
@@ -165,6 +195,12 @@ class JournalistTable extends React.Component<Props, State> {
             </div>);
     }
 
+    /**
+     * @param e - {htmlInputEvent} whose target.value is a number
+     * @param id - id of user
+     *
+     * Adds an mapping of id -> e.target.value to this.state.idLevelMap
+     */
     onIdLevelMap(e: Event, id: string) {
 
         const target = e.target as HTMLSelectElement;
@@ -177,6 +213,11 @@ class JournalistTable extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * Adds input value to {@see this.state.usersToDelete} if input is checked, else removes the value
+     *
+     * @param {htmlInputEvent} - event from html checkbox
+     */
     onDelete(e: Event) {
 
         const target = e.target as HTMLInputElement;
@@ -190,7 +231,24 @@ class JournalistTable extends React.Component<Props, State> {
         });
     }
 
-    formatLevelChanges(idLevelMap: Map<string, number>) {
+    /**
+     * @param idLevelMap - map of id to level
+     *
+     * @return object where level => [ids that mapped to that level]
+     *
+     * @example convertMapToArrayOfJSON(new Map([['123', 1], ['456', 2], ['789', 1])) =>
+     * [
+     *   {
+     *     level: 1
+     *     ids: ['123', '789']
+     *   },
+     *   {
+     *     level: 2,
+     *     ids: ['456']
+     *   }
+     * ]
+     */
+    convertMapToArrayOfJSON(idLevelMap: Map<string, number>) {
 
         const data: {level: number; ids: string[]}[] = [];
 
@@ -214,12 +272,15 @@ class JournalistTable extends React.Component<Props, State> {
         return data;
     }
 
+    /**
+     * Sends data to server, if there's data to be sent from this.state usersToDelete and/or idLevelMap
+     */
     onSubmit(e: Event) {
 
         e.preventDefault();
         e.stopPropagation();
 
-        const data = this.formatLevelChanges(this.state.idLevelMap);
+        const data = this.convertMapToArrayOfJSON(this.state.idLevelMap);
 
         if (data.length > 0) {
 
@@ -246,11 +307,11 @@ class JournalistTable extends React.Component<Props, State> {
         let loggedInElts: JSX.Element[] = [];
 
 
-        if (jwt.level) {
+        if (this.jwt.level) {
             tableHeadings.splice(1, 0, 'Level');
         }
 
-        if (jwt.level > 1) {
+        if (this.jwt.level > 1) {
             tableHeadings.push(<span className="danger">Delete</span>);
 
             loggedInElts = [
@@ -278,7 +339,7 @@ class JournalistTable extends React.Component<Props, State> {
                         <div>
                             <Table
                                 headings={tableHeadings}
-                                rows={this.state.journalistInfoArr}
+                                rows={this.state.userInfo}
                             />
                             {loggedInElts.map(input => input)}
                         </div>

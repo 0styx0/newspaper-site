@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<JournalistTable> should render correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Journalists
+  </h1>
+  <div>
+    <div
+      id="sortingContainer"
+    >
+      <label>
+        Sort By: 
+        <select
+          onChange={[Function]}
+        >
+          <option
+            value="lastName"
+          >
+            Last Name
+          </option>
+          <option
+            value="articles"
+          >
+            Articles
+          </option>
+          <option
+            value="views"
+          >
+            Views
+          </option>
+        </select>
+        
+        
+      </label>
+    </div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                 
+                Name
+              </th>
+              <th>
+                 
+                Articles
+              </th>
+              <th>
+                 
+                Views
+              </th>
+            </tr>
+          </thead>
+          <tbody />
+        </table>
+      </div>
+    </form>
+  </div>
+</section>
+`;
