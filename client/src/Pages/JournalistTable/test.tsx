@@ -70,6 +70,40 @@ describe('<JournalistTable>', () => {
         expect(tree).toMatchSnapshot();
     });
 
+    it(`should show users' levels only when one is logged in`, () => {
+
+       localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
+
+        const tree = renderer.create(
+            <JournalistTable
+                data={data}
+                userUpdate={(test: any) => true}
+                userDelete={(test: any) => false}
+            />
+        ).toJSON();
+
+        expect(tree).toMatchSnapshot();
+    });
+
+    it(`should let higher level users modify lower level users' level and delete their account`, () => {
+
+        // 2 tests since lvl 2 can only modify lvl 1, and change them to lvl 2,
+        // while lvl 3 can delete/modify lvl 2 until lvl 3
+        [2, 3].forEach(level => {
+
+            localStorageMock.setItem('jwt', JSON.stringify([,{level}]));
+
+                const tree = renderer.create(
+                    <JournalistTable
+                        data={data}
+                        userUpdate={(test: any) => true}
+                        userDelete={(test: any) => false}
+                    />
+                ).toJSON();
+
+                expect(tree).toMatchSnapshot();
+        });
+    });
     describe('sorting `select`', () => {
 
 

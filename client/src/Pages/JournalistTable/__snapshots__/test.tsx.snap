@@ -1,5 +1,207 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<JournalistTable> should let higher level users modify lower level users' level and delete their account 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Journalists
+  </h1>
+  <div>
+    <div
+      id="sortingContainer"
+    >
+      <label>
+        Sort By: 
+        <select
+          onChange={[Function]}
+        >
+          <option
+            value="lastName"
+          >
+            Last Name
+          </option>
+          <option
+            value="level"
+          >
+            Level
+          </option>
+          <option
+            value="articles"
+          >
+            Articles
+          </option>
+          <option
+            value="views"
+          >
+            Views
+          </option>
+        </select>
+        
+        
+      </label>
+    </div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                 
+                Name
+              </th>
+              <th>
+                 
+                Level
+              </th>
+              <th>
+                 
+                Articles
+              </th>
+              <th>
+                 
+                Views
+              </th>
+              <th>
+                 
+                <span
+                  className="danger"
+                >
+                  Delete
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody />
+        </table>
+        <label>
+          Password: 
+          <input
+            name="password"
+            required={true}
+            type="password"
+          />
+          <span
+            className="danger"
+          >
+            *
+          </span>
+          
+        </label>
+        <input
+          name=""
+          type="submit"
+          value="Modify Users"
+        />
+      </div>
+    </form>
+  </div>
+</section>
+`;
+
+exports[`<JournalistTable> should let higher level users modify lower level users' level and delete their account 2`] = `
+<section
+  className="container "
+>
+  <h1>
+    Journalists
+  </h1>
+  <div>
+    <div
+      id="sortingContainer"
+    >
+      <label>
+        Sort By: 
+        <select
+          onChange={[Function]}
+        >
+          <option
+            value="lastName"
+          >
+            Last Name
+          </option>
+          <option
+            value="level"
+          >
+            Level
+          </option>
+          <option
+            value="articles"
+          >
+            Articles
+          </option>
+          <option
+            value="views"
+          >
+            Views
+          </option>
+        </select>
+        
+        
+      </label>
+    </div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                 
+                Name
+              </th>
+              <th>
+                 
+                Level
+              </th>
+              <th>
+                 
+                Articles
+              </th>
+              <th>
+                 
+                Views
+              </th>
+              <th>
+                 
+                <span
+                  className="danger"
+                >
+                  Delete
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody />
+        </table>
+        <label>
+          Password: 
+          <input
+            name="password"
+            required={true}
+            type="password"
+          />
+          <span
+            className="danger"
+          >
+            *
+          </span>
+          
+        </label>
+        <input
+          name=""
+          type="submit"
+          value="Modify Users"
+        />
+      </div>
+    </form>
+  </div>
+</section>
+`;
+
 exports[`<JournalistTable> should render correctly 1`] = `
 <section
   className="container "
@@ -46,6 +248,80 @@ exports[`<JournalistTable> should render correctly 1`] = `
               <th>
                  
                 Name
+              </th>
+              <th>
+                 
+                Articles
+              </th>
+              <th>
+                 
+                Views
+              </th>
+            </tr>
+          </thead>
+          <tbody />
+        </table>
+      </div>
+    </form>
+  </div>
+</section>
+`;
+
+exports[`<JournalistTable> should show users' levels only when one is logged in 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Journalists
+  </h1>
+  <div>
+    <div
+      id="sortingContainer"
+    >
+      <label>
+        Sort By: 
+        <select
+          onChange={[Function]}
+        >
+          <option
+            value="lastName"
+          >
+            Last Name
+          </option>
+          <option
+            value="level"
+          >
+            Level
+          </option>
+          <option
+            value="articles"
+          >
+            Articles
+          </option>
+          <option
+            value="views"
+          >
+            Views
+          </option>
+        </select>
+        
+        
+      </label>
+    </div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                 
+                Name
+              </th>
+              <th>
+                 
+                Level
               </th>
               <th>
                  
