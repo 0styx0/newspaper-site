@@ -11,7 +11,7 @@ let jwt: jwt = {
     email: ''
 };
 
-async function setJWT(jwt: jwt) {
+async function setJWT() {
 
     jwt = {
         level: jwt.level || 1,
