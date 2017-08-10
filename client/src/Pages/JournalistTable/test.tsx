@@ -115,8 +115,37 @@ describe('<JournalistTable>', () => {
             expect(component.state.userInfo.map((user: User) => user[sortingIdices[option]])).toEqual(expected)
         }
 
-        beforeEach(setupSelect);
+        /**
+         * Tests that will run in multiple descriptions
+         *
+         *  *   lastName
+         *  *   articles
+         *  *   views
+         */
+        function testSortByNameArticlesViews(sortingIdices: {lastName: number; articles: number; views: number}) {
 
+            it('can sort by lastName', () => {
+
+                setSelectValue('lastName');
+
+                const expected = data
+                                .users
+                                .sort((a, b) => a.lastName.localeCompare(b.lastName))
+                                .map(user =>
+                                  `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`
+                                );
+
+                expect(component.state.userInfo.map((user: User) =>
+                user[sortingIdices.lastName].props.children)
+                ).toEqual(expected);
+            });
+
+            it('can sort by articles', () => testNumberSorting('articles', sortingIdices));
+
+            it('can sort by views', () => testNumberSorting('views', sortingIdices));
+        }
+
+        beforeEach(setupSelect);
 
         describe('when logged in', () => {
 
@@ -153,6 +182,8 @@ describe('<JournalistTable>', () => {
 
                 ).toEqual(expected);
             });
+
+            testSortByNameArticlesViews(sortingIdices);
         });
 
         describe('when not logged in (and no access to level)', () => {
@@ -165,25 +196,7 @@ describe('<JournalistTable>', () => {
                 views: 2
             };
 
-            it('can sort by lastName', () => {
-
-                setSelectValue('lastName');
-
-                const expected = data
-                                .users
-                                .sort((a, b) => a.lastName.localeCompare(b.lastName))
-                                .map(user =>
-                                  `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`
-                                );
-
-                expect(component.state.userInfo.map((user: User) =>
-                user[sortingIdices.lastName].props.children)
-                ).toEqual(expected);
-            });
-
-            it('can sort by articles', () => testNumberSorting('articles', sortingIdices));
-
-            it('can sort by views', () => testNumberSorting('views', sortingIdices));
+            testSortByNameArticlesViews(sortingIdices);
         });
     });
 });
