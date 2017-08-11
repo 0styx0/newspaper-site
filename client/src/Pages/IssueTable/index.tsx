@@ -44,39 +44,73 @@ class IssueTable extends React.Component<Props, State> {
         this.state = {
             issueInfo: [],
             privateIssue: {}
-        }
+        };
     }
 
-    componentDidUpdate() {
+    /**
+     * When graphql gets data from @see graphql/issues,
+     * this turns it into 2d array of what will be table rows and saves it to state.issueInfo
+     *
+     * If current user is an admin, enables editing of most recent, unpublished issue @see this.allowEditsOfLastIssue
+     */
+    componentWillReceiveProps(props: Props) {
 
-        if (this.props.data.loading || this.state.issueInfo!.length > 0) {
+        if (!props.data.issues || this.state.issueInfo!.length > 0) {
             return;
         }
 
         const admin = jwt.level > 2;
 
-        const dataArr = this.props.data.issues.map((issue: Issue) => [
+        let dataArr = props.data.issues.map((issue: Issue) => [
                  issue.num,
-                 (admin && !issue.public) ?
-                     <input
-                       type="text"
-                       name="name"
-                       onChange={this.changeIssueInfo as any}
-                       defaultValue={issue.name}
-                     />
-                   : <Link to={'/issue/'+issue.num}>{issue.name}</Link>,
+                 <Link key={issue.num} to={`/issue/${issue.num}`}>{issue.name}</Link>,
                  issue.views,
-                 (admin && !issue.public) ?
-                                      <select name="public" onChange={this.changeIssueInfo as any}>
-                                        <option value={0}>No</option>
-                                        <option value={1}>Yes</option>
-                                      </select>
-                                    : issue.datePublished
+                 issue.datePublished
         ]);
+
+
+        const lastIssue = props.data.issues[props.data.issues.length - 1];
+
+        if (!lastIssue.public && admin) {
+
+            dataArr = this.allowEditsOfLastIssue(dataArr, lastIssue);
+        }
 
         this.setState({issueInfo: dataArr});
     }
 
+    /**
+     * @param dataArr - {Array<number, name, views, datePublished>[]}
+     *
+     * @return dataArr, but with last row's name and dataPublished replaced with `input` and `select` respectively
+     */
+    allowEditsOfLastIssue(dataArr: (number | JSX.Element | Date)[][], lastIssue: Issue) {
+
+            dataArr[dataArr.length - 1][1] = (
+                         <input
+                            type="text"
+                            name="name"
+                            onChange={this.changeIssueInfo as any}
+                            defaultValue={lastIssue.name}
+                         />
+                     );
+            dataArr[dataArr.length - 1][3] = (
+                        <select name="public" onChange={this.changeIssueInfo as any}>
+                            <option value={0}>No</option>
+                            <option value={1}>Yes</option>
+                        </select>
+                    );
+
+            return dataArr;
+    }
+
+    /**
+     * @param e {HTMLInputElement event}
+     *
+     * Adds input's value to this.state.privateIssue[input.name]
+     *
+     * @example if event.target = <input name="public" value="1" />, then after this, this.state.privateIssue.public = 1
+     */
     changeIssueInfo(e: Event) {
 
         const target = e.target as HTMLInputElement;
@@ -89,6 +123,11 @@ class IssueTable extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * @param e {HTMLFormElement event}
+     *
+     * Sends this.state.privateIssue data to server (so name and/or public status can be saved to db)
+     */
     onSubmit(e: Event) {
 
         e.stopPropagation();
@@ -99,7 +138,7 @@ class IssueTable extends React.Component<Props, State> {
                 name: this.state.privateIssue.name,
                 public: !!this.state.privateIssue.public
             }
-        })
+        });
     }
 
     render() {
@@ -108,7 +147,7 @@ class IssueTable extends React.Component<Props, State> {
             return null;
         }
 
-        const headings = ["Issue", "Name", "Views", "Published"];
+        const headings = ['Issue', 'Name', 'Views', 'Published'];
 
         return (
             <Container
@@ -119,15 +158,14 @@ class IssueTable extends React.Component<Props, State> {
                             <Table headings={headings} rows={this.state.issueInfo} />
                             {jwt.level > 2 ?
                                 <div>
-                                    <Input label="Password" props={{type: "password", name: "password"}}/>
+                                    <Input label="Password" props={{type: 'password', name: 'password'}}/>
                                     <input type="submit" />
                                 </div>
-                            : ""}
+                            : ''}
                         </div>
-                     </form>
-                    }
+                     </form>}
             />
-        )
+        );
     }
 }
 
