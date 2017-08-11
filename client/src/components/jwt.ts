@@ -7,7 +7,7 @@ interface jwt {
 
 let jwt: jwt = {
     id: '',
-    level: Math.random(),
+    level: 1,
     email: ''
 };
 

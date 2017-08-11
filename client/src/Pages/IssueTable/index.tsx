@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Table from '../../components/Table';
 import Container from '../../components/Container';
-import {jwt} from '../../components/jwt';
+// import { jwt } from '../../components/jwt';
 import Input from '../../components/Form/Input';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { IssueQuery, IssueUpdate } from '../../graphql/issues';
 
-jwt.level = 3;
 
 interface State {
     issueInfo?: Array<number | Date | JSX.Element>[]; // convert some of Issue to html
@@ -35,6 +34,10 @@ interface Props {
 
 class IssueTable extends React.Component<Props, State> {
 
+    private jwt = window.localStorage.getItem('jwt') ?
+                JSON.parse(window.localStorage.getItem('jwt') as string)[1] :
+                {level: 0};
+
     constructor() {
         super();
 
@@ -59,7 +62,7 @@ class IssueTable extends React.Component<Props, State> {
             return;
         }
 
-        const admin = jwt.level > 2;
+        const admin = this.jwt.level > 2;
 
         let dataArr = props.data.issues.map((issue: Issue) => [
                  issue.num,
@@ -69,7 +72,7 @@ class IssueTable extends React.Component<Props, State> {
         ]);
 
 
-        const lastIssue = props.data.issues[props.data.issues.length - 1];
+        const lastIssue = props.data.issues[0];
 
         if (!lastIssue.public && admin) {
 
@@ -82,11 +85,11 @@ class IssueTable extends React.Component<Props, State> {
     /**
      * @param dataArr - {Array<number, name, views, datePublished>[]}
      *
-     * @return dataArr, but with last row's name and dataPublished replaced with `input` and `select` respectively
+     * @return dataArr, but with first row's name and dataPublished replaced with `input` and `select` respectively
      */
     allowEditsOfLastIssue(dataArr: (number | JSX.Element | Date)[][], lastIssue: Issue) {
 
-            dataArr[dataArr.length - 1][1] = (
+            dataArr[0][1] = (
                          <input
                             type="text"
                             name="name"
@@ -94,7 +97,7 @@ class IssueTable extends React.Component<Props, State> {
                             defaultValue={lastIssue.name}
                          />
                      );
-            dataArr[dataArr.length - 1][3] = (
+            dataArr[0][3] = (
                         <select name="public" onChange={this.changeIssueInfo as any}>
                             <option value={0}>No</option>
                             <option value={1}>Yes</option>
@@ -156,7 +159,7 @@ class IssueTable extends React.Component<Props, State> {
                     <form onSubmit={this.onSubmit as any}>
                         <div>
                             <Table headings={headings} rows={this.state.issueInfo} />
-                            {jwt.level > 2 ?
+                            {this.jwt.level > 2 ?
                                 <div>
                                     <Input label="Password" props={{type: 'password', name: 'password'}}/>
                                     <input type="submit" />
