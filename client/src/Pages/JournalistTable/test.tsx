@@ -3,7 +3,7 @@ import { JournalistTable, User } from './';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../../__tests__/localstorage.mock';
+import localStorageMock from '../../__tests__/localstorage.mock';
 
 /** @author https://stackoverflow.com/a/1527820/6140527 */
 const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -243,7 +243,7 @@ describe('<JournalistTable>', () => {
 
         describe('level `select`', () => {
 
-            let wrapper: {};
+            let wrapper: any;
             let component: any;
             const userLevel = 3;
             let levelSelect: any;
@@ -316,7 +316,7 @@ describe('<JournalistTable>', () => {
 
                 const expectedLevel = 2;
 
-                const wrapper = setup({
+                const wrapper: any = setup({
                     // this will execute after everything else
                     userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
 
@@ -333,7 +333,7 @@ describe('<JournalistTable>', () => {
                 // using data.users since already there. No difference if would generate another array of random users
                 const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
 
-                component.state.idLevelMap = new Map<string, number>(idLevelMap);
+                component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
 
                 wrapper.find('form').first().simulate('submit');
             });
@@ -343,7 +343,7 @@ describe('<JournalistTable>', () => {
                 const expectedLevels = [2, 3];
                 let idLevelMap: Array<string | number>[];
 
-                const wrapper = setup({
+                const wrapper: any = setup({
                     // this will execute after everything else
                     userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
 
@@ -372,7 +372,7 @@ describe('<JournalistTable>', () => {
                 // using data.users since already there. No difference if would generate another array of random users
                 idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[randomNum(0, 1)]]);
 
-                component.state.idLevelMap = new Map<string, number>(idLevelMap);
+                component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
 
                 wrapper.find('form').first().simulate('submit');
             });
@@ -413,7 +413,7 @@ describe('<JournalistTable>', () => {
 
         describe('delete `checkbox`', () => {
 
-            let deleteCheckbox: HTMLInputElement;
+            let deleteCheckbox: any;
 
             beforeEach(() => {
 
@@ -480,7 +480,7 @@ describe('<JournalistTable>', () => {
                     }
                 });
 
-               const deleteCheckboxes = wrapper.find('input[name="delAcc"]');
+               const deleteCheckboxes: any = wrapper.find('input[name="delAcc"]');
 
                for (let i = 0; i < deleteCheckboxes.length; i++) {
                     deleteCheckboxes.at(i).nodes[0].checked = true;
