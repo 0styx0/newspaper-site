@@ -5,20 +5,21 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../../__tests__/localstorage.mock';
 
+/** @author https://stackoverflow.com/a/1527820/6140527 */
+const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 /**
  * @param amount - how many users to return
  *
  * @return array of randomly generated Users
  */
-function generateUsers(amount: number) {
+function generateUsers(amount: number, requiredLevels: number[] = []) {
 
     let users: User[] = [];
 
     /** @author https://stackoverflow.com/a/38622545/6140527 */
     const randomStr = (length: number) => (Math.random() + 1).toString(36).substr(2, length);
 
-    /** @author https://stackoverflow.com/a/1527820/6140527 */
-    const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     while (amount > 0) {
 
@@ -27,7 +28,7 @@ function generateUsers(amount: number) {
                 articles: randomNum(0, 20),
                 views: randomNum(0, 10),
                 level: randomNum(1, 3), // lvls can only be 1-3
-                id: randomStr(randomNum(0, 7)),
+                id: randomStr(randomNum(1, 7)),
                 profileLink: randomStr(5),
                 firstName: randomStr(randomNum(5, 50)),
                 middleName: randomStr(randomNum(0, 2)), // 2 is the most a middleName can be
