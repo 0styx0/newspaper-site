@@ -75,7 +75,7 @@ export class JournalistTable extends React.Component<Props, State> {
      */
     componentWillReceiveProps(props: Props) {
 
-        if (props.data.loading || this.state.userInfo!.length > 0) {
+        if (!props.data.users || this.state.userInfo!.length > 0) {
             return;
         }
 
@@ -116,7 +116,7 @@ export class JournalistTable extends React.Component<Props, State> {
                             />
 
                 level = <select
-                          name="lvl[]"
+                          name="lvl"
                           onChange={((e: Event) => this.onIdLevelMap(e, person.id)) as any}
                           defaultValue={person.level.toString()}
                         >
