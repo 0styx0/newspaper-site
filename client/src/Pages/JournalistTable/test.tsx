@@ -47,14 +47,14 @@ const data = {
 };
 
 // for some reason beforeEvery doesn't work
-function setup() {
+function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {}) {
 
     return mount(
         <MemoryRouter>
             <JournalistTable
                 data={data}
-                userUpdate={(test: any) => true}
-                userDelete={(test: any) => false}
+                userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : (test: any) => true}
+                userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : (test: any) => false}
             />
         </MemoryRouter>
     );
@@ -302,6 +302,75 @@ describe('<JournalistTable>', () => {
                                  .map((user: User) => [user.id, updatedLevel]);
 
             expect(mappings).toEqual(usersToMatch);
+        });
+    });
+
+    describe('when sending level data to server', () => {
+
+
+        it('formats data correctly when multiple ids, 1 level', () => {
+
+            const expectedLevel = 2;
+
+            const wrapper = setup({
+                // this will execute after everything else
+                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+
+                    const expectedIds = data.users.reduce(
+                                            (accumulator: string[], user: User) => accumulator.concat(user.id), []
+                                        );
+
+                    expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                }
+            });
+
+            const component = wrapper.find(JournalistTable).node;
+
+            // using data.users since already there. No difference if would generate another array of random users
+            const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
+
+            component.state.idLevelMap = new Map<string, number>(idLevelMap);
+
+            wrapper.find('form').first().simulate('submit');
+        });
+
+        it('formats data correctly when multiple ids, multiple levels', () => {
+
+            const expectedLevels = [2, 3];
+            let idLevelMap: Array<string | number>[];
+
+            const wrapper = setup({
+                // this will execute after everything else
+                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+
+                    let expectedFormat = [] as {level: number, ids: string[]}[];
+
+                    expectedLevels.forEach(level => expectedFormat.push({level, ids: []}))
+
+                    idLevelMap.forEach(mapping => {
+
+                        const place = expectedFormat.find(elt => elt.level == mapping[1]);
+
+                        place && place.ids.push(mapping[0] as string)
+                    });
+
+                    expectedFormat = expectedFormat.filter(elt => !!elt.ids.length);
+
+                    const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
+
+                    // the sorting is so test doesn't fail because indices don't match
+                    expect(mapping.variables.data.sort(sortBy)).toEqual(expectedFormat.sort(sortBy));
+                }
+            });
+
+            const component = wrapper.find(JournalistTable).node;
+
+            // using data.users since already there. No difference if would generate another array of random users
+            idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[randomNum(0, 1)]]);
+
+            component.state.idLevelMap = new Map<string, number>(idLevelMap);
+
+            wrapper.find('form').first().simulate('submit');
         });
     });
 });
