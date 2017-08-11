@@ -244,6 +244,7 @@ describe('<JournalistTable>', () => {
         let wrapper: any;
         let component: any;
         const userLevel = 3;
+        let levelSelect: any;
 
         beforeEach(() => {
 
@@ -253,16 +254,18 @@ describe('<JournalistTable>', () => {
             component = wrapper.find(JournalistTable).node;
 
             component.componentWillReceiveProps({data});
+
+            levelSelect = wrapper.find('select[name="lvl"]');
         });
 
         it(`adds map of id => level when a user's level is changed`, () => {
 
-            const levelSelect = wrapper.find('select[name="lvl"]').first();
+            const firstLevelSelect = levelSelect.first();
             const updatedLevel = 2;
 
             const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
 
-            levelSelect.simulate('change', {target: { value: updatedLevel }});
+            firstLevelSelect.simulate('change', {target: { value: updatedLevel }});
 
             const mappings = [...component.state.idLevelMap];
 
@@ -271,14 +274,14 @@ describe('<JournalistTable>', () => {
 
         it('cannot add 1 user to 2 different levels', () => {
 
-            const levelSelect = wrapper.find('select[name="lvl"]').first();
+            const firstLevelSelect = levelSelect.first();
             const initialNewLevel = 2;
             const updatedLevel = userLevel;
 
             const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
 
-            levelSelect.simulate('change', {target: { value: initialNewLevel }});
-            levelSelect.simulate('change', {target: { value: updatedLevel}});
+            firstLevelSelect.simulate('change', {target: { value: initialNewLevel }});
+            firstLevelSelect.simulate('change', {target: { value: updatedLevel}});
 
             const mappings = [...component.state.idLevelMap];
 
@@ -287,7 +290,6 @@ describe('<JournalistTable>', () => {
 
         it('can add multiple users to the same level', () => {
 
-            const levelSelect = wrapper.find('select[name="lvl"]');
             const updatedLevel = 2;
 
             for (let i = 0; i < levelSelect.length; i++) {
