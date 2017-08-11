@@ -239,220 +239,255 @@ describe('<JournalistTable>', () => {
         });
     });
 
-    describe('level `select`', () => {
+    describe(`changing users' levels`, () => {
 
-        let wrapper: any;
-        let component: any;
-        const userLevel = 3;
-        let levelSelect: any;
+        describe('level `select`', () => {
 
-        beforeEach(() => {
+            let wrapper: {};
+            let component: any;
+            const userLevel = 3;
+            let levelSelect: any;
 
-            localStorageMock.setItem('jwt', JSON.stringify([,{level: userLevel}]));
+            beforeEach(() => {
 
-            wrapper = setup();
-            component = wrapper.find(JournalistTable).node;
+                localStorageMock.setItem('jwt', JSON.stringify([,{level: userLevel}]));
 
-            component.componentWillReceiveProps({data});
+                wrapper = setup();
+                component = wrapper.find(JournalistTable).node;
 
-            levelSelect = wrapper.find('select[name="lvl"]');
+                component.componentWillReceiveProps({data});
+
+                levelSelect = wrapper.find('select[name="lvl"]');
+            });
+
+            it(`adds map of id => level when a user's level is changed`, () => {
+
+                const firstLevelSelect = levelSelect.first();
+                const updatedLevel = 2;
+
+                const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+
+                firstLevelSelect.simulate('change', {target: { value: updatedLevel }});
+
+                const mappings = [...component.state.idLevelMap];
+
+                expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
+            });
+
+            it('cannot add 1 user to 2 different levels', () => {
+
+                const firstLevelSelect = levelSelect.first();
+                const initialNewLevel = 2;
+                const updatedLevel = userLevel;
+
+                const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+
+                firstLevelSelect.simulate('change', {target: { value: initialNewLevel }});
+                firstLevelSelect.simulate('change', {target: { value: updatedLevel}});
+
+                const mappings = [...component.state.idLevelMap];
+
+                expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
+            });
+
+            it('can add multiple users to the same level', () => {
+
+                const updatedLevel = 2;
+
+                for (let i = 0; i < levelSelect.length; i++) {
+
+                    levelSelect.at(i).simulate('change', {target: { value: updatedLevel }});
+                }
+
+                const mappings = [...component.state.idLevelMap];
+
+                const usersToMatch = component.props.data.users
+                                    .filter((user: User) => user.level < userLevel)
+                                    .map((user: User) => [user.id, updatedLevel]);
+
+                expect(mappings).toEqual(usersToMatch);
+            });
         });
 
-        it(`adds map of id => level when a user's level is changed`, () => {
+        describe('when sending level data to server', () => {
 
-            const firstLevelSelect = levelSelect.first();
-            const updatedLevel = 2;
 
-            const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+            it('formats data correctly when multiple ids, 1 level', () => {
 
-            firstLevelSelect.simulate('change', {target: { value: updatedLevel }});
+                const expectedLevel = 2;
 
-            const mappings = [...component.state.idLevelMap];
+                const wrapper = setup({
+                    // this will execute after everything else
+                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
 
-            expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
-        });
+                        const expectedIds = data.users.reduce(
+                                                (accumulator: string[], user: User) => accumulator.concat(user.id), []
+                                            );
 
-        it('cannot add 1 user to 2 different levels', () => {
+                        expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                    }
+                });
 
-            const firstLevelSelect = levelSelect.first();
-            const initialNewLevel = 2;
-            const updatedLevel = userLevel;
+                const component = wrapper.find(JournalistTable).node;
 
-            const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+                // using data.users since already there. No difference if would generate another array of random users
+                const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
 
-            firstLevelSelect.simulate('change', {target: { value: initialNewLevel }});
-            firstLevelSelect.simulate('change', {target: { value: updatedLevel}});
+                component.state.idLevelMap = new Map<string, number>(idLevelMap);
 
-            const mappings = [...component.state.idLevelMap];
+                wrapper.find('form').first().simulate('submit');
+            });
 
-            expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
-        });
+            it('formats data correctly when multiple ids, multiple levels', () => {
 
-        it('can add multiple users to the same level', () => {
+                const expectedLevels = [2, 3];
+                let idLevelMap: Array<string | number>[];
 
-            const updatedLevel = 2;
+                const wrapper = setup({
+                    // this will execute after everything else
+                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
 
-            for (let i = 0; i < levelSelect.length; i++) {
+                        let expectedFormat = [] as {level: number, ids: string[]}[];
 
-                levelSelect.at(i).simulate('change', {target: { value: updatedLevel }});
-            }
+                        expectedLevels.forEach(level => expectedFormat.push({level, ids: []}))
 
-            const mappings = [...component.state.idLevelMap];
+                        idLevelMap.forEach(mapping => {
 
-            const usersToMatch = component.props.data.users
-                                 .filter((user: User) => user.level < userLevel)
-                                 .map((user: User) => [user.id, updatedLevel]);
+                            const place = expectedFormat.find(elt => elt.level == mapping[1]);
 
-            expect(mappings).toEqual(usersToMatch);
+                            place && place.ids.push(mapping[0] as string)
+                        });
+
+                        expectedFormat = expectedFormat.filter(elt => !!elt.ids.length);
+
+                        const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
+
+                        // the sorting is so test doesn't fail because indices don't match
+                        expect(mapping.variables.data.sort(sortBy)).toEqual(expectedFormat.sort(sortBy));
+                    }
+                });
+
+                const component = wrapper.find(JournalistTable).node;
+
+                // using data.users since already there. No difference if would generate another array of random users
+                idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[randomNum(0, 1)]]);
+
+                component.state.idLevelMap = new Map<string, number>(idLevelMap);
+
+                wrapper.find('form').first().simulate('submit');
+            });
+
+            // integration between toggling `select` and that same data being sent to server
+            it('sends the same data to server that was put into state when level `select`s were changed', () => {
+
+                const expectedLevel = 2;
+
+                const wrapper = setup({
+                    // this will execute after everything else
+                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+
+                        const expectedIds = data.users.reduce(
+                                                (accumulator: string[], user: User) => accumulator.concat(user.id), []
+                                            );
+
+                        expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                    }
+                });
+
+                const levelSelect = wrapper.find('select[name="lvl"]');
+
+                for (let i = 0; i < levelSelect.length; i++) {
+
+                    levelSelect.at(i).simulate('change', {target: { value: expectedLevel }});
+                }
+
+                wrapper.find('form').first().simulate('submit');
+            });
         });
     });
 
-    describe('when sending level data to server', () => {
-
-
-        it('formats data correctly when multiple ids, 1 level', () => {
-
-            const expectedLevel = 2;
-
-            const wrapper = setup({
-                // this will execute after everything else
-                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
-
-                    const expectedIds = data.users.reduce(
-                                            (accumulator: string[], user: User) => accumulator.concat(user.id), []
-                                        );
-
-                    expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
-                }
-            });
-
-            const component = wrapper.find(JournalistTable).node;
-
-            // using data.users since already there. No difference if would generate another array of random users
-            const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
-
-            component.state.idLevelMap = new Map<string, number>(idLevelMap);
-
-            wrapper.find('form').first().simulate('submit');
-        });
-
-        it('formats data correctly when multiple ids, multiple levels', () => {
-
-            const expectedLevels = [2, 3];
-            let idLevelMap: Array<string | number>[];
-
-            const wrapper = setup({
-                // this will execute after everything else
-                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
-
-                    let expectedFormat = [] as {level: number, ids: string[]}[];
-
-                    expectedLevels.forEach(level => expectedFormat.push({level, ids: []}))
-
-                    idLevelMap.forEach(mapping => {
-
-                        const place = expectedFormat.find(elt => elt.level == mapping[1]);
-
-                        place && place.ids.push(mapping[0] as string)
-                    });
-
-                    expectedFormat = expectedFormat.filter(elt => !!elt.ids.length);
-
-                    const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
-
-                    // the sorting is so test doesn't fail because indices don't match
-                    expect(mapping.variables.data.sort(sortBy)).toEqual(expectedFormat.sort(sortBy));
-                }
-            });
-
-            const component = wrapper.find(JournalistTable).node;
-
-            // using data.users since already there. No difference if would generate another array of random users
-            idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[randomNum(0, 1)]]);
-
-            component.state.idLevelMap = new Map<string, number>(idLevelMap);
-
-            wrapper.find('form').first().simulate('submit');
-        });
-
-        // integration between toggling `select` and that same data being sent to server
-        it('sends the same data to server that was put into state.idLevelMap when level `select`s were changed', () => {
-
-            const expectedLevel = 2;
-
-            const wrapper = setup({
-                // this will execute after everything else
-                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
-
-                    const expectedIds = data.users.reduce(
-                                            (accumulator: string[], user: User) => accumulator.concat(user.id), []
-                                        );
-
-                    expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
-                }
-            });
-
-            const levelSelect = wrapper.find('select[name="lvl"]');
-
-            for (let i = 0; i < levelSelect.length; i++) {
-
-                levelSelect.at(i).simulate('change', {target: { value: expectedLevel }});
-            }
-
-            wrapper.find('form').first().simulate('submit');
-        });
-    });
-
-    describe('delete `checkbox`', () => {
+    describe('deleting users', () => {
 
         let wrapper: any;
         let component: any;
-        let deleteCheckbox: HTMLInputElement;
 
-        beforeEach(() => {
+        describe('delete `checkbox`', () => {
 
-            localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
+            let deleteCheckbox: HTMLInputElement;
 
-            wrapper = setup();
-            component = wrapper.find(JournalistTable).node;
+            beforeEach(() => {
 
-            component.componentWillReceiveProps({data});
+                localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
 
-            deleteCheckbox = wrapper.find('input[name="delAcc"]')
+                wrapper = setup();
+                component = wrapper.find(JournalistTable).node;
+
+                component.componentWillReceiveProps({data});
+
+                deleteCheckbox = wrapper.find('input[name="delAcc"]')
+            });
+
+            /**
+             * Toggle the first deleteCheckbox
+             *
+             * @return first deleteCheckbox
+             */
+            function toggleTheBox() {
+
+                const firstCheckbox = deleteCheckbox.first();
+                firstCheckbox.nodes[0].checked = !firstCheckbox.nodes[0].checked;
+                firstCheckbox.simulate('change');
+
+                return firstCheckbox;
+            }
+
+            it('adds ids to props.usersToDelete when checked', () => {
+
+                toggleTheBox();
+
+                const expectedUser = component.props.data.users.find((user: User) => user.level < 3);
+
+                expect([...component.state.usersToDelete]).toEqual([expectedUser.id]);
+            });
+
+            it('should remove users from props.usersToDelete if checkbox is unchecked', () => {
+
+                toggleTheBox();
+
+                expect(component.state.usersToDelete.size).toBe(1);
+
+                toggleTheBox();
+
+                expect(component.state.usersToDelete.size).toBe(0);
+            });
         });
 
-        /**
-         * Toggle the first deleteCheckbox
-         *
-         * @return first deleteCheckbox
-         */
-        function toggleTheBox() {
+        describe('when sending delete data to server', () => {
 
-            const firstCheckbox = deleteCheckbox.first();
-            firstCheckbox.nodes[0].checked = !firstCheckbox.nodes[0].checked;
-            firstCheckbox.simulate('change');
+            it('sends the same ids that were put into state.usersToDelete when checkboxes were toggled', () => {
 
-            return firstCheckbox;
-        }
+               const wrapper = setup({
+                    // this will execute after everything else
+                    userUpdate: (mapping: {variables: {ids: string[]}}) => {
 
-        it('adds ids to props.usersToDelete when checked', () => {
+                        const expectedIds = data
+                                            .users
+                                            .reduce(
+                                                (accumulator: string[], user: User) => accumulator.concat(user.id), []
+                                            );
 
-            toggleTheBox();
+                        expect(mapping.variables).toEqual({ids: expectedIds});
+                    }
+                });
 
-            const expectedUser = component.props.data.users.find((user: User) => user.level < 3);
+               const deleteCheckboxes = wrapper.find('input[name="delAcc"]');
 
-            expect([...component.state.usersToDelete]).toEqual([expectedUser.id]);
-        });
+               for (let i = 0; i < deleteCheckboxes.length; i++) {
+                    deleteCheckboxes.at(i).nodes[0].checked = true;
+                }
 
-        it('should remove users from props.usersToDelete if checkbox is unchecked', () => {
-
-            toggleTheBox();
-
-            expect(component.state.usersToDelete.size).toBe(1);
-
-            toggleTheBox();
-
-            expect(component.state.usersToDelete.size).toBe(0);
+               wrapper.find('form').first().simulate('submit');
+            });
         });
     });
 });
