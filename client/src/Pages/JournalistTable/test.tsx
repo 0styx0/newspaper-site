@@ -237,4 +237,70 @@ describe('<JournalistTable>', () => {
             testSortByNameArticlesViews(sortingIdices);
         });
     });
+
+    describe('level `select`', () => {
+
+        let wrapper: any;
+        let component: any;
+        const userLevel = 3;
+
+        beforeEach(() => {
+
+            localStorageMock.setItem('jwt', JSON.stringify([,{level: userLevel}]));
+
+            wrapper = setup();
+            component = wrapper.find(JournalistTable).node;
+
+            component.componentWillReceiveProps({data});
+        });
+
+        it(`adds map of id => level when a user's level is changed`, () => {
+
+            const levelSelect = wrapper.find('select[name="lvl"]').first();
+            const updatedLevel = 2;
+
+            const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+
+            levelSelect.simulate('change', {target: { value: updatedLevel }});
+
+            const mappings = [...component.state.idLevelMap];
+
+            expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
+        });
+
+        it('cannot add 1 user to 2 different levels', () => {
+
+            const levelSelect = wrapper.find('select[name="lvl"]').first();
+            const initialNewLevel = 2;
+            const updatedLevel = userLevel;
+
+            const userToChange = component.props.data.users.find((user: User) => user.level < userLevel);
+
+            levelSelect.simulate('change', {target: { value: initialNewLevel }});
+            levelSelect.simulate('change', {target: { value: updatedLevel}});
+
+            const mappings = [...component.state.idLevelMap];
+
+            expect(mappings).toEqual([[userToChange.id, updatedLevel]]);
+        });
+
+        it('can add multiple users to the same level', () => {
+
+            const levelSelect = wrapper.find('select[name="lvl"]');
+            const updatedLevel = 2;
+
+            for (let i = 0; i < levelSelect.length; i++) {
+
+                levelSelect.at(i).simulate('change', {target: { value: updatedLevel }});
+            }
+
+            const mappings = [...component.state.idLevelMap];
+
+            const usersToMatch = component.props.data.users
+                                 .filter((user: User) => user.level < userLevel)
+                                 .map((user: User) => [user.id, updatedLevel]);
+
+            expect(mappings).toEqual(usersToMatch);
+        });
+    });
 });
