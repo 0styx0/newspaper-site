@@ -375,4 +375,57 @@ describe('<JournalistTable>', () => {
             wrapper.find('form').first().simulate('submit');
         });
     });
+
+    describe('delete `checkbox`', () => {
+
+        let wrapper: any;
+        let component: any;
+        let deleteCheckbox: HTMLInputElement;
+
+        beforeEach(() => {
+
+            localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
+
+            wrapper = setup();
+            component = wrapper.find(JournalistTable).node;
+
+            component.componentWillReceiveProps({data});
+
+            deleteCheckbox = wrapper.find('input[name="delAcc"]')
+        });
+
+        /**
+         * Toggle the first deleteCheckbox
+         *
+         * @return first deleteCheckbox
+         */
+        function toggleTheBox() {
+
+            const firstCheckbox = deleteCheckbox.first();
+            firstCheckbox.nodes[0].checked = !firstCheckbox.nodes[0].checked;
+            firstCheckbox.simulate('change');
+
+            return firstCheckbox;
+        }
+
+        it('adds ids to props.usersToDelete when checked', () => {
+
+            toggleTheBox();
+
+            const expectedUser = component.props.data.users.find((user: User) => user.level < 3);
+
+            expect([...component.state.usersToDelete]).toEqual([expectedUser.id]);
+        });
+
+        it('should remove users from props.usersToDelete if checkbox is unchecked', () => {
+
+            toggleTheBox();
+
+            expect(component.state.usersToDelete.size).toBe(1);
+
+            toggleTheBox();
+
+            expect(component.state.usersToDelete.size).toBe(0);
+        });
+    });
 });

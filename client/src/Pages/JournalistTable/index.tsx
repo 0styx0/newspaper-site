@@ -111,7 +111,7 @@ export class JournalistTable extends React.Component<Props, State> {
                                 onChange={this.onDelete as any}
                                 key={person.id}
                                 type="checkbox"
-                                name="delAcc[]"
+                                name="delAcc"
                                 value={person.id}
                             />
 
