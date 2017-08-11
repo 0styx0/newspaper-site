@@ -374,6 +374,33 @@ describe('<JournalistTable>', () => {
 
             wrapper.find('form').first().simulate('submit');
         });
+
+        // integration between toggling `select` and that same data being sent to server
+        it('sends the same data to server that was put into state.idLevelMap when level `select`s were changed', () => {
+
+            const expectedLevel = 2;
+
+            const wrapper = setup({
+                // this will execute after everything else
+                userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+
+                    const expectedIds = data.users.reduce(
+                                            (accumulator: string[], user: User) => accumulator.concat(user.id), []
+                                        );
+
+                    expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                }
+            });
+
+            const levelSelect = wrapper.find('select[name="lvl"]');
+
+            for (let i = 0; i < levelSelect.length; i++) {
+
+                levelSelect.at(i).simulate('change', {target: { value: expectedLevel }});
+            }
+
+            wrapper.find('form').first().simulate('submit');
+        });
     });
 
     describe('delete `checkbox`', () => {
