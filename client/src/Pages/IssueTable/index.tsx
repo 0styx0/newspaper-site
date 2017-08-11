@@ -16,7 +16,7 @@ interface State {
     };
 }
 
-interface Issue {
+export interface Issue {
     num: number;
     name: string;
     views: number;
@@ -32,7 +32,7 @@ interface Props {
     mutate: Function;
 }
 
-class IssueTable extends React.Component<Props, State> {
+export class IssueTable extends React.Component<Props, State> {
 
     private jwt = window.localStorage.getItem('jwt') ?
                 JSON.parse(window.localStorage.getItem('jwt') as string)[1] :

@@ -3,10 +3,8 @@ import { JournalistTable, User } from './';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../__tests__/localstorage.mock';
-
-/** @author https://stackoverflow.com/a/1527820/6140527 */
-const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+import localStorageMock from '../../tests/localstorage.mock';
+import { generateRandomNum, generateRandomStr } from '../../tests/helpers';
 
 /**
  * @param amount - how many users to return
@@ -17,22 +15,18 @@ function generateUsers(amount: number, requiredLevels: number[] = []) {
 
     let users: User[] = [];
 
-    /** @author https://stackoverflow.com/a/38622545/6140527 */
-    const randomStr = (length: number) => (Math.random() + 1).toString(36).substr(2, length);
-
-
     while (amount > 0) {
 
         // all numbers, except where noted otherwise, are magic numbers
         users.push({
-                articles: randomNum(0, 20),
-                views: randomNum(0, 10),
-                level: randomNum(1, 3), // lvls can only be 1-3
-                id: randomStr(randomNum(1, 7)),
-                profileLink: randomStr(5),
-                firstName: randomStr(randomNum(5, 50)),
-                middleName: randomStr(randomNum(0, 2)), // 2 is the most a middleName can be
-                lastName: randomStr(randomNum(5, 7))
+                articles: generateRandomNum(0, 20),
+                views: generateRandomNum(0, 10),
+                level: generateRandomNum(1, 3), // lvls can only be 1-3
+                id: generateRandomStr(generateRandomNum(1, 7)),
+                profileLink: generateRandomStr(5),
+                firstName: generateRandomStr(generateRandomNum(5, 50)),
+                middleName: generateRandomStr(generateRandomNum(0, 2)), // 2 is the most a middleName can be
+                lastName: generateRandomStr(generateRandomNum(5, 7))
         });
 
         amount--;
@@ -370,7 +364,7 @@ describe('<JournalistTable>', () => {
                 const component = wrapper.find(JournalistTable).node;
 
                 // using data.users since already there. No difference if would generate another array of random users
-                idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[randomNum(0, 1)]]);
+                idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[generateRandomNum(0, 1)]]);
 
                 component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
 
