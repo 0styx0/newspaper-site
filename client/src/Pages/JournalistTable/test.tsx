@@ -5,40 +5,44 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../../__tests__/localstorage.mock';
 
+/**
+ * @param amount - how many users to return
+ *
+ * @return array of randomly generated Users
+ */
+function generateUsers(amount: number) {
+
+    let users: User[] = [];
+
+    /** @author https://stackoverflow.com/a/38622545/6140527 */
+    const randomStr = (length: number) => (Math.random() + 1).toString(36).substr(2, length);
+
+    /** @author https://stackoverflow.com/a/1527820/6140527 */
+    const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    while (amount > 0) {
+
+        // all numbers, except where noted otherwise, are magic numbers
+        users.push({
+                articles: randomNum(0, 20),
+                views: randomNum(0, 10),
+                level: randomNum(1, 3), // lvls can only be 1-3
+                id: randomStr(randomNum(0, 7)),
+                profileLink: randomStr(5),
+                firstName: randomStr(randomNum(5, 50)),
+                middleName: randomStr(randomNum(0, 2)), // 2 is the most a middleName can be
+                lastName: randomStr(randomNum(5, 7))
+        });
+
+        amount--;
+    }
+
+    return users;
+}
+
 const data = {
     loading: false,
-    users: [
-        {
-            articles: 2,
-            views: 5,
-            level: 3,
-            id: 'string',
-            profileLink: 'link',
-            firstName: 'John',
-            middleName: '',
-            lastName: 'Doe'
-        },
-        {
-            articles: 0,
-            views: 3,
-            level: 2,
-            id: 'adfg',
-            profileLink: 'hreg',
-            firstName: 'Bob',
-            middleName: '',
-            lastName: 'Zerg'
-        },
-        {
-            articles: 5,
-            views: 1,
-            level: 1,
-            id: 'qwert',
-            profileLink: 'a',
-            firstName: 'Grok',
-            middleName: 'T',
-            lastName: 'Tre'
-        }
-    ]
+    users: generateUsers(5)
 };
 
 // for some reason beforeEvery doesn't work
@@ -104,8 +108,8 @@ describe('<JournalistTable>', () => {
                 expect(tree).toMatchSnapshot();
         });
     });
-    describe('sorting `select`', () => {
 
+    describe('sorting `select`', () => {
 
         let wrapper: any; // really ReactWrapper
         let sortingSelect: any;
@@ -127,7 +131,7 @@ describe('<JournalistTable>', () => {
         /**
          * Simulates a change event to sorting select and sets its value to @param value
          */
-        function setSelectValue (value: string) {
+        function setSelectValue(value: string) {
 
             sortingSelect.node.value = value;
             sortingSelect.simulate('change');
