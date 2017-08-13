@@ -30,6 +30,9 @@ const Users = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString),
             resolve: (user) => user.l_name
         },
+        fullName: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
         email: {type: new GraphQLNonNull(GraphQLString)},
         level: {type: new GraphQLNonNull(GraphQLInt)},
         notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
@@ -64,7 +67,10 @@ const Articles = new GraphQLObjectType({
     description: 'Articles created by users',
     fields: () => ({
         id: {type: new GraphQLNonNull(GraphQLID)},
-        dateCreated: {type: new GraphQLNonNull(GraphQLString)},
+        dateCreated: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: article => article.created
+        },
         lede: {type: new GraphQLNonNull(GraphQLString)},
         body: {type: new GraphQLNonNull(GraphQLString)},
         url: {type: new GraphQLNonNull(GraphQLString)},
@@ -73,11 +79,23 @@ const Articles = new GraphQLObjectType({
         slideImages: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         issue: {type: new GraphQLNonNull(GraphQLInt)},
         views: {type: new GraphQLNonNull(GraphQLInt)},
-        displayOrder: {type: new GraphQLNonNull(GraphQLInt)},
+        displayOrder: {
+            type: new GraphQLNonNull(GraphQLInt),
+            resolve: article => article.display_order
+        },
+        tags: {
+            type: new GraphQLNonNull(Tags),
+            resolve: (article) => db.models.tags.findOne({
+                where: {art_id: sanitize(article.id)}
+            })
+        },
         authorId: {type: new GraphQLNonNull(GraphQLID)},
         author: {
             type: new GraphQLNonNull(Users),
             resolve: (user) => db.models.users.findById(sanitize(user.authorid))
+        },
+        comments: {
+            type: new GraphQLList(Comments),
         }
     })
 });
@@ -142,11 +160,15 @@ const Tags = new GraphQLObjectType({
        id: {type: new GraphQLNonNull(GraphQLID)},
         artId: {
             type: new GraphQLNonNull(GraphQLID),
-            resolve: (tag) => tag.art_id
+            resolve: tag => tag.art_id
         },
         tag1: {type: new GraphQLNonNull(GraphQLString)},
-        tag2: {type: new GraphQLNonNull(GraphQLString)},
-        tag3: {type: new GraphQLNonNull(GraphQLString)},
+        tag2: {type: GraphQLString},
+        tag3: {type: GraphQLString},
+        all: {
+            type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+            resolve: tags => [tags.tag1, tags.tag2, tags.tag3].filter(tag => !!tag)
+        }
    })
 });
 
