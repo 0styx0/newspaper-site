@@ -81,7 +81,7 @@ const Users = sequelize.define('users', {
     }
 }, {
     getterMethods: {
-        fullName: () => {
+        fullName: function() {
             return `${this.f_name} ${this.m_name ? this.m_name + ' ' : ''}${this.l_name}`;
         }
     },
@@ -236,12 +236,12 @@ const Articles = sequelize.define('pageinfo', {
 }, {
     getterMethods:{
 
-        slideImages: () => {
+        slideImages: function() {
 
             const slideshowImages = this.slide_img;
             return this.img_url.filter((img: string, i: number) => !!+slideshowImages[i]);
         },
-        article: () => {
+        article: function() {
 
             let content = this.lede + this.body;
 
