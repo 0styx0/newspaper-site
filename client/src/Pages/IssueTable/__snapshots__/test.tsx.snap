@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IssueTable> snapshots if admin, get chance to name and/or make unpublished issue published 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Issues
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+               
+              Issue
+            </th>
+            <th>
+               
+              Name
+            </th>
+            <th>
+               
+              Views
+            </th>
+            <th>
+               
+              Published
+            </th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+      <div>
+        <label>
+          Password: 
+          <input
+            name="password"
+            type="password"
+          />
+          
+          
+        </label>
+        <input
+          type="submit"
+        />
+      </div>
+    </div>
+  </form>
+</section>
+`;
+
+exports[`<IssueTable> snapshots if issue already published, nobody can change info 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Issues
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+               
+              Issue
+            </th>
+            <th>
+               
+              Name
+            </th>
+            <th>
+               
+              Views
+            </th>
+            <th>
+               
+              Published
+            </th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+      <div>
+        <label>
+          Password: 
+          <input
+            name="password"
+            type="password"
+          />
+          
+          
+        </label>
+        <input
+          type="submit"
+        />
+      </div>
+    </div>
+  </form>
+</section>
+`;
+
+exports[`<IssueTable> snapshots table is created and not admin (so can't modify anything) 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Issues
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+               
+              Issue
+            </th>
+            <th>
+               
+              Name
+            </th>
+            <th>
+               
+              Views
+            </th>
+            <th>
+               
+              Published
+            </th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+      
+    </div>
+  </form>
+</section>
+`;

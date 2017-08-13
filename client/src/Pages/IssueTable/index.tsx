@@ -9,7 +9,7 @@ import { IssueQuery, IssueUpdate } from '../../graphql/issues';
 
 
 interface State {
-    issueInfo?: Array<number | Date | JSX.Element>[]; // convert some of Issue to html
+    issueInfo?: Array<number | string | JSX.Element>[]; // convert some of Issue to html
     privateIssue: { // admins can change these (until public is true)
         public?: boolean;
         name?: string;
@@ -20,7 +20,7 @@ export interface Issue {
     num: number;
     name: string;
     views: number;
-    datePublished: Date;
+    datePublished: string;
     public: boolean;
 }
 
@@ -32,6 +32,13 @@ interface Props {
     mutate: Function;
 }
 
+/**
+ * Creates a table of issues, in descending order with info of
+ * number, name, datePublished, and views (sum of views of all articles in the issue)
+ *
+ * If user is admin (lvl 3) and issue is not public, user can change issue name and make it public.
+ * In that case, @see IssueTable.allowEditsOfLastIssue for difference in UI
+ */
 export class IssueTable extends React.Component<Props, State> {
 
     private jwt = window.localStorage.getItem('jwt') ?
@@ -87,7 +94,7 @@ export class IssueTable extends React.Component<Props, State> {
      *
      * @return dataArr, but with first row's name and dataPublished replaced with `input` and `select` respectively
      */
-    allowEditsOfLastIssue(dataArr: (number | JSX.Element | Date)[][], lastIssue: Issue) {
+    allowEditsOfLastIssue(dataArr: (number | JSX.Element | string)[][], lastIssue: Issue) {
 
             dataArr[0][1] = (
                          <input
