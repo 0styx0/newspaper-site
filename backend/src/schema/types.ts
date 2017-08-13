@@ -86,13 +86,13 @@ const Articles = new GraphQLObjectType({
         tags: {
             type: new GraphQLNonNull(Tags),
             resolve: (article) => db.models.tags.findOne({
-                where: {art_id: sanitize(article.id)}
+                where: {art_id: article.id}
             })
         },
         authorId: {type: new GraphQLNonNull(GraphQLID)},
         author: {
             type: new GraphQLNonNull(Users),
-            resolve: (user) => db.models.users.findById(sanitize(user.authorid))
+            resolve: async (article, args, { loaders }) => loaders.default.user.load(sanitize(article.authorid))
         },
         comments: {
             type: new GraphQLList(Comments),
@@ -115,7 +115,7 @@ const Issues = new GraphQLObjectType({
             resolve: (issue) => issue.madepub
         },
         articles: {
-            type: new GraphQLNonNull(Articles),
+            type: new GraphQLNonNull(new GraphQLList(Articles)),
             resolve: (issue) => db.models.pageinfo.findAll({
                 where: sanitize({issue: issue.num})
             })
@@ -127,6 +127,10 @@ const Issues = new GraphQLObjectType({
                     issue: sanitize(issue.num)
                 }
             })
+        },
+        max: {
+            type: new GraphQLNonNull(GraphQLInt),
+            resolve: async (issue) => db.models.issues.max('num')
         }
     })
 });
@@ -148,7 +152,7 @@ const Comments = new GraphQLObjectType({
         dateCreated: {type: new GraphQLNonNull(GraphQLString)},
         author: {
             type: new GraphQLNonNull(Users),
-            resolve: (user) => db.models.users.findById(sanitize(user.authorid))
+            resolve: (comment, args, { loaders }) => loaders.default.user.load(sanitize(comment.authorid))
         }
     })
 });

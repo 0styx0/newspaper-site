@@ -45,7 +45,10 @@ const Query = new GraphQLObjectType({
                url: {type: GraphQLString},
                issue: {type: GraphQLInt},
            },
-           resolve: (_, args) => db.models.pageinfo.findAll({where: sanitize(args)})
+           resolve: (_, args) => {
+
+               return db.models.pageinfo.findAll({where: sanitize(args)})
+           }
        },
        issues: {
            type: new GraphQLList(Issues),

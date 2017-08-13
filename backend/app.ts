@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
-
+import * as loaders from './src/schema/dataloaders';
 import Schema from './src/schema/schema';
 import * as GraphHTTP from 'express-graphql';
 
@@ -37,11 +37,13 @@ app.use(function(req, res, next) {
 
 // app.use('/api', require('./routes/'));
 
+import db from './src/db/models';
 
 app.use('/graphql', GraphHTTP({
   schema: Schema,
   pretty: true,
-  graphiql: true
+  graphiql: true,
+  context: { loaders }
 }));
 
 // error handler
