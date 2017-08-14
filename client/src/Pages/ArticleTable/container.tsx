@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { ArticleQuery } from '../../graphql/articles';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 
 import ArticleTable from './';
-
-interface State {
-    issue: number;
-}
 
 interface Article {
     tags: {
@@ -37,6 +33,14 @@ interface Props {
             }
         )[]; // will never be more length than 1
     };
+    client: {
+        query: Function;
+    };
+}
+
+interface State {
+    issue: Issue;
+    articles: Article[];
 }
 
 class ArticleTableContainer extends React.Component<Props, State> {
@@ -45,9 +49,12 @@ class ArticleTableContainer extends React.Component<Props, State> {
         super();
 
         this.putData = this.putData.bind(this);
+        this.convertPropsToState = this.convertPropsToState.bind(this);
+
 
         this.state = {
-            issue: +window.location.pathname.split('/').slice(-1)[0]
+            issue: {} as Issue,
+            articles: []
         };
     }
 
@@ -64,35 +71,52 @@ class ArticleTableContainer extends React.Component<Props, State> {
 
         num = (isNaN(lastPath) || ((!isNaN(+num!)) && num)) ? num : lastPath;
 
+        this.props.client.query({
+            query: ArticleQuery,
+                variables: {
+                    issue: num
+            }
+        }).then((data: Props) => {
+            this.convertPropsToState(data);
+        });
+
         window.history.pushState(
             {},
             `Issue ${num}`, isNaN(lastPath) ?
               `modifyArticles/${num}` :
-              num + ''
+             num + ''
         );
     }
 
-    componentWillMount() {
+    componentWillReceiveProps(newProps: Props) {
+        this.convertPropsToState(newProps);
     }
 
-    componentWillReceiveProps(newProps: any) {
+    convertPropsToState(props: Props) {
 
-        window.setTimeout(() => this.setState({
-            issue: newProps.data.issues[0].num
-        }), 100);
+        let {max, num} = props.data.issues![0];
+
+        this.setState({
+            issue: {
+                max,
+                num
+            },
+            articles: props.data.issues![0].articles
+        });
+
     }
 
     render() {
 
-        if (!this.props.data.issues) {
+        if (this.state.articles.length < 1) {
             return null;
         }
 
         return (
             <ArticleTable
-                articles={this.props.data.issues![0].articles!}
-                key={this.state.issue}
-                issue={this.props.data.issues![0]}
+                articles={this.state.articles}
+                key={this.state.issue.num}
+                issue={this.state.issue}
                 update={(e: Event) => this.putData(+(e.target as HTMLInputElement).value)}
             />
         );
@@ -109,4 +133,4 @@ const ArticleTableContainerWithData = compose(
     }),
 )(ArticleTableContainer as any);
 
-export default ArticleTableContainerWithData;
+export default withApollo(ArticleTableContainerWithData);

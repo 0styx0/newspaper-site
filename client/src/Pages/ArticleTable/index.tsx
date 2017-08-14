@@ -58,7 +58,7 @@ export default function ArticleTable(props: Props) {
                         props={{
                         type: 'number',
                         min: 1,
-                        value: props.issue.num || '',
+                        defaultValue: props.issue.num || '',
                         max: props.issue.max,
                         onChange: props.update
                         }}
@@ -95,7 +95,7 @@ function createArticleTableRows(props: Props) {
                 (
                     <Link
                       key={article.url}
-                      to={`/issue/${props.issue}/story/${article.url}`}
+                      to={`/issue/${props.issue.num}/story/${article.url}`}
                     >
                       {decodeURIComponent(article.url)}
                     </Link>
