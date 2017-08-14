@@ -4,7 +4,6 @@ import Container from '../../components/Container';
 import Table from '../../components/Table';
 import Input from '../../components/Form/Input';
 import TagSelect from '../../components/TagSelect';
-import SecretTwinsContainer from '../../components/Form/SecretTwins/container';
 import { Link } from 'react-router-dom';
 
 
@@ -29,7 +28,10 @@ interface Props {
         max: number;
     };
     articles: Article[];
-    update: Function;
+    onUpdate: Function;
+    onSubmit: Function;
+    onChange: (e: any, article: Article) => void;
+    onDelete: Function;
 }
 
 export default function ArticleTable(props: Props) {
@@ -60,10 +62,10 @@ export default function ArticleTable(props: Props) {
                         min: 1,
                         defaultValue: props.issue.num || '',
                         max: props.issue.max,
-                        onChange: props.update
+                        onChange: props.onUpdate
                         }}
                     />
-                    <form>
+                    <form onSubmit={props.onSubmit as any}>
                         <Table headings={headings} rows={rows}/>
 
                         <Input
@@ -110,41 +112,34 @@ function createArticleTableRows(props: Props) {
                     </Link>
                 ),
                 (
-                    <SecretTwinsContainer
-                      key={article.tags.toString()}
-                      original={
-                          <TagSelect
-                            props={{
-                                name: 'tag[]',
-                                multiple: true,
-                                defaultValue: article.tags.all,
-                                required: true,
-                            }}
-                          />
-                      }
-                      props={{
-                          name: 'artId[]',
-                          value: article.id
-                      }}
+                    <TagSelect
+                        props={{
+                            name: 'tags',
+                            onChange: (e: any) => props.onChange(e, article),
+                            multiple: true,
+                            defaultValue: article.tags.all,
+                            required: true,
+                        }}
                     />
                 ),
                 article.views,
                 // Same info in SecretTwins as right above so that artId is submitted no matter what
                 (
-                    <SecretTwinsContainer
-                      original={
-                          <input
-                            type="number"
-                            name="order[]"
-                            defaultValue={`${article.displayOrder}`}
-                          />}
-                      props={{
-                          name: 'artId[]',
-                          value: article.id
-                      }}
+                    <input
+                      type="number"
+                      onChange={(e) => props.onChange(e, article) as any}
+                      name="displayOrder"
+                      defaultValue={`${article.displayOrder}`}
                     />
                 ),
-                <input key={article.id} type="checkbox" name="delArt[]" value={article.id} />
+                (
+                    <input
+                      key={article.id}
+                      onChange={props.onDelete as any}
+                      type="checkbox"
+                      value={article.id}
+                    />
+                )
             ];
     });
 }
