@@ -189,8 +189,49 @@ const Mutation = new GraphQLObjectType({
                     }
                 });
             }
+        },
+        updateArticles: {
+            type: new GraphQLList(Articles),
+            description: 'Modify article data',
+            args: {
+                data: {
+                    type: new GraphQLList(
+                        new GraphQLInputObjectType({
+                            name: 'IdDisplayTagList',
+                            description: 'Format: {id: string, tags?: string[], displayOrder?: number}',
+                            fields: {
+                                id: {
+                                    type: new GraphQLNonNull(GraphQLString)
+                                },
+                                tags: {
+                                    type: new GraphQLList(GraphQLString)
+                                },
+                                displayOrder: {
+                                    type: GraphQLInt
+                                }
+                            }
+                        })
+                    )
+                }
+            },
+            resolve: (_, args: {data: {id: string, tags?: string[], displayOrder?: number}[]}) => {
+
+                const sanitized: typeof args = sanitize(args);
+
+                sanitized.data.forEach(article => {
+
+                    db.models.pageinfo.update(
+                        sanitized,
+                        {
+                            where: {
+                                id: article.id
+                            }
+                        }
+                    );
+                });
+            }
         }
-    })
+    }),
 });
 
 export default new GraphQLSchema({
