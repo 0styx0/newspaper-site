@@ -63,6 +63,10 @@ const Query = new GraphQLObjectType({
                 let limit = args.limit;
                 delete args.limit;
 
+                if ('num' in args && !args.num) {
+                    delete args.num;
+                }
+
                 if ('public' in args) {
                     args.ispublic = +args.public;
                     delete args.public;

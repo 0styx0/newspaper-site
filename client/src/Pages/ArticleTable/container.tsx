@@ -1,106 +1,112 @@
 import * as React from 'react';
-import fetchFromApi from '../../helpers/fetchFromApi';
+import { ArticleQuery } from '../../graphql/articles';
+import { compose, graphql } from 'react-apollo';
 
 import ArticleTable from './';
 
 interface State {
-    articles: Array<{
-        tags: string;
-        url: string;
-        author_username: string;
-        author_name: string;
-        art_id: number;
-        display_order: number;
-        created: string;
-        views: number
-    }>; // TODO: actually fill this out
-    issueInfo: {
-        num: number;
-        max: number;
-    };
-    history: {
-        articles: Array<{
-            tags: string;
-            url: string;
-            author_username: string;
-            author_name: string;
-            art_id: number;
-            display_order: number;
-            created: string;
-            views: number
-        }>;
-        issueInfo: {
-            num: number;
-            max: number;
-        }
-    }[];
+    issue: number;
 }
 
-export default class ArticleTableContainer extends React.Component<{}, State> {
+interface Article {
+    tags: {
+            all: string;
+        };
+    url: string;
+    id: string;
+    displayOrder: number;
+    dateCreated: string;
+    views: number;
+    author: {
+        fullName: string;
+        profileLink: string;
+    };
+}
+
+interface Issue {
+    num: number;
+    max: number;
+}
+
+interface Props {
+    data: {
+        loading: boolean;
+        issues?: (
+            Issue & {
+                articles: Article[]
+            }
+        )[]; // will never be more length than 1
+    };
+}
+
+class ArticleTableContainer extends React.Component<Props, State> {
 
     constructor() {
         super();
 
         this.putData = this.putData.bind(this);
+
+        this.state = {
+            issue: +window.location.pathname.split('/').slice(-1)[0]
+        };
     }
 
+    /**
+     * @param num - articles from what issue to get. If null, get latest
+     *
+     * Gets data needed for table (@see State.Article interface) and changes page url to modifyArticles/currentIssue
+     *
+     * Depends on window.location.pathname
+     */
     async putData(num: number | null = null) {
 
-        const lastPath = +window.location.pathname.split("/").slice(-1);
+        const lastPath = +window.location.pathname.split('/').slice(-1)[0];
 
         num = (isNaN(lastPath) || ((!isNaN(+num!)) && num)) ? num : lastPath;
 
-
-        // use cached results (don't load new info)
-        if (num && this.state.history[num]) {
-            this.setState({
-                articles: this.state.history[num].articles,
-                issueInfo: this.state.history[num].issueInfo
-            });
-
-            window.history.pushState({}, `Issue ${num}`, `${num}`);
-        }
-        else {
-
-            const data = await this.getData(num);
-            const json = await data.json();
-
-            window.history.pushState({}, `Issue ${num}`, isNaN(lastPath) ? "modifyArticles/"+json[2].num : json[2].num);
-
-            this.setArticleInfo(json);
-        }
+        window.history.pushState(
+            {},
+            `Issue ${num}`, isNaN(lastPath) ?
+              `modifyArticles/${num}` :
+              num + ''
+        );
     }
 
     componentWillMount() {
-
-        this.putData(null);
     }
 
-    async getData(num: number | null) {
+    componentWillReceiveProps(newProps: any) {
 
-         return await fetchFromApi(`articleGroup?articlesFor=${num}`);
-
-    }
-
-
-    setArticleInfo(data: State) {
-
-        const history = [...this.state.history];
-        history[data[2].num] = {articles: data[0], issueInfo: data[2]};
-
-        this.setState({
-            articles: data[0].length ? data[0] :  null,
-            issueInfo: data[2],
-            history
-        });
+        window.setTimeout(() => this.setState({
+            issue: newProps.data.issues[0].num
+        }), 100);
     }
 
     render() {
 
-            return <ArticleTable
-                     articles={this.state.articles}
-                     issue={this.state.issueInfo}
-                     update={(e: Event) => this.putData(+(e.target as HTMLInputElement).value)}
-                   />
+        if (!this.props.data.issues) {
+            return null;
+        }
+
+        return (
+            <ArticleTable
+                articles={this.props.data.issues![0].articles!}
+                key={this.state.issue}
+                issue={this.props.data.issues![0]}
+                update={(e: Event) => this.putData(+(e.target as HTMLInputElement).value)}
+            />
+        );
     }
 }
+
+const ArticleTableContainerWithData = compose(
+    graphql(ArticleQuery, {
+        options: {
+            variables: {
+                issue: +window.location.pathname.split('/').slice(-1)[0]
+            }
+        }
+    }),
+)(ArticleTableContainer as any);
+
+export default ArticleTableContainerWithData;
