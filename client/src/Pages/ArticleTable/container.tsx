@@ -106,6 +106,10 @@ class ArticleTableContainer extends React.Component<Props, State> {
 
     convertPropsToState(props: Props) {
 
+        if (!props.data.issues) {
+            return;
+        }
+
         let {max, num} = props.data.issues![0];
 
         this.setState({
