@@ -246,6 +246,43 @@ const Mutation = new GraphQLObjectType({
                     return rows[i].update(article);
                 });
             }
+        },
+        deleteArticles: {
+            type: new GraphQLList(Articles),
+            description: 'Delete articles',
+            args: {
+                ids: {
+                    type: new GraphQLList(GraphQLID)
+                }
+            },
+            resolve: async (_, args: {ids: string[]}) => {
+
+                const sanitized: typeof args = sanitize(args);
+
+                await db.models.comments.destroy({
+                    where: {
+                        art_id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                });
+
+                await db.models.tags.destroy({
+                    where: {
+                        art_id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                });
+
+                await db.models.pageinfo.destroy({
+                    where: {
+                        id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                });
+            }
         }
     }),
 });

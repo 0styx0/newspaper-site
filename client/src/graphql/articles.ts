@@ -38,7 +38,18 @@ const ArticleUpdate = gql`
     }
 `;
 
+const ArticleDelete = gql`
+
+    mutation deleteArticles($ids: [ID]) {
+        deleteArticles(ids: $ids) {
+            id
+        }
+    }
+
+`;
+
 export {
     ArticleQuery,
-    ArticleUpdate
+    ArticleUpdate,
+    ArticleDelete
 };

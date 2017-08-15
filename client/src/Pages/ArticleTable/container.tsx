@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArticleQuery, ArticleUpdate } from '../../graphql/articles';
+import { ArticleQuery, ArticleUpdate, ArticleDelete } from '../../graphql/articles';
 import { compose, graphql, withApollo } from 'react-apollo';
 
 import ArticleTable from './';
@@ -37,6 +37,7 @@ interface Props {
         query: Function;
     };
     updateArticle: Function;
+    deleteArticle: Function;
 }
 
 interface State {
@@ -174,33 +175,49 @@ class ArticleTableContainer extends React.Component<Props, State> {
         e.stopPropagation();
         e.preventDefault();
 
-        const { displayOrder, tags } = this.state.updates;
+        // separating update and delete into functions just to show they're separate stuff
+        const submitUpdated = () => {
 
-        let data: {id: string, displayOrder?: number, tags?: string[]}[] = [...displayOrder].map(mapping => ({
+            const { displayOrder, tags } = this.state.updates;
 
-            id: mapping[0],
-            displayOrder: mapping[1]
-        }));
+            let data: {id: string, displayOrder?: number, tags?: string[]}[] = [...displayOrder].map(mapping => ({
 
-        [...tags].forEach(mapping => {
+                id: mapping[0],
+                displayOrder: mapping[1]
+            }));
 
-            const idIdx = data.findIndex(elt => elt.id === mapping[0]);
+            [...tags].forEach(mapping => {
 
-            if (idIdx !== -1) {
-                data[idIdx].tags = mapping[1];
-            } else {
-                data.push({
-                    id: mapping[0],
-                    tags: mapping[1]
-                });
-            }
-        });
+                const idIdx = data.findIndex(elt => elt.id === mapping[0]);
 
-        this.props.updateArticle({
-            variables: {
-                data
-            }
-        });
+                if (idIdx !== -1) {
+                    data[idIdx].tags = mapping[1];
+                } else {
+                    data.push({
+                        id: mapping[0],
+                        tags: mapping[1]
+                    });
+                }
+            });
+
+            this.props.updateArticle({
+                variables: {
+                    data
+                }
+            });
+        };
+
+        const submitDeleted = () => {
+
+            this.props.deleteArticle({
+                variables: {
+                    ids: [...this.state.updates.idsToDelete]
+                }
+            });
+        };
+
+        submitUpdated();
+        submitDeleted();
     }
 
     render() {
@@ -231,7 +248,8 @@ const ArticleTableContainerWithData = compose(
             }
         }
     }),
-    graphql(ArticleUpdate, {name: 'updateArticle'})
+    graphql(ArticleUpdate, {name: 'updateArticle'}),
+    graphql(ArticleDelete, {name: 'deleteArticle'})
 )(ArticleTableContainer as any);
 
 export default withApollo(ArticleTableContainerWithData);
