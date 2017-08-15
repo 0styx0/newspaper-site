@@ -180,6 +180,10 @@ class ArticleTableContainer extends React.Component<Props, State> {
 
             const { displayOrder, tags } = this.state.updates;
 
+            if (displayOrder.size + tags.size < 1) {
+                return;
+            }
+
             let data: {id: string, displayOrder?: number, tags?: string[]}[] = [...displayOrder].map(mapping => ({
 
                 id: mapping[0],
@@ -209,11 +213,14 @@ class ArticleTableContainer extends React.Component<Props, State> {
 
         const submitDeleted = () => {
 
-            this.props.deleteArticle({
-                variables: {
-                    ids: [...this.state.updates.idsToDelete]
-                }
-            });
+            if (this.state.updates.idsToDelete.size > 0) {
+
+                this.props.deleteArticle({
+                    variables: {
+                        ids: [...this.state.updates.idsToDelete]
+                    }
+                });
+            }
         };
 
         submitUpdated();
