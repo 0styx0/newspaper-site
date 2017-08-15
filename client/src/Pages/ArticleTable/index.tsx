@@ -5,28 +5,10 @@ import Table from '../../components/Table';
 import Input from '../../components/Form/Input';
 import TagSelect from '../../components/TagSelect';
 import { Link } from 'react-router-dom';
-
-
-interface Article {
-    tags: {
-        all: string;
-    };
-    url: string;
-    id: string;
-    displayOrder: number;
-    dateCreated: string;
-    views: number;
-    author: {
-        fullName: string;
-        profileLink: string;
-    };
-}
+import { Article, Issue } from './container';
 
 interface Props {
-    issue: {
-        num: number;
-        max: number;
-    };
+    issue: Issue;
     articles: Article[];
     onUpdate: Function;
     onSubmit: Function;
@@ -34,8 +16,15 @@ interface Props {
     onDelete: Function;
 }
 
+/**
+ * @summary Creates table with info about all articles in issue `props.issue.num`
+ *
+ * @description Has an `input` where user can choose which issue to view,
+ * a table with actual info, and `password` and `submit` `input`s to save changes
+ *
+ * @see createArticleTableRows for info about what's in the table
+ */
 export default function ArticleTable(props: Props) {
-
 
     const headings = [
         'Article',
@@ -84,7 +73,13 @@ export default function ArticleTable(props: Props) {
     );
 }
 
-
+/**
+ * Generates table rows in the following format
+ *
+ *  linkToArticle | dateArticleWasCreated | linkToAuthorProfile | `select` where can change tags of article |
+ *  views | displayOrder | `checkbox` for deletion
+ *
+ */
 function createArticleTableRows(props: Props) {
 
     if (!props.articles) {

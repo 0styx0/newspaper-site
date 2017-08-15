@@ -4,7 +4,7 @@ import { compose, graphql, withApollo } from 'react-apollo';
 
 import ArticleTable from './';
 
-interface Article {
+export interface Article {
     tags: {
             all: string;
         };
@@ -19,7 +19,7 @@ interface Article {
     };
 }
 
-interface Issue {
+export interface Issue {
     num: number;
     max: number;
 }
@@ -50,6 +50,12 @@ interface State {
     };
 }
 
+/**
+ * Controller of ArticleTable (@see ./index)
+ *
+ * Gets data from server, then renders ArticleTable with it.
+ * This holds listeners for all events that @see ArticleTable can fire
+ */
 class ArticleTableContainer extends React.Component<Props, State> {
 
     constructor() {
@@ -104,10 +110,16 @@ class ArticleTableContainer extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Seeds state with graphql props
+     */
     componentWillReceiveProps(newProps: Props) {
         this.convertPropsToState(newProps);
     }
 
+    /**
+     * Sets `state.issue` and `state.articles` to values extracted from props
+     */
     convertPropsToState(props: Props) {
 
         if (!props.data.issues) {
@@ -123,25 +135,27 @@ class ArticleTableContainer extends React.Component<Props, State> {
             },
             articles: props.data.issues![0].articles
         });
-
     }
 
     /**
-     * Saves changes to articles so can be submitted later on
+     * Saves changes to state so can be submitted later on. This is for updates only. @see onDelete for deletions
+     *
+     * @uses `e.target.name` as index of state.updates
+     * @uses `e.target.value` as the value
      */
     onChange(e: Event, article: Article) {
 
         e.stopPropagation();
         e.preventDefault();
 
-        const target = e.target as HTMLInputElement | HTMLSelectElement; // or `select`
+        const target = e.target as HTMLInputElement | HTMLSelectElement;
 
         const stateUpdate = this.state.updates;
 
         const modifyMapCopy = new Map(stateUpdate[target.name]);
         let value: number | string[];
 
-        if ((target as HTMLSelectElement).selectedOptions) {
+        if ((target as HTMLSelectElement).selectedOptions) { // for tags
 
             value = Array.from((target as HTMLSelectElement).selectedOptions).map(option => option.value);
         } else {
@@ -157,6 +171,13 @@ class ArticleTableContainer extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * Adds/removes user's id from list of users to delete
+     *
+     * @uses e.target.checked as way to see if should add or remove e.target.value from list
+     *
+     * @param e {HTMLCheckboxEvent}
+     */
     onDelete(e: Event) {
 
         const stateUpdate = this.state.updates;
@@ -170,6 +191,9 @@ class ArticleTableContainer extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * Sends data from `state.updates` to server
+     */
     onSubmit(e: Event) {
 
         e.stopPropagation();
