@@ -34,7 +34,7 @@ interface Props {
     data: {
         loading: boolean;
         users: User[];
-    },
+    };
     userUpdate: Function;
     userDelete: Function;
 }

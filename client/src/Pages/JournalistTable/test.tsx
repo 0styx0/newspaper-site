@@ -11,7 +11,7 @@ import * as casual from 'casual';
  *
  * @return array of randomly generated Users
  */
-casual.define('users', (amount: number, requiredLevels: number[] = []) {
+casual.define('users', function(amount: number, requiredLevels: number[] = []) {
 
     let users: User[] = [];
 
@@ -25,7 +25,7 @@ casual.define('users', (amount: number, requiredLevels: number[] = []) {
                 id: casual.word,
                 profileLink: casual.word,
                 firstName: casual.first_name,
-                middleName: casual.coin_flip ? casual.letter : null, // 2 is the most a middleName can be
+                middleName: casual.coin_flip ? casual.letter : '', // 2 is the most a middleName can be
                 lastName: casual.last_name
         });
 
@@ -37,7 +37,7 @@ casual.define('users', (amount: number, requiredLevels: number[] = []) {
 
 const data = {
     loading: false,
-    users: casual.users(5)
+    users: (casual as any).users(5) as User[]
 };
 
 // for some reason beforeEvery doesn't work
@@ -141,7 +141,7 @@ describe('<JournalistTable>', () => {
 
             setSelectValue(option);
 
-            const expected = data.users.
+            const expected = (data.users as User[]).
                                  sort((a, b) => +a[option] - +b[option])
                                  .map(user => user[option]);
 
@@ -161,8 +161,8 @@ describe('<JournalistTable>', () => {
 
                 setSelectValue('lastName');
 
-                const expected = data
-                                .users
+                const expected = (data
+                                .users as User[])
                                 .sort((a, b) => a.lastName.localeCompare(b.lastName))
                                 .map(user =>
                                   `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`

@@ -40,7 +40,7 @@ casual.define('issues', function generateIssues(amount: number) {
 
 const data = {
     loading: false,
-    issues: casual.issues(5)
+    issues: (casual as any).issues(5) as Issue[]
 };
 
 function setup(mockGraphql: {mutate?: Function} = {}) {

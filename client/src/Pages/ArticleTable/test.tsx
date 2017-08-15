@@ -6,7 +6,8 @@ import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
 
-localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}])); // only lvl 3 can access this page
+
+localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}])); // only lvl 3 can access this page
 
 casual.define('articles', function(amount: number, issue: number) {
 
@@ -41,22 +42,25 @@ casual.define('articles', function(amount: number, issue: number) {
 
 casual.define('data', (issue?: number) => ({
     loading: false,
-    issues: casual.articles(casual.integer(1, 10), issue)
+    issues: (casual as any).articles(casual.integer(1, 10), issue) as (Issue & { articles: Article[] })[]
 }));
+
+const filler = () => (true as any) as any;
 
 function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
-    const filler = () => true;
 
     return mount(
         <MemoryRouter>
             <ArticleTableContainer
-                data={casual.data}
+                data={(casual as any).data as any}
                 client={{
                     query: async (query: {variables: {issue: number}}) => (
-                      {data: casual.data(query.variables.issue)}
+                        {
+                          data: (casual as any).data(query.variables.issue)
+                        }
                     )
-                }}
+                } as any}
                 updateArticle={mockGraphql.updateArticle ? mockGraphql.updateArticle : filler}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : filler}
             />
@@ -79,11 +83,11 @@ describe('<ArticleTableContainer>', () => {
             const tree = renderer.create(
 
                 <ArticleTableContainer
-                    data={casual.data}
-                    updateArticle={() => true}
-                    deleteArticle={() => true}
+                    data={(casual as any).data}
+                    updateArticle={filler}
+                    deleteArticle={filler}
                     client={{
-                        query: () => true
+                        query: filler
                     }}
                 />
             ).toJSON();
@@ -92,4 +96,62 @@ describe('<ArticleTableContainer>', () => {
         });
     });
 
+    describe('displayOrder', () => {
+
+        it('allows user to change displayOrder input', () => {
+
+            //
+        });
+
+        it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
+
+            //
+        });
+
+        it('updates displayOrder when it has been changed more than once to most recent value', () => {
+
+            //
+        });
+    });
+
+    describe('tags', () => {
+
+        it('allows users to change tags select', () => {
+
+            //
+        });
+
+        it('saves updated tags in state.updates.tags, with article id as the key', () => {
+
+            //
+        });
+
+        it('saves the 3 most recently selected tags if user selects more than 3', () => {
+
+            //
+        });
+
+        it('removes tags from array if user de-selects', () => {
+
+            //
+        });
+    });
+
+    describe('delete', () => {
+
+        it('allows users to check the delete checkbox', () => {
+
+            //
+        });
+
+        it('saves ids of articles selected for deletion in state.updates.idsToDelete', () => {
+
+            //
+        });
+
+        it('removes id from state.updates.idsToDelete if user unchecks the box', () => {
+
+            //
+        });
+    });
 });

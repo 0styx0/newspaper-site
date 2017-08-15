@@ -34,9 +34,7 @@ interface Props {
         )[]; // will never be more length than 1
     };
     client: {
-        query: (query: {variables: {issue: number}}) => Promise<Issue & {
-                articles: Article[]
-            }>;
+        query: ( params: { query: typeof ArticleQuery, variables: { issue: number | null; } } ) => Promise<Props>;
     };
     updateArticle: Function;
     deleteArticle: Function;
@@ -97,8 +95,8 @@ export class ArticleTableContainer extends React.Component<Props, State> {
 
         this.props.client.query({
             query: ArticleQuery,
-                variables: {
-                    issue: num
+            variables: {
+                issue: num
             }
         }).then((data: Props) => {
             this.convertPropsToState(data);
