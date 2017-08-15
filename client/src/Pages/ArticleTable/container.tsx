@@ -34,7 +34,9 @@ interface Props {
         )[]; // will never be more length than 1
     };
     client: {
-        query: Function;
+        query: (query: {variables: {issue: number}}) => Promise<Issue & {
+                articles: Article[]
+            }>;
     };
     updateArticle: Function;
     deleteArticle: Function;
@@ -56,7 +58,7 @@ interface State {
  * Gets data from server, then renders ArticleTable with it.
  * This holds listeners for all events that @see ArticleTable can fire
  */
-class ArticleTableContainer extends React.Component<Props, State> {
+export class ArticleTableContainer extends React.Component<Props, State> {
 
     constructor() {
         super();
