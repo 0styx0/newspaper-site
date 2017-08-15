@@ -4,14 +4,14 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
-import { generateRandomNum, generateRandomStr } from '../../tests/helpers';
+import * as casual from 'casual';
 
 /**
  * @param amount - how many users to return
  *
  * @return array of randomly generated Users
  */
-function generateUsers(amount: number, requiredLevels: number[] = []) {
+casual.define('users', (amount: number, requiredLevels: number[] = []) {
 
     let users: User[] = [];
 
@@ -19,25 +19,25 @@ function generateUsers(amount: number, requiredLevels: number[] = []) {
 
         // all numbers, except where noted otherwise, are magic numbers
         users.push({
-                articles: generateRandomNum(0, 20),
-                views: generateRandomNum(0, 10),
-                level: generateRandomNum(1, 3), // lvls can only be 1-3
-                id: generateRandomStr(generateRandomNum(1, 7)),
-                profileLink: generateRandomStr(5),
-                firstName: generateRandomStr(generateRandomNum(5, 50)),
-                middleName: generateRandomStr(generateRandomNum(0, 2)), // 2 is the most a middleName can be
-                lastName: generateRandomStr(generateRandomNum(5, 7))
+                articles: casual.integer(0, 100),
+                views: casual.integer(0, 1000),
+                level: casual.integer(1, 3), // lvls can only be 1-3
+                id: casual.word,
+                profileLink: casual.word,
+                firstName: casual.first_name,
+                middleName: casual.coin_flip ? casual.letter : null, // 2 is the most a middleName can be
+                lastName: casual.last_name
         });
 
         amount--;
     }
 
     return users;
-}
+});
 
 const data = {
     loading: false,
-    users: generateUsers(5)
+    users: casual.users(5)
 };
 
 // for some reason beforeEvery doesn't work
@@ -364,7 +364,7 @@ describe('<JournalistTable>', () => {
                 const component = wrapper.find(JournalistTable).node;
 
                 // using data.users since already there. No difference if would generate another array of random users
-                idLevelMap = data.users.map((user: User) => [user.id, expectedLevels[generateRandomNum(0, 1)]]);
+                idLevelMap = data.users.map((user: User) => [user.id, casual.random_element(expectedLevels)]);
 
                 component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
 

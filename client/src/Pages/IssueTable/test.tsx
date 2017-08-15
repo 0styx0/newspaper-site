@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
-import { generateRandomNum, generateRandomStr } from '../../tests/helpers';
+import * as casual from 'casual';
 
 // NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
 
@@ -18,7 +18,7 @@ localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
  *
  * @return the issues
  */
-function generateIssues(amount: number) {
+casual.define('issues', function generateIssues(amount: number) {
 
     const issues: Issue[] = [];
 
@@ -26,8 +26,8 @@ function generateIssues(amount: number) {
 
         issues.push({
             num: amount,
-            name: generateRandomStr(10),
-            views: generateRandomNum(1, 100),
+            name: casual.title,
+            views: casual.integer(0, 1000),
             datePublished: (new Date).toISOString(),
             public: true
         });
@@ -36,11 +36,11 @@ function generateIssues(amount: number) {
     issues[0].public = false; // most tests need it to private, to test if can change name etc
 
     return issues;
-}
+});
 
 const data = {
     loading: false,
-    issues: generateIssues(5)
+    issues: casual.issues(5)
 };
 
 function setup(mockGraphql: {mutate?: Function} = {}) {
@@ -106,7 +106,7 @@ describe('<IssueTable>', () => {
 
         const nameInput = wrapper.find('input[name="name"]');
 
-        const expectedName = generateRandomStr(10);
+        const expectedName = casual.title;
 
         nameInput.simulate('change', {target: {name: 'name', value: expectedName}});
 
@@ -132,7 +132,7 @@ describe('<IssueTable>', () => {
 
         const expectedData = { // this is already tested in the 2 previous tests
             public: true,
-            name: generateRandomStr(10)
+            name: casual.title
         };
 
         wrapper = setup({mutate: (graphql: {variables: {public: boolean; name: string}}) =>
