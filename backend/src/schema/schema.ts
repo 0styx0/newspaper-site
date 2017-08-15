@@ -214,20 +214,36 @@ const Mutation = new GraphQLObjectType({
                     )
                 }
             },
-            resolve: (_, args: {data: {id: string, tags?: string[], displayOrder?: number}[]}) => {
+            resolve: async (_, args: {data: {id: string, tags?: string[], displayOrder?: number, display_order?: number}[]}) => {
 
                 const sanitized: typeof args = sanitize(args);
 
-                sanitized.data.forEach(article => {
-
-                    db.models.pageinfo.update(
-                        sanitized,
-                        {
-                            where: {
-                                id: article.id
+                /* must find before update else errors in model.
+                 For some reason gettermethods are called even on update
+                 and must make sure it has data needed. Google was no help */
+                const rows = await db.models.pageinfo.findAll({
+                        where: {
+                            id: {
+                                $in: sanitized.data.map(item => item.id)
                             }
-                        }
-                    );
+                        },
+                        include: [ { model : db.models.tags }]
+                    });
+
+                return sanitized.data.map((article, i) => {
+
+                    // displayOrder doesn't exist in db, calling it that since js like camels but sql likes snakes
+                    if ('displayOrder' in article) {
+                        article.display_order = article.displayOrder;
+                        delete article.displayOrder;
+                    }
+
+                    if (article.tags) {
+
+                        db.models.tags.update({all: article.tags}, {where: {art_id: article.id}});
+                    }
+
+                    return rows[i].update(article);
                 });
             }
         }

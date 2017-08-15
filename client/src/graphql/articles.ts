@@ -25,6 +25,20 @@ const ArticleQuery = gql`
 
 `;
 
+const ArticleUpdate = gql`
+
+    mutation ArticleUpdate($data: [IdDisplayTagList]) {
+        updateArticles(data: $data) {
+            id
+            tags {
+                all
+            }
+            displayOrder
+        }
+    }
+`;
+
 export {
-    ArticleQuery
+    ArticleQuery,
+    ArticleUpdate
 };

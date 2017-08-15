@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArticleQuery } from '../../graphql/articles';
+import { ArticleQuery, ArticleUpdate } from '../../graphql/articles';
 import { compose, graphql, withApollo } from 'react-apollo';
 
 import ArticleTable from './';
@@ -36,6 +36,7 @@ interface Props {
     client: {
         query: Function;
     };
+    updateArticle: Function;
 }
 
 interface State {
@@ -57,6 +58,8 @@ class ArticleTableContainer extends React.Component<Props, State> {
         this.convertPropsToState = this.convertPropsToState.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDelete = this.onDelete.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
 
 
         this.state = {
@@ -171,7 +174,33 @@ class ArticleTableContainer extends React.Component<Props, State> {
         e.stopPropagation();
         e.preventDefault();
 
-        console.log(e.target);
+        const { displayOrder, tags } = this.state.updates;
+
+        let data: {id: string, displayOrder?: number, tags?: string[]}[] = [...displayOrder].map(mapping => ({
+
+            id: mapping[0],
+            displayOrder: mapping[1]
+        }));
+
+        [...tags].forEach(mapping => {
+
+            const idIdx = data.findIndex(elt => elt.id === mapping[0]);
+
+            if (idIdx !== -1) {
+                data[idIdx].tags = mapping[1];
+            } else {
+                data.push({
+                    id: mapping[0],
+                    tags: mapping[1]
+                });
+            }
+        });
+
+        this.props.updateArticle({
+            variables: {
+                data
+            }
+        });
     }
 
     render() {
@@ -202,6 +231,7 @@ const ArticleTableContainerWithData = compose(
             }
         }
     }),
+    graphql(ArticleUpdate, {name: 'updateArticle'})
 )(ArticleTableContainer as any);
 
 export default withApollo(ArticleTableContainerWithData);

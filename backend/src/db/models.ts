@@ -107,7 +107,7 @@ const Issues = sequelize.define('issues', {
         type: Sequelize.DATE,
         allowNull: true, // only filled when made public, so before that should be null
         validate: {
-            isBefore: new Date(Date.now() + 1)
+            isBefore: new Date(Date.now() + 1).toISOString()
         }
     },
     name: {
@@ -148,7 +148,7 @@ const Articles = sequelize.define('pageinfo', {
         allowNull: false,
         defaultValue: Sequelize.NOW,
         validate: {
-            isBefore: new Date(Date.now() + 1) // doing +1 since don't know if it will otherwise mess with defaultValue
+            isBefore: new Date(Date.now() + 1).toISOString() // doing +1 since don't know if it will otherwise mess with defaultValue
         }
     },
     url: {
@@ -161,13 +161,13 @@ const Articles = sequelize.define('pageinfo', {
     lede: {
         type: Sequelize.BLOB,
         allowNull: false,
-        validate: {
-            is: /<h1>[\s\S]*<\/h1>.*<\/h4>[\s\S]*<\/h4>/
-        },
+        // validate: {
+        //     is: /<h1>[\s\S]*<\/h1>.*<\/h4>[\s\S]*<\/h4>/
+        // },
     },
     body: {
         type: Sequelize.BLOB,
-        allowNull: false,
+        // allowNull: false,
         validate: {
             isLength: {
                 min: 50 // random number, just don't want articles too short
@@ -220,21 +220,19 @@ const Articles = sequelize.define('pageinfo', {
     },
     views: {
         type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0,
+        allowNull: false,
         validate: {
-            min: 0,
-            defaultValue: 0,
-            allowNull: false
+            min: 0
         }
     },
     display_order: {
         type: Sequelize.INTEGER(2).UNSIGNED,
-        validate: {
-            defaultValue: 0,
-            allowNull: false
-        }
+        defaultValue: 0,
+        allowNull: false
     }
 }, {
-    getterMethods:{
+    getterMethods: {
 
         slideImages: function() {
 
@@ -266,7 +264,7 @@ const Articles = sequelize.define('pageinfo', {
     ]
 });
 
-sequelize.define('tags', {
+const Tags = sequelize.define('tags', {
     id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -301,6 +299,13 @@ sequelize.define('tags', {
         },
     }
 }, {
+    setterMethods: {
+        
+        all(tags: string[]) {
+
+            ['tag1', 'tag2', 'tag3'].forEach((col, i) => this.setDataValue(col, tags[i]));
+        }
+    },
     underscored: true,
     timestamps: false,
     indexes: [
@@ -347,7 +352,7 @@ sequelize.define('comments', {
         allowNull: false,
         defaultValue: Sequelize.NOW,
         validate: {
-            isBefore: new Date(Date.now() + 1)
+            isBefore: new Date(Date.now() + 1).toISOString()
         }
     },
 }, {
@@ -355,5 +360,7 @@ sequelize.define('comments', {
     underscored: true,
     timestamps: false
 });
+
+Articles.hasOne(Tags, { foreignKey: 'art_id' });
 
 export default sequelize;
