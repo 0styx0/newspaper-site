@@ -348,16 +348,22 @@ describe('<JournalistTable>', () => {
 
                         let expectedFormat = [] as {level: number, ids: string[]}[];
 
-                        expectedLevels.forEach(level => expectedFormat.push({level, ids: []}))
+                        expectedLevels.forEach(level => expectedFormat.push({level, ids: []}));
 
                         idLevelMap.forEach(mapping => {
 
-                            const place = expectedFormat.find(elt => elt.level == mapping[1]);
+                            const place = expectedFormat.find(elt => elt.level === mapping[1]);
 
                             place && place.ids.push(mapping[0] as string)
                         });
 
-                        expectedFormat = expectedFormat.filter(elt => !!elt.ids.length);
+                        expectedFormat = expectedFormat
+                                         .filter(elt => !!elt.ids.length)
+                                         .map(elt => {
+
+                                            elt.ids = [...new Set(elt.ids)];
+                                            return elt;
+                                        });
 
                         const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
 

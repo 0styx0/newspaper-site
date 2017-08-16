@@ -6,7 +6,7 @@ import ArticleTable from './';
 
 export interface Article {
     tags: {
-            all: string;
+            all: string[];
         };
     url: string;
     id: string;
