@@ -13,8 +13,8 @@ casual.define('articles', function(amount: number, issue: number) {
 
     let articles: (Issue & { articles: Article[] })[] = [
         {
-            num: issue || casual.integer(1, 100),
-            max: casual.integer(1, 100),
+            num: issue || casual.integer(1, 50),
+            max: casual.integer(50, 100),
             articles: []
         }
     ];
@@ -23,7 +23,7 @@ casual.define('articles', function(amount: number, issue: number) {
 
         articles[0].articles.push({
             tags: {
-                all: casual.word
+                all: casual.array_of_words(casual.integer(1, 20))
             },
             url: encodeURIComponent(casual.title),
             id: casual.word,
@@ -53,7 +53,7 @@ function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function}
     return mount(
         <MemoryRouter>
             <ArticleTableContainer
-                data={(casual as any).data as any}
+                data={(casual as any).data()}
                 client={{
                     query: async (query: {variables: {issue: number}}) => (
                         {
@@ -71,6 +71,7 @@ function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function}
 describe('<ArticleTableContainer>', () => {
 
     let wrapper: any;
+    let component: any;
 
     beforeEach(() => {
         wrapper = setup();
@@ -83,7 +84,7 @@ describe('<ArticleTableContainer>', () => {
             const tree = renderer.create(
 
                 <ArticleTableContainer
-                    data={(casual as any).data}
+                    data={(casual as any).data()}
                     updateArticle={filler}
                     deleteArticle={filler}
                     client={{
@@ -98,14 +99,45 @@ describe('<ArticleTableContainer>', () => {
 
     describe('displayOrder', () => {
 
+        let displayOrderInputs: any;
+
+        beforeAll(() => {
+
+            wrapper = setup();
+            component = wrapper.find(ArticleTableContainer).node;
+
+            component.componentWillReceiveProps({data: (casual as any).data() });
+
+            displayOrderInputs = wrapper.find('input[name="displayOrder"]');
+        });
+
+        function changeOneInput(value?: number) {
+
+            const oneInput = displayOrderInputs.at(casual.integer(0, displayOrderInputs.length - 1));
+            const newValue = (value === undefined) ? casual.integer(0, 100) : value;
+
+            oneInput.node.value = newValue;
+            oneInput.simulate('change');
+
+            return oneInput;
+        }
+
         it('allows user to change displayOrder input', () => {
 
-            //
+            const newValue = casual.integer(0, 100);
+
+            const oneInput = changeOneInput(newValue);
+
+            expect(+oneInput.node.value).toBe(newValue);
         });
 
         it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
 
-            //
+            const oneInput = displayOrderInputs.at(casual.integer(0, displayOrderInputs.length - 1));
+            const newValue = casual.integer(0, 100);
+
+            oneInput.node.value = newValue;
+            oneInput.simulate('change');
         });
 
         it('updates displayOrder when it has been changed more than once to most recent value', () => {
@@ -150,6 +182,37 @@ describe('<ArticleTableContainer>', () => {
         });
 
         it('removes id from state.updates.idsToDelete if user unchecks the box', () => {
+
+            //
+        });
+    });
+
+    describe('#onSubmit', () => {
+
+        describe('formats updates correctly when', () => {
+
+            test('only tags have changed', () => {
+
+                //
+            });
+
+            test('when only order has changed', () => {
+
+                //
+            });
+
+            test('displayOrder and tags both refer to same article', () => {
+
+                //
+            });
+
+            test('displayOrder and tags refer to different articles', () => {
+
+                //
+            });
+        });
+
+        it('sends idsToDelete in correct format', () => {
 
             //
         });
