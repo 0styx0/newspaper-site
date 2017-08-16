@@ -318,7 +318,12 @@ describe('<JournalistTable>', () => {
                                                 (accumulator: string[], user: User) => accumulator.concat(user.id), []
                                             );
 
-                        expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                        expect(mapping.variables.data).toEqual(
+                            [{
+                                level: expectedLevel,
+                                ids: [...new Set(expectedIds)]
+                            }]
+                        );
                     }
                 });
 
