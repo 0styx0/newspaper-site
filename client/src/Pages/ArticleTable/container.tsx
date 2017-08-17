@@ -157,7 +157,10 @@ export class ArticleTableContainer extends React.Component<Props, State> {
 
         if ((target as HTMLSelectElement).selectedOptions) { // for tags
 
-            value = Array.from((target as HTMLSelectElement).selectedOptions).map(option => option.value);
+            value = Array.from((target as HTMLSelectElement).selectedOptions)
+                    .map(option => option.value)
+                    .slice(-3)
+                    .sort(); // using sort to make it easier to test, no actual reason besides that
         } else {
             value = +target.value;
         }
