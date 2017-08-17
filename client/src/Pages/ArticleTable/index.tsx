@@ -138,6 +138,7 @@ function createArticleTableRows(props: Props) {
                       key={article.id}
                       onChange={props.onDelete as any}
                       type="checkbox"
+                      name="delete"
                       value={article.id}
                     />
                 )

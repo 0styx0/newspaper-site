@@ -250,7 +250,7 @@ describe('<ArticleTableContainer>', () => {
 
         it('removes tags from array if user de-selects', () => {
 
-            const result = changeOneSelect(3);
+            const result = changeOneSelect(undefined, 3);
 
             changeOneSelect(result.index, 2); // changeOneSelect does the assertion
         });
@@ -258,19 +258,52 @@ describe('<ArticleTableContainer>', () => {
 
     describe('delete', () => {
 
-        it('allows users to check the delete checkbox', () => {
+        let deleteCheckbox: any;
 
-            //
+        beforeEach(() => {
+
+            wrapper = setup();
+            component = wrapper.find(ArticleTableContainer).node;
+
+            component.componentWillReceiveProps({data: (casual as any).data() });
+
+            deleteCheckbox = wrapper.find('input[name="delete"]');
         });
 
-        it('saves ids of articles selected for deletion in state.updates.idsToDelete', () => {
+        /**
+         * checks a random `checkbox[name=delete]`
+         */
+        function changeOneCheckbox() {
 
-            //
+            const checkboxIndex = casual.integer(0, deleteCheckbox.length - 1);
+
+            const oneCheckbox = deleteCheckbox.at(checkboxIndex);
+            oneCheckbox.nodes[0].checked = !oneCheckbox.nodes[0].checked;
+            oneCheckbox.simulate('change');
+
+            const id = component.state.articles[checkboxIndex].id;
+
+            expect(component.state.updates.idsToDelete).toContain(id);
+
+            return {
+              index: checkboxIndex,
+              input: oneCheckbox,
+              id
+            };
+        }
+
+        it('allows users to check the delete checkbox', () => {
+
+            changeOneCheckbox(); // assertion handled in function
         });
 
         it('removes id from state.updates.idsToDelete if user unchecks the box', () => {
 
-            //
+            const result = changeOneCheckbox();
+            result.input.nodes[0].checked = false;
+            result.input.simulate('change');
+
+            expect(component.state.updates.idsToDelete.size).toBe(0);
         });
     });
 
