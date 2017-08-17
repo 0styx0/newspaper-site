@@ -26,7 +26,7 @@ casual.define('articles', function(amount: number, issue: number) {
                 all: casual.array_of_words(casual.integer(1, 20))
             },
             url: encodeURIComponent(casual.title),
-            id: casual.word,
+            id: casual.word + '--' + amount,
             displayOrder: casual.integer(0, 100),
             dateCreated: casual.date('YYYY-MM-DD'),
             views: casual.integer(0, 100),
@@ -101,7 +101,7 @@ describe('<ArticleTableContainer>', () => {
 
         let displayOrderInputs: any;
 
-        beforeAll(() => {
+        beforeEach(() => {
 
             wrapper = setup();
             component = wrapper.find(ArticleTableContainer).node;
@@ -111,38 +111,55 @@ describe('<ArticleTableContainer>', () => {
             displayOrderInputs = wrapper.find('input[name="displayOrder"]');
         });
 
-        function changeOneInput(value?: number) {
+        /**
+         * @param inputIndex - if given, the displayOrder input at that index will be the one changed.
+         * If not passed, a random input will be chosen
+         */
+        function changeOneInput(inputIndex?: number) {
 
-            const oneInput = displayOrderInputs.at(casual.integer(0, displayOrderInputs.length - 1));
-            const newValue = (value === undefined) ? casual.integer(0, 100) : value;
+            const indexOfInput = (inputIndex === undefined) ?
+                casual.integer(0, displayOrderInputs.length - 1) :
+                inputIndex;
+
+            const oneInput = displayOrderInputs.at(indexOfInput);
+            const newValue = casual.integer(0, 100);
 
             oneInput.node.value = newValue;
             oneInput.simulate('change');
 
-            return oneInput;
-        }
-
-        it('allows user to change displayOrder input', () => {
-
-            const newValue = casual.integer(0, 100);
-
-            const oneInput = changeOneInput(newValue);
-
             expect(+oneInput.node.value).toBe(newValue);
-        });
+
+            return {
+                input: oneInput,
+                id: component.state.articles[indexOfInput].id,
+                index: indexOfInput
+            };
+        }
 
         it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
 
-            const oneInput = displayOrderInputs.at(casual.integer(0, displayOrderInputs.length - 1));
-            const newValue = casual.integer(0, 100);
+            let expected: string[][] = [];
 
-            oneInput.node.value = newValue;
-            oneInput.simulate('change');
+            for (let i = 0; i < casual.integer(0, 100); i++) {
+                const result = changeOneInput();
+
+                expected.push([result.id, +result.input.node.value]);
+            }
+
+            // If there are duplicate ids, only get the last one
+            // @example [['hi', 1], ['bye', 1], ['hi', 2]] => [['bye', 1], ['hi', 2]]
+            const uniqueExpected = expected.filter((elt, i, arr) =>
+
+                !arr.some((search, j) => search[0] === elt[0] && i < j)
+            );
+
+            expect([...component.state.updates.displayOrder].sort()).toEqual(uniqueExpected.sort());
         });
 
         it('updates displayOrder when it has been changed more than once to most recent value', () => {
 
-            //
+            const input = changeOneInput();
+            changeOneInput(input.index); // changeOneInput has the assertions
         });
     });
 
