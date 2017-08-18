@@ -37,4 +37,4 @@ export {
     UserQuery,
     UserUpdate,
     UserDelete
-}
+};
