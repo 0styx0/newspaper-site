@@ -18,7 +18,7 @@ export default function TagSelect(props: Props) {
                     'other'
                 ];
 
-    const options = (props.tags || []).concat(tags).map((val =>
+    const options = [...new Set((props.tags || []).concat(tags))].map((val =>
             <option key={val} value={val}>{val[0].toUpperCase() + val.slice(1)}</option>
         ));
 
