@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { ArticleTableContainer, Article, Issue } from './container';
+import { ArticleTableContainer, Article, Issue, Issues } from './container';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
 
+type Issues = (Issue & { articles: Article[] })[];
 
 localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}])); // only lvl 3 can access this page
 
 let allTags = new Set<string>();
 casual.define('articles', function(amount: number, issue: number) {
 
-    let articles: (Issue & { articles: Article[] })[] = [
+    let articles: Issues = [
         {
             num: issue || casual.integer(1, 50),
             max: casual.integer(50, 100),
@@ -46,7 +47,7 @@ casual.define('articles', function(amount: number, issue: number) {
 
 casual.define('data', (issue?: number) => ({
     loading: false,
-    issues: (casual as any).articles(casual.integer(1, 10), issue) as (Issue & { articles: Article[] })[]
+    issues: (casual as any).articles(casual.integer(1, 10), issue) as Issues
 }));
 
 const filler = () => (true as any) as any;
@@ -76,6 +77,21 @@ describe('<ArticleTableContainer>', () => {
 
     let wrapper: any;
     let component: any;
+
+    /**
+     * Does the basic setup; gets new versions of wrapper, component and gives component new props
+     */
+    function setupWithProps(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
+
+        wrapper = setup(mockGraphql);
+        component = wrapper.find(ArticleTableContainer).node;
+
+        const data = (casual as any).data();
+
+        component.componentWillReceiveProps({ data });
+
+        return data;
+    }
 
     beforeEach(() => {
         wrapper = setup();
@@ -107,11 +123,7 @@ describe('<ArticleTableContainer>', () => {
 
         beforeEach(() => {
 
-            wrapper = setup();
-            component = wrapper.find(ArticleTableContainer).node;
-
-            component.componentWillReceiveProps({data: (casual as any).data() });
-
+            setupWithProps();
             displayOrderInputs = wrapper.find('input[name="displayOrder"]');
         });
 
@@ -173,10 +185,7 @@ describe('<ArticleTableContainer>', () => {
 
         beforeEach(() => {
 
-            wrapper = setup();
-            component = wrapper.find(ArticleTableContainer).node;
-
-            component.componentWillReceiveProps({data: (casual as any).data() });
+            setupWithProps();
 
             tagSelects = wrapper.find('select[name="tags"]');
         });
@@ -262,10 +271,7 @@ describe('<ArticleTableContainer>', () => {
 
         beforeEach(() => {
 
-            wrapper = setup();
-            component = wrapper.find(ArticleTableContainer).node;
-
-            component.componentWillReceiveProps({data: (casual as any).data() });
+            setupWithProps();
 
             deleteCheckbox = wrapper.find('input[name="delete"]');
         });
@@ -311,24 +317,168 @@ describe('<ArticleTableContainer>', () => {
 
         describe('formats updates correctly when', () => {
 
+            /**
+             * Loops through a random number of articles and calls @param func on every unique one
+             *
+             * @param data - casual.data
+             * @param func - to be called on every unique article
+             */
+            function randomArticleLoop(data: {issues: Issues}, func: (article: Article) => void) {
+
+                const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
+                const usedIds: string[] = [];
+
+                // put random tags on random articles
+                for (let i = 0; i < numberOfArticles; i++) {
+
+                    const article: Article = casual.random_element([...data.issues[0].articles]);
+
+                    if (usedIds.indexOf(article.id) !== -1) {
+                        i--;
+                        continue;
+                    }
+
+                    usedIds.push(article.id);
+
+                    func(article);
+                }
+            }
+
+            /**
+             * @return random amount of tags (between 1 and 3) from @see allTags
+             */
+            function getRandomTags() {
+
+                let tagList = new Set<string>();
+                const allTagsArr = [...allTags];
+
+                for (let j = 0; tagList.size < casual.integer(1, 3); j++) {
+                    tagList.add(casual.random_element(allTagsArr));
+                }
+
+                return tagList;
+            }
+
+            type updateData = {displayOrder?: number, tags?: string[], id: string};
+
             test('only tags have changed', () => {
 
-                //
+                const tags: updateData[] = [];
+
+                const data = setupWithProps({
+                    // called after submit event (at very bottom of this test)
+                    updateArticle: (info: {variables: {data: typeof tags} }) => {
+
+                         expect(info.variables.data).toEqual(tags);
+                    }
+                });
+
+                randomArticleLoop(data, article => {
+
+                    let tagList = getRandomTags();
+
+                    tags.push({id: article.id, tags: [...tagList]});
+
+                    component.state.updates.tags.set(article.id, [...tagList]);
+                });
+
+                component.onSubmit(new Event('submit'));
             });
 
             test('when only order has changed', () => {
 
-                //
+                const orders: updateData[] = [];
+
+                const data = setupWithProps({
+                    // called after submit event (at very bottom of this test)
+                    updateArticle: (info: {variables: {data: typeof orders }}) => {
+
+                         expect(info.variables.data).toEqual(orders);
+                    }
+                });
+
+                randomArticleLoop(data, article => {
+
+                    const newOrder = casual.integer(0, 100);
+
+                    orders.push({id: article.id, displayOrder: newOrder});
+                    component.state.updates.displayOrder.set(article.id, newOrder);
+                });
+
+                component.onSubmit(new Event('submit'));
             });
 
             test('displayOrder and tags both refer to same article', () => {
 
-                //
+                const allData: updateData[] = [];
+
+                const data = setupWithProps({
+
+                    updateArticle: (info: {variables: {data: typeof allData} }) => {
+
+                         expect(info.variables.data).toEqual(allData);
+                    }
+                });
+
+                randomArticleLoop(data, article => {
+
+                    const newOrder = casual.integer(0, 100);
+                    component.state.updates.displayOrder.set(article.id, newOrder);
+
+                    let tagList = getRandomTags();
+                    component.state.updates.tags.set(article.id, [...tagList]);
+
+                    allData.push({
+                        id: article.id,
+                        tags: [...tagList],
+                        displayOrder: newOrder
+                    });
+                });
+
+                component.onSubmit(new Event('submit'));
             });
 
             test('displayOrder and tags refer to different articles', () => {
 
-                //
+                const allData: updateData[] = [];
+
+                const data = setupWithProps({
+
+                    updateArticle: (info: {variables: {data: typeof allData} }) => {
+
+                        const sortFunc = (a: updateData, b: updateData) => 'tags' in a ? 1 : -1;
+                        info.variables.data.sort(sortFunc);
+                        allData.sort(sortFunc);
+
+                        expect(info.variables.data).toEqual(allData);
+                    }
+                });
+
+                randomArticleLoop(data, article => {
+
+                    if (casual.coin_flip) {
+
+                        const newOrder = casual.integer(0, 100);
+                        component.state.updates.displayOrder.set(article.id, newOrder);
+
+                        allData.push({
+                            id: article.id,
+                            displayOrder: newOrder
+                        });
+
+                    } else {
+
+                        let tagList = [...getRandomTags()];
+                        component.state.updates.tags.set(article.id, tagList);
+
+                        allData.push({
+                            id: article.id,
+                            tags: tagList
+                        });
+                    }
+                });
+
+                component.onSubmit(new Event('submit'));
             });
         });
 
