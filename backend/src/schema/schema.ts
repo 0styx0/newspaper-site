@@ -32,9 +32,25 @@ const Query = new GraphQLObjectType({
             description: 'Users',
             args: {
                 id: {type: GraphQLID},
-                email: {type: GraphQLString},
+                profileLink: {type: GraphQLString},
             },
-            resolve: (_, args) => db.models.users.findAll({where: sanitize(args)})
+            resolve: (_, args) => {
+
+                const sanitized = sanitize(args);
+
+                if (sanitized.profileLink) {
+
+                    sanitized.email = {
+                        $like: sanitized.profileLink + '@%'
+                    }
+
+                    delete sanitized.profileLink;
+                }
+
+                return db.models.users.findAll({
+                    where: sanitized
+                })
+            }
         },
         articles: {
             type: new GraphQLList(Articles),
