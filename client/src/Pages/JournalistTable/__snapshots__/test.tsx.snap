@@ -27,7 +27,7 @@ exports[`<JournalistTable> should let higher level users modify lower level user
             Level
           </option>
           <option
-            value="articles"
+            value="articleCount"
           >
             Articles
           </option>
@@ -128,7 +128,7 @@ exports[`<JournalistTable> should let higher level users modify lower level user
             Level
           </option>
           <option
-            value="articles"
+            value="articleCount"
           >
             Articles
           </option>
@@ -224,7 +224,7 @@ exports[`<JournalistTable> should render correctly 1`] = `
             Last Name
           </option>
           <option
-            value="articles"
+            value="articleCount"
           >
             Articles
           </option>
@@ -294,7 +294,7 @@ exports[`<JournalistTable> should show users' levels only when one is logged in 
             Level
           </option>
           <option
-            value="articles"
+            value="articleCount"
           >
             Articles
           </option>

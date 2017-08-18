@@ -19,7 +19,7 @@ casual.define('users', function(amount: number, requiredLevels: number[] = []) {
 
         // all numbers, except where noted otherwise, are magic numbers
         users.push({
-                articles: casual.integer(0, 100),
+                articleCount: casual.integer(0, 100),
                 views: casual.integer(0, 1000),
                 level: casual.integer(1, 3), // lvls can only be 1-3
                 id: casual.word,
@@ -155,7 +155,7 @@ describe('<JournalistTable>', () => {
          *  *   articles
          *  *   views
          */
-        function testSortByNameArticlesViews(sortingIdices: {lastName: number; articles: number; views: number}) {
+        function testSortByNameArticlesViews(sortingIdices: {lastName: number; articleCount: number; views: number}) {
 
             it('can sort by lastName', () => {
 
@@ -173,7 +173,7 @@ describe('<JournalistTable>', () => {
                 ).toEqual(expected);
             });
 
-            it('can sort by articles', () => testNumberSorting('articles', sortingIdices));
+            it('can sort by articles', () => testNumberSorting('articleCount', sortingIdices));
 
             it('can sort by views', () => testNumberSorting('views', sortingIdices));
         }
@@ -185,7 +185,7 @@ describe('<JournalistTable>', () => {
             const sortingIdices = {
                 lastName: 0,
                 level: 1,
-                articles: 2,
+                articleCount: 2,
                 views: 3
             };
 
@@ -225,7 +225,7 @@ describe('<JournalistTable>', () => {
 
             const sortingIdices = {
                 lastName: 0,
-                articles: 1,
+                articleCount: 1,
                 views: 2
             };
 

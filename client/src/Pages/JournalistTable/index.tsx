@@ -20,7 +20,7 @@ interface State {
 }
 
 export interface User {
-    articles: number;
+    articleCount: number;
     views: number;
     level: number;
     id: string;
@@ -129,7 +129,7 @@ export class JournalistTable extends React.Component<Props, State> {
 
             let info: (number | string | JSX.Element)[] = [
                 profileLink,
-                person.articles,
+                person.articleCount,
                 person.views
             ];
 
@@ -167,8 +167,8 @@ export class JournalistTable extends React.Component<Props, State> {
                 value: 'lastName'
             },
             {
-                view: "Articles",
-                value: 'articles'
+                view: 'Articles',
+                value: 'articleCount'
             },
             {
                 view: "Views",

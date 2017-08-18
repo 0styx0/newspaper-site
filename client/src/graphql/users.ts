@@ -3,7 +3,7 @@ import { gql } from 'react-apollo';
 const UserQuery = gql`
     query users {
         users {
-            articles
+            articleCount
             views
             level
             id

@@ -42,7 +42,7 @@ const Users = new GraphQLObjectType({
                 where: {authorid: sanitize(user.id)}
             }) || 0 // don't know why I need + and || but I do
         },
-        articles: {
+        articleCount: {
             type: GraphQLInt,
             resolve: (user) => db.models.pageinfo.count({
                 where: {authorid: sanitize(user.id)}
@@ -51,7 +51,14 @@ const Users = new GraphQLObjectType({
         profileLink: {
             type: new GraphQLNonNull(GraphQLString),
             resolve: user => user.email.split('@')[0]
-        }
+        },
+        articles: {
+            type: new GraphQLNonNull(new GraphQLList(Articles)),
+            resolve: (user) => db.models.pageinfo.findAll({
+                where: sanitize({authorid: user.id})
+            })
+        },
+
 
         /* // PRIVATE types. Putting them here just to complete the db table
         // don't use these
