@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArticleTableContainer, Article, Issue, Issues } from './container';
+import { ArticleTableContainer, Article, Issue } from './container';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
