@@ -315,34 +315,34 @@ describe('<ArticleTableContainer>', () => {
 
     describe('#onSubmit', () => {
 
-        describe('formats updates correctly when', () => {
+        /**
+         * Loops through a random number of articles and calls @param func on every unique one
+         *
+         * @param data - casual.data
+         * @param func - to be called on every unique article
+         */
+        function randomArticleLoop(data: {issues: Issues}, func: (article: Article) => void) {
 
-            /**
-             * Loops through a random number of articles and calls @param func on every unique one
-             *
-             * @param data - casual.data
-             * @param func - to be called on every unique article
-             */
-            function randomArticleLoop(data: {issues: Issues}, func: (article: Article) => void) {
+            const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
+            const usedIds: string[] = [];
 
-                const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
-                const usedIds: string[] = [];
+            // put random tags on random articles
+            for (let i = 0; i < numberOfArticles; i++) {
 
-                // put random tags on random articles
-                for (let i = 0; i < numberOfArticles; i++) {
+                const article: Article = casual.random_element([...data.issues[0].articles]);
 
-                    const article: Article = casual.random_element([...data.issues[0].articles]);
-
-                    if (usedIds.indexOf(article.id) !== -1) {
-                        i--;
-                        continue;
-                    }
-
-                    usedIds.push(article.id);
-
-                    func(article);
+                if (usedIds.indexOf(article.id) !== -1) {
+                    i--;
+                    continue;
                 }
+
+                usedIds.push(article.id);
+
+                func(article);
             }
+        }
+
+        describe('formats updates correctly when', () => {
 
             /**
              * @return random amount of tags (between 1 and 3) from @see allTags
@@ -484,7 +484,21 @@ describe('<ArticleTableContainer>', () => {
 
         it('sends idsToDelete in correct format', () => {
 
-            //
+            const idsToDelete: string[] = [];
+
+            const data = setupWithProps({
+
+                deleteArticle: (info: {variables: {data: typeof idsToDelete} }) => {
+
+                    expect(info.variables.data).toEqual(idsToDelete);
+                }
+            });
+
+            randomArticleLoop(data, article => {
+                idsToDelete.push(article.id);
+            });
+
+            component.onSubmit(new Event('submit'));
         });
     });
 });
