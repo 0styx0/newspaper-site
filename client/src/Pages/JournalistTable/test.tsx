@@ -299,7 +299,7 @@ describe('<JournalistTable>', () => {
                                     .filter((user: User) => user.level < userLevel)
                                     .map((user: User) => [user.id, updatedLevel]);
 
-                const sortFunc = (a: [string, number], b: [string, number]) => a[0].localeCompare(b);
+                const sortFunc = (a: [string, number], b: [string, number]) => a[0].localeCompare(b[0]);
 
                 expect(mappings.sort(sortFunc)).toEqual(usersToMatch.sort(sortFunc));
             });
