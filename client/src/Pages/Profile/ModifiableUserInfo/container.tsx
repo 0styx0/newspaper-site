@@ -5,9 +5,12 @@ import { graphql, withApollo, compose } from 'react-apollo';
 import { ModifiableUserInfo } from '../shared.interfaces';
 import ModifiableUserInfoComponent from './';
 
-interface Props extends ModifiableUserInfo {
+interface Props {
     updateUser: Function;
     deleteUser: Function;
+    privateUserData: {
+        users: [ModifiableUserInfo] // always length = 1
+    };
 }
 
 interface State {
@@ -83,28 +86,39 @@ class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
         this.props.deleteUser({
             variables: {
-                ids: [this.props.id]
+                ids: [this.props.privateUserData.users[0].id]
             }
         });
     }
 
     render() {
 
+        if (!this.props.privateUserData || !this.props.privateUserData.users) {
+           return null;
+        }
+
         return (
             <ModifiableUserInfoComponent
               onSubmit={this.onSubmit}
               onChange={this.onChange}
               onDelete={this.onDelete}
-              {...this.props}
+              {...this.props.privateUserData.users[0]}
             />
         );
     }
 }
 
 const ModifiableUserInfoContainerWithData = compose(
-    (graphql(PrivateUserQuery) as any,
-    graphql(UserUpdate, {name: 'updateUser'}) as any,
-    graphql(UserDelete, {name: 'deleteUser'}) as any) as any
-)(ModifiableUserInfoContainer);
+    graphql(PrivateUserQuery, {
+        name: 'privateUserData',
+        options: {
+            variables: {
+                profileLink: 'meiselesd2018'
+            }
+        }
+    }),
+    graphql(UserUpdate, {name: 'updateUser'}),
+    graphql(UserDelete, {name: 'deleteUser'})
+)(ModifiableUserInfoContainer as any);
 
 export default withApollo(ModifiableUserInfoContainerWithData);

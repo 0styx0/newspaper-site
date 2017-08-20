@@ -2,7 +2,6 @@ import * as React from 'react';
 import Container from '../../../components/Container';
 import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
-import CheckboxContainer from '../../../components/Form/Checkbox/container';
 import { ModifiableUserInfo } from '../shared.interfaces';
 
 interface Props extends ModifiableUserInfo {
@@ -23,20 +22,18 @@ function ModifiableUserInfo(props: Props) {
     const row = [
         props.email,
         (
-            <CheckboxContainer
-                props={{
-                    name: 'twoFactor',
-                    onChange: props.onChange,
-                    defaultChecked: props.twoFactor
-                }}
+            <input
+              name="twoFactor"
+              onChange={props.onChange as any}
+              type="checkbox"
+              defaultChecked={props.twoFactor}
             />
         ),
         (
-            <CheckboxContainer
-                props={{
-                    name: 'notificationStatus',
-                    defaultChecked: props.notificationStatus
-                }}
+            <input
+                name="notificationStatus"
+                type="checkbox"
+                defaultChecked={props.notificationStatus}
             />
         ),
         (

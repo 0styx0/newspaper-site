@@ -47,6 +47,11 @@ const Query = new GraphQLObjectType({
                     delete sanitized.profileLink;
                 }
 
+                if (sanitized.twoFactor) {
+                    sanitized.two_fa_enabled = sanitized.twoFactor;
+                    delete sanitized.twoFactor;
+                }
+
                 return db.models.users.findAll({
                     where: sanitized
                 })
