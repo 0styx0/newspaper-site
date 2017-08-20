@@ -19,7 +19,7 @@ class TwoFactor extends React.Component<Props, {}> {
 
     onSubmit() {
 
-        setJWT()
+        setJWT(null as any) // TODO:
         .then(() => this.props.history.push('/publish'));
     }
 

@@ -1,24 +1,25 @@
 
-interface jwt {
+interface Jwt {
     id: string;
     level: number;
     email: string;
 }
 
-let jwt: jwt = {
+let jwt: Jwt = {
     id: '',
     level: 1,
     email: ''
 };
 
-async function setJWT() {
+function getJWT(): Jwt {
 
-    jwt = {
-        level: jwt.level || 1,
-        id: jwt.id,
-        email: jwt.email
-    };
-    return jwt;
+    return JSON.parse(window.localStorage.getItem('jwt') || JSON.stringify(jwt));
 }
 
-export {jwt, setJWT};
+async function setJWT(newJwt: Jwt) {
+
+    window.localStorage.setItem('jwt', JSON.stringify(newJwt));
+    return newJwt;
+}
+
+export {getJWT, setJWT, Jwt};

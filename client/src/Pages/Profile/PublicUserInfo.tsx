@@ -3,7 +3,7 @@ import Container from '../../components/Container';
 import Table from '../../components/Table';
 import { PublicUserInfo } from './shared.interfaces';
 
-function PublicUserInfo(props: User) {
+function PublicUserInfo(props: PublicUserInfo) {
 
     return (
         <Container

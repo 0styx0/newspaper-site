@@ -42,7 +42,7 @@ class ChangePasswordContainer extends React.Component<Props, {}> {
 }
 
 const ChangePasswordContainerWithData = compose(
-    graphql(UserUpdate, {name: 'updatePassword'})
+    graphql(UserUpdate, {name: 'updatePassword'}) as any
 )(ChangePasswordContainer);
 
 export default withApollo(ChangePasswordContainerWithData);

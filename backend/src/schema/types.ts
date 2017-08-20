@@ -36,6 +36,7 @@ const Users = new GraphQLObjectType({
         email: {type: new GraphQLNonNull(GraphQLString)},
         level: {type: new GraphQLNonNull(GraphQLInt)},
         notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
+        twoFactor: {type: new GraphQLNonNull(GraphQLBoolean)},
         views: {
             type: GraphQLInt,
             resolve: (user) => +db.models.pageinfo.sum('views', {

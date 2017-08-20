@@ -1,10 +1,12 @@
 import * as React from 'react';
 import FormContainer from '../Form/container';
-import {jwt} from '../jwt';
+import { getJWT } from '../jwt';
 
 import { Link } from 'react-router-dom'
 
 function Logout() {
+
+    const jwt = getJWT();
 
     return (
         <Link to="/" onClick={() => jwt.level = 0}>

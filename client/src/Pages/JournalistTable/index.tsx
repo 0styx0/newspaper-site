@@ -3,7 +3,7 @@ import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-// import { jwt } from '../../components/jwt';
+// import { getJWT } from '../../components/jwt';
 import { Link } from 'react-router-dom';
 
 import twoDimensionalSorter from '../../helpers/twoDimensionalSorter';

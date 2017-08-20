@@ -56,7 +56,7 @@ function UserArticleTable(props: Props) {
                 <input
                     type="checkbox"
                     name="delArt"
-                    onChange={props.onDelete}
+                    onChange={props.onDelete as any}
                     value={article.id}
                 />
             );
@@ -68,7 +68,7 @@ function UserArticleTable(props: Props) {
         <Container
             heading="Articles"
             children={
-                <form onSubmit={props.onSubmit}>
+                <form onSubmit={props.onSubmit as any}>
                     <Table
                         headings={headings}
                         rows={articles}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { graphql, withApollo } from 'react-apollo';
+import { graphql, withApollo, compose } from 'react-apollo';
 import { ArticleDelete } from '../../../graphql/articles';
 import { Article, PublicUserInfo } from '../shared.interfaces';
 import UserArticleTable from './';
@@ -19,7 +19,7 @@ class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set
         super();
 
         this.state = {
-            idsToDelete: new Set<String>()
+            idsToDelete: new Set<string>()
         };
     }
 
@@ -64,7 +64,7 @@ class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set
 
 
 const UserArticleTableContainerWithData = compose(
-    graphql(ArticleDelete, {name: 'deleteArticle'})
+    graphql(ArticleDelete, {name: 'deleteArticle'}) as any
 )(UserArticleTableContainer);
 
 export default withApollo(UserArticleTableContainerWithData);

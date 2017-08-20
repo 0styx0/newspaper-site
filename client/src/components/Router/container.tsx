@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import fetchFromApi from '../../helpers/fetchFromApi';
 
-import {jwt} from '../jwt';
+import { getJWT, Jwt } from '../jwt';
 import Router from './';
 
 interface State {
-    jwt: jwt | {};
+    jwt: Jwt | {};
 }
 
 export default class RouterContainer extends React.Component<{}, State> {
@@ -26,6 +26,8 @@ export default class RouterContainer extends React.Component<{}, State> {
 
     componentWillMount() {
 
+        const jwt = getJWT();
+
         fetchFromApi('userStatus')
         .then(data => data)
         .then(data => data.json())
@@ -34,11 +36,13 @@ export default class RouterContainer extends React.Component<{}, State> {
             jwt.email = json.email
             jwt.id = json.id
 
-            this.setState({jwt});
+            this.setState({ jwt: getJWT() });
         });
     }
 
     render() {
+
+        const jwt = getJWT();
 
         return <Router key={jwt.id} />
     }

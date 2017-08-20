@@ -12,7 +12,7 @@ function ChangePassword(props: Props) {
         <Container
             heading="Change Password"
             children={
-                <form onSubmit={props.onSubmit}>
+                <form onSubmit={props.onSubmit as any}>
                     <Input
                         label="New Password"
                         props={{

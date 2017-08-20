@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EditableContainer from '../../Editable/container';
-import { jwt } from '../../jwt'
+import { getJWT } from '../../jwt'
 
 import '../Comment/index.css';
 import './index.css';
@@ -11,6 +11,8 @@ interface Props {
 }
 
 export default function EditableComment(props: Props) {
+
+    const jwt = getJWT();
 
     return <article id="reply" className="comment">
                 <EditableContainer

@@ -3,7 +3,7 @@ import * as React from 'react';
 import CommentContainer from './Comment/container';
 
 import EditableCommentContainer from './EditableComment/container';
-import {jwt} from '../jwt';
+import { getJWT } from '../jwt';
 
 import CommentList from './';
 
@@ -41,6 +41,7 @@ export default class CommentListContainer extends React.Component<Props, State> 
     add(content: string) {
 
         const Comments = this.state.Comments.slice() as JSX.Element[];
+        const jwt = getJWT();
 
         Comments.push(<CommentContainer
                         content={content}
@@ -74,6 +75,7 @@ export default class CommentListContainer extends React.Component<Props, State> 
     render() {
 
         const Comments = [...this.state.Comments];
+        const jwt = getJWT();
 
         if (jwt.level) {
             Comments.push(<EditableCommentContainer addToList={this.add} name={this.props.name as string} issue={this.props.issue} />);

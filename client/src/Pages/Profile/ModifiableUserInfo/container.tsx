@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { UserUpdate } from '../../../graphql/user';
+import { PrivateUserQuery, UserUpdate } from '../../../graphql/user';
 import { UserDelete } from '../../../graphql/users';
-import { graphql, withApollo } from 'react-apollo';
-import { Info } from './';
-import ModifiableUserInfo from './';
+import { graphql, withApollo, compose } from 'react-apollo';
+import { ModifiableUserInfo } from '../shared.interfaces';
+import ModifiableUserInfoComponent from './';
 
-interface Props extends Info {
-    userUpdate: Function;
-    userDelete: Function;
+interface Props extends ModifiableUserInfo {
+    updateUser: Function;
+    deleteUser: Function;
 }
 
 interface State {
@@ -71,7 +71,7 @@ class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
         if (this.state.updates) {
             this.props.updateUser({
-                variables: [...this.state.updates]
+                variables: this.state.updates
             });
         }
     }
@@ -91,7 +91,7 @@ class ModifiableUserInfoContainer extends React.Component<Props, State> {
     render() {
 
         return (
-            <ModifiableUserInfo
+            <ModifiableUserInfoComponent
               onSubmit={this.onSubmit}
               onChange={this.onChange}
               onDelete={this.onDelete}
@@ -102,8 +102,9 @@ class ModifiableUserInfoContainer extends React.Component<Props, State> {
 }
 
 const ModifiableUserInfoContainerWithData = compose(
-    graphql(UserUpdate),
-    graphql(UserDelete)
+    (graphql(PrivateUserQuery) as any,
+    graphql(UserUpdate, {name: 'updateUser'}) as any,
+    graphql(UserDelete, {name: 'deleteUser'}) as any) as any
 )(ModifiableUserInfoContainer);
 
 export default withApollo(ModifiableUserInfoContainerWithData);

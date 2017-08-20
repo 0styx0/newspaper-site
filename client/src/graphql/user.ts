@@ -22,6 +22,18 @@ const UserQuery = gql`
     }
 `;
 
+const PrivateUserQuery = gql`
+
+    query users($profileLink: String) {
+        users(profileLink: $profileLink) {
+            notifications
+            twoFactor
+            email
+            id
+        }
+    }
+`;
+
 const UserUpdate = gql`
     mutation updateUser(
         id: String!, $notificationStatus: boolean, $twoFactor: boolean, $newPassword: String
@@ -36,5 +48,6 @@ const UserUpdate = gql`
 
 export {
     UserQuery,
+    PrivateUserQuery,
     UserUpdate
 };

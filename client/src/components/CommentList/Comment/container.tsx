@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {jwt} from '../../jwt';
+import { getJWT } from '../../jwt';
 import fetchFromApi from '../../../helpers/fetchFromApi';
 
 import Comment from './';
@@ -62,6 +62,8 @@ class CommentContainer extends React.Component<Props, State> {
             profileLink: this.props.profileLink,
             content: this.state.content
         };
+
+        const jwt = getJWT();
 
         // if already deleted, or user not authorized to delete,
         // or it was just created so info needed to delete isn't there yet

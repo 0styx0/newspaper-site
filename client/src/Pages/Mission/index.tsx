@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EditableContainer from '../../components/Editable/container';
-import {jwt} from '../../components/jwt';
+import { getJWT } from '../../components/jwt';
 
 import './index.css';
 
@@ -11,6 +11,8 @@ interface Props {
 };
 
 export default function Mission(props: Props) {
+
+    const jwt = getJWT();
 
     return <EditableContainer
                 key={props.content}

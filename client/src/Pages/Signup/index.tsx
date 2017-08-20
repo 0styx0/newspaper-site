@@ -3,13 +3,15 @@ import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
-import {jwt} from '../../components/jwt';
+import { getJWT } from '../../components/jwt';
 
 import './index.css';
 
 class Signup extends React.Component {
 
     renderLevelSelect() {
+
+      const jwt = getJWT();
 
         if (jwt.level > 1) {
           // adding .changed since might not want user to be more than lvl 1, and for the input, can't change it since hidden

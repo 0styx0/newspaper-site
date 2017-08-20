@@ -16,11 +16,13 @@ import ForgotPassword from '../../Pages/ForgotPassword';
 import TwoFactor from '../../Pages/TwoFactor';
 import SelectTagPreview from '../TagSelect/SelectTagPreview';
 
-import {jwt} from '../jwt';
+import { getJWT } from '../jwt';
 
 import './index.css';
 
 export default function Router() {
+
+    const jwt = getJWT();
 
     return (
         <div>

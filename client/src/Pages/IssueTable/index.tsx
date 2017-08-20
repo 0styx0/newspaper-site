@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Table from '../../components/Table';
 import Container from '../../components/Container';
-// import { jwt } from '../../components/jwt';
+// import { getJWT } from '../../components/jwt';
 import Input from '../../components/Form/Input';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';

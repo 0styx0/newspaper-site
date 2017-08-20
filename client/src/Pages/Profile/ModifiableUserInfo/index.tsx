@@ -45,7 +45,7 @@ function ModifiableUserInfo(props: Props) {
                 type="checkbox"
                 name="delAcc"
                 value={props.id}
-                onChange={props.onDelete}
+                onChange={props.onDelete as any}
             />
         )
     ];
@@ -55,7 +55,7 @@ function ModifiableUserInfo(props: Props) {
             heading="Options"
             className="tableContainer"
             children={
-                <form onSubmit={props.onSubmit}>
+                <form onSubmit={props.onSubmit as any}>
                     <Table
                         headings={headings}
                         rows={[row]}

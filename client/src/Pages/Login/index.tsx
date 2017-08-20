@@ -2,7 +2,7 @@ import * as React from 'react';
 import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 import Container from '../../components/Container';
-import {setJWT} from '../../components/jwt';
+import { setJWT } from '../../components/jwt';
 import { Link } from 'react-router-dom';
 
 import './index.css';
@@ -54,7 +54,7 @@ class LoginForm extends React.Component<Props, {}> {
 
     async setJWT(method: string, json: Promise<{level: number}>, result: {statusText: string}) {
 
-        const jwt = await setJWT();
+        const jwt = await setJWT(null as any); // TODO:
 
         if (jwt.level) {
 
