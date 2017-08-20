@@ -206,6 +206,25 @@ const Mutation = new GraphQLObjectType({
                 });
             }
         },
+        updateProfile: {
+            type: new GraphQLNonNull(Users),
+            description: 'Modify your own settings',
+            args: {
+                notificationStatus: {type: GraphQLBoolean},
+                twoFactor: {type: GraphQLBoolean},
+                id: {type: new GraphQLNonNull(GraphQLID)}
+            },
+            resolve: async (_, args: {notificationState?: boolean; id: string; twoFactor?: boolean}) => {
+
+                const sanitized = sanitize(args);
+
+                return db.models.users.update(sanitized, {
+                    where: {
+                        id: sanitized.id
+                    }
+                });
+            }
+        },
         updateArticles: {
             type: new GraphQLList(Articles),
             description: 'Modify article data',
