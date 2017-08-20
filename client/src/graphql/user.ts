@@ -23,8 +23,12 @@ const UserQuery = gql`
 `;
 
 const UserUpdate = gql`
-    mutation updateUser($notificationStatus: boolean, $twoFactor: boolean, id: String!) {
-        updateUser(notificationStatus: $notificationStatus, twoFactor: $twoFactor, id: $id) {
+    mutation updateUser(
+        id: String!, $notificationStatus: boolean, $twoFactor: boolean, $newPassword: String
+    ) {
+        updateUser(
+            notificationStatus: $notificationStatus, twoFactor: $twoFactor, newPassword: $newPassword, id: $id
+        ) {
             id
         }
     }

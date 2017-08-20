@@ -4,8 +4,11 @@ import Container from '../../components/Container';
 import Table from '../../components/Table';
 import Input from '../../components/Form/Input';
 import TagSelect from '../../components/TagSelect';
-import { Link } from 'react-router-dom';
+
 import { Article, Issue } from './container';
+
+import ArticleLink from '../../components/ArticleTable/Link';
+import AuthorLink from '../../components/User/Link';
 
 interface Props {
     issue: Issue;
@@ -94,22 +97,14 @@ function createArticleTableRows(props: Props) {
     return props.articles.map((article: Article) => {
 
             return [
-                (
-                    <Link
-                      key={article.url}
-                      to={`/issue/${props.issue.num}/story/${article.url}`}
-                    >
-                      {decodeURIComponent(article.url)}
-                    </Link>
-                ),
+                <ArticleLink key={article.url} issue={props.issue.num} url={article.url} />,
                 article.dateCreated,
                 (
-                    <Link
+                    <AuthorLink
                       key={article.author.fullName}
-                      to={`/u/${article.author.profileLink}`}
-                    >
-                      {article.author.fullName}
-                    </Link>
+                      fullName={article.author.fullName}
+                      profileLink={article.author.profileLink}
+                    />
                 ),
                 (
                     <TagSelect
