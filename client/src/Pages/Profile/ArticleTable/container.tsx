@@ -1,20 +1,12 @@
 import * as React from 'react';
 import { graphql, withApollo } from 'react-apollo';
 import { ArticleDelete } from '../../../graphql/articles';
-import { Article } from './';
+import { Article, PublicUserInfo } from '../shared.interfaces';
 import UserArticleTable from './';
-
-interface User {
-    views: number;
-    level: number;
-    id: string;
-    fullName: string;
-    profileLink: string;
-}
 
 interface Props {
     articles: Article[];
-    user: User;
+    user: PublicUserInfo;
     deleteArticle: Function;
 }
 

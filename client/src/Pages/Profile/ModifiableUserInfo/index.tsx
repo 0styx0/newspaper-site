@@ -3,15 +3,9 @@ import Container from '../../../components/Container';
 import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
 import CheckboxContainer from '../../../components/Form/Checkbox/container';
+import { ModifiableUserInfo } from '../shared.interfaces';
 
-export interface Info {
-    email: string;
-    twoFactor: boolean;
-    notificationStatus: boolean;
-    id: string;
-}
-
-interface Props extends Info {
+interface Props extends ModifiableUserInfo {
     onSubmit: Function;
     onChange: Function;
     onDelete: Function;

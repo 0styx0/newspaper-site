@@ -6,6 +6,11 @@ interface ProfileState {
     idsToDelete: Set<string>;
 }
 
+
+interface Props {
+    fullName: string;
+}
+
 class Profile extends React.Component<{}, ProfileState> {
 
     private jwt = window.localStorage.getItem('jwt') ?
@@ -36,7 +41,7 @@ class Profile extends React.Component<{}, ProfileState> {
             <div>
                 <PublicUserInfo
                     key={this.state.changed}
-                    info={this.state.userInfo as ModifiableInfo}
+                    info={this.state.userInfo}
                 />
                 <ModifiableUserInfo
                     key={this.state.changed + 1/*forces update*/}

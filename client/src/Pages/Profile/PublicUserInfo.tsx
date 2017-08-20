@@ -1,17 +1,17 @@
 import * as React from 'react';
 import Container from '../../components/Container';
+import Table from '../../components/Table';
+import { PublicUserInfo } from './shared.interfaces';
 
-function PublicUserInfo(props: {info: ModifiableInfo}) {
-
-    const headingsJSON = props.info;
+function PublicUserInfo(props: User) {
 
     return (
         <Container
             className="tableContainer"
             children={
                 <Table
-                  headings={Object.keys(headingsJSON)}
-                  rows={[Object.values(headingsJSON)]}
+                  headings={Object.keys(props)}
+                  rows={[Object.values(props)]}
                 />
             }
         />

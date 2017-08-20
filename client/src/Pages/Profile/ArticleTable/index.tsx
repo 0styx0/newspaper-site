@@ -2,19 +2,8 @@ import * as React from 'react';
 import Container from '../../../components/Container';
 import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
-
+import { Article } from '../shared.interfaces';
 import ArticleLink from '../../../components/ArticleTable/Link';
-
-export interface Article {
-    url: string;
-    created: Date;
-    tags: {
-        all: string
-    };
-    views: number;
-    issue: number;
-    id: string;
-}
 
 interface Props {
     user: string;
