@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { UserQuery } from '../../graphql/user';
 import { graphql, compose } from 'react-apollo';
-// import PublicUserInfoComponent from './PublicUserInfo';
+import PublicUserInfoComponent from './PublicUserInfo';
 import ModifiableUserInfo from './ModifiableUserInfo/container';
 // import UserArticleTable from './ArticleTable/container';
 // import ChangePassword from './ChangePassword/container';
@@ -24,13 +24,19 @@ function Profile(props: Props) {
         return null;
     }
 
+    const articles = props.data.users[0].articles as Article[];
+    const user = props.data.users[0] as PublicUserInfo;
+
     return (
         <div>
-            <ModifiableUserInfo />
-         {/*}   <PublicUserInfoComponent
-                {...props.data.users[0]}
+            <PublicUserInfoComponent
+                name={user.fullName}
+                level={user.level}
+                views={user.views}
+                articles={articles.length}
             />
-            {getJWT().email === props.data.users[0].profileLink ? <ChangePassword /> : ''}
+            <ModifiableUserInfo />
+          {/*  {getJWT().email === props.data.users[0].profileLink ? <ChangePassword /> : ''}
             <UserArticleTable
                 articles={props.data.users[0].articles}
                 user={props.data.users[0]}

@@ -1,9 +1,15 @@
 import * as React from 'react';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-import { PublicUserInfo } from './shared.interfaces';
 
-function PublicUserInfo(props: PublicUserInfo) {
+interface Props {
+    name: string;
+    level: number;
+    articles: number;
+    views: number;
+}
+
+function PublicUserInfo(props: Props) {
 
     return (
         <Container
