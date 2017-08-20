@@ -3,12 +3,12 @@ import { UserQuery } from '../../graphql/user';
 import { graphql, compose } from 'react-apollo';
 import PublicUserInfoComponent from './PublicUserInfo';
 import ModifiableUserInfo from './ModifiableUserInfo/container';
-// import UserArticleTable from './ArticleTable/container';
-// import ChangePassword from './ChangePassword/container';
+import UserArticleTable from './ArticleTable/container';
+import ChangePassword from './ChangePassword/container';
 
 import { Article, PublicUserInfo } from './shared.interfaces';
 
-// import { getJWT } from '../../components/jwt';
+import { getJWT } from '../../components/jwt';
 
 interface Props {
     data: {
@@ -27,6 +27,8 @@ function Profile(props: Props) {
     const articles = props.data.users[0].articles as Article[];
     const user = props.data.users[0] as PublicUserInfo;
 
+    const canModify = getJWT().email === props.data.users[0].profileLink;
+
     return (
         <div>
             <PublicUserInfoComponent
@@ -36,11 +38,11 @@ function Profile(props: Props) {
                 articles={articles.length}
             />
             <ModifiableUserInfo />
-          {/*  {getJWT().email === props.data.users[0].profileLink ? <ChangePassword /> : ''}
+            {canModify ? <ChangePassword /> : ''}
             <UserArticleTable
                 articles={props.data.users[0].articles}
-                user={props.data.users[0]}
-            />*/}
+                canModify={canModify}
+            />
         </div>
     );
 }

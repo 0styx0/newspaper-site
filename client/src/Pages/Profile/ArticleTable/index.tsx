@@ -6,7 +6,7 @@ import { Article } from '../shared.interfaces';
 import ArticleLink from '../../../components/ArticleTable/Link';
 
 interface Props {
-    user: string;
+    canModify: boolean;
     articles: Article[];
     onSubmit: Function;
     onDelete: Function;
@@ -21,9 +21,6 @@ interface Props {
  */
 function UserArticleTable(props: Props) {
 
-    const jwt = window.localStorage.getItem('jwt') ?
-                JSON.parse(window.localStorage.getItem('jwt') as string)[1] :
-                {level: 0};
 
     const headings: Array<string | JSX.Element> = [
         'Article',
@@ -32,7 +29,7 @@ function UserArticleTable(props: Props) {
         'Views',
     ];
 
-    if (jwt.email === props.user) {
+    if (props.canModify) {
 
         headings.push(<span className="danger">Delete</span>);
     }
@@ -46,12 +43,12 @@ function UserArticleTable(props: Props) {
                     issue={article.issue}
                 />
             ),
-            article.created,
-            article.tags,
+            article.dateCreated,
+            article.tags.all.join(', '),
             article.views
         ];
 
-        if (jwt.email === props.user) {
+        if (props.canModify) {
             artInfo.push(
                 <input
                     type="checkbox"
@@ -74,7 +71,7 @@ function UserArticleTable(props: Props) {
                         rows={articles}
                     />
 
-                    {jwt.email === props.user ?
+                    {props.canModify ?
                         <div>
                             <Input
                                 label="Password"

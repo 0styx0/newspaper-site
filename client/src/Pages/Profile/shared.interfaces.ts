@@ -1,8 +1,8 @@
 interface Article {
     url: string;
-    created: Date;
+    dateCreated: Date; // date string
     tags: {
-        all: string
+        all: string[]
     };
     views: number;
     issue: number;

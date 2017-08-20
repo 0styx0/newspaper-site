@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { graphql, withApollo, compose } from 'react-apollo';
 import { ArticleDelete } from '../../../graphql/articles';
-import { Article, PublicUserInfo } from '../shared.interfaces';
+import { Article } from '../shared.interfaces';
 import UserArticleTable from './';
 
 interface Props {
     articles: Article[];
-    user: PublicUserInfo;
+    canModify: boolean;
     deleteArticle: Function;
 }
 
@@ -54,7 +54,7 @@ class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set
         return (
             <UserArticleTable
               articles={this.props.articles}
-              user={this.props.user.profileLink}
+              canModify={this.props.canModify}
               onDelete={this.onDelete}
               onSubmit={this.onSubmit}
             />
@@ -64,7 +64,7 @@ class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set
 
 
 const UserArticleTableContainerWithData = compose(
-    graphql(ArticleDelete, {name: 'deleteArticle'}) as any
-)(UserArticleTableContainer);
+    graphql(ArticleDelete, {name: 'deleteArticle'})
+)(UserArticleTableContainer as any);
 
 export default withApollo(UserArticleTableContainerWithData);
