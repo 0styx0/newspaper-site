@@ -4,7 +4,8 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
-import * as casual from 'casual';
+
+import casual from '../../tests/casual.data';
 
 type Issues = (Issue & { articles: Article[] })[];
 
@@ -24,14 +25,12 @@ casual.define('articles', function(amount: number, issue: number) {
     while (amount-- > 0) {
 
         articles[0].articles.push({
-            tags: {
-                all: casual.array_of_words(casual.integer(1, 3)) // can have at most 3 tags, at least 1
-            },
-            url: encodeURIComponent(casual.title),
+            tags: casual.tags,
+            url: casual.articleUrl,
             id: casual.word + '--' + amount,
             displayOrder: casual.integer(0, 100),
-            dateCreated: casual.date('YYYY-MM-DD'),
-            views: casual.integer(0, 100),
+            dateCreated: casual.dateCreated,
+            views: casual.randomPositive,
             author: {
                 fullName: casual.first_name,
                 profileLink: casual.word
