@@ -8,6 +8,7 @@ import casual from '../../../tests/casual.data';
 import snapData from './articles.example';
 import { Article } from '../shared.interfaces';
 import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
+import toggler from '../../../helpers/toggler';
 
 localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
 
@@ -49,7 +50,7 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
             <UserArticleTableContainer
                 articles={data.articles}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : (test: {}) => false}
-                canModify={!!casual.coin_flip}
+                canModify={true}
             />
         </MemoryRouter>
     );
@@ -96,12 +97,46 @@ describe('<UserArticleTableContainer>', () => {
         });
 
         it('adds article id to state.idsToDelete when checkbox is clicked', () => {
-            // changeOneCheckbox(component, deleteBoxes);
+
+            let expectedIds = new Set<string>();
+            let articlesToTest = casual.integer(0, deleteBoxes.length - 1);
+
+            for (let i = 0; expectedIds.size < articlesToTest; i++) {
+
+                const result = randomCheckboxToggle(component, deleteBoxes);
+
+                toggler(expectedIds, component.props.articles[result.index].id);
+            }
+
+            expect([...component.state.idsToDelete]).toEqual([...expectedIds]);
         });
 
         it('removes article id from state.idsToDelete when checkbox is unchecked', () => {
 
-            //
+            let expectedIds = new Set<string>();
+            let indices = new Set<String>();
+            let articlesToTest = casual.integer(0, deleteBoxes.length - 1);
+
+            for (let i = 0; expectedIds.size < articlesToTest; i++) {
+
+                const result = randomCheckboxToggle(component, deleteBoxes);
+                const id = result.input.nodes[0].value;
+
+                toggler(expectedIds, id);
+                toggler(indices, result.index);
+            }
+
+            for (let i = 0; i < casual.integer(0, indices.size); i++) {
+
+                const indexToRemove = casual.random_element([...indices]);
+
+                const result = randomCheckboxToggle(component, deleteBoxes, indexToRemove);
+                indices.delete(indexToRemove);
+
+                expectedIds.delete(result.input.nodes[0].value);
+            }
+
+            expect([...component.state.idsToDelete].sort()).toEqual([...expectedIds].sort());
         });
     });
 });

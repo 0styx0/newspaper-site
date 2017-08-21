@@ -18,6 +18,8 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
     constructor() {
         super();
 
+        this.onDelete = this.onDelete.bind(this);
+
         this.state = {
             idsToDelete: new Set<string>()
         };
@@ -29,8 +31,15 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
     onDelete(e: Event) {
 
         const idsToDelete: Set<string> = this.state.idsToDelete;
+        const value = (e.target as HTMLInputElement).value;
 
-        idsToDelete.add((e.target as HTMLInputElement).value);
+        if (idsToDelete.has(value)) {
+            
+            idsToDelete.delete(value);
+        } else {
+
+            idsToDelete.add(value);
+        }
 
         this.setState({
             idsToDelete
