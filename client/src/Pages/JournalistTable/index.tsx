@@ -3,7 +3,7 @@ import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-// import { getJWT } from '../../components/jwt';
+import { getJWT } from '../../components/jwt';
 import { Link } from 'react-router-dom';
 
 import twoDimensionalSorter from '../../helpers/twoDimensionalSorter';
@@ -50,13 +50,11 @@ interface Props {
  */
 export class JournalistTable extends React.Component<Props, State> {
 
-    private jwt = window.localStorage.getItem('jwt') ?
-                    JSON.parse(window.localStorage.getItem('jwt') as string)[1] :
-                    {level: 0};
+    private jwt = getJWT();
 
     constructor() {
         super();
-
+console.log(this.jwt);
         this.sortInfo = this.sortInfo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
@@ -99,32 +97,37 @@ export class JournalistTable extends React.Component<Props, State> {
 
         return userData.map((person: User) => {
 
-            const fullName = `${person.firstName} ${person.middleName ? person.middleName + ' ' : ''}${person.lastName}`;
-            const profileLink = <Link to={"/u/"+person.profileLink}>{fullName}</Link>;
+            const fullName =
+                `${person.firstName} ${person.middleName ? person.middleName + ' ' : ''}${person.lastName}`;
+            const profileLink = <Link to={`/u/${person.profileLink}`}>{fullName}</Link>;
 
-            let deleteBox: JSX.Element | string = "N/A";
+            let deleteBox: JSX.Element | string = 'N/A';
             let level: JSX.Element | number = person.level;
 
             if (person.level < this.jwt.level) {
 
-                deleteBox = <input
-                                onChange={this.onDelete as any}
-                                key={person.id}
-                                type="checkbox"
-                                name="delAcc"
-                                value={person.id}
-                            />
+                deleteBox = (
+                    <input
+                        onChange={this.onDelete as any}
+                        key={person.id}
+                        type="checkbox"
+                        name="delAcc"
+                        value={person.id}
+                    />
+                );
 
-                level = <select
-                          name="lvl"
-                          onChange={((e: Event) => this.onIdLevelMap(e, person.id)) as any}
-                          defaultValue={person.level.toString()}
-                        >
-                            {Array(this.jwt.level).fill(null).map((val, idx) =>
-                                // fill with levels until and including current user's level
-                                <option key={idx} value={idx + 1}>{idx + 1}</option>
-                            )}
-                        </select>;
+                level = (
+                    <select
+                        name="lvl"
+                        onChange={((e: Event) => this.onIdLevelMap(e, person.id)) as any}
+                        defaultValue={person.level.toString()}
+                    >
+                        {Array(this.jwt.level).fill(null).map((val, idx) =>
+                            // fill with levels until and including current user's level
+                            <option key={idx} value={idx + 1}>{idx + 1}</option>
+                        )}
+                    </select>
+                );
             }
 
             let info: (number | string | JSX.Element)[] = [
@@ -136,9 +139,9 @@ export class JournalistTable extends React.Component<Props, State> {
             switch(this.jwt.level) {
                 case 3:
                 case 2:
-                    info.push(deleteBox)
+                    info.push(deleteBox);
                 case 1:
-                    info.splice(1, 0, level)
+                    info.splice(1, 0, level);
                 default:
                     return info;
             }
@@ -171,7 +174,7 @@ export class JournalistTable extends React.Component<Props, State> {
                 value: 'articleCount'
             },
             {
-                view: "Views",
+                view: 'Views',
                 value: 'views'
             }
         ];
@@ -259,13 +262,14 @@ export class JournalistTable extends React.Component<Props, State> {
             const indexOfLevel = data.findIndex(elt => elt.level === level);
 
             if (indexOfLevel !== -1) {
+
                 data[indexOfLevel].ids.push(id);
-            }
-            else {
+            } else {
+
                 data[data.length] = {
                     level,
                     ids: [id]
-                }
+                };
             }
         });
 
@@ -315,16 +319,18 @@ export class JournalistTable extends React.Component<Props, State> {
             tableHeadings.push(<span className="danger">Delete</span>);
 
             loggedInElts = [
-                    <Input
-                        key={0}
-                        label="Password"
-                        props={{
-                            key: 0,
-                            name: "password",
-                            type: "password",
-                            required: true
-                        }}
-                    />,
+                    (
+                        <Input
+                            key={0}
+                            label="Password"
+                            props={{
+                                key: 0,
+                                name: 'password',
+                                type: 'password',
+                                required: true
+                            }}
+                        />
+                    ),
                     <input key={1} name="" value="Modify Users" type="submit" />
                 ];
         }

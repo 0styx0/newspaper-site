@@ -16,4 +16,4 @@ interface Extended {
     };
 }
 
-export default casual as Extended & casual;
+export default casual as Extended & typeof casual;

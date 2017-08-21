@@ -1,6 +1,6 @@
 interface Article {
     url: string;
-    dateCreated: Date; // date string
+    dateCreated: string; // date string
     tags: {
         all: string[]
     };

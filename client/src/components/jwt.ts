@@ -13,7 +13,9 @@ let jwt: Jwt = {
 
 function getJWT(): Jwt {
 
-    return JSON.parse(window.localStorage.getItem('jwt') || JSON.stringify(jwt));
+    return JSON.parse(
+        window.localStorage.getItem('jwt') ||
+        JSON.stringify([, jwt]))[1];
 }
 
 async function setJWT(newJwt: Jwt) {

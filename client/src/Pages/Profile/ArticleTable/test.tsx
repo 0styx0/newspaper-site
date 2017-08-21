@@ -10,6 +10,14 @@ import { Article } from '../shared.interfaces';
 
 localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
 
+interface customCasualData {
+    articles: (amount: number) => Article[];
+}
+
+type customCasual = customCasualData & typeof casual;
+
+const customCasual = casual as customCasual;
+
 casual.define('articles', function(amount: number) {
 
     const articles: Article[] = [];
@@ -34,9 +42,9 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
     return mount(
         <MemoryRouter>
             <UserArticleTableContainer
-                articles={casual.articles(casual.randomPositive)}
+                articles={customCasual.articles(casual.randomPositive)}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : (test: {}) => false}
-                canModify={casual.coin_flip}
+                canModify={!!casual.coin_flip}
             />
         </MemoryRouter>
     );

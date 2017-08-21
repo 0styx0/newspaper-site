@@ -71,7 +71,7 @@ describe('<JournalistTable>', () => {
 
     it(`should show users' levels only when one is logged in`, () => {
 
-       localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
+        localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
 
         const tree = renderer.create(
             <JournalistTable
@@ -90,17 +90,17 @@ describe('<JournalistTable>', () => {
         // while lvl 3 can delete/modify lvl 2 until lvl 3
         [2, 3].forEach(level => {
 
-            localStorageMock.setItem('jwt', JSON.stringify([,{level}]));
+            localStorageMock.setItem('jwt', JSON.stringify([, {level}]));
 
-                const tree = renderer.create(
-                    <JournalistTable
-                        data={data}
-                        userUpdate={(test: any) => true}
-                        userDelete={(test: any) => false}
-                    />
-                ).toJSON();
+            const tree = renderer.create(
+                <JournalistTable
+                    data={data}
+                    userUpdate={(test: any) => true}
+                    userDelete={(test: any) => false}
+                />
+            ).toJSON();
 
-                expect(tree).toMatchSnapshot();
+            expect(tree).toMatchSnapshot();
         });
     });
 
@@ -368,6 +368,9 @@ describe('<JournalistTable>', () => {
                                         });
 
                         const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
+
+                        mapping.variables.data.forEach(elt => elt.ids.sort());
+                        expectedFormat.forEach(elt => elt.ids.sort());
 
                         // the sorting is so test doesn't fail because indices don't match
                         expect(mapping.variables.data.sort(sortBy)).toEqual(expectedFormat.sort(sortBy));
