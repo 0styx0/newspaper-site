@@ -5,6 +5,8 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
+import snapData from './__snapshots__/users.example';
+import renderWithProps from '../../tests/snapshot.helper';
 
 /**
  * @param amount - how many users to return
@@ -56,51 +58,57 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
 
 describe('<JournalistTable>', () => {
 
-    it('should render correctly', () => {
+    describe('snapshots', () => {
 
-        const tree = renderer.create(
-            <JournalistTable
-                data={data}
-                userUpdate={(test: any) => true}
-                userDelete={(test: any) => false}
-            />
-        ).toJSON();
+        const fixedData = {
+                        loading: false,
+                        users: snapData
+                    };
 
-        expect(tree).toMatchSnapshot();
-    });
+        it('should render correctly', () => {
 
-    it(`should show users' levels only when one is logged in`, () => {
-
-        localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
-
-        const tree = renderer.create(
-            <JournalistTable
-                data={data}
-                userUpdate={(test: any) => true}
-                userDelete={(test: any) => false}
-            />
-        ).toJSON();
-
-        expect(tree).toMatchSnapshot();
-    });
-
-    it(`should let higher level users modify lower level users' level and delete their account`, () => {
-
-        // 2 tests since lvl 2 can only modify lvl 1, and change them to lvl 2,
-        // while lvl 3 can delete/modify lvl 2 until lvl 3
-        [2, 3].forEach(level => {
-
-            localStorageMock.setItem('jwt', JSON.stringify([, {level}]));
-
-            const tree = renderer.create(
+            const tree = renderWithProps(
                 <JournalistTable
-                    data={data}
+                    data={fixedData}
                     userUpdate={(test: any) => true}
                     userDelete={(test: any) => false}
-                />
-            ).toJSON();
+                />);
 
             expect(tree).toMatchSnapshot();
+        });
+
+        it(`should show users' levels only when one is logged in`, () => {
+
+            localStorageMock.setItem('jwt', JSON.stringify([, {level: 1}]));
+
+            const tree = renderWithProps(
+                <JournalistTable
+                    data={fixedData}
+                    userUpdate={(test: any) => true}
+                    userDelete={(test: any) => false}
+                />);
+
+            expect(tree).toMatchSnapshot();
+        });
+
+        it(`should let higher level users modify lower level users' level and delete their account`, () => {
+
+            // 2 tests since lvl 2 can only modify lvl 1, and change them to lvl 2,
+            // while lvl 3 can delete/modify lvl 2 until lvl 3
+            [2, 3].forEach(level => {
+
+                localStorageMock.setItem('jwt', JSON.stringify([, {level}]));
+
+                const tree = renderWithProps(
+                    <JournalistTable
+                        data={fixedData}
+                        userUpdate={(test: any) => true}
+                        userDelete={(test: any) => false}
+                    />
+                );
+
+                expect(tree).toMatchSnapshot();
+            });
         });
     });
 

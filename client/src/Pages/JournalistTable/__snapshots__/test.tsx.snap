@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<JournalistTable> should let higher level users modify lower level users' level and delete their account 1`] = `
+exports[`<JournalistTable> snapshots should let higher level users modify lower level users' level and delete their account 1`] = `
 <section
   className="container "
 >
@@ -74,7 +74,138 @@ exports[`<JournalistTable> should let higher level users modify lower level user
               </th>
             </tr>
           </thead>
-          <tbody />
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/u/nemo"
+                  onClick={[Function]}
+                >
+                  Greg Kuhn
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                4
+              </td>
+              <td>
+                72
+              </td>
+              <td>
+                N/A
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/sit"
+                  onClick={[Function]}
+                >
+                  Angelina Kutch
+                </a>
+              </td>
+              <td>
+                3
+              </td>
+              <td>
+                48
+              </td>
+              <td>
+                695
+              </td>
+              <td>
+                N/A
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/ut"
+                  onClick={[Function]}
+                >
+                  Tracy g Gusikowski
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                50
+              </td>
+              <td>
+                554
+              </td>
+              <td>
+                N/A
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/et"
+                  onClick={[Function]}
+                >
+                  Violette Schmitt
+                </a>
+              </td>
+              <td>
+                <select
+                  defaultValue="1"
+                  name="lvl"
+                  onChange={[Function]}
+                >
+                  <option
+                    value={1}
+                  >
+                    1
+                  </option>
+                  <option
+                    value={2}
+                  >
+                    2
+                  </option>
+                </select>
+              </td>
+              <td>
+                44
+              </td>
+              <td>
+                289
+              </td>
+              <td>
+                <input
+                  name="delAcc"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="et"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/voluptatem"
+                  onClick={[Function]}
+                >
+                  Marion Z Sanford
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                6
+              </td>
+              <td>
+                99
+              </td>
+              <td>
+                N/A
+              </td>
+            </tr>
+          </tbody>
         </table>
         <label>
           Password: 
@@ -101,7 +232,7 @@ exports[`<JournalistTable> should let higher level users modify lower level user
 </section>
 `;
 
-exports[`<JournalistTable> should let higher level users modify lower level users' level and delete their account 2`] = `
+exports[`<JournalistTable> snapshots should let higher level users modify lower level users' level and delete their account 2`] = `
 <section
   className="container "
 >
@@ -175,7 +306,218 @@ exports[`<JournalistTable> should let higher level users modify lower level user
               </th>
             </tr>
           </thead>
-          <tbody />
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/u/nemo"
+                  onClick={[Function]}
+                >
+                  Greg Kuhn
+                </a>
+              </td>
+              <td>
+                <select
+                  defaultValue="2"
+                  name="lvl"
+                  onChange={[Function]}
+                >
+                  <option
+                    value={1}
+                  >
+                    1
+                  </option>
+                  <option
+                    value={2}
+                  >
+                    2
+                  </option>
+                  <option
+                    value={3}
+                  >
+                    3
+                  </option>
+                </select>
+              </td>
+              <td>
+                4
+              </td>
+              <td>
+                72
+              </td>
+              <td>
+                <input
+                  name="delAcc"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="qui"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/sit"
+                  onClick={[Function]}
+                >
+                  Angelina Kutch
+                </a>
+              </td>
+              <td>
+                3
+              </td>
+              <td>
+                48
+              </td>
+              <td>
+                695
+              </td>
+              <td>
+                N/A
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/ut"
+                  onClick={[Function]}
+                >
+                  Tracy g Gusikowski
+                </a>
+              </td>
+              <td>
+                <select
+                  defaultValue="2"
+                  name="lvl"
+                  onChange={[Function]}
+                >
+                  <option
+                    value={1}
+                  >
+                    1
+                  </option>
+                  <option
+                    value={2}
+                  >
+                    2
+                  </option>
+                  <option
+                    value={3}
+                  >
+                    3
+                  </option>
+                </select>
+              </td>
+              <td>
+                50
+              </td>
+              <td>
+                554
+              </td>
+              <td>
+                <input
+                  name="delAcc"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="ex"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/et"
+                  onClick={[Function]}
+                >
+                  Violette Schmitt
+                </a>
+              </td>
+              <td>
+                <select
+                  defaultValue="1"
+                  name="lvl"
+                  onChange={[Function]}
+                >
+                  <option
+                    value={1}
+                  >
+                    1
+                  </option>
+                  <option
+                    value={2}
+                  >
+                    2
+                  </option>
+                  <option
+                    value={3}
+                  >
+                    3
+                  </option>
+                </select>
+              </td>
+              <td>
+                44
+              </td>
+              <td>
+                289
+              </td>
+              <td>
+                <input
+                  name="delAcc"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="et"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/voluptatem"
+                  onClick={[Function]}
+                >
+                  Marion Z Sanford
+                </a>
+              </td>
+              <td>
+                <select
+                  defaultValue="2"
+                  name="lvl"
+                  onChange={[Function]}
+                >
+                  <option
+                    value={1}
+                  >
+                    1
+                  </option>
+                  <option
+                    value={2}
+                  >
+                    2
+                  </option>
+                  <option
+                    value={3}
+                  >
+                    3
+                  </option>
+                </select>
+              </td>
+              <td>
+                6
+              </td>
+              <td>
+                99
+              </td>
+              <td>
+                <input
+                  name="delAcc"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="facilis"
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
         <label>
           Password: 
@@ -202,7 +544,7 @@ exports[`<JournalistTable> should let higher level users modify lower level user
 </section>
 `;
 
-exports[`<JournalistTable> should render correctly 1`] = `
+exports[`<JournalistTable> snapshots should render correctly 1`] = `
 <section
   className="container "
 >
@@ -259,7 +601,88 @@ exports[`<JournalistTable> should render correctly 1`] = `
               </th>
             </tr>
           </thead>
-          <tbody />
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/u/nemo"
+                  onClick={[Function]}
+                >
+                  Greg Kuhn
+                </a>
+              </td>
+              <td>
+                4
+              </td>
+              <td>
+                72
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/sit"
+                  onClick={[Function]}
+                >
+                  Angelina Kutch
+                </a>
+              </td>
+              <td>
+                48
+              </td>
+              <td>
+                695
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/ut"
+                  onClick={[Function]}
+                >
+                  Tracy g Gusikowski
+                </a>
+              </td>
+              <td>
+                50
+              </td>
+              <td>
+                554
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/et"
+                  onClick={[Function]}
+                >
+                  Violette Schmitt
+                </a>
+              </td>
+              <td>
+                44
+              </td>
+              <td>
+                289
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/voluptatem"
+                  onClick={[Function]}
+                >
+                  Marion Z Sanford
+                </a>
+              </td>
+              <td>
+                6
+              </td>
+              <td>
+                99
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </form>
@@ -267,7 +690,7 @@ exports[`<JournalistTable> should render correctly 1`] = `
 </section>
 `;
 
-exports[`<JournalistTable> should show users' levels only when one is logged in 1`] = `
+exports[`<JournalistTable> snapshots should show users' levels only when one is logged in 1`] = `
 <section
   className="container "
 >
@@ -333,7 +756,103 @@ exports[`<JournalistTable> should show users' levels only when one is logged in 
               </th>
             </tr>
           </thead>
-          <tbody />
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/u/nemo"
+                  onClick={[Function]}
+                >
+                  Greg Kuhn
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                4
+              </td>
+              <td>
+                72
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/sit"
+                  onClick={[Function]}
+                >
+                  Angelina Kutch
+                </a>
+              </td>
+              <td>
+                3
+              </td>
+              <td>
+                48
+              </td>
+              <td>
+                695
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/ut"
+                  onClick={[Function]}
+                >
+                  Tracy g Gusikowski
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                50
+              </td>
+              <td>
+                554
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/et"
+                  onClick={[Function]}
+                >
+                  Violette Schmitt
+                </a>
+              </td>
+              <td>
+                1
+              </td>
+              <td>
+                44
+              </td>
+              <td>
+                289
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/u/voluptatem"
+                  onClick={[Function]}
+                >
+                  Marion Z Sanford
+                </a>
+              </td>
+              <td>
+                2
+              </td>
+              <td>
+                6
+              </td>
+              <td>
+                99
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </form>
