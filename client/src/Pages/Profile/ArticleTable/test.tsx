@@ -7,14 +7,15 @@ import localStorageMock from '../../../tests/localstorage.mock';
 import casual from '../../../tests/casual.data';
 import snapData from './articles.example';
 import { Article } from '../shared.interfaces';
+import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
 
 localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
 
-interface customCasualData {
+interface CustomCasualData {
     articles: (amount: number) => Article[];
 }
 
-type customCasual = customCasualData & typeof casual;
+type customCasual = CustomCasualData & typeof casual;
 
 const customCasual = casual as customCasual;
 
@@ -37,12 +38,16 @@ casual.define('articles', function(amount: number) {
     return articles;
 });
 
+const data = {
+    articles: customCasual.articles(casual.randomPositive)
+};
+
 function setup(mockGraphql: {deleteArticle?: Function} = {}) {
 
     return mount(
         <MemoryRouter>
             <UserArticleTableContainer
-                articles={customCasual.articles(casual.randomPositive)}
+                articles={data.articles}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : (test: {}) => false}
                 canModify={!!casual.coin_flip}
             />
@@ -51,11 +56,6 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
 }
 
 describe('<UserArticleTableContainer>', () => {
-    let wrapper: any;
-
-    beforeEach(() => {
-        wrapper = setup();
-    });
 
     describe('snapshots', () => {
 
@@ -79,5 +79,29 @@ describe('<UserArticleTableContainer>', () => {
         it('renders correctly when canModify is true', () => testSnap(true));
 
         it('renders correctly when canModify is false', () => testSnap(false));
+    });
+
+    describe('onDelete', () => {
+
+        let wrapper: any;
+        let component: any;
+        let deleteBoxes: any;
+
+        beforeEach(() => {
+
+            wrapper = setup();
+
+            deleteBoxes = wrapper.find('[name="delArt"]');
+            component = wrapper.find(UserArticleTableContainer).node;
+        });
+
+        it('adds article id to state.idsToDelete when checkbox is clicked', () => {
+            // changeOneCheckbox(component, deleteBoxes);
+        });
+
+        it('removes article id from state.idsToDelete when checkbox is unchecked', () => {
+
+            //
+        });
     });
 });

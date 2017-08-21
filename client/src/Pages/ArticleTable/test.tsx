@@ -7,7 +7,9 @@ import localStorageMock from '../../tests/localstorage.mock';
 
 import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
-import snapData from './__snapshots__/articles.example.ts';
+import snapData from './__snapshots__/articles.example';
+import { randomCheckboxToggle } from '../../tests/enzyme.helpers';
+
 
 type Issues = (Issue & { articles: Article[] })[];
 
@@ -285,19 +287,15 @@ describe('<ArticleTableContainer>', () => {
          */
         function changeOneCheckbox() {
 
-            const checkboxIndex = casual.integer(0, deleteCheckbox.length - 1);
+            const boxInfo = randomCheckboxToggle(component, deleteCheckbox);
 
-            const oneCheckbox = deleteCheckbox.at(checkboxIndex);
-            oneCheckbox.nodes[0].checked = !oneCheckbox.nodes[0].checked;
-            oneCheckbox.simulate('change');
-
-            const id = component.state.articles[checkboxIndex].id;
+            const id = component.state.articles[boxInfo.index].id;
 
             expect(component.state.updates.idsToDelete).toContain(id);
 
             return {
-              index: checkboxIndex,
-              input: oneCheckbox,
+              index: boxInfo.index,
+              input: boxInfo.input,
               id
             };
         }
