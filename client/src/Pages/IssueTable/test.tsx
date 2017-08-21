@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { IssueTable, Issue } from './';
 import { mount } from 'enzyme';
-import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
-import renderWithProps from '../../tests/snapshots.helper';
+import renderWithProps from '../../tests/snapshot.helper';
+import snapData from './__snapshots__/issues.example';
 
 // NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
 
@@ -73,13 +73,16 @@ describe('<IssueTable>', () => {
 
             localStorageMock.setItem('jwt', JSON.stringify([,{level: userLevel}]));
 
-            const tree = renderer.create(
+            const tree = renderWithProps(
 
                 <IssueTable
-                    data={graphql}
+                    data={{
+                        loading: false,
+                        issues: snapData
+                    }}
                     mutate={(test: any) => false}
                 />
-            ).toJSON();
+            );
 
             expect(tree).toMatchSnapshot();
         }

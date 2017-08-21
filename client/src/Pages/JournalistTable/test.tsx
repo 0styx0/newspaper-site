@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { JournalistTable, User } from './';
 import { mount } from 'enzyme';
-import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
