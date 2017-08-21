@@ -13,7 +13,7 @@ interface Props {
 /**
  * Container for @see ./index.tsx
  */
-class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set<string>}> {
+export class UserArticleTableContainer extends React.Component<Props, {idsToDelete: Set<string>}> {
 
     constructor() {
         super();
