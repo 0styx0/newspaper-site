@@ -145,7 +145,7 @@ describe('<JournalistTable>', () => {
                                  sort((a, b) => +a[option] - +b[option])
                                  .map(user => user[option]);
 
-            expect(component.state.userInfo.map((user: User) => user[sortingIdices[option]])).toEqual(expected)
+            expect(component.state.userInfo.map((user: User) => user[sortingIdices[option]])).toEqual(expected);
         }
 
         /**

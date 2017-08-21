@@ -54,7 +54,7 @@ export class JournalistTable extends React.Component<Props, State> {
 
     constructor() {
         super();
-console.log(this.jwt);
+
         this.sortInfo = this.sortInfo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);

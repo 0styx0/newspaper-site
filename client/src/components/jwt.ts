@@ -7,7 +7,7 @@ interface Jwt {
 
 let jwt: Jwt = {
     id: '',
-    level: 1,
+    level: 0,
     email: ''
 };
 

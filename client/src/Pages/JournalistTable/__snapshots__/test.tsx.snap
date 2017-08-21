@@ -224,11 +224,6 @@ exports[`<JournalistTable> should render correctly 1`] = `
             Last Name
           </option>
           <option
-            value="level"
-          >
-            Level
-          </option>
-          <option
             value="articleCount"
           >
             Articles
@@ -253,10 +248,6 @@ exports[`<JournalistTable> should render correctly 1`] = `
               <th>
                  
                 Name
-              </th>
-              <th>
-                 
-                Level
               </th>
               <th>
                  
