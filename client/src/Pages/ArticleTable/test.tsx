@@ -5,7 +5,9 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 
+import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
+import snapData from './__snapshots__/articles.example.ts';
 
 type Issues = (Issue & { articles: Article[] })[];
 
@@ -100,17 +102,20 @@ describe('<ArticleTableContainer>', () => {
 
         it('renders correctly', () => {
 
-            const tree = renderer.create(
+            const tree = renderWithProps(
 
                 <ArticleTableContainer
-                    data={(casual as any).data()}
+                    data={{
+                        loading: false,
+                        issues: snapData
+                    }}
                     updateArticle={filler}
                     deleteArticle={filler}
                     client={{
                         query: filler
                     }}
                 />
-            ).toJSON();
+            );
 
             expect(tree).toMatchSnapshot();
         });

@@ -5,6 +5,7 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
+import renderWithProps from '../../tests/snapshots.helper';
 
 // NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
 
