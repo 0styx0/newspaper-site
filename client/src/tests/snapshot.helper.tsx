@@ -12,7 +12,7 @@ import * as renderer from 'react-test-renderer';
  * @return result of `renderer.create` (@see react-test-renderer npm module)
  * after giving `router` context and making `componentWillReceiveProps` fire
  */
-export default function renderWithProps(component: JSX.Element) {
+export default function renderWithProps(component: JSX.Element | any) {
 
         // in case componentWillMount is used in the component save it so can put back when done
         const mount = component.type.prototype.componentWillMount;

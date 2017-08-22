@@ -27,11 +27,11 @@ export interface Issue {
 interface Props {
     data: {
         loading: boolean;
-        issues?: [
+        issues?: (
             Issue & {
                 articles: Article[]
             }
-        ]; // will never be more length than 1
+        )[]; // will never be more length than 1
     };
     client: {
         query: ( params: { query: typeof ArticleQuery, variables: { issue: number | null; } } ) => Promise<Props>;
