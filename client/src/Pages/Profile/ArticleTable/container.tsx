@@ -19,6 +19,7 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
         super();
 
         this.onDelete = this.onDelete.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             idsToDelete: new Set<string>()
@@ -34,7 +35,7 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
         const value = (e.target as HTMLInputElement).value;
 
         if (idsToDelete.has(value)) {
-            
+
             idsToDelete.delete(value);
         } else {
 
@@ -49,8 +50,11 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
     /**
      * Sends idsToDelete to server to be deleted
      */
-    onSubmit() {
+    onSubmit(e: Event) {
 
+        e.preventDefault();
+        e.stopPropagation();
+        
         this.props.deleteArticle({
             variables: {
                 ids: [...this.state.idsToDelete]
