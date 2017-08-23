@@ -38,10 +38,10 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
         };
     }
 
-    onDelete() {
+    onDelete(e: Event) {
 
         this.setState({
-            delete: !this.state.delete
+            delete: (e.target as HTMLInputElement).checked
         });
     }
 
@@ -56,7 +56,7 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
         const updates = Object.assign({}, this.state.updates);
 
-        updates[target.name] = target.value;
+        updates[target.name] = target.checked;
 
         this.setState({
             updates

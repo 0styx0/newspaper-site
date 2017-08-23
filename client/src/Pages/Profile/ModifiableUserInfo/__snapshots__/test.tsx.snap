@@ -52,6 +52,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
             <input
               defaultChecked={true}
               name="notificationStatus"
+              onChange={[Function]}
               type="checkbox"
             />
           </td>
@@ -139,6 +140,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
             <input
               defaultChecked={false}
               name="notificationStatus"
+              onChange={[Function]}
               type="checkbox"
             />
           </td>
@@ -226,6 +228,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
             <input
               defaultChecked={true}
               name="notificationStatus"
+              onChange={[Function]}
               type="checkbox"
             />
           </td>
@@ -313,6 +316,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
             <input
               defaultChecked={false}
               name="notificationStatus"
+              onChange={[Function]}
               type="checkbox"
             />
           </td>

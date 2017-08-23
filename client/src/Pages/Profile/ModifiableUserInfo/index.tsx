@@ -32,6 +32,7 @@ function ModifiableUserInfo(props: Props) {
         (
             <input
                 name="notificationStatus"
+                onChange={props.onChange as any}
                 type="checkbox"
                 defaultChecked={props.notificationStatus}
             />
