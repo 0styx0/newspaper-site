@@ -103,7 +103,7 @@ describe('<UserArticleTableContainer>', () => {
 
             for (let i = 0; expectedIds.size < articlesToTest; i++) {
 
-                const result = randomCheckboxToggle(component, deleteBoxes);
+                const result = randomCheckboxToggle(deleteBoxes);
 
                 toggler(expectedIds, component.props.articles[result.index].id);
             }
@@ -119,7 +119,7 @@ describe('<UserArticleTableContainer>', () => {
 
             for (let i = 0; expectedIds.size < articlesToTest; i++) {
 
-                const result = randomCheckboxToggle(component, deleteBoxes);
+                const result = randomCheckboxToggle(deleteBoxes);
                 const id = result.input.nodes[0].value;
 
                 toggler(expectedIds, id);
@@ -130,7 +130,7 @@ describe('<UserArticleTableContainer>', () => {
 
                 const indexToRemove = casual.random_element([...indices]);
 
-                const result = randomCheckboxToggle(component, deleteBoxes, indexToRemove);
+                const result = randomCheckboxToggle(deleteBoxes, indexToRemove);
                 indices.delete(indexToRemove);
 
                 expectedIds.delete(result.input.nodes[0].value);

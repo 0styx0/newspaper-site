@@ -286,7 +286,7 @@ describe('<ArticleTableContainer>', () => {
          */
         function changeOneCheckbox() {
 
-            const boxInfo = randomCheckboxToggle(component, deleteCheckbox);
+            const boxInfo = randomCheckboxToggle(deleteCheckbox);
 
             const id = component.state.articles[boxInfo.index].id;
 

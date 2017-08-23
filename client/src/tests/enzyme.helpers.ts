@@ -3,7 +3,7 @@ import casual from './casual.data';
 /**
  * checks a random checkbox
  */
-export function randomCheckboxToggle(component: any, checkboxList: any, indexToToggle?: number) {
+export function randomCheckboxToggle(checkboxList: any, indexToToggle?: number) {
 
     const checkboxIndex = (indexToToggle === undefined) ? casual.integer(0, checkboxList.length - 1) : indexToToggle;
 
