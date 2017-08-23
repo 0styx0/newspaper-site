@@ -22,7 +22,7 @@ describe('<ChangePasswordContainer>', () => {
 
             const tree = renderer.create(
 
-                <ChangePasswordContainer />
+                <ChangePasswordContainer updatePassword={() => true} />
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
@@ -83,7 +83,7 @@ describe('<ChangePasswordContainer>', () => {
 
             values[casual.integer(0, 2)] = '';
 
-            setValues(...values);
+            setValues(values[0], values[1], values[2]);
 
             expect(spy.called).toBeFalsy();
         });
