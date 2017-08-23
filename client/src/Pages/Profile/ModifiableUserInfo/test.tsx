@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
 import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
+import * as sinon from 'sinon';
 
 import { ModifiableUserInfo } from '../shared.interfaces';
 
@@ -258,9 +259,22 @@ describe('<ModifiableUserInfoContainer>', () => {
 
             wrapper.find('form').first().simulate('submit');
         });
-    });
 
-    it(`shouldn't send if no data`, () => {
-            //
+        it(`shouldn't send if no data`, () => {
+
+            const spy = sinon.spy();
+
+            const wrapper = setup(
+                {notificationStatus: false, twoFactor: false},
+                {
+                    updateUser: spy,
+                    deleteUser: spy
+                }
+            );
+
+            wrapper.find('form').first().simulate('submit');
+
+            expect(spy.called).toBeFalsy();
+        });
     });
 });

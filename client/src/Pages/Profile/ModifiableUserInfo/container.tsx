@@ -72,7 +72,7 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
             return this.deleteUser();
         }
 
-        if (this.state.updates) {
+        if (Object.keys(this.state.updates).length > 0) {
             this.props.updateUser({
                 variables: this.state.updates
             });
