@@ -4,43 +4,15 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../../tests/localstorage.mock';
-import casual from '../../../tests/casual.data';
+import casual from '../casual.data';
 import snapData from './articles.example';
-import { Article } from '../shared.interfaces';
 import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
 import toggler from '../../../helpers/toggler';
 
 localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
 
-interface CustomCasualData {
-    articles: (amount: number) => Article[];
-}
-
-type customCasual = CustomCasualData & typeof casual;
-
-const customCasual = casual as customCasual;
-
-casual.define('articles', function(amount: number) {
-
-    const articles: Article[] = [];
-
-    while (amount-- > 0) {
-
-        articles.push({
-            tags: casual.tags,
-            url: casual.articleUrl,
-            id: casual.word + '--' + amount,
-            dateCreated: casual.dateCreated,
-            views: casual.randomPositive,
-            issue: casual.randomPositive
-        });
-    }
-
-    return articles;
-});
-
 const data = {
-    articles: customCasual.articles(casual.randomPositive)
+    articles: casual.articles(casual.randomPositive)
 };
 
 function setup(mockGraphql: {deleteArticle?: Function} = {}) {
