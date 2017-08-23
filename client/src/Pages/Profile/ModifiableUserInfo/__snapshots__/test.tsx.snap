@@ -1,0 +1,349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ModifiableUserInfoContainer> snapshots should have both checked if both are true 1`] = `
+<section
+  className="container tableContainer"
+>
+  <h1>
+    Options
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Email
+          </th>
+          <th>
+             
+            2FA
+          </th>
+          <th>
+             
+            Notifications
+          </th>
+          <th>
+             
+            <span
+              className="danger"
+            >
+              Delete Account
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Lockman_Quincy@gmail.com
+          </td>
+          <td>
+            <input
+              defaultChecked={true}
+              name="twoFactor"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              defaultChecked={true}
+              name="notificationStatus"
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              name="delAcc"
+              onChange={[Function]}
+              type="checkbox"
+              value="totam"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <label>
+      Password: 
+      <input
+        name="password"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;
+
+exports[`<ModifiableUserInfoContainer> snapshots should have none checked if both are false 1`] = `
+<section
+  className="container tableContainer"
+>
+  <h1>
+    Options
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Email
+          </th>
+          <th>
+             
+            2FA
+          </th>
+          <th>
+             
+            Notifications
+          </th>
+          <th>
+             
+            <span
+              className="danger"
+            >
+              Delete Account
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Fadel.Ephraim@gmail.com
+          </td>
+          <td>
+            <input
+              defaultChecked={false}
+              name="twoFactor"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              defaultChecked={false}
+              name="notificationStatus"
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              name="delAcc"
+              onChange={[Function]}
+              type="checkbox"
+              value="dolorem"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <label>
+      Password: 
+      <input
+        name="password"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;
+
+exports[`<ModifiableUserInfoContainer> snapshots should have notifications checked if notificationStatus is true 1`] = `
+<section
+  className="container tableContainer"
+>
+  <h1>
+    Options
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Email
+          </th>
+          <th>
+             
+            2FA
+          </th>
+          <th>
+             
+            Notifications
+          </th>
+          <th>
+             
+            <span
+              className="danger"
+            >
+              Delete Account
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Kassulke.Glen@yahoo.com
+          </td>
+          <td>
+            <input
+              defaultChecked={false}
+              name="twoFactor"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              defaultChecked={true}
+              name="notificationStatus"
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              name="delAcc"
+              onChange={[Function]}
+              type="checkbox"
+              value="dolor"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <label>
+      Password: 
+      <input
+        name="password"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;
+
+exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked if twoFactor is true 1`] = `
+<section
+  className="container tableContainer"
+>
+  <h1>
+    Options
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Email
+          </th>
+          <th>
+             
+            2FA
+          </th>
+          <th>
+             
+            Notifications
+          </th>
+          <th>
+             
+            <span
+              className="danger"
+            >
+              Delete Account
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Bailey.Elnora@Lehner.us
+          </td>
+          <td>
+            <input
+              defaultChecked={true}
+              name="twoFactor"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              defaultChecked={false}
+              name="notificationStatus"
+              type="checkbox"
+            />
+          </td>
+          <td>
+            <input
+              name="delAcc"
+              onChange={[Function]}
+              type="checkbox"
+              value="optio"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <label>
+      Password: 
+      <input
+        name="password"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;

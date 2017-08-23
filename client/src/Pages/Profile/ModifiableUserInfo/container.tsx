@@ -24,7 +24,7 @@ interface State {
 /**
  * Container, has event listeners and passes data to @see ./index.tsx
  */
-class ModifiableUserInfoContainer extends React.Component<Props, State> {
+export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
     constructor() {
         super();
