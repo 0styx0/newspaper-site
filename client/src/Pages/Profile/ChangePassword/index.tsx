@@ -42,8 +42,7 @@ function ChangePassword(props: Props) {
                         }}
                     />
                     <input type="submit" value="Change Password" />
-                </form>
-            }
+                </form>}
         />
     );
 }

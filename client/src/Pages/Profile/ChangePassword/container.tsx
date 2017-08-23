@@ -7,7 +7,13 @@ interface Props {
     updatePassword: Function;
 }
 
-class ChangePasswordContainer extends React.Component<Props, {}> {
+export class ChangePasswordContainer extends React.Component<Props, {}> {
+
+    constructor() {
+        super();
+
+        this.onSubmit = this.onSubmit.bind(this);
+    }
 
     /**
      * Send data to server
@@ -19,19 +25,20 @@ class ChangePasswordContainer extends React.Component<Props, {}> {
 
         const target = e.target as HTMLFormElement;
 
-        const formInfo =
-          target.querySelectorAll(
-              '[name=password], [name=newPassword], [name=newPasswordConfirmation]'
-          ) as NodeListOf<HTMLInputElement>;
+        const oldPassword = target.querySelector('[name=password]') as HTMLInputElement;
+        const newPassword = target.querySelector('[name=newPassword]') as HTMLInputElement;
+        const newPasswordConfirmation = target.querySelector('[name=newPasswordConfirmation]') as HTMLInputElement;
 
-        if (formInfo[1].value !== formInfo[2].value) {
+        if (newPassword.value !== newPasswordConfirmation.value ||
+          !(oldPassword.value && newPassword.value && newPasswordConfirmation.value)) {
+
             return;
         }
 
         this.props.updatePassword({
             variables: {
-                password: formInfo[0],
-                newPassword: formInfo[2]
+                password: oldPassword.value,
+                newPassword: newPassword.value
             }
         });
     }

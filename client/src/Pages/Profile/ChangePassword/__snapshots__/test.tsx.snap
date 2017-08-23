@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Change Password
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      New Password: 
+      <input
+        name="newPasswordConfirmation"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <label>
+      Confirm Password: 
+      <input
+        name="newPassword"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <label>
+      Old Password: 
+      <input
+        name="password"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+      value="Change Password"
+    />
+  </form>
+</section>
+`;
