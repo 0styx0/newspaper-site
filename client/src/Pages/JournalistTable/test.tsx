@@ -23,7 +23,7 @@ casual.define('users', function(amount: number, requiredLevels: number[] = []) {
                 articleCount: casual.integer(0, 100),
                 views: casual.integer(0, 1000),
                 level: casual.integer(1, 3), // lvls can only be 1-3
-                id: casual.word,
+                id: casual.word + '--' + amount,
                 profileLink: casual.word,
                 firstName: casual.first_name,
                 middleName: casual.coin_flip ? casual.letter : '', // 2 is the most a middleName can be
