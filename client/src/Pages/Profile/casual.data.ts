@@ -22,7 +22,7 @@ casual.define('articles', function(amount: number) {
 });
 
 interface Extended {
-    articles: Article[];
+    articles: (amount: number) => Article[];
 }
 
 export default casual as Extended & typeof casual;
