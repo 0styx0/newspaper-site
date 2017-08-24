@@ -8,7 +8,7 @@ import JournalistTable from '../../Pages/JournalistTable';
 import IssueTable from '../../Pages/IssueTable';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
 import Publish from '../../Pages/Publish';
-import Profile from '../../Pages/Profile';
+import ProfileContainer from '../../Pages/Profile/container';
 import MainPage from '../../Pages/MainPage';
 import MissionContainer from '../../Pages/Mission/container';
 import Story from '../../Pages/Story';
@@ -62,7 +62,7 @@ export default function Router() {
                 <Route path="/tag/(.*)" component={MainPage}/>
                 <Route path="/issue/(.*)" component={MainPage}/>
                 <Route exact path="/" component={MainPage}/>
-                <Route path="/u/(.*)" component={Profile}/>
+                <Route path="/u/(.*)" component={ProfileContainer}/>
                 <Route path="/authLogin" component={TwoFactor}/>
                 <Route path="/forgotPass" component={ForgotPassword}/>
 
