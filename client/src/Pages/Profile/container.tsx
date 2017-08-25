@@ -15,7 +15,7 @@ interface Props {
     client: {
         query: ( params: { query: typeof UserQuery, variables: { profileLink: string; } } ) => Promise<Props>;
     };
-}
+} 
 
 interface State {
     articles: Article[];

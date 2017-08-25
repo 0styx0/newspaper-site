@@ -9,7 +9,7 @@ import IssueTable from '../../Pages/IssueTable';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
 import Publish from '../../Pages/Publish';
 import ProfileContainer from '../../Pages/Profile/container';
-import MainPage from '../../Pages/MainPage';
+import MainPageContainer from '../../Pages/MainPage/container';
 import MissionContainer from '../../Pages/Mission/container';
 import Story from '../../Pages/Story';
 import ForgotPassword from '../../Pages/ForgotPassword';
@@ -59,9 +59,9 @@ export default function Router() {
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
                 {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
                 <Route path="/issue/(.*)/story/(.*)" component={Story}/>
-                <Route path="/tag/(.*)" component={MainPage}/>
-                <Route path="/issue/(.*)" component={MainPage}/>
-                <Route exact path="/" component={MainPage}/>
+                <Route path="/tag/(.*)" component={MainPageContainer}/>
+                <Route path="/issue/(.*)" component={MainPageContainer}/>
+                <Route exact path="/" component={MainPageContainer}/>
                 <Route path="/u/(.*)" component={ProfileContainer}/>
                 <Route path="/authLogin" component={TwoFactor}/>
                 <Route path="/forgotPass" component={ForgotPassword}/>

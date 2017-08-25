@@ -8,7 +8,7 @@ import './index.css';
 
 interface Props {
     history: string[];
-};
+}
 
 interface Slide {
     img: string;

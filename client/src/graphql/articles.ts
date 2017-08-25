@@ -22,7 +22,24 @@ const ArticleQuery = gql`
           }
         }
     }
+`;
 
+const ArticlePreviewQuery = gql`
+
+    query ArticleQuery($issue: ID) {
+        issues(limit: 1, num: $issue) {
+          num
+          max
+          name
+          articles {
+            url
+            slideImages
+            displayOrder
+            views
+            lede
+          }
+        }
+    }
 `;
 
 const ArticleUpdate = gql`
@@ -50,6 +67,7 @@ const ArticleDelete = gql`
 
 export {
     ArticleQuery,
+    ArticlePreviewQuery,
     ArticleUpdate,
     ArticleDelete
 };
