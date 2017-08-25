@@ -79,13 +79,24 @@ const Query = new GraphQLObjectType({
                 public: {type: GraphQLBoolean},
                 limit: {type: GraphQLInt}
             },
-            resolve: (_, args: {num?: string; public?: boolean; ispublic?: number, limit?: number}) => {
+            resolve: async (_, args: {num?: string; public?: boolean; ispublic?: number, limit?: number}) => {
 
                 let limit = args.limit;
                 delete args.limit;
 
-                if ('num' in args && !args.num) {
-                    delete args.num;
+                if ('num' in args) {
+
+                    if (args.num === '0') {
+
+                        args.num = (
+                            await db.models.issues.findOne({
+                                order: [ [ 'num', 'DESC' ]]
+                            })).dataValues.num
+
+                    }
+                    else if (!args.num) {
+                        delete args.num;
+                    }
                 }
 
                 if ('public' in args) {
