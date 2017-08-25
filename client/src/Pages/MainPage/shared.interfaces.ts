@@ -1,6 +1,6 @@
 interface Issue {
-    num: string | number;
-    max: string | number;
+    num: number;
+    max: number;
     name: string;
 }
 
@@ -8,7 +8,7 @@ interface Article {
     url: string;
     slideImages: string[];
     displayOrder: number;
-    views: string | number;
+    views: number;
     lede: string;
 }
 

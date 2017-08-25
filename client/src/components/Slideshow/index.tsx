@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Slideframe from './frame';
 
-interface Image {
+export interface Image {
     url: string;
     img: string;
 }
@@ -17,7 +17,7 @@ interface State {
     activeImg: number;
 }
 
-class Slideshow extends React.Component<Props, State> {
+export class Slideshow extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
