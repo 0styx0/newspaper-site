@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { MainPageContainer } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../../tests/casual.data';
 
 import { Article, Issue } from './shared.interfaces';
-
-// import snapData from './articles.example';
 
 interface Data {
     issues: ({
@@ -49,7 +46,7 @@ describe('<MainPageContainer>', () => {
 
         it('renders correctly', () => {
 
-            const data = casual.preview;
+            const data = (casual as typeof casual & {preview: Data}).preview;
 
             const tree = renderer.create(
 
@@ -57,8 +54,8 @@ describe('<MainPageContainer>', () => {
                     <MainPageContainer
                         data={data}
                         client={{
-                            query: () => Promise.resolve({ data })
-                        }}
+                            query: Function
+                        } as any}
                     />
                 </MemoryRouter>
             ).toJSON();
