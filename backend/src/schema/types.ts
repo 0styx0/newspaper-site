@@ -85,7 +85,22 @@ const Articles = new GraphQLObjectType({
         lede: {type: new GraphQLNonNull(GraphQLString)},
         body: {type: new GraphQLNonNull(GraphQLString)},
         url: {type: new GraphQLNonNull(GraphQLString)},
-        article: {type: new GraphQLNonNull(GraphQLString)},
+        article: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: article => {
+
+                let content = article.lede + article.body;
+
+                (article.img_url || []).forEach((img: string) => {
+
+                    if (content.indexOf("data-src") !== -1) {
+                        content = content.replace('data-src', `src='${img}'`);
+                    }
+                });
+
+                return content;
+            }
+        },
         imgUrl: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         slideImages: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         issue: {type: new GraphQLNonNull(GraphQLInt)},

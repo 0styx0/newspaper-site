@@ -238,17 +238,6 @@ const Articles = sequelize.define('pageinfo', {
 
             const slideshowImages = this.slide_img;
             return this.img_url.filter((img: string, i: number) => !!+slideshowImages[i]);
-        },
-        article: function() {
-
-            let content = this.lede + this.body;
-
-            (this.img_url || []).forEach((img: string) => {
-
-                if (content.indexOf("data-src") !== -1) {
-                    content = content.replace('data-src', `src='${img}'`);
-                }
-            });
         }
     },
     paranoid: true,
@@ -300,7 +289,7 @@ const Tags = sequelize.define('tags', {
     }
 }, {
     setterMethods: {
-        
+
         all(tags: string[]) {
 
             ['tag1', 'tag2', 'tag3'].forEach((col, i) => this.setDataValue(col, tags[i]));
