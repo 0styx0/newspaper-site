@@ -10,7 +10,7 @@ const ArticleQuery = gql`
                 id
                 content,
                 dateCreated,
-                canEdit,
+                canDelete,
                 author {
                     fullName,
                     profileLink

@@ -12,7 +12,7 @@ interface Props {
     client: {
         query: ( params: {
             query: typeof ArticleQuery, variables: { issue: number; url: string }
-        } ) => Promise<{data: { article: Article} }>;
+        } ) => Promise<{data: { articles: Article[] } }>;
     };
 }
 
@@ -53,21 +53,22 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
             }
         });
 
-        const heading = data.article.body.match(/^[\s\S]+?<\/h4>/)![0];
-        const body = data.article.body.replace(heading, '');
+        const article = data.articles[0];
 
-
+        const heading = article.article.match(/^[\s\S]+?<\/h4>/)![0];
+        const body = article.article.replace(heading, '');
+        
         this.setState({
             issue,
             url,
             heading,
             body,
-            canEdit: data.article.canEdit,
-            comments: data.article.comments,
+            canEdit: article.canEdit,
+            comments: article.comments || [],
             tags: {
-                all: data.article.tags.all
+                all: article.tags.all
             },
-            id: data.article.id
+            id: article.id
         });
     }
 
@@ -89,6 +90,11 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
     }
 
     render() {
+
+        if (!this.state.id) {
+            return null;
+        }
+
         return (
             <Story
               {...this.state}

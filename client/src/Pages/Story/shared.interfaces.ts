@@ -2,7 +2,8 @@ interface Article {
     heading: string;
     body: string;
     canEdit: boolean;
-    comments: {
+    article: string;
+    comments?: {
         id: string;
         canDelete: boolean;
         content: string;

@@ -7,7 +7,7 @@ interface Props {
     handleEdits: Function; // whenever a formatting button is clicked (bold, italic, etc)
     submit?: Function; // what to do when user wants to save the edit
     content: JSX.Element; // what element is being edited
-    buttons: "all" | "basic" | "none"; // all buttons, or just a subset of them
+    buttons: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
 }
 
 interface Command {
@@ -20,15 +20,26 @@ interface Command {
  */
 function Editable(props: Props) {
 
-    return (
-        <div>
-            <div id={props.buttons === "all" ? "buttonContainer" : ""}>
+    let buttons: JSX.Element | null = null;
+
+    if (props.buttons !== 'none') {
+
+        buttons = (
+            <div id={props.buttons === 'all' ? 'buttonContainer' : ''}>
                 {(commands as any as Command[]).map((command: Command, idx: number) => {
 
-                    if (((props.buttons === "basic" && command.basic) || props.buttons === "all")
+                    if (((props.buttons === 'basic' && command.basic) || props.buttons === 'all')
                         && document.queryCommandSupported(command.cmd)) {
 
-                        return <button key={idx} className={command.cmd} onClick={props.handleEdits as any}>{command.cmd}</button>
+                        return (
+                            <button
+                              key={idx}
+                              className={command.cmd}
+                              onClick={props.handleEdits as any}
+                            >
+                              {command.cmd}
+                            </button>
+                        );
                     }
                     return null;
                 })}
@@ -36,6 +47,12 @@ function Editable(props: Props) {
                 <br />
                 <button onClick={props.submit as any}>Submit</button>
             </div>
+        );
+    }
+
+    return (
+        <div>
+            {buttons}
             {props.content}
         </div>
         );

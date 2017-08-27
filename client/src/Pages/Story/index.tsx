@@ -13,7 +13,7 @@ interface Props extends ArticleInfo {
 
 function Story(props: Props) {
 
-        const comments = props.comments.map((comment, idx) =>
+        const comments = (props.comments || []).map((comment, idx) =>
 
             (
                 <CommentContainer
