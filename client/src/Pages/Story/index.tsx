@@ -25,7 +25,7 @@ function Story(props: Props) {
                     id={comment.id}
                 />)
         );
-
+        
         return (
             <div>
                 <div id="tags">Tag(s): {props.tags.all.join(', ')}</div>

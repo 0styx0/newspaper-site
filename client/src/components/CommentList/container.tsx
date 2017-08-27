@@ -22,14 +22,14 @@ interface State {
  */
 export default class CommentListContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         ['add'].forEach(method => this[method] = this[method].bind(this));
 
         this.state = {
-            Comments: []
-        }
+            Comments: props.Comments
+        };
 
     }
 
