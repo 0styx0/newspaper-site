@@ -21,7 +21,7 @@ interface State {
     issue: Issue;
 }
 
-class MainPageContainer extends React.Component<Props, State> {
+export class MainPageContainer extends React.Component<Props, State> {
 
     constructor() {
         super();

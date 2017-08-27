@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MainPageContainer> snapshots renders correctly 1`] = `
+<div>
+  <header>
+    <h1>
+      <img
+        alt="TABC Logo"
+        src="/images/tabc_logo.png"
+      />
+      Eye Of The Storm
+    </h1>
+    <q>
+      A Clearer View Of TABC
+    </q>
+    <h2 />
+  </header>
+  <div
+    id="mainContent"
+  >
+    <div
+      id="slideShow"
+    >
+      <a
+        href="/"
+        onAnimationIteration={[Function]}
+        onClick={[Function]}
+      >
+        <img
+          alt="Default, TABC logo"
+          className="slideshowPic activePic"
+          src="../images/tabc_logo.png"
+        />
+      </a>
+    </div>
+  </div>
+  <span
+    id="issueRange"
+  />
+  <footer
+    className="small"
+    id="credits"
+  >
+    Created by 
+    <a
+      href="https://dovidm.com"
+    >
+      Dovid Meiseles
+    </a>
+     ('18)
+  </footer>
+</div>
+`;
