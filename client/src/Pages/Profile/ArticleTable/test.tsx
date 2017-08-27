@@ -28,7 +28,7 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
     );
 }
 
-fdescribe('<UserArticleTableContainer>', () => {
+describe('<UserArticleTableContainer>', () => {
 
     describe('snapshots', () => {
 
