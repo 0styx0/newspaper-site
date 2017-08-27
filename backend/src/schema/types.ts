@@ -122,6 +122,9 @@ const Articles = new GraphQLObjectType({
         },
         comments: {
             type: new GraphQLList(Comments),
+            resolve: (article) => db.models.comments.findAll({
+                where: {art_id: article.id}
+            })
         },
         canEdit: {
             type: new GraphQLNonNull(GraphQLBoolean),
@@ -181,7 +184,10 @@ const Comments = new GraphQLObjectType({
             resolve: (comment) => comment.authorid
         },
         content: {type: new GraphQLNonNull(GraphQLString)},
-        dateCreated: {type: new GraphQLNonNull(GraphQLString)},
+        dateCreated: {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: comment => comment.created
+        },
         author: {
             type: new GraphQLNonNull(Users),
             resolve: (comment, args, { loaders }) => loaders.default.user.load(sanitize(comment.authorid))
