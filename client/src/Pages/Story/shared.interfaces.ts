@@ -1,19 +1,11 @@
+import { Comment } from '../../components/CommentList/shared.interface';
+
 interface Article {
     heading: string;
     body: string;
     canEdit: boolean;
     article: string;
-    comments?: {
-        id: string;
-        canDelete: boolean;
-        content: string;
-        dateCreated: string;
-        author: {
-            fullName: string;
-            profileLink: string;
-            id: string;
-        }
-    }[];
+    comments?: Comment[];
     tags: {
         all: string[]
     };

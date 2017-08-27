@@ -1,7 +1,6 @@
 import * as React from 'react';
 import EditableContainer from '../../components/Editable/container';
 import CommentListContainer from '../../components/CommentList/container';
-import CommentContainer from '../../components/CommentList/Comment/container';
 import { ArticleInfo } from './shared.interfaces';
 
 import './index.css';
@@ -13,19 +12,6 @@ interface Props extends ArticleInfo {
 
 function Story(props: Props) {
 
-        const comments = (props.comments || []).map((comment, idx) =>
-
-            (
-                <CommentContainer
-                    author={comment.author.fullName}
-                    profileLink={comment.author.profileLink}
-                    authorid={comment.author.id}
-                    content={comment.content}
-                    key={idx}
-                    id={comment.id}
-                />)
-        );
-        
         return (
             <div>
                 <div id="tags">Tag(s): {props.tags.all.join(', ')}</div>
@@ -63,8 +49,8 @@ function Story(props: Props) {
 
                 <div id="comments">
                     <CommentListContainer
-                      issue={props.issue}
-                      Comments={comments}
+                      artId={props.id}
+                      comments={props.comments || []}
                     />
                 </div>
            </div>

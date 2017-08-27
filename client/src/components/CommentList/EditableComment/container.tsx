@@ -4,8 +4,7 @@ import fetchFromApi from '../../../helpers/fetchFromApi';
 import EditableComment from './';
 
 interface Props {
-    issue: number; // issue of parent article
-    name: string; // name (url) of article (ex: name in http://localhost:3001/issue/1/story/name)
+    artId: string;
     addToList: Function; // callback where content is passed into after user submits the comment
 }
 
@@ -22,7 +21,7 @@ export default class EditableCommentContainer extends React.Component<Props, Sta
 
         this.state = {
             content: ''
-        }
+        };
     }
 
     /**
@@ -33,20 +32,21 @@ export default class EditableCommentContainer extends React.Component<Props, Sta
         this.props.addToList(this.state.content);
 
         const info = {
-            issue: this.props.issue,
-            url: this.props.name,
+            artId: this.props.artId,
             content: this.state.content
-        }
+        };
 
-        fetchFromApi("comment", "post", info);
+        fetchFromApi('comment', 'post', info);
     }
 
     render() {
 
-        return <EditableComment
-                 onSubmit={this.save}
-                 onBlur={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
-               />
+        return (
+            <EditableComment
+                onSubmit={this.save}
+                onBlur={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
+            />
+        );
     }
 
 }

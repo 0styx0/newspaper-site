@@ -1,25 +1,44 @@
 import * as React from 'react';
+import CommentContainer from './Comment/container';
+import EditableCommentContainer from './EditableComment/container';
+import { Comment } from './shared.interface';
 
 import './index.css';
 
 interface Props {
-
-    Comments: Array<JSX.Element | HTMLElement | Comment >;
+    comments: Comment[];
+    canAdd: boolean; // if user can comment
+    onAdd: Function;
+    artId: string;
 }
 
 export default function CommentList(props: Props) {
 
+    const Comments = (props.comments || []).map((comment: Comment) =>
+
+        (
+            <CommentContainer
+                author={comment.author.fullName}
+                profileLink={comment.author.profileLink}
+                authorid={comment.author.id}
+                content={comment.content}
+                key={comment.id}
+                id={comment.id}
+            />)
+    );
+
+    if (props.canAdd) {
+
+        Comments.push(
+            <EditableCommentContainer
+                addToList={props.onAdd}
+                artId={props.artId}
+            />);
+    }
 
     return (
         <div id="comments">
-
-        {
-            props.Comments.map((comment, idx) =>
-                React.cloneElement(comment as JSX.Element, {
-                    key: idx,
-                })
-            )
-        }
+            {Comments}
         </div>
     );
 

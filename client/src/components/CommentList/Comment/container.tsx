@@ -33,7 +33,7 @@ class CommentContainer extends React.Component<Props, State> {
         this.state = {
             content: this.props.content,
             author: this.props.author
-        }
+        };
     }
 
     /**
@@ -50,9 +50,9 @@ class CommentContainer extends React.Component<Props, State> {
 
         const info = {
             id: this.props.id
-        }
+        };
 
-        fetchFromApi("comment", "delete", info);
+        fetchFromApi('comment', 'delete', info);
     }
 
     render() {
@@ -67,7 +67,7 @@ class CommentContainer extends React.Component<Props, State> {
 
         // if already deleted, or user not authorized to delete,
         // or it was just created so info needed to delete isn't there yet
-        if (this.props.content !== "deleted" &&
+        if (this.props.content !== 'deleted' &&
             (jwt.level > 2 || jwt.id === this.props.authorid) &&
             this.props.id
             ) {
@@ -75,9 +75,7 @@ class CommentContainer extends React.Component<Props, State> {
             commentProps.deleteButton = this.delete;
         }
 
-        return <Comment
-                 {...commentProps}
-               />
+        return <Comment {...commentProps} />;
     }
 }
 
