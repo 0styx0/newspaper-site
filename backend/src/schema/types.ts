@@ -107,6 +107,12 @@ const Articles = new GraphQLObjectType({
         },
         comments: {
             type: new GraphQLList(Comments),
+        },
+        canEdit: {
+            type: new GraphQLNonNull(GraphQLBoolean),
+            resolve: (article) => {
+                return true; // TODO: when implement authentication use jwt to decide
+            }
         }
     })
 });
@@ -164,6 +170,12 @@ const Comments = new GraphQLObjectType({
         author: {
             type: new GraphQLNonNull(Users),
             resolve: (comment, args, { loaders }) => loaders.default.user.load(sanitize(comment.authorid))
+        },
+        canDelete: {
+            type: new GraphQLNonNull(GraphQLBoolean),
+            resolve: (comment) => {
+                return true; // TODO: when implement authentication use jwt to decide
+            }
         }
     })
 });
