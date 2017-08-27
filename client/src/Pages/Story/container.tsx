@@ -1,8 +1,9 @@
 import * as React from 'react';
-// import httpNotification from '../../helpers/Notification';
+import httpNotification from '../../helpers/Notification';
 
 import { compose, graphql, withApollo } from 'react-apollo';
 import { ArticleQuery } from '../../graphql/article';
+import { ArticleUpdate } from '../../graphql/articles';
 
 import { Article, ArticleInfo } from './shared.interfaces';
 import Story from './';
@@ -14,6 +15,14 @@ interface Props {
             query: typeof ArticleQuery, variables: { issue: number; url: string }
         } ) => Promise<{data: { articles: Article[] } }>;
     };
+    updateArticle: ( params: {
+        variables: {
+            data: {
+                id: string;
+                article: string;
+            }
+        }
+    }) => void; // not really void
 }
 
 class StoryContainer extends React.Component<Props, ArticleInfo> {
@@ -57,7 +66,7 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
 
         const heading = article.article.match(/^[\s\S]+?<\/h4>/)![0];
         const body = article.article.replace(heading, '');
-        
+
         this.setState({
             issue,
             url,
@@ -74,19 +83,16 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
 
     onSubmit() {
 
-        const info = {
-            edit: this.state.heading + this.state.body,
-            id: this.state.id
-        };
-        console.log('====================================');
-        console.log(info);
-        console.log('====================================');
+        this.props.updateArticle({
+            variables: {
+                data: {
+                    id: this.state.id,
+                    article: this.state.heading + this.state.body
+                }
+            }
+        });
 
-        // fetchFromApi('story', 'put', info)
-        // .then((response) => {
-
-        //     httpNotification(response.statusText as string, response.status as number);
-        // });
+        httpNotification('Article Updated', 200);
     }
 
     render() {
@@ -116,7 +122,7 @@ const StoryContainerWithData = compose(
             }
         }
     }),
-    // graphql(ArticleUpdate, {name: 'updateArticle'}),
+    graphql(ArticleUpdate, {name: 'updateArticle'}),
 )(StoryContainer as any);
 
 export default withApollo(StoryContainerWithData);

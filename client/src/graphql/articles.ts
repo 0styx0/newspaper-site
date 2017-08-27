@@ -44,7 +44,7 @@ const ArticlePreviewQuery = gql`
 
 const ArticleUpdate = gql`
 
-    mutation ArticleUpdate($data: [IdDisplayTagList]) {
+    mutation ArticleUpdate($data: [Fields]) {
         updateArticles(data: $data) {
             id
             tags {

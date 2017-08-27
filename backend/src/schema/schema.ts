@@ -248,8 +248,8 @@ const Mutation = new GraphQLObjectType({
                 data: {
                     type: new GraphQLList(
                         new GraphQLInputObjectType({
-                            name: 'IdDisplayTagList',
-                            description: 'Format: {id: string, tags?: string[], displayOrder?: number}',
+                            name: 'Fields',
+                            description: 'Format: {id: string, article?: string, tags?: string[], displayOrder?: number}',
                             fields: {
                                 id: {
                                     type: new GraphQLNonNull(GraphQLString)
@@ -259,13 +259,16 @@ const Mutation = new GraphQLObjectType({
                                 },
                                 displayOrder: {
                                     type: GraphQLInt
+                                },
+                                article: {
+                                    type: GraphQLString
                                 }
                             }
                         })
                     )
                 }
             },
-            resolve: async (_, args: {data: {id: string, tags?: string[], displayOrder?: number, display_order?: number}[]}) => {
+            resolve: async (_, args: {data: {id: string, article?: string, tags?: string[], displayOrder?: number, display_order?: number}[]}) => {
 
                 const sanitized: typeof args = sanitize(args);
 
