@@ -11,7 +11,7 @@ import Publish from '../../Pages/Publish';
 import ProfileContainer from '../../Pages/Profile/container';
 import MainPageContainer from '../../Pages/MainPage/container';
 import MissionContainer from '../../Pages/Mission/container';
-import Story from '../../Pages/Story';
+import StoryContainer from '../../Pages/Story/container';
 import ForgotPassword from '../../Pages/ForgotPassword';
 import TwoFactor from '../../Pages/TwoFactor';
 import SelectTagPreview from '../TagSelect/SelectTagPreview';
@@ -58,7 +58,7 @@ export default function Router() {
                 <Route exact path="/issue" component={IssueTable}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
                 {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
-                <Route path="/issue/(.*)/story/(.*)" component={Story}/>
+                <Route path="/issue/(.*)/story/(.*)" component={StoryContainer}/>
                 <Route path="/tag/(.*)" component={MainPageContainer}/>
                 <Route path="/issue/(.*)" component={MainPageContainer}/>
                 <Route exact path="/" component={MainPageContainer}/>
