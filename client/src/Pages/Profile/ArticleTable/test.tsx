@@ -9,10 +9,10 @@ import snapData from './articles.example';
 import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
 import toggler from '../../../helpers/toggler';
 
-localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
+localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}]));
 
 const data = {
-    articles: casual.articles(casual.randomPositive)
+    articles: casual.articles(casual.integer(0, 25)) // if do more than around 25, the test will be really slow
 };
 
 function setup(mockGraphql: {deleteArticle?: Function} = {}) {
@@ -28,7 +28,7 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
     );
 }
 
-describe('<UserArticleTableContainer>', () => {
+fdescribe('<UserArticleTableContainer>', () => {
 
     describe('snapshots', () => {
 
