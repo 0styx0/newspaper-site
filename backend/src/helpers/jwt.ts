@@ -13,3 +13,21 @@ export function getJWT(req) {
 
     return token ? jsonwebtoken.verify(token, config.JWT.SECRET) as jwt : {} as jwt;
 };
+
+/**
+ * Object that must include jwt interface
+ * Making it not be exactly the interface so can just pass an entire db row
+ */
+export function setJWT(user: jwt) {
+
+    const payload = {
+        id: user.id,
+        level: user.level,
+        profileLink: user.profileLink
+    };
+
+    return jsonwebtoken.sign(payload, config.JWT.SECRET, {
+            expiresIn: '1h',
+            subject: user.id.toString()
+    });
+}

@@ -16,12 +16,16 @@ import {
     Articles,
     Issues,
     Comments,
-    Tags
+    Tags,
+    Jwt
 } from './types';
 
 import sanitize from '../helpers/sanitize';
 
 import db from '../db/models';
+
+import * as bcrypt from 'bcrypt';
+import { setJWT } from '../helpers/jwt';
 
 const Query = new GraphQLObjectType({
     name: 'QuerySchema',
@@ -152,7 +156,7 @@ const Mutation = new GraphQLObjectType({
 
                 const newComment: {art_id?: string, artId?: string, content: string, authorid: string} =
                   Object.assign({authorid: jwt.id}, args);
-                  
+
                 newComment.art_id = args.artId;
                 delete newComment.artId;
 
@@ -358,6 +362,43 @@ const Mutation = new GraphQLObjectType({
                         }
                     }
                 });
+            }
+        },
+        login: {
+            type: Jwt,
+            description: 'Log in a user',
+            args: {
+                username: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {username: string, password: string}, { req }) => {
+
+                const sanitized = sanitize(args);
+
+                const user = await db.models.users.findOne({
+
+                    attributes: ['id', 'email', 'level', 'password']
+                    where: {
+                        $or: [
+                            {
+                                username: sanitized.username
+                            },
+                            {
+                                email: sanitized.username + '@%'
+                            }
+                        ]
+                    }
+                });
+
+                if (await bcrypt.compare(args.password, user.dataValues.password.replace(/^\$2y/, '$2a'))) {
+
+                    user.dataValues.profileLink = user.dataValues.email.split('@')[0];
+                    return { jwt: setJWT(user.dataValues) };
+                }
             }
         }
     }),

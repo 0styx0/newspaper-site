@@ -220,10 +220,21 @@ const Tags = new GraphQLObjectType({
    })
 });
 
+const Jwt = new GraphQLObjectType({
+    name: 'JWT',
+    description: 'JSON web token',
+    fields: () => ({
+        jwt: {
+            type: GraphQLString
+        }
+    })
+})
+
 export {
     Users,
     Articles,
     Issues,
     Comments,
-    Tags
+    Tags,
+    Jwt
 };

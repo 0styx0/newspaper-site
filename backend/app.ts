@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 import * as loaders from './src/schema/dataloaders';
 import Schema from './src/schema/schema';
 import * as GraphHTTP from 'express-graphql';
-// import { getJWT, jwt } from './src/helpers/jwt';
+import { getJWT, jwt } from './src/helpers/jwt';
 
 var app = express();
 process.on('unhandledRejection', (reason, p) => {
@@ -36,11 +36,22 @@ app.use(function(req, res, next) {
   next()
 });
 
-app.use('/graphql', GraphHTTP({
-  schema: Schema,
-  pretty: true,
-  graphiql: true,
-  context: { loaders, jwt: {level: 3, id: 3499} }
+app.use('/graphql', GraphHTTP((req) => {
+
+  let jwt
+
+  try {
+    jwt = getJWT(req);
+  } catch(error) {
+    jwt = null;
+  }
+
+  return {
+    schema: Schema,
+    pretty: true,
+    graphiql: true,
+    context: { loaders, jwt, req }
+  }
 }));
 
 // error handler

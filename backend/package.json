@@ -8,7 +8,7 @@
   "dependencies": {
     "@types/jsonwebtoken": "^7.2.3",
     "array-flatten": "^2.1.1",
-    "bcrypt": "^1.0.2",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "cookies": "^0.7.0",
