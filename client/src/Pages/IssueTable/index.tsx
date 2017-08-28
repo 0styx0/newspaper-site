@@ -6,7 +6,7 @@ import Input from '../../components/Form/Input';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { IssueQuery, IssueUpdate } from '../../graphql/issues';
-
+import { getJWT } from '../../components/jwt';
 
 interface State {
     issueInfo?: Array<number | string | JSX.Element>[]; // convert some of Issue to html
@@ -41,9 +41,7 @@ interface Props {
  */
 export class IssueTable extends React.Component<Props, State> {
 
-    private jwt = window.localStorage.getItem('jwt') ?
-                JSON.parse(window.localStorage.getItem('jwt') as string)[1] :
-                {level: 0};
+    private jwt = getJWT();
 
     constructor() {
         super();

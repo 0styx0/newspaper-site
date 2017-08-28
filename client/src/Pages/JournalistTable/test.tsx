@@ -7,6 +7,8 @@ import * as casual from 'casual';
 import snapData from './__snapshots__/users.example';
 import renderWithProps from '../../tests/snapshot.helper';
 
+import setFakeJwt from '../../tests/jwt.helper';
+
 /**
  * @param amount - how many users to return
  *
@@ -78,7 +80,7 @@ describe('<JournalistTable>', () => {
 
         it(`should show users' levels only when one is logged in`, () => {
 
-            localStorageMock.setItem('jwt', JSON.stringify([, {level: 1}]));
+            setFakeJwt({level: 1});
 
             const tree = renderWithProps(
                 <JournalistTable
@@ -96,7 +98,7 @@ describe('<JournalistTable>', () => {
             // while lvl 3 can delete/modify lvl 2 until lvl 3
             [2, 3].forEach(level => {
 
-                localStorageMock.setItem('jwt', JSON.stringify([, {level}]));
+                setFakeJwt( {level});
 
                 const tree = renderWithProps(
                     <JournalistTable
@@ -198,7 +200,7 @@ describe('<JournalistTable>', () => {
 
             it('and level 1, can sort by level (regular number)', () => {
 
-                localStorageMock.setItem('jwt', JSON.stringify([,{level: 1}]));
+                setFakeJwt({level: 1});
                 setupSelect();
 
                 setSelectValue('level');
@@ -207,7 +209,7 @@ describe('<JournalistTable>', () => {
 
             it('and above level 1, can sort by level (mixed `select` and number)', () => {
 
-                localStorageMock.setItem('jwt', JSON.stringify([,{level: 2}]));
+                setFakeJwt({level: 2});
                 setupSelect();
 
                 const expected = data.users.
@@ -251,7 +253,7 @@ describe('<JournalistTable>', () => {
 
             beforeEach(() => {
 
-                localStorageMock.setItem('jwt', JSON.stringify([,{level: userLevel}]));
+                setFakeJwt({level: userLevel});
 
                 wrapper = setup();
                 component = wrapper.find(JournalistTable).node;
@@ -434,7 +436,7 @@ describe('<JournalistTable>', () => {
 
             beforeEach(() => {
 
-                localStorageMock.setItem('jwt', JSON.stringify([,{level: 3}]));
+                setFakeJwt({level: 3});
 
                 wrapper = setup();
                 component = wrapper.find(JournalistTable).node;

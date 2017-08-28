@@ -3,13 +3,13 @@ import { UserArticleTableContainer } from './container';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../../tests/localstorage.mock';
 import casual from '../casual.data';
 import snapData from './articles.example';
 import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
 import toggler from '../../../helpers/toggler';
+import setFakeJwt from '../../../tests/jwt.helper';
 
-localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}]));
+setFakeJwt({level: 3});
 
 const data = {
     articles: casual.articles(casual.integer(0, 25)) // if do more than around 25, the test will be really slow

@@ -2,17 +2,17 @@ import * as React from 'react';
 import { ArticleTableContainer, Article, Issue } from './container';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../tests/localstorage.mock';
 
 import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
 import { randomCheckboxToggle } from '../../tests/enzyme.helpers';
 
+import setFakeJwt from '../../tests/jwt.helper';
 
 type Issues = (Issue & { articles: Article[] })[];
 
-localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}])); // only lvl 3 can access this page
+setFakeJwt({level: 3}); // only lvl 3 can access this page
 
 let allTags = new Set<string>();
 casual.define('articles', function(amount: number, issue: number) {

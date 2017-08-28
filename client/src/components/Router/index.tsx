@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link, Route, Switch } from 'react-router-dom';
 
-import Login from '../../Pages/Login';
+import LoginContainer from '../../Pages/Login/container';
 import Logout from '../Logout';
 import Signup from '../../Pages/Signup';
 import JournalistTable from '../../Pages/JournalistTable';
@@ -51,7 +51,7 @@ export default function Router() {
                 </ul>
             </nav>
             <Switch>
-                <Route path="/login" component={Login}/>
+                <Route path="/login" component={LoginContainer}/>
                 <Route path="/signup" component={Signup}/>
                 <Route exact path="/u" component={JournalistTable}/>
                 <Route path="/mission" component={MissionContainer}/>

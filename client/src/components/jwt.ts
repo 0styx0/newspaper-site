@@ -13,14 +13,22 @@ let jwt: Jwt = {
 
 function getJWT(): Jwt {
 
-    return JSON.parse(
-        window.localStorage.getItem('jwt') ||
-        JSON.stringify([, jwt]))[1];
+    const encodedToken = window.localStorage.getItem('jwt');
+
+    if (encodedToken) {
+
+        const encodedBody = encodedToken.split('.')[1];
+        const jsonString = atob(encodedBody);
+        return JSON.parse(jsonString);
+
+    } else {
+        return jwt;
+    }
 }
 
-async function setJWT(newJwt: Jwt) {
+async function setJWT(newJwt: string) {
 
-    window.localStorage.setItem('jwt', JSON.stringify(newJwt));
+    window.localStorage.setItem('jwt', newJwt);
     return newJwt;
 }
 

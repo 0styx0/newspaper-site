@@ -46,8 +46,17 @@ const UserUpdate = gql`
     }
 `;
 
+const UserLogin = gql`
+    mutation login($username: String!, $password: String!) {
+        login(username: $username, password: $password) {
+            jwt
+        }
+    }
+`;
+
 export {
     UserQuery,
     PrivateUserQuery,
-    UserUpdate
+    UserUpdate,
+    UserLogin
 };
