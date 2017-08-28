@@ -23,7 +23,7 @@ networkInterface.use([{
       req.options.headers = new Headers();  // Create the header object if needed.
     }
     // get the authentication token from local storage if it exists
-    req.options.headers.Authorization =  `Bearer ${sessionStorage.getItem('jwt') || ''}`;
+    req.options.headers.Authorization =  `Bearer ${localStorage.getItem('jwt') || ''}`;
 
     next();
   }

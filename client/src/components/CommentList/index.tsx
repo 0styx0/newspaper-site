@@ -33,6 +33,7 @@ export default function CommentList(props: Props) {
             <EditableCommentContainer
                 addToList={props.onAdd}
                 artId={props.artId}
+                key={props.comments.length}
             />);
     }
 

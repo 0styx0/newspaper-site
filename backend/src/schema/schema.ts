@@ -137,6 +137,28 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Mutate data',
     fields: () => ({
+        createComment: {
+            type: Comments,
+            description: 'Create a comment',
+            args: {
+                artId: { // will switch to art_id but figured will keep js camelCase for consistency
+                    type: new GraphQLNonNull(GraphQLID)
+                },
+                content: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: (_, args: {artId: string, content: string}, { jwt }) => {
+
+                const newComment: {art_id?: string, artId?: string, content: string, authorid: string} =
+                  Object.assign({authorid: jwt.id}, args);
+                  
+                newComment.art_id = args.artId;
+                delete newComment.artId;
+
+                return new db.models.comments(sanitize(newComment)).save();
+            }
+        },
         updateIssue: {
             type: Issues,
             description: 'Alter the latest issue',

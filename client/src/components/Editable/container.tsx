@@ -3,9 +3,9 @@ import * as React from 'react';
 import Editable from './';
 
 interface Props {
-    children: Element | JSX.Element | HTMLElement; //children - 1 elt to make editable
+    children: Element | JSX.Element | HTMLElement; // children - 1 elt to make editable
     canEdit: boolean;
-    buttons?: "all" | "basic" | "none"; // all buttons, or just a subset of them
+    buttons?: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
     submit?: Function;
 }
 
@@ -13,9 +13,11 @@ interface Props {
  * @prop
  * @prop canEdit - boolean
  * @prop buttons - if "all" (default), show all buttons. If "basic" show subset
- * @prop submit - runs when the submit button is clicked. If this is not given, nothing will happen when submit is clicked
+ * @prop submit - runs when the submit button is clicked.
+ *  If this is not given, nothing will happen when submit is clicked
  *
- * @return lets content be edited and renders a bar of buttons that can edit the html of props.children if props.canEdit = true
+ * @return lets content be edited and renders a bar of buttons that can edit the html
+ *  of props.children if props.canEdit = true
  */
 class EditableContainer extends React.Component<Props, {}> {
 
@@ -30,10 +32,10 @@ class EditableContainer extends React.Component<Props, {}> {
         const target = event.target as HTMLElement;
 
         if (target.classList.contains('hideFromPreview')) {
-            return this.toggleClassOnElementSelected("previewHidden");
+            return this.toggleClassOnElementSelected('previewHidden');
         }
 
-        const value = target.className === "createLink" ?
+        const value = target.className === 'createLink' ?
                           prompt(`Insert where you would like to link to
                 (make sure to include the https:// if linking to an outside site)`)
                                                               : null;
@@ -52,8 +54,8 @@ class EditableContainer extends React.Component<Props, {}> {
 
         if ((window.getSelection().anchorNode as Element).children) { // if selected elt is an img
             (window.getSelection().anchorNode as Element).children[0].classList.toggle(className);
-        }
-        else {
+
+        } else {
 
             const eltToChange = (eltAnchor.nodeType === Node.TEXT_NODE) ?
                                   eltAnchor.parentNode as Element :
@@ -71,12 +73,14 @@ class EditableContainer extends React.Component<Props, {}> {
             return this.props.children as JSX.Element;
         }
 
-        return <Editable
+        return (
+            <Editable
                 buttons={this.props.buttons || 'all'}
                 handleEdits={this.handleEdits}
                 content={content}
                 submit={this.props.submit}
-               />
+            />
+        );
     }
 }
 

@@ -1,18 +1,19 @@
 import * as React from 'react';
-import fetchFromApi from '../../../helpers/fetchFromApi';
-
+import { CommentCreate } from '../../../graphql/comment';
 import EditableComment from './';
+import { withApollo, graphql } from 'react-apollo';
 
 interface Props {
     artId: string;
     addToList: Function; // callback where content is passed into after user submits the comment
+    createComment: (params: {variables: { content: string, artId: string }}) => void;
 }
 
 interface State {
     content: string;
 }
 
-export default class EditableCommentContainer extends React.Component<Props, State> {
+class EditableCommentContainer extends React.Component<Props, State> {
 
     constructor() {
         super();
@@ -31,12 +32,12 @@ export default class EditableCommentContainer extends React.Component<Props, Sta
 
         this.props.addToList(this.state.content);
 
-        const info = {
-            artId: this.props.artId,
-            content: this.state.content
-        };
-
-        fetchFromApi('comment', 'post', info);
+        this.props.createComment({
+            variables: {
+                artId: this.props.artId,
+                content: this.state.content
+            }
+        });
     }
 
     render() {
@@ -50,3 +51,7 @@ export default class EditableCommentContainer extends React.Component<Props, Sta
     }
 
 }
+
+export default withApollo(
+    graphql(CommentCreate, {name: 'createComment'})(EditableCommentContainer as any)
+);

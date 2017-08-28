@@ -1,11 +1,12 @@
 import * as express from 'express';
-// import * as path from 'path';
+import * as path from 'path';
 import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as loaders from './src/schema/dataloaders';
 import Schema from './src/schema/schema';
 import * as GraphHTTP from 'express-graphql';
+// import { getJWT, jwt } from './src/helpers/jwt';
 
 var app = express();
 process.on('unhandledRejection', (reason, p) => {
@@ -35,15 +36,11 @@ app.use(function(req, res, next) {
   next()
 });
 
-// app.use('/api', require('./routes/'));
-
-import db from './src/db/models';
-
 app.use('/graphql', GraphHTTP({
   schema: Schema,
   pretty: true,
   graphiql: true,
-  context: { loaders }
+  context: { loaders, jwt: {level: 3, id: 3499} }
 }));
 
 // error handler
@@ -54,7 +51,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.sendFile(path.join(__dirname+'/../../client/public/index.html')); // switch to build when in prod
 });
 
 app.listen(4000, ()=> {

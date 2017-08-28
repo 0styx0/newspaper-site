@@ -269,7 +269,7 @@ const Articles = sequelize.define('pageinfo', {
             const lede = modifiedArticle.substring(0, article.indexOf(firstParagraph) + 5);
 
             let body = modifiedArticle.substring(article.indexOf(firstParagraph) + 5);
-            
+
             this.setDataValue('lede', lede);
             this.setDataValue('body', body);
             this.setDataValue('img_url', JSON.stringify(img_url));
@@ -377,7 +377,12 @@ sequelize.define('comments', {
         allowNull: false,
         defaultValue: Sequelize.NOW,
         validate: {
-            isBefore: new Date(Date.now() + 1).toISOString()
+            pastDate(date: string) {
+
+                if ((new Date(date)).getTime() > Date.now()) {
+                    throw new Error('Cannot use future date')
+                }
+            }
         }
     },
 }, {

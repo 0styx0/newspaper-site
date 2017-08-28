@@ -21,7 +21,7 @@ interface Command {
 function Editable(props: Props) {
 
     let buttons: JSX.Element | null = null;
-
+    
     if (props.buttons !== 'none') {
 
         buttons = (
