@@ -2,13 +2,13 @@
 interface Jwt {
     id: string;
     level: number;
-    email: string;
+    profileLink: string;
 }
 
 let jwt: Jwt = {
     id: '',
     level: 0,
-    email: ''
+    profileLink: ''
 };
 
 function getJWT(): Jwt {

@@ -47,7 +47,7 @@ export default function Router() {
                     {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
                     {jwt.level ? <li id="logout"><Logout /></li>
                                 : ""}
-                    {jwt.level ? <li className="profile"><Link to={`/u/${jwt.email}`}>Profile</Link></li> : ""}
+                    {jwt.level ? <li className="profile"><Link to={`/u/${jwt.profileLink}`}>Profile</Link></li> : ""}
                 </ul>
             </nav>
             <Switch>

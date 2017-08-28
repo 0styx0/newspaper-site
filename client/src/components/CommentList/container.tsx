@@ -46,7 +46,7 @@ export default class CommentListContainer extends React.Component<Props, State> 
         comments.push({
                 content,
                 author: {
-                    profileLink: jwt.email,
+                    profileLink: jwt.profileLink,
                     fullName: 'You',
                     id: jwt.id
                 },

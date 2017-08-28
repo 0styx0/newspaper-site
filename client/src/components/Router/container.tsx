@@ -33,7 +33,7 @@ export default class RouterContainer extends React.Component<{}, State> {
         .then(data => data.json())
         .then(json => {
             jwt.level = +json.level
-            jwt.email = json.email
+            jwt.profileLink = json.email
             jwt.id = json.id
 
             this.setState({ jwt: getJWT() });

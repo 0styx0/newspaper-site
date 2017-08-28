@@ -59,7 +59,7 @@ class ProfileContainer extends React.Component<Props, State> {
 
         const articles = this.state.articles as Article[];
         const user = this.state.user as PublicUserInfo;
-        const canModify = getJWT().email === user.profileLink;
+        const canModify = getJWT().profileLink === user.profileLink;
 
         return (
             <Profile
