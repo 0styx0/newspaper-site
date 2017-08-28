@@ -17,7 +17,7 @@ interface Props {
     } ) => Promise<{ data: { login: { jwt: string } } }>;
 }
 
-class LoginFormContainer extends React.Component<Props, {}> {
+export class LoginFormContainer extends React.Component<Props, {}> {
 
     constructor() {
         super();

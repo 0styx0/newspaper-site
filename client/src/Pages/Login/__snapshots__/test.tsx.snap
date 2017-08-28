@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginFormContainer> snapshots renders correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Login
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Username: 
+      <input
+        name="username"
+        placeholder="Username"
+        required={true}
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <label>
+      Password: 
+      <input
+        name="password"
+        placeholder="Password"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      className="submit"
+      type="submit"
+      value="Log In"
+    />
+    <br />
+    <a
+      href="forgotPass"
+      onClick={[Function]}
+    >
+      Forgot your password?
+    </a>
+  </form>
+</section>
+`;

@@ -1,24 +1,15 @@
 import localStorageMock from './localstorage.mock';
 
-/*
 
-    const encodedToken = window.localStorage.getItem('jwt');
+export function encodeJwt(payload: Object) {
 
-    if (encodedToken) {
-
-        const encodedBody = encodedToken.split('.')[1];
-        const jsonString = atob(encodedBody);
-        return JSON.parse(jsonString);
-
-
-*/
+    const jsonString = JSON.stringify(payload);
+    const encodedBody = btoa(jsonString);
+    return `.${encodedBody}.`;
+}
 
 // basically the opposite of components/jwt#getJWT
 export default function setFakeJwt(payload: Object) {
 
-    const jsonString = JSON.stringify(payload);
-    const encodedBody = btoa(jsonString);
-    const encodedToken = `.${encodedBody}.`;
-
-    localStorageMock.setItem('jwt', encodedToken);
+    localStorageMock.setItem('jwt', encodeJwt(payload));
 }
