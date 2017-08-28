@@ -19,7 +19,7 @@ interface Props {
  * @return lets content be edited and renders a bar of buttons that can edit the html
  *  of props.children if props.canEdit = true
  */
-class EditableContainer extends React.Component<Props, {}> {
+export class EditableContainer extends React.Component<Props, {}> {
 
     constructor() {
         super();

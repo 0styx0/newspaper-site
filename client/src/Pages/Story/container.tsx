@@ -5,15 +5,15 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { ArticleQuery } from '../../graphql/article';
 import { ArticleUpdate } from '../../graphql/articles';
 
-import { Article, ArticleInfo } from './shared.interfaces';
-import Story from './';
+import { ArticleInfo, Story } from './shared.interfaces';
+import StoryComponent from './';
 
 interface Props {
 
     client: {
         query: ( params: {
             query: typeof ArticleQuery, variables: { issue: number; url: string }
-        } ) => Promise<{data: { articles: Article[] } }>;
+        } ) => Promise<{data: { articles: Story[] } }>;
     };
     updateArticle: ( params: {
         variables: {
@@ -25,7 +25,7 @@ interface Props {
     }) => void; // not really void
 }
 
-class StoryContainer extends React.Component<Props, ArticleInfo> {
+export class StoryContainer extends React.Component<Props, ArticleInfo> {
 
     constructor() {
         super();
@@ -48,6 +48,9 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
         this.setState(newState);
     }
 
+    /**
+     * Gets article from server and sets the state to the data received
+     */
     async componentWillMount() {
 
         const path = window.location.pathname.split('/');
@@ -81,6 +84,9 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
         });
     }
 
+    /**
+     * Sends edited article to server
+     */
     onSubmit() {
 
         this.props.updateArticle({
@@ -102,11 +108,11 @@ class StoryContainer extends React.Component<Props, ArticleInfo> {
         }
 
         return (
-            <Story
+           <StoryComponent
               {...this.state}
               onSaveEdits={this.onSaveEdits}
               onSubmit={this.onSubmit}
-            />
+           />
         );
     }
 }
