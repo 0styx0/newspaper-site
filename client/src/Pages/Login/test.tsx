@@ -8,18 +8,17 @@ import * as sinon from 'sinon';
 import { encodeJwt } from '../../tests/jwt.helper';
 import localStorageMock from '../../tests/localstorage.mock';
 
-import { getJWT } from '../../components/jwt';
-
 // using it here even though appears do to nothing to get rid of unused import warning.
 // Using it really for side effect of defining localstorage
 localStorageMock.clear();
 
+
 casual.define('jwt', () =>
 
     encodeJwt({
-        profileLink: casual.username,
-        level: casual.integer(1, 3),
-        id: casual.word
+        profileLink: customCasual.username,
+        level: customCasual.integer(1, 3),
+        id: customCasual.word
     })
 );
 
@@ -31,14 +30,18 @@ casual.define('data', (jwt: string) => Promise.resolve({
     }
 }));
 
-function setup(loginUser: Function) {
+type Casual = typeof casual & { jwt: string, data: (jwt: string) => Promise<{ data: { login: { jwt: string }} }> };
+const customCasual = casual as Casual;
+
+function setup(loginUser: any) {
 
     return mount(
         <MemoryRouter>
             <LoginFormContainer
                 loginUser={loginUser ?
                     loginUser :
-                    (params: { variables: { username: string, password: string }}) => casual.data(casual.jwt)}
+                    (params: { variables: { username: string, password: string }}) =>
+                      customCasual.data(customCasual.jwt)}
                 history={[]}
             />
         </MemoryRouter>
@@ -55,7 +58,9 @@ describe('<LoginFormContainer>', () => {
 
                 <MemoryRouter>
                     <LoginFormContainer
-                        loginUser={(params: { variables: { username: string, password: string }}) => true}
+                        loginUser={(params: { variables: { username: string, password: string }}) =>
+                          customCasual.data(customCasual.jwt)}
+                        history={[]}
                     />
                 </MemoryRouter>
             ).toJSON();
@@ -69,7 +74,7 @@ describe('<LoginFormContainer>', () => {
         /**
          * Sets username and password inputs and submits the form
          */
-        function setInputs(wrapper) {
+        function setInputs(wrapper: any) {
 
             const { username, password } = casual;
 
@@ -84,7 +89,7 @@ describe('<LoginFormContainer>', () => {
 
         test('#onLogin gets called when form is submitted', () => {
 
-            const spy = sinon.stub().returns(casual.data(casual.jwt));
+            const spy = sinon.stub().returns(customCasual.data(customCasual.jwt));
 
             const wrapper = setup(spy);
 
@@ -97,12 +102,12 @@ describe('<LoginFormContainer>', () => {
         it('submits correct data', async () => {
 
             let expected = {};
-            const jwt = casual.jwt;
+            const jwt = customCasual.jwt;
 
             const wrapper = setup(
                 async (data: { variables: {username: string, password: string} }) => {
                     expect(data.variables).toEqual(expected);
-                    return casual.data(jwt);
+                    return customCasual.data(jwt);
                 }
             );
 
