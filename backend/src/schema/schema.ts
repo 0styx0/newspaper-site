@@ -102,7 +102,7 @@ const Query = new GraphQLObjectType({
 
                     const maxIssueAllowed = await getMaxIssueAllowed(jwt);
 
-                    if (args.num == maxIssueAllowed) {
+                    if (args.num == maxIssueAllowed && !jwt.id) {
                         args.num = maxIssueAllowed - 1;
                     }
 
