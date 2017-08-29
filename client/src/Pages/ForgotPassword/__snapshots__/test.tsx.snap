@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Recover Password
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Username: 
+      <input
+        name="username"
+        required={true}
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <label>
+      Email: 
+      <input
+        name="email"
+        required={true}
+        type="email"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <label>
+      Last Auth Code: 
+      <input
+        name="lastAuth"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;

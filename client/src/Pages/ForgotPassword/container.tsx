@@ -12,7 +12,7 @@ interface Props {
       ) => Promise<{message: string}>;
 }
 
-class ForgotPasswordContainer extends React.Component<Props, {}> {
+export class ForgotPasswordContainer extends React.Component<Props, {}> {
 
     constructor() {
         super();
