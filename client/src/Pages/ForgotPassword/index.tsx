@@ -1,54 +1,45 @@
 import * as React from 'react';
 import Container from '../../components/Container';
-import FormContainer from '../../components/Form/container';
 import Input from '../../components/Form/Input';
 
+interface Props {
+    onSubmit: Function;
+}
 
-function ForgotPassword() {
+function ForgotPassword(props: Props) {
 
     return (
-        <Container
-          heading="Recover Password"
-          children={
+        <Container heading="Recover Password">
+            <form onSubmit={props.onSubmit as any}>
+                <Input
+                    label="Username"
+                    props={{
+                        required: true,
+                        name: 'username',
+                        type: 'text'
+                    }}
+                />
+                <Input
+                    label="Email"
+                    props={{
+                        type: 'email',
+                        name: 'email',
+                        required: true
+                    }}
+                />
+                <Input
+                    label="Last Auth Code"
+                    props={{
+                        type: 'password',
+                        name: 'lastAuth',
+                        required: true
+                    }}
+                />
 
-              <FormContainer
-                  action="/api/user"
-                  method="put"
-                  children={
-                      <div>
-                          <Input
-                              label="Username"
-                              props={{
-                                  required: true,
-                                  name: "user",
-                                  type: "text"
-                              }}
-                          />
-                          <Input
-                              label="Email"
-                              props={{
-                                  type: "email",
-                                  name: "email",
-                                  required: true
-                              }}
-                          />
-                          <Input
-                              label="Last Auth Code"
-                              props={{
-                                  type: "password",
-                                  name: "lastAuth",
-                                  required: true
-                              }}
-                          />
-
-                          <input type="submit" />
-                      </div>
-
-                  }
-              />
-          }
-        />
-    )
+                <input type="submit" />
+            </form>
+        </Container>
+    );
 }
 
 export default ForgotPassword;

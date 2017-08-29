@@ -5,7 +5,7 @@ import './index.css';
 interface Props {
     heading?: string;
     className?: string; // in addition to the default `container` class if wanted
-    children: JSX.Element | Element;
+    children?: JSX.Element | Element;
 }
 
 export default function Container(props: Props) {

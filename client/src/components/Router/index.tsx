@@ -12,7 +12,7 @@ import ProfileContainer from '../../Pages/Profile/container';
 import MainPageContainer from '../../Pages/MainPage/container';
 import MissionContainer from '../../Pages/Mission/container';
 import StoryContainer from '../../Pages/Story/container';
-import ForgotPassword from '../../Pages/ForgotPassword';
+import ForgotPasswordContainer from '../../Pages/ForgotPassword/container';
 import TwoFactor from '../../Pages/TwoFactor';
 import SelectTagPreview from '../TagSelect/SelectTagPreview';
 
@@ -64,7 +64,7 @@ export default function Router() {
                 <Route exact path="/" component={MainPageContainer}/>
                 <Route path="/u/(.*)" component={ProfileContainer}/>
                 <Route path="/authLogin" component={TwoFactor}/>
-                <Route path="/forgotPass" component={ForgotPassword}/>
+                <Route path="/forgotPass" component={ForgotPasswordContainer}/>
 
             </Switch>
         </div>

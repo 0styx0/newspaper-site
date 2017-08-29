@@ -46,6 +46,14 @@ const UserUpdate = gql`
     }
 `;
 
+const RecoverPassword = gql`
+    mutation recoverPassword($email: String!, $authCode: String!, $username: String!) {
+        recoverPassword(email: $email, authCode: $authCode, username: $username) {
+            message
+        }
+    }
+`;
+
 const UserLogin = gql`
     mutation login($username: String!, $password: String!) {
         login(username: $username, password: $password) {
@@ -58,5 +66,6 @@ export {
     UserQuery,
     PrivateUserQuery,
     UserUpdate,
-    UserLogin
+    UserLogin,
+    RecoverPassword
 };
