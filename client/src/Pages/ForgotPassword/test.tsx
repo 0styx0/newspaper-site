@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ForgotPasswordContainer } from './container';
 import { mount } from 'enzyme';
-import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 
