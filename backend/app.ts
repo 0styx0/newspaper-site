@@ -43,7 +43,7 @@ app.use('/graphql', GraphHTTP((req) => {
   try {
     jwt = getJWT(req);
   } catch(error) {
-    jwt = null;
+    jwt = {};
   }
 
   return {

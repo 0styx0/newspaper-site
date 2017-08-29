@@ -1,3 +1,4 @@
+import { jwt } from './../helpers/jwt';
 import {
   GraphQLNonNull,
   GraphQLObjectType,
@@ -10,6 +11,27 @@ import {
 
 import db from '../db/models';
 import sanitize from '../helpers/sanitize';
+
+/**
+ * @return max issue + 1 a user can view, or infinity if user is logged in
+ *
+ * Used in stuff like `select * from pageinfo where issue != getMaxIssueAllowed`
+ */
+export async function getMaxIssueAllowed(jwt: jwt) {
+
+    if (jwt && jwt.id) {
+        return null;
+    }
+
+    const maxIssueRow = (await db.models.issues.findOne({
+        attributes: ['num'],
+        where: {
+            ispublic: false
+        }
+    }));
+
+    return maxIssueRow.dataValues.num;
+}
 
 
 const Users = new GraphQLObjectType({
@@ -33,24 +55,48 @@ const Users = new GraphQLObjectType({
         fullName: {
             type: new GraphQLNonNull(GraphQLString),
         },
-        email: {type: new GraphQLNonNull(GraphQLString)},
+        email: {
+            type: GraphQLString,
+            resolve: (user, _, { jwt }) =>
+
+                jwt.id == user.id ? user.email : null
+        },
         level: {type: new GraphQLNonNull(GraphQLInt)},
-        notifications: {type: new GraphQLNonNull(GraphQLBoolean)},
+        notifications: {
+            type: GraphQLBoolean,
+            resolve: (user, test,  { jwt }) =>
+                jwt.id == user.id ? user.notifications : null
+        },
         twoFactor: {
-            type: new GraphQLNonNull(GraphQLBoolean),
-            resolve: (user) => user.two_fa_enabled
+            type: GraphQLBoolean,
+            resolve: (user, _, { jwt }) =>
+
+                jwt.id == user.id ? user.two_fa_enabled : null
         },
         views: {
             type: GraphQLInt,
-            resolve: (user) => +db.models.pageinfo.sum('views', {
-                where: {authorid: sanitize(user.id)}
+            resolve: async (user, _, { jwt }) => +db.models.pageinfo.sum('views', {
+                where: {
+                    authorid: sanitize(user.id),
+                    issue: {
+                        $ne: await getMaxIssueAllowed(jwt)
+                    }
+                }
             }) || 0 // don't know why I need + and || but I do
         },
         articleCount: {
             type: GraphQLInt,
-            resolve: (user) => db.models.pageinfo.count({
-                where: {authorid: sanitize(user.id)}
-            })
+            resolve: async (user, _, { jwt }) => {
+
+                return db.models.pageinfo.count({
+                    where: {
+                        authorid: sanitize(user.id),
+                        issue: {
+                            $ne: await getMaxIssueAllowed(jwt)
+                        }
+                    }
+                })
+            }
         },
         profileLink: {
             type: new GraphQLNonNull(GraphQLString),
@@ -58,9 +104,17 @@ const Users = new GraphQLObjectType({
         },
         articles: {
             type: new GraphQLNonNull(new GraphQLList(Articles)),
-            resolve: (user) => db.models.pageinfo.findAll({
-                where: sanitize({authorid: user.id})
-            })
+            resolve: async (user, _, { jwt }) => {
+
+                return db.models.pageinfo.findAll({
+                    where: {
+                        authorid: user.id,
+                        issue: {
+                            $ne: await getMaxIssueAllowed(jwt)
+                        }
+                    }
+                })
+            }
         },
 
 
@@ -128,8 +182,8 @@ const Articles = new GraphQLObjectType({
         },
         canEdit: {
             type: new GraphQLNonNull(GraphQLBoolean),
-            resolve: (article) => {
-                return true; // TODO: when implement authentication use jwt to decide
+            resolve: (article, _, { jwt }) => {
+                return jwt.level > 2 || jwt.id == article.authorid;
             }
         }
     })
@@ -194,9 +248,8 @@ const Comments = new GraphQLObjectType({
         },
         canDelete: {
             type: new GraphQLNonNull(GraphQLBoolean),
-            resolve: (comment) => {
-                return true; // TODO: when implement authentication use jwt to decide
-            }
+            resolve: (comment, _, { jwt }) =>
+                jwt.level > 2 || jwt.id === comment.authorid
         }
     })
 });

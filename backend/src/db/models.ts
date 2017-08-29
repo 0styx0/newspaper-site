@@ -167,12 +167,7 @@ const Articles = sequelize.define('pageinfo', {
     },
     body: {
         type: Sequelize.BLOB,
-        // allowNull: false,
-        validate: {
-            isLength: {
-                min: 50 // random number, just don't want articles too short
-            }
-        },
+        allowNull: false,
     },
     img_url: {
         type: Sequelize.STRING(100),

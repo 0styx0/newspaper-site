@@ -1,3 +1,4 @@
+import { jwt } from './../helpers/jwt';
 import {
 //   graphql,
   GraphQLSchema,
@@ -17,7 +18,8 @@ import {
     Issues,
     Comments,
     Tags,
-    Jwt
+    Jwt,
+    getMaxIssueAllowed
 } from './types';
 
 import sanitize from '../helpers/sanitize';
@@ -70,9 +72,17 @@ const Query = new GraphQLObjectType({
                 url: {type: GraphQLString},
                 issue: {type: GraphQLInt},
             },
-            resolve: (_, args) => {
+            resolve: async (_, args, { jwt }) => {
 
-                return db.models.pageinfo.findAll({where: sanitize(args)})
+                const where = Object.assign({
+                    issue: {
+                        $ne: await getMaxIssueAllowed(jwt)
+                    }
+                }, sanitize(args));
+
+                return db.models.pageinfo.findAll({
+                    where
+                })
             }
         },
         issues: {
@@ -83,14 +93,20 @@ const Query = new GraphQLObjectType({
                 public: {type: GraphQLBoolean},
                 limit: {type: GraphQLInt}
             },
-            resolve: async (_, args: {num?: string; public?: boolean; ispublic?: number, limit?: number}) => {
+            resolve: async (_, args: {num?: number | Object; public?: boolean; ispublic?: number, limit?: number}, { jwt }) => {
 
                 let limit = args.limit;
                 delete args.limit;
 
                 if ('num' in args) {
 
-                    if (args.num === '0') {
+                    const maxIssueAllowed = await getMaxIssueAllowed(jwt);
+
+                    if (args.num == maxIssueAllowed) {
+                        args.num = maxIssueAllowed - 1;
+                    }
+
+                    if (+args.num === 0) {
 
                         args.num = (
                             await db.models.issues.findOne({
@@ -100,6 +116,10 @@ const Query = new GraphQLObjectType({
                     }
                     else if (!args.num) {
                         delete args.num;
+                    }
+                } else {
+                    args.num = {
+                        $ne: await getMaxIssueAllowed(jwt)
                     }
                 }
 
@@ -170,7 +190,11 @@ const Mutation = new GraphQLObjectType({
                 name: {type: GraphQLString},
                 public: {type: GraphQLBoolean}
             },
-            resolve: async (_, args) => {
+            resolve: async (_, args, { jwt }) => {
+
+                if (jwt.level < 3) {
+                    return false;
+                }
 
                 const maxIssueRow = await db.models.issues.findOne({
                                     order: [ [ 'num', 'DESC' ]],
@@ -207,11 +231,15 @@ const Mutation = new GraphQLObjectType({
                     )
                 }
             },
-            resolve: (_, args: {data: {ids: string[]; level: number}[]}) => {
+            resolve: (_, args: {data: {ids: string[]; level: number}[]}, { jwt }) => {
 
                 const sanitized: typeof args = sanitize(args);
 
                 sanitized.data.forEach(level => {
+
+                    if (jwt.level < level.level) {
+                        return;
+                    }
 
                     db.models.users.update(
                         {
@@ -235,17 +263,33 @@ const Mutation = new GraphQLObjectType({
                     type: new GraphQLList(GraphQLID)
                 }
             },
-            resolve: (_, args: {ids: string[]}) => {
+            resolve: async (_, args: {ids: string[]}, { jwt }) => {
 
                 const sanitized: typeof args = sanitize(args);
 
-                db.models.users.destroy({
+                const maxLevelRow = await db.models.users.findOne({
+                    attributes: ['level'],
+                    order: [ [ 'level', 'DESC' ]],
                     where: {
                         id: {
                             $in: sanitized.ids
                         }
                     }
                 });
+
+                const adminAndDeletingNonAdmins = jwt.level > 2 && maxLevelRow.dataValues.level < jwt.level;
+                const regularAndDeletingSelf = sanitized.ids.indexOf(jwt.id) !== -1 && sanitized.ids.length === 1;
+
+                if (adminAndDeletingNonAdmins || regularAndDeletingSelf) {
+
+                    db.models.users.destroy({
+                        where: {
+                            id: {
+                                $in: sanitized.ids
+                            }
+                        }
+                    });
+                }
             }
         },
         updateProfile: {
@@ -253,16 +297,15 @@ const Mutation = new GraphQLObjectType({
             description: 'Modify your own settings',
             args: {
                 notificationStatus: {type: GraphQLBoolean},
-                twoFactor: {type: GraphQLBoolean},
-                id: {type: new GraphQLNonNull(GraphQLID)}
+                twoFactor: {type: GraphQLBoolean}
             },
-            resolve: async (_, args: {notificationState?: boolean; id: string; twoFactor?: boolean}) => {
+            resolve: async (_, args: {notificationState?: boolean; id: string; twoFactor?: boolean}, { jwt }) => {
 
                 const sanitized = sanitize(args);
 
                 return db.models.users.update(sanitized, {
                     where: {
-                        id: sanitized.id
+                        id: jwt.id
                     }
                 });
             }
@@ -294,7 +337,11 @@ const Mutation = new GraphQLObjectType({
                     )
                 }
             },
-            resolve: async (_, args: {data: {id: string, article?: string, tags?: string[], displayOrder?: number, display_order?: number}[]}) => {
+            resolve: async (
+                _,
+                args: {data: {id: string, article?: string, tags?: string[], displayOrder?: number, display_order?: number}[]},
+                { jwt }
+            ) => {
 
                 const sanitized: typeof args = sanitize(args);
 
@@ -311,6 +358,10 @@ const Mutation = new GraphQLObjectType({
                     });
 
                 return sanitized.data.map((article, i) => {
+
+                    if (jwt.level < 3 && rows[i].dataValues.authorid !== jwt.id) {
+                        return;
+                    }
 
                     // displayOrder doesn't exist in db, calling it that since js like camels but sql likes snakes
                     if ('displayOrder' in article) {
@@ -335,9 +386,25 @@ const Mutation = new GraphQLObjectType({
                     type: new GraphQLList(GraphQLID)
                 }
             },
-            resolve: async (_, args: {ids: string[]}) => {
+            resolve: async (_, args: {ids: string[]}, { jwt }) => {
 
                 const sanitized: typeof args = sanitize(args);
+
+                const authorIds = await db.models.pageinfo.find({
+                    attributes: ['authorid'],
+                    where: {
+                        id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                });
+
+                const uniqueAuthors = [...new Set(authorIds.dataValues)];
+                const onlyArticlesOfCurrentUser = uniqueAuthors.length === 1 && uniqueAuthors[0] === jwt.id
+
+                if (jwt.level < 3 && !onlyArticlesOfCurrentUser) {
+                    return;
+                }
 
                 await db.models.comments.destroy({
                     where: {
@@ -381,7 +448,7 @@ const Mutation = new GraphQLObjectType({
 
                 const user = await db.models.users.findOne({
 
-                    attributes: ['id', 'email', 'level', 'password']
+                    attributes: ['id', 'email', 'level', 'password'],
                     where: {
                         $or: [
                             {
@@ -399,6 +466,8 @@ const Mutation = new GraphQLObjectType({
                     user.dataValues.profileLink = user.dataValues.email.split('@')[0];
                     return { jwt: setJWT(user.dataValues) };
                 }
+
+                throw new Error('Incorrect password');
             }
         }
     }),
