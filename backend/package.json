@@ -27,7 +27,7 @@
     "moment": "^2.18.1",
     "morgan": "^1.8.2",
     "mysql2": "^1.4.0",
-    "nodemailer": "^4.0.1",
+    "nodemailer": "^4.1.0",
     "randomstring": "^1.1.5",
     "sanitize-html": "^1.14.1",
     "sequelize": "^4.4.2",
@@ -44,7 +44,7 @@
     "@types/graphql": "^0.10.2",
     "@types/jwt-simple": "^0.5.33",
     "@types/morgan": "^1.7.32",
-    "@types/nodemailer": "^3.1.1",
+    "@types/nodemailer": "^3.1.2",
     "@types/randomstring": "^1.1.6",
     "@types/sanitize-html": "^1.13.31",
     "@types/sequelize": "^4.0.67"

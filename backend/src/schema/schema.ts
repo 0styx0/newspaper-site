@@ -19,14 +19,18 @@ import {
     Comments,
     Tags,
     Jwt,
+    PasswordRecovery,
     getMaxIssueAllowed
 } from './types';
 
 import sanitize from '../helpers/sanitize';
+import SendMail from '../helpers/SendMail';
 
 import db from '../db/models';
 
 import * as bcrypt from 'bcrypt';
+import * as randomstring from 'randomstring';
+
 import { setJWT } from '../helpers/jwt';
 
 const Query = new GraphQLObjectType({
@@ -308,6 +312,60 @@ const Mutation = new GraphQLObjectType({
                         id: jwt.id
                     }
                 });
+            }
+        },
+        recoverPassword: {
+            type: PasswordRecovery,
+            description: 'Get a new password',
+            args: {
+                email: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                authCode: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                username: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {email: string, authCode: string, username: string}) => {
+
+                const sanitized = sanitize(args);
+
+                const userRow = await db.models.users.findOne({
+                    where: {
+                        email: sanitized.email
+                    }
+                });
+
+                const data = userRow.dataValues;
+
+                if (
+                    data.email &&
+                    data.username === sanitized.username &&
+                    await bcrypt.compare(args.authCode, data.auth.replace(/^\$2y/, '$2a'))
+                ) {
+
+                    const newPlainTextPassword = randomstring.generate(30);
+
+                    const newPassword = (await bcrypt.hash(newPlainTextPassword, 10)).replace(/^\$2a/, '$2y');
+
+                    SendMail.passwordRecovery(
+                        newPlainTextPassword,
+                        data.username,
+                        data.email
+                    );
+
+                    db.models.users.update({password: newPassword}, {where: {email: sanitized.email}});
+
+                    return {
+                        message: 'Password has been changed. An email has been sent.'
+                    };
+                }
+
+                return {
+                    message: 'Error: Invalid data given.'
+                };
             }
         },
         updateArticles: {

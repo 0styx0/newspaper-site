@@ -281,6 +281,16 @@ const Jwt = new GraphQLObjectType({
             type: GraphQLString
         }
     })
+});
+
+const PasswordRecovery = new GraphQLObjectType({
+    name: 'RecoverPassword',
+    description: 'Recover forgotten password',
+    fields: () => ({
+        message: {
+            type: GraphQLString
+        }
+    })
 })
 
 export {
@@ -289,5 +299,6 @@ export {
     Issues,
     Comments,
     Tags,
-    Jwt
+    Jwt,
+    PasswordRecovery
 };
