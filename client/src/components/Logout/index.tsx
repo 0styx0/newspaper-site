@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { getJWT } from '../jwt';
 
 import { Link } from 'react-router-dom';
 
