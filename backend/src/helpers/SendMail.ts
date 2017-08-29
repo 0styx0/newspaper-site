@@ -64,14 +64,14 @@ export default {
       *
       * @return true if sent, else false
       */
-    emailAuth(email: string, username: string, code: string) {
+    emailAuth(email: string, profileLink: string, code: string) {
 
 
         const message = "Your code is <br />" + code + "<br/>This code is valid for 1 day. "+
                     "Your account may be deleted if this is not "+
-                    "<a href='https://tabceots.com/u/"+username+"'>verified</a>.";
+                    `<a href='https://tabceots.com/u/${profileLink}'>verified</a>.`;
 
-        return this.mail([email.substr(1)], "Verify Your EOTS Account", message);
+        return this.mail(email, "Verify Your EOTS Account", message);
     },
 
     /**

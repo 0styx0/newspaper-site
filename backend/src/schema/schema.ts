@@ -1,4 +1,3 @@
-import { jwt } from './../helpers/jwt';
 import {
 //   graphql,
   GraphQLSchema,
@@ -22,14 +21,12 @@ import {
     PasswordRecovery,
     getMaxIssueAllowed
 } from './types';
-
 import sanitize from '../helpers/sanitize';
 import SendMail from '../helpers/SendMail';
 
 import db from '../db/models';
-
-import * as bcrypt from 'bcrypt';
-import * as randomstring from 'randomstring';
+import userHelpers from '../helpers/user';
+import userValidator from '../helpers/user.validators';
 
 import { setJWT } from '../helpers/jwt';
 
@@ -213,6 +210,64 @@ const Mutation = new GraphQLObjectType({
                 return Object.assign(maxIssueRow.dataValues, args); // optimistic that update worked
             }
         },
+        createUser: {
+            type: Users,
+            description: 'Sign up for an account',
+            args: {
+                username: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                email: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                level: {
+                    type: GraphQLInt
+                },
+                firstName: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                middleName: {
+                    type: GraphQLString
+                },
+                lastName: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (
+                _,
+                args: {
+                    username: string,
+                    email: string,
+                    password: string,
+                    level: number,
+                    firstName: string,
+                    middleName: string,
+                    lastName: string
+                },
+                { jwt }) => {
+
+                const sanitized = sanitize(args);
+
+                sanitized.level = userValidator.level(sanitized.level, jwt.level);
+                sanitized.email = userValidator.email(sanitized.email);
+                args.password = userValidator.password(args.password);
+
+                const codes = await userHelpers.generateAuthCode();
+
+                const user = Object.assign(sanitized, {
+                    password: await userHelpers.encrypt(args.password),
+                    authCode: codes.encrypted,
+                    email: '.' + sanitized.email
+                });
+
+                SendMail.emailAuth(sanitized.email, sanitized.email.split('@')[0], codes.plaintext);
+
+                return new db.models.users(user).newUser.save();
+            }
+        },
         updateUsers: {
             type: new GraphQLList(Users),
             description: 'Modify user data',
@@ -343,20 +398,18 @@ const Mutation = new GraphQLObjectType({
                 if (
                     data.email &&
                     data.username === sanitized.username &&
-                    await bcrypt.compare(args.authCode, data.auth.replace(/^\$2y/, '$2a'))
+                    await userHelpers.compareEncrypted(args.authCode, data.auth)
                 ) {
 
-                    const newPlainTextPassword = randomstring.generate(30);
-
-                    const newPassword = (await bcrypt.hash(newPlainTextPassword, 10)).replace(/^\$2a/, '$2y');
+                    const codes = await userHelpers.generateAuthCode(30);
 
                     SendMail.passwordRecovery(
-                        newPlainTextPassword,
+                        codes.plaintext,
                         data.username,
                         data.email
                     );
 
-                    db.models.users.update({password: newPassword}, {where: {email: sanitized.email}});
+                    db.models.users.update({password: codes.encrypted}, {where: {email: sanitized.email}});
 
                     return {
                         message: 'Password has been changed. An email has been sent.'
@@ -519,7 +572,7 @@ const Mutation = new GraphQLObjectType({
                     }
                 });
 
-                if (await bcrypt.compare(args.password, user.dataValues.password.replace(/^\$2y/, '$2a'))) {
+                if (await userHelpers.compareEncrypted(args.password, user.dataValues.password)) {
 
                     user.dataValues.profileLink = user.dataValues.email.split('@')[0];
                     return { jwt: setJWT(user.dataValues) };

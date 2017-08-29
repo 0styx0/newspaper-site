@@ -28,14 +28,14 @@ const Users = sequelize.define('users', {
         type: Sequelize.STRING,
         allowNull: true,
         validate: {
-            is: /^[a-zA-Z]{0, 3}$/
+            is: /^[a-zA-Z]{0,3}$/
         }
     },
     l_name: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-            is: /^[a-zA-Z]$/
+            is: /^[a-zA-Z]+$/
         }
     },
     email: {
@@ -85,6 +85,19 @@ const Users = sequelize.define('users', {
             return `${this.f_name} ${this.m_name ? this.m_name + ' ' : ''}${this.l_name}`;
         }
     },
+    setterMethods: {
+
+        firstName: function(firstName: string) {
+            this.setDataValue('f_name', firstName);
+        },
+        middleName: function(middleName: string | null) {
+            this.setDataValue('m_name', middleName);
+        },
+        lastName: function(lastName: string) {
+            this.setDataValue('l_name', lastName);
+        }
+    }
+
     underscored: true,
     timestamps: false,
     indexes: [
