@@ -54,8 +54,10 @@ describe('<MainPageContainer>', () => {
                     <MainPageContainer
                         data={data}
                         client={{
-                            query: Function
-                        } as any}
+                            query: ( params:
+                                { query: Function, variables: { issue: string | number; } } ) =>
+                                    Promise.resolve({data: ''})
+                        }}
                     />
                 </MemoryRouter>
             ).toJSON();
