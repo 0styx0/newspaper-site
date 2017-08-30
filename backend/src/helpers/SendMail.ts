@@ -71,7 +71,7 @@ export default {
                     "Your account may be deleted if this is not "+
                     `<a href='https://tabceots.com/u/${profileLink}'>verified</a>.`;
 
-        return this.mail(email, "Verify Your EOTS Account", message);
+        return this.mail([email], "Verify Your EOTS Account", message);
     },
 
     /**
@@ -99,7 +99,7 @@ export default {
     /**
       * Actually sends emails. Uses phpmailer library to do so
       *
-      * @param to - 1 or more valid email addresses (if 1, string, else array of strings)
+      * @param to - valid email addresses
       * @param subject - subject of email
       * @param message - email body
       *
