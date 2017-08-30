@@ -27,6 +27,10 @@ const sanitizeOptions = {
  */
 export default function sanitize(toSanitize: any) {
 
+    if (toSanitize === null) { // weird thing: typeof null = 'object' (https://stackoverflow.com/a/18808270)
+        return toSanitize;
+    }
+
     // if array or object, recurse through it
     if (typeof toSanitize === 'object') {
 
