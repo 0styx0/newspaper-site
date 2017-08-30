@@ -7,7 +7,7 @@ interface Props {
     createUser: Function;
 }
 
-class SignupContainer extends React.Component<Props, {}> {
+export class SignupContainer extends React.Component<Props, {}> {
 
     constructor() {
         super();
@@ -23,7 +23,9 @@ class SignupContainer extends React.Component<Props, {}> {
         e.preventDefault();
 
         const namesToSearchFor = ['email', 'password', 'confirmation', 'level', 'fullName', 'username'];
-        let values = {} as { fullName: string, level: number }; // only doing types for props that are using
+
+        // only doing types for props that are using here, in this function
+        let values = {} as { fullName: string, level: number, password: string, confirmation: string };
 
         const inputs = (e.target as HTMLFormElement).querySelectorAll('input, select');
 
@@ -32,6 +34,10 @@ class SignupContainer extends React.Component<Props, {}> {
            if (namesToSearchFor.indexOf(input.name) !== -1) {
                values[input.name] = input.value;
            }
+        }
+
+        if (values.password !== values.confirmation) {
+            throw new Error('Password does not match confirmation');
         }
 
         const name = values.fullName.split(' ');
@@ -43,7 +49,7 @@ class SignupContainer extends React.Component<Props, {}> {
         });
 
         delete values.fullName;
-        
+
         this.props.createUser({
             query: UserCreate,
             variables: values
