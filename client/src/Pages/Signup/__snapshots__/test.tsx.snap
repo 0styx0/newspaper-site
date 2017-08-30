@@ -1,0 +1,306 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignupContainer> snapshots gives choice of level when someone creates an account while being signed in 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Sign Up
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Username: 
+      <input
+        name="username"
+        pattern="[\\\\w._-]+"
+        placeholder="jpulitzer"
+        required={true}
+        title="Must be letters, numbers, ., _, or -"
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must not contain spaces"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Full Name: 
+      <input
+        name="fullName"
+        pattern="^[a-zA-Z.-]+\\\\s[a-zA-Z-]+(\\\\s[a-zA-Z]+)?$"
+        placeholder="Edgar A Poe"
+        required={true}
+        title="First, middle initial (optional), last"
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must contain only uppercase, lowercase, or
+                        periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Password: 
+      <input
+        name="password"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Password must contain at least: 1 uppercase, 1 lowercase, 1 number, 6 character"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Confirm Password: 
+      <input
+        name="confirmation"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must be the same as the password"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Email: 
+      <input
+        name="email"
+        pattern="^[^@]+@\\\\w+\\\\.\\\\w+$"
+        required={true}
+        type="email"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must be your assigned email."
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Level: 
+      <select
+        className="changed"
+        defaultValue={1}
+        name="level"
+        required={true}
+      >
+        <option
+          value={1}
+        >
+          1
+        </option>
+        <option
+          value={2}
+        >
+          2
+        </option>
+      </select>
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      
+    </label>
+    <input
+      className="submit"
+      name="create"
+      type="submit"
+      value="Sign Up"
+    />
+  </form>
+</section>
+`;
+
+exports[`<SignupContainer> snapshots renders correctly (no choice of level) when someone creates an account without being signed in 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Sign Up
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Username: 
+      <input
+        name="username"
+        pattern="[\\\\w._-]+"
+        placeholder="jpulitzer"
+        required={true}
+        title="Must be letters, numbers, ., _, or -"
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must not contain spaces"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Full Name: 
+      <input
+        name="fullName"
+        pattern="^[a-zA-Z.-]+\\\\s[a-zA-Z-]+(\\\\s[a-zA-Z]+)?$"
+        placeholder="Edgar A Poe"
+        required={true}
+        title="First, middle initial (optional), last"
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must contain only uppercase, lowercase, or
+                        periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Password: 
+      <input
+        name="password"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Password must contain at least: 1 uppercase, 1 lowercase, 1 number, 6 character"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Confirm Password: 
+      <input
+        name="confirmation"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must be the same as the password"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <label>
+      Email: 
+      <input
+        name="email"
+        pattern="^[^@]+@\\\\w+\\\\.\\\\w+$"
+        required={true}
+        type="email"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Must be your assigned email."
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    
+    <input
+      className="submit"
+      name="create"
+      type="submit"
+      value="Sign Up"
+    />
+  </form>
+</section>
+`;
