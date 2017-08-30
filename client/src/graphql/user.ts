@@ -62,10 +62,35 @@ const UserLogin = gql`
     }
 `;
 
+const UserCreate = gql`
+    mutation createUser(
+        $username: String!,
+        $email: String!,
+        $level: Int,
+        $firstName: String!,
+        $middleName: String,
+        $lastName: String!,
+        $password: String!) {
+
+            createUser(
+                username: $username,
+                email: $email,
+                level: $level,
+                firstName: $firstName,
+                middleName: $middleName,
+                lastName: $lastName,
+                password: $password
+            ) {
+                id
+            }
+        }
+`;
+
 export {
     UserQuery,
     PrivateUserQuery,
     UserUpdate,
     UserLogin,
-    RecoverPassword
+    RecoverPassword,
+    UserCreate
 };

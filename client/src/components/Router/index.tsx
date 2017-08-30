@@ -3,7 +3,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 
 import LoginContainer from '../../Pages/Login/container';
 import Logout from '../Logout';
-import Signup from '../../Pages/Signup';
+import SignupContainer from '../../Pages/Signup/container';
 import JournalistTable from '../../Pages/JournalistTable';
 import IssueTable from '../../Pages/IssueTable';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
@@ -52,7 +52,7 @@ export default function Router() {
             </nav>
             <Switch>
                 <Route path="/login" component={LoginContainer}/>
-                <Route path="/signup" component={Signup}/>
+                <Route path="/signup" component={SignupContainer}/>
                 <Route exact path="/u" component={JournalistTable}/>
                 <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTable}/>

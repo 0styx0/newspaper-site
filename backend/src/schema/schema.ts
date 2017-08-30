@@ -250,6 +250,7 @@ const Mutation = new GraphQLObjectType({
                 { jwt }) => {
 
                 const sanitized = sanitize(args);
+                const unmodifiedEmail = sanitized.email;
 
                 sanitized.level = userValidator.level(sanitized.level, jwt.level);
                 sanitized.email = userValidator.email(sanitized.email);
@@ -263,9 +264,9 @@ const Mutation = new GraphQLObjectType({
                     email: '.' + sanitized.email
                 });
 
-                SendMail.emailAuth(sanitized.email, sanitized.email.split('@')[0], codes.plaintext);
+                SendMail.emailAuth(unmodifiedEmail, unmodifiedEmail.split('@')[0], codes.plaintext);
 
-                return new db.models.users(user).newUser.save();
+                return new db.models.users(user).save();
             }
         },
         updateUsers: {
