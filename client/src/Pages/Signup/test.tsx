@@ -30,11 +30,12 @@ type user = {
         confirmation: string,
         username: string,
         firstName: string,
+        middleName: string,
         lastName: string,
         level: number | string | null
 };
 
-const customCasual: typeof casual & { formData: user } = casual;
+const customCasual = casual as typeof casual & { formData: user };
 
 function setup(createUser: Function = () => true) {
 
@@ -51,7 +52,7 @@ describe('<SignupContainer>', () => {
         function snap() {
 
             const tree = renderer.create(
-                <SignupContainer />
+                <SignupContainer createUser={() => true} />
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
