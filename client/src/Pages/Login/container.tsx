@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setJWT } from '../../components/jwt';
+import { setJWT, getJWT } from '../../components/jwt';
 import LoginForm from './';
 import { UserLogin } from '../../graphql/user';
 import { graphql, withApollo } from 'react-apollo';
@@ -48,10 +48,15 @@ export class LoginFormContainer extends React.Component<Props, {}> {
         });
 
         setJWT(data.login.jwt);
+        const jwt = getJWT();
 
-        if (data.login.jwt) {
+        if (jwt.level) {
 
             this.props.history.push('/publish');
+        }
+        else if (jwt.id) {
+
+            this.props.history.push('/authLogin');
         }
     }
 

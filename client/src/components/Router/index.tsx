@@ -13,7 +13,7 @@ import MainPageContainer from '../../Pages/MainPage/container';
 import MissionContainer from '../../Pages/Mission/container';
 import StoryContainer from '../../Pages/Story/container';
 import ForgotPasswordContainer from '../../Pages/ForgotPassword/container';
-import TwoFactor from '../../Pages/TwoFactor';
+import TwoFactorContainer from '../../Pages/TwoFactor/container';
 import SelectTagPreview from '../TagSelect/SelectTagPreview';
 
 import { getJWT } from '../jwt';
@@ -63,7 +63,7 @@ export default function Router() {
                 <Route path="/issue/(.*)" component={MainPageContainer}/>
                 <Route exact path="/" component={MainPageContainer}/>
                 <Route path="/u/(.*)" component={ProfileContainer}/>
-                <Route path="/authLogin" component={TwoFactor}/>
+                <Route path="/authLogin" component={TwoFactorContainer}/>
                 <Route path="/forgotPass" component={ForgotPasswordContainer}/>
 
             </Switch>

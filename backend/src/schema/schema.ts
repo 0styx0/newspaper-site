@@ -609,7 +609,7 @@ const Mutation = new GraphQLObjectType({
                 }
 
                 if (user.dataValues.email[0] !== '.') {
-                    return { jwt };
+                    return { jwt: setJWT(jwt) };
                 }
 
                 const parsedAuthTime = Date.parse(user.dataValues.auth_time);

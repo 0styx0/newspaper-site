@@ -26,7 +26,7 @@ function getJWT(): Jwt {
     }
 }
 
-async function setJWT(newJwt: string) {
+function setJWT(newJwt: string) {
 
     window.localStorage.setItem('jwt', newJwt);
     return newJwt;

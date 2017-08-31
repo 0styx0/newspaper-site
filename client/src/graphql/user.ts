@@ -62,6 +62,15 @@ const UserLogin = gql`
     }
 `;
 
+// to be used only after user is logged in
+const UserVerifyEmail = gql`
+    mutation verifyEmail($authCode: String!) {
+        verifyEmail(authCode: $authCode) {
+            jwt
+        }
+    }
+`;
+
 const UserCreate = gql`
     mutation createUser(
         $username: String!,
@@ -92,5 +101,6 @@ export {
     UserUpdate,
     UserLogin,
     RecoverPassword,
-    UserCreate
+    UserCreate,
+    UserVerifyEmail
 };
