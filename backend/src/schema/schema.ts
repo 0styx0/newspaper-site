@@ -260,7 +260,7 @@ const Mutation = new GraphQLObjectType({
 
                 const user = Object.assign(sanitized, {
                     password: await userHelpers.encrypt(args.password),
-                    authCode: codes.encrypted,
+                    auth: await codes.encrypted,
                     email: '.' + sanitized.email
                 });
 
@@ -580,10 +580,6 @@ const Mutation = new GraphQLObjectType({
 
                     user.dataValues.profileLink = user.dataValues.email.split('@')[0];
 
-                    if (user.dataValues.profileLink[0] === '.') {
-                        userHelpers.sendTwoFactorCode(user.dataValues);
-                    }
-
                     return { jwt: setJWT(user.dataValues) };
                 }
 
@@ -616,7 +612,7 @@ const Mutation = new GraphQLObjectType({
                     return { jwt };
                 }
 
-                const parsedAuthTime = Date.parse(user.dateValues.auth_time);
+                const parsedAuthTime = Date.parse(user.dataValues.auth_time);
                 const authTimePlusOneDay = parsedAuthTime + (60 * 60 * 24 * 1000);
                 const authCodeSentLessThanOneDayAgo = authTimePlusOneDay - Date.now() > 0;
 
@@ -626,11 +622,17 @@ const Mutation = new GraphQLObjectType({
 
                 if (await userHelpers.compareEncrypted(args.authCode, user.dataValues.auth)) {
 
-                    const verifiedEmail = user.dateValues.email.substr(1);
+                    const verifiedEmail = user.dataValues.email.substr(1);
 
-                    db.models.update({
-                        email: verifiedEmail
-                    });
+                    db.models.users.update(
+                        {
+                            email: verifiedEmail
+                        },
+                        {
+                            where: {
+                                id: jwt.id
+                            }
+                        });
 
                     user.dataValues.profileLink = verifiedEmail.split('@')[0];
                     user.dataValues.email = verifiedEmail;

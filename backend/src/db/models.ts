@@ -82,7 +82,8 @@ const Users = sequelize.define('users', {
         type: Sequelize.TEXT
     },
     auth_time: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: new Date().toISOString()
     },
     password: {
         type: Sequelize.TEXT,
