@@ -583,11 +583,62 @@ const Mutation = new GraphQLObjectType({
                     if (user.dataValues.profileLink[0] === '.') {
                         userHelpers.sendTwoFactorCode(user.dataValues);
                     }
-                    
+
                     return { jwt: setJWT(user.dataValues) };
                 }
 
                 throw new Error('Incorrect password');
+            }
+        },
+        verifyEmail: {
+            type: Jwt,
+            description: 'Verify email',
+            args: {
+                authCode: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {authCode: string}, { jwt, req }) => {
+
+                const user = await db.models.users.findOne({
+
+                    attributes: ['id', 'email', 'level', 'auth', 'auth_time'],
+                    where: {
+                        id: jwt.id
+                    }
+                });
+
+                if (!jwt.id) {
+                    throw new Error('User not logged in');
+                }
+
+                if (user.dataValues.email[0] !== '.') {
+                    return { jwt };
+                }
+
+                const parsedAuthTime = Date.parse(user.dateValues.auth_time);
+                const authTimePlusOneDay = parsedAuthTime + (60 * 60 * 24 * 1000);
+                const authCodeSentLessThanOneDayAgo = authTimePlusOneDay - Date.now() > 0;
+
+                if (!authCodeSentLessThanOneDayAgo) {
+                    throw new RangeError('Code sent more than a day ago');
+                }
+
+                if (await userHelpers.compareEncrypted(args.authCode, user.dataValues.auth)) {
+
+                    const verifiedEmail = user.dateValues.email.substr(1);
+
+                    db.models.update({
+                        email: verifiedEmail
+                    });
+
+                    user.dataValues.profileLink = verifiedEmail.split('@')[0];
+                    user.dataValues.email = verifiedEmail;
+
+                    return { jwt: setJWT(user.dataValues) };
+                }
+
+                throw new Error('Invalid auth code');
             }
         }
     }),
