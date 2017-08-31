@@ -58,7 +58,7 @@ export default {
     /**
       * Sends email user gets either right after signing up, or after changing email
       *
-      * @param email - valid email address of user EXCEPT that a dot (.) must be preceeding the address
+      * @param email - valid email address of user
       * @param username - username of user
       * @param code - decrypted version of auth code
       *
@@ -66,10 +66,9 @@ export default {
       */
     emailAuth(email: string, profileLink: string, code: string) {
 
-
         const message = "Your code is <br />" + code + "<br/>This code is valid for 1 day. "+
                     "Your account may be deleted if this is not "+
-                    `<a href='https://tabceots.com/u/${profileLink}'>verified</a>.`;
+                    `<a href='https://tabceots.com/login'>verified</a>.`;
 
         return this.mail([email], "Verify Your EOTS Account", message);
     },

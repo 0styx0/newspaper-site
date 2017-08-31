@@ -558,6 +558,9 @@ const Mutation = new GraphQLObjectType({
 
                 const sanitized = sanitize(args);
 
+                // if first time logging in, email is unverified so has dot
+                const potentialEmail = sanitized.username[0] == '.' ? sanitized.username.substr(1) : sanitized.username;
+
                 const user = await db.models.users.findOne({
 
                     attributes: ['id', 'email', 'level', 'password'],
@@ -567,7 +570,7 @@ const Mutation = new GraphQLObjectType({
                                 username: sanitized.username
                             },
                             {
-                                email: sanitized.username + '@%'
+                                email: potentialEmail + '@%'
                             }
                         ]
                     }
@@ -576,6 +579,11 @@ const Mutation = new GraphQLObjectType({
                 if (await userHelpers.compareEncrypted(args.password, user.dataValues.password)) {
 
                     user.dataValues.profileLink = user.dataValues.email.split('@')[0];
+
+                    if (user.dataValues.profileLink[0] === '.') {
+                        userHelpers.sendTwoFactorCode(user.dataValues);
+                    }
+                    
                     return { jwt: setJWT(user.dataValues) };
                 }
 

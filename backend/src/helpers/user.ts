@@ -1,5 +1,7 @@
 import * as randomstring from 'randomstring';
 import * as bcrypt from 'bcrypt';
+import SendMail from './SendMail';
+import db from '../db/models';
 
 export default {
 
@@ -34,5 +36,23 @@ export default {
             encrypted: this.encrypt(plaintext),
             plaintext
         };
+    },
+
+    sendTwoFactorCode(userInfo: {email: string, profileLink: string, id: string}) {
+
+        const authCode = this.generateAuthCode();
+
+        db.models.users.update(
+            {
+                auth: authCode,
+                auth_time: new Date()
+            },
+            {
+                where: {
+                    id: userInfo.id
+                }
+            });
+
+        SendMail.emailAuth(userInfo.email.substr(1), userInfo.profileLink.substr(1), authCode);
     }
 }
