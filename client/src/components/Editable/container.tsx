@@ -3,7 +3,8 @@ import * as React from 'react';
 import Editable from './';
 
 interface Props {
-    children: Element | JSX.Element | HTMLElement; // children - 1 elt to make editable
+    // children - 1 elt to make editable
+    children: Element | JSX.Element | HTMLElement | (Element | JSX.Element | string)[];
     canEdit: boolean;
     buttons?: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
     submit?: Function;

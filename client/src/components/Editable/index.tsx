@@ -21,7 +21,7 @@ interface Command {
 function Editable(props: Props) {
 
     let buttons: JSX.Element | null = null;
-    
+
     if (props.buttons !== 'none') {
 
         buttons = (
@@ -36,6 +36,7 @@ function Editable(props: Props) {
                               key={idx}
                               className={command.cmd}
                               onClick={props.handleEdits as any}
+                              type="button"
                             >
                               {command.cmd}
                             </button>
@@ -45,7 +46,7 @@ function Editable(props: Props) {
                 })}
 
                 <br />
-                <button onClick={props.submit as any}>Submit</button>
+                <button type="button" onClick={props.submit as any}>Submit</button>
             </div>
         );
     }

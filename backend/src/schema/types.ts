@@ -291,7 +291,17 @@ const PasswordRecovery = new GraphQLObjectType({
             type: GraphQLString
         }
     })
-})
+});
+
+const Mission = new GraphQLObjectType({
+    name: 'Mission',
+    description: 'Mission statement',
+    fields: () => ({
+        mission: {
+            type: GraphQLString
+        }
+    })
+});
 
 export {
     Users,
@@ -300,5 +310,6 @@ export {
     Comments,
     Tags,
     Jwt,
-    PasswordRecovery
+    PasswordRecovery,
+    Mission
 };

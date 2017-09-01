@@ -5,23 +5,26 @@ import { getJWT } from '../../components/jwt';
 import './index.css';
 
 interface Props {
-    submit: Function;
+    onSubmit: Function;
     content: string;
-    save: Function;
-};
+    onSave: Function;
+}
 
 export default function Mission(props: Props) {
 
     const jwt = getJWT();
 
-    return <EditableContainer
-                key={props.content}
-                canEdit={jwt.level > 2}
-                submit={props.submit as any}
-                children={<div
-                            className="mission"
-                            dangerouslySetInnerHTML={{__html: props.content}}
-                            onBlur={props.save as any}
-                            />}
+    return (
+        <EditableContainer
+            key={props.content}
+            canEdit={jwt.level > 2}
+            submit={props.onSubmit as any}
+        >
+            <div
+              className="mission"
+              dangerouslySetInnerHTML={{__html: props.content}}
+              onBlur={props.onSave as any}
             />
+        </EditableContainer>
+    );
 }

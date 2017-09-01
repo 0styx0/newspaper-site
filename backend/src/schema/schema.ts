@@ -19,7 +19,8 @@ import {
     Tags,
     Jwt,
     PasswordRecovery,
-    getMaxIssueAllowed
+    getMaxIssueAllowed,
+    Mission
 } from './types';
 import sanitize from '../helpers/sanitize';
 import SendMail from '../helpers/SendMail';
@@ -29,6 +30,8 @@ import userHelpers from '../helpers/user';
 import userValidator from '../helpers/user.validators';
 
 import { setJWT } from '../helpers/jwt';
+
+import { writeFile } from 'fs';
 
 const Query = new GraphQLObjectType({
     name: 'QuerySchema',
@@ -641,6 +644,37 @@ const Mutation = new GraphQLObjectType({
                 }
 
                 throw new Error('Invalid auth code');
+            }
+        },
+        editMission: {
+            type: Mission,
+            description: 'Edit mission statement',
+            args: {
+                mission: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {mission: string}, { jwt }) => {
+
+                const sanitized = sanitize(args);
+
+                if (sanitized.mission && jwt.level > 2) {
+
+                    await writeFile(
+                        __dirname+'/../../../../client/public/missionView.html',
+                        sanitized.mission,
+                        (err) => {
+                            if (err) {
+                                console.log(err);
+                                throw new Error('Unknown Error');
+                            }
+                        }
+                    );
+
+                    return { mission: sanitized.mission };
+                }
+
+                throw new Error('Invalid Authority');
             }
         }
     }),
