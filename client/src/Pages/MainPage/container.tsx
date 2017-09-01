@@ -12,7 +12,8 @@ interface Props {
     };
     client: {
         query:
-          ( params: { query: typeof ArticlePreviewQuery, variables: { issue: string | number; } } ) => Promise<Props>;
+          ( params: { query: typeof ArticlePreviewQuery, variables: { issue: string | number; } } ) =>
+            Promise<{ data: Props['data'] }>;
     };
 }
 

@@ -56,7 +56,7 @@ describe('<MainPageContainer>', () => {
                         client={{
                             query: ( params:
                                 { query: Function, variables: { issue: string | number; } } ) =>
-                                    Promise.resolve() as any
+                                    Promise.resolve({data})
                         }}
                     />
                 </MemoryRouter>

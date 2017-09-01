@@ -2,18 +2,16 @@ import * as React from 'react';
 import { TwoFactorContainer } from './container';
 import * as renderer from 'react-test-renderer';
 import casual from '../../tests/casual.data';
-import setFakeJwt from '../../tests/jwt.helper';
 import { encodeJwt } from '../../tests/jwt.helper';
 import localStorageMock from '../../tests/localstorage.mock';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
 
-import { getJWT } from '../../components/jwt';
-
 
 localStorageMock.clear();
-const fakeVerifyEmail = async (params?: { variables: { authCode: string } }) => // params is only optional for testing
-  ({data: { verifyEmail: encodeJwt({id: Math.random() }) } });
+
+const fakeVerifyEmail = async (params: { query: Function, variables: { authCode: string } }) =>
+  ({data: { verifyEmail: { jwt: encodeJwt({id: Math.random() }) } } });
 
 function setup(verifyEmail = fakeVerifyEmail) {
 
@@ -32,7 +30,7 @@ describe('<TwoFactorContainer>', () => {
         it('renders correctly', () => {
 
             const tree = renderer.create(
-                <TwoFactorContainer history={[]} verifyEmail={() => true} />
+                <TwoFactorContainer history={[]} verifyEmail={fakeVerifyEmail} />
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
@@ -84,14 +82,14 @@ describe('<TwoFactorContainer>', () => {
 
                 let expected: string;
 
-                const wrapper = setup(async (params: { variables: { authCode: string } }) => {
+                const wrapper = setup(async (params: { query: Function, variables: { authCode: string } }) => {
 
                     expect(expected).toEqual(params.variables.authCode);
 
                     return {
                         data: {
                             verifyEmail: {
-                                jwt: setFakeJwt({
+                                jwt: encodeJwt({
                                     level: casual.integer(1, 3),
                                     id: Math.random(),
                                     profileLink: casual.word
