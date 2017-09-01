@@ -16,7 +16,7 @@ interface Props {
         }>;
 }
 
-class TwoFactorContainer extends React.Component<Props, {}> {
+export class TwoFactorContainer extends React.Component<Props, {}> {
 
     constructor() {
         super();
@@ -29,10 +29,12 @@ class TwoFactorContainer extends React.Component<Props, {}> {
         e.preventDefault();
         e.stopPropagation();
 
+        const target = e.target as HTMLFormElement;
+
         const { data } = await this.props.verifyEmail({
             query: UserVerifyEmail,
             variables: {
-                authCode: (document.getElementsByName('authCode')[0] as HTMLInputElement).value
+                authCode: (target.querySelector('input[name=authCode]') as HTMLInputElement).value
             }
         });
 

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TwoFactorContainer> snapshots renders correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Authenticate
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Auth Code: 
+      <input
+        name="authCode"
+        required={true}
+        type="password"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="Code that was emailed to you. If it has not been sent
+                             within a few moments, try logging in again"
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <input
+      type="submit"
+    />
+  </form>
+</section>
+`;
