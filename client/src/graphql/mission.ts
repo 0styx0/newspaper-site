@@ -8,6 +8,15 @@ const MissionEdit = gql`
     }
 `;
 
+const MissionQuery = gql`
+    query missionQuery {
+        mission {
+            mission
+        }
+    }
+`;
+
 export {
-    MissionEdit
+    MissionEdit,
+    MissionQuery
 };

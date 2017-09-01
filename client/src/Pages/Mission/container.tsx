@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { graphql, withApollo } from 'react-apollo';
-import { MissionEdit } from '../../graphql/mission';
+import { graphql, withApollo, compose } from 'react-apollo';
+import { MissionEdit, MissionQuery } from '../../graphql/mission';
 
+import { getJWT } from '../../components/jwt';
 import Mission from './';
 
-interface Props {
+export interface Props {
     editMission: (params: { query: typeof MissionEdit, variables: { mission: string } }) => Promise<{
         data: {
             editMission: {
@@ -13,6 +14,11 @@ interface Props {
             }
         }
     }>;
+    data: {
+        mission: {
+            mission: string
+        }
+    };
 }
 
 interface State {
@@ -34,13 +40,14 @@ export class MissionContainer extends React.Component<Props, State> {
     /**
      * Gets mission statement
      */
-    async componentWillMount() {
+    async componentWillReceiveProps(props: Props) {
 
-        const mission = await fetch('./missionView.html')
-                                .then((data: {text: Function}) => data.text());
-        this.setState({
-            content: mission
-        });
+        if (props.data.mission.mission) {
+
+            this.setState({
+                content: props.data.mission.mission
+            });
+        }
     }
 
     /**
@@ -58,16 +65,22 @@ export class MissionContainer extends React.Component<Props, State> {
 
     render() {
 
+        const jwt = getJWT();
+
         return (
             <Mission
                 content={this.state.content}
                 onSubmit={this.onSubmit}
                 onSave={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
+                canEdit={jwt.level > 2}
             />
         );
     }
 }
 
-const MissionContainerWithData = graphql(MissionEdit, {name: 'editMission'})(MissionContainer as any);
+const MissionContainerWithData = compose(
+    graphql(MissionEdit, {name: 'editMission'}),
+    graphql(MissionQuery),
+)(MissionContainer as any);
 
 export default withApollo(MissionContainerWithData);

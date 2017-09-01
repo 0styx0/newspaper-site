@@ -31,7 +31,9 @@ import userValidator from '../helpers/user.validators';
 
 import { setJWT } from '../helpers/jwt';
 
-import { writeFile } from 'fs';
+import { writeFile, readFile } from 'fs-extra';
+
+const pathToMission = __dirname+'/../../src/../../src/missionView.html'; // path from dist/
 
 const Query = new GraphQLObjectType({
     name: 'QuerySchema',
@@ -156,6 +158,12 @@ const Query = new GraphQLObjectType({
                 artId: {type: GraphQLID},
             },
             resolve: (_, args) => db.models.tags.findAll({where: sanitize(args)})
+        },
+        mission: {
+            type: Mission,
+            resolve: async () => ({
+                mission: (await readFile(pathToMission)).toString()
+            })
         }
 
     })
@@ -661,7 +669,7 @@ const Mutation = new GraphQLObjectType({
                 if (sanitized.mission && jwt.level > 2) {
 
                     await writeFile(
-                        __dirname+'/../../../../client/public/missionView.html',
+                        pathToMission,
                         sanitized.mission,
                         (err) => {
                             if (err) {
