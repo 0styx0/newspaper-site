@@ -1,6 +1,5 @@
 import * as React from 'react';
 import EditableContainer from '../../components/Editable/container';
-import { getJWT } from '../../components/jwt';
 
 import './index.css';
 
@@ -8,16 +7,15 @@ interface Props {
     onSubmit: Function;
     content: string;
     onSave: Function;
+    canEdit: boolean;
 }
 
 export default function Mission(props: Props) {
 
-    const jwt = getJWT();
-
     return (
         <EditableContainer
             key={props.content}
-            canEdit={jwt.level > 2}
+            canEdit={props.canEdit}
             submit={props.onSubmit as any}
         >
             <div
