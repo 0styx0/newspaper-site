@@ -3,15 +3,14 @@ import * as React from 'react';
 import Editable from './';
 
 interface Props {
-    // children - 1 elt to make editable
     children: Element | JSX.Element | HTMLElement | (Element | JSX.Element | string)[];
     canEdit: boolean;
     buttons?: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
-    submit?: Function;
+    onSubmit?: Function;
 }
 
 /**
- * @prop
+ * @prop children - 1 elt to make editable
  * @prop canEdit - boolean
  * @prop buttons - if "all" (default), show all buttons. If "basic" show subset
  * @prop submit - runs when the submit button is clicked.
@@ -79,7 +78,7 @@ export class EditableContainer extends React.Component<Props, {}> {
                 buttons={this.props.buttons || 'all'}
                 handleEdits={this.handleEdits}
                 content={content}
-                submit={this.props.submit}
+                onSubmit={this.props.onSubmit}
             />
         );
     }

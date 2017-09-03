@@ -8,6 +8,7 @@ interface Props {
     children?: JSX.Element | Element;
 }
 
+// tested as part of many other components/pages
 export default function Container(props: Props) {
 
         const className = `container ${props.className || ''}`;

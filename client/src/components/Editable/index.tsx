@@ -5,7 +5,7 @@ import './index.css';
 
 interface Props {
     handleEdits: Function; // whenever a formatting button is clicked (bold, italic, etc)
-    submit?: Function; // what to do when user wants to save the edit
+    onSubmit?: Function; // what to do when user wants to save the edit
     content: JSX.Element; // what element is being edited
     buttons: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
 }
@@ -46,7 +46,7 @@ function Editable(props: Props) {
                 })}
 
                 <br />
-                <button type="button" onClick={props.submit as any}>Submit</button>
+                <button type="button" onClick={props.onSubmit as any}>Submit</button>
             </div>
         );
     }

@@ -16,7 +16,7 @@ export default function Mission(props: Props) {
         <EditableContainer
             key={props.content}
             canEdit={props.canEdit}
-            submit={props.onSubmit as any}
+            onSubmit={props.onSubmit as any}
         >
             <div
               className="mission"

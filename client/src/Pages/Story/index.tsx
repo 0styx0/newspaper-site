@@ -19,7 +19,7 @@ function Story(props: Props) {
 
                     <EditableContainer
                         canEdit={props.canEdit}
-                        submit={props.onSubmit as any}
+                        onSubmit={props.onSubmit as any}
                         key={props.id}
                         children={
                                 <header

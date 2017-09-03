@@ -19,7 +19,7 @@ export default function EditableComment(props: Props) {
             <EditableContainer
                 buttons="basic"
                 canEdit={!!jwt.id}
-                submit={props.onSubmit as any}
+                onSubmit={props.onSubmit as any}
                 children={
                     <div
                         onBlur={props.onBlur as any}
