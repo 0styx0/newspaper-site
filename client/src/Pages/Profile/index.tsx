@@ -9,7 +9,6 @@ import { Article, PublicUserInfo } from './shared.interfaces';
 interface Props {
     articles: Article[];
     user: PublicUserInfo;
-    canModify: boolean;
 }
 
 function Profile(props: Props) {
@@ -27,10 +26,9 @@ function Profile(props: Props) {
                 articles={props.articles.length}
             />
             <ModifiableUserInfo />
-            {props.canModify ? <ChangePassword /> : ''}
+            {props.user.canEdit ? <ChangePassword /> : ''}
             <UserArticleTable
                 articles={props.articles}
-                canModify={props.canModify}
             />
         </div>
     );

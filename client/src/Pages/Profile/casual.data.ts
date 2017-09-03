@@ -14,7 +14,8 @@ casual.define('articles', function(amount: number) {
             id: casual.word + '--' + amount,
             dateCreated: casual.dateCreated,
             views: casual.randomPositive,
-            issue: casual.randomPositive
+            issue: casual.randomPositive,
+            canEdit: true
         });
     }
 

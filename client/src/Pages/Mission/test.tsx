@@ -30,16 +30,15 @@ describe('<MissionContainer>', () => {
 
     describe('snapshot', () => {
 
-        function snap(level: number) {
-
-            setFakeJwt({level});
+        function snap(canEdit: boolean) {
 
             const tree = renderer.create(
                 <MissionContainer
                     editMission={fakeEditMission()}
                     data={{
                         mission: {
-                            mission: casual.sentences()
+                            mission: casual.sentences(),
+                            canEdit
                         }
                     }}
                 />
@@ -48,9 +47,9 @@ describe('<MissionContainer>', () => {
             expect(tree).toMatchSnapshot();
         }
 
-        it('lets user edit when lvl 3+', () => snap(3));
+        it('lets user edit when canEdit = true', () => snap(true));
 
-        it('does not let user edit if 2-', () => snap(casual.integer(0, 2)));
+        it('does not let user edit canEdit = false', () => snap(false));
     });
 
     type editMissionType = Props['editMission'];
@@ -67,7 +66,8 @@ describe('<MissionContainer>', () => {
               editMission={editMission || fakeEditMission(casual.sentences())}
               data={{
                   mission: {
-                      mission: casual.sentences()
+                      mission: casual.sentences(),
+                      canEdit: true
                   }
               }}
             />
@@ -75,11 +75,6 @@ describe('<MissionContainer>', () => {
     }
 
     describe('editMission', () => {
-
-        beforeEach(() => {
-
-            setFakeJwt({level: 3, id: Math.random()});
-        });
 
         it('gets called after submission', () => {
 

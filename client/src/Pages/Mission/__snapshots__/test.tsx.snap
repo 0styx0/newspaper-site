@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<MissionContainer> snapshot does not let user edit if 2- 1`] = `
+exports[`<MissionContainer> snapshot does not let user edit canEdit = false 1`] = `
 <div
   className="mission"
   dangerouslySetInnerHTML={
@@ -12,7 +12,7 @@ exports[`<MissionContainer> snapshot does not let user edit if 2- 1`] = `
 />
 `;
 
-exports[`<MissionContainer> snapshot lets user edit when lvl 3+ 1`] = `
+exports[`<MissionContainer> snapshot lets user edit when canEdit = true 1`] = `
 <div>
   <div
     id="buttonContainer"

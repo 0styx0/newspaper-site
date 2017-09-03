@@ -9,6 +9,7 @@ const IssueQuery = gql`
             views
             datePublished
             public
+            canEdit
         }
     }
 `;

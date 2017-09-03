@@ -13,11 +13,13 @@ const UserQuery = gql`
                 }
                 views
                 issue
+                canEdit
             }
             views
             level
             id
             fullName
+            canEdit
         }
     }
 `;

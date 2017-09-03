@@ -12,6 +12,7 @@ const MissionQuery = gql`
     query missionQuery {
         mission {
             mission
+            canEdit
         }
     }
 `;

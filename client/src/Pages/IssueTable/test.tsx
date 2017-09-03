@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { IssueTable, Issue } from './';
+import { IssueTableContainer  } from './container';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import * as casual from 'casual';
 import renderWithProps from '../../tests/snapshot.helper';
 import snapData from './__snapshots__/issues.example';
 import setFakeJwt from '../../tests/jwt.helper';
-
+import { Issue } from './interface.shared';
 
 // NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
 
@@ -31,11 +31,10 @@ casual.define('issues', function generateIssues(amount: number) {
             name: casual.title,
             views: casual.integer(0, 1000),
             datePublished: (new Date).toISOString(),
-            public: true
+            public: true,
+            canEdit: true
         });
     }
-
-    issues[0].public = false; // most tests need it to private, to test if can change name etc
 
     return issues;
 });
@@ -49,7 +48,7 @@ function setup(mockGraphql: {mutate?: Function} = {}) {
 
     return mount(
         <MemoryRouter>
-            <IssueTable
+            <IssueTableContainer
                 data={data}
                 mutate={mockGraphql.mutate ? mockGraphql.mutate : (test: {}) => false}
             />
@@ -57,7 +56,7 @@ function setup(mockGraphql: {mutate?: Function} = {}) {
     );
 }
 
-describe('<IssueTable>', () => {
+describe('<IssueTableContainer>', () => {
 
     let wrapper: any;
 
@@ -68,15 +67,15 @@ describe('<IssueTable>', () => {
     describe('snapshots', () => {
 
         /**
-         * Tests a snapshot against a version of <IssueTable /> where user is level @param userLevel
+         * Tests a snapshot against a version of <IssueTableContainer /> where user is level @param userLevel
          */
-        function testSnapshot(userLevel: number, graphql: typeof data = data) {
+        function testSnapshot(canEdit: boolean, graphql: typeof data = data) {
 
-            setFakeJwt({level: userLevel});
+            snapData[0].canEdit = canEdit;
 
             const tree = renderWithProps(
 
-                <IssueTable
+                <IssueTableContainer
                     data={{
                         loading: false,
                         issues: snapData
@@ -88,23 +87,15 @@ describe('<IssueTable>', () => {
             expect(tree).toMatchSnapshot();
         }
 
-        test(`table is created and not admin (so can't modify anything)`, () => testSnapshot(2));
+        test(`table is created and canEdit = false`, () => testSnapshot(false));
 
-        test('if admin, get chance to name and/or make unpublished issue published', () => testSnapshot(3));
-
-        test('if issue already published, nobody can change info', () => {
-
-            const dataCopy = JSON.parse(JSON.stringify(data));
-            dataCopy.issues[0].public = true;
-
-            testSnapshot(3, dataCopy);
-         });
+        test('if canEdit = true, get chance to name and/or make unpublished issue published', () => testSnapshot(true));
     });
 
-    test(`admins can change most recent issue's name if not public`, () => {
+    test(`if canEdit = true, can change most recent issue's name (state.privateIssue.name)`, () => {
 
         wrapper = setup();
-        const component = wrapper.find(IssueTable).node;
+        const component = wrapper.find(IssueTableContainer).node;
         component.componentWillReceiveProps({data});
 
         expect(component.state.privateIssue.name).toBeFalsy();
@@ -118,10 +109,10 @@ describe('<IssueTable>', () => {
         expect(component.state.privateIssue.name).toBe(expectedName);
     });
 
-    test(`admins can change most recent issue's public status if not public`, () => {
+    test(`if canEdit = true, can change most recent issue's public status (state.privateIssue.public)`, () => {
 
         wrapper = setup();
-        const component = wrapper.find(IssueTable).node;
+        const component = wrapper.find(IssueTableContainer).node;
         component.componentWillReceiveProps({data});
 
         expect(component.state.privateIssue.public).toBeFalsy();
@@ -144,7 +135,7 @@ describe('<IssueTable>', () => {
             expect(graphql.variables).toEqual(expectedData)
         });
 
-        const component = wrapper.find(IssueTable).node;
+        const component = wrapper.find(IssueTableContainer).node;
 
         component.state.privateIssue = expectedData;
 

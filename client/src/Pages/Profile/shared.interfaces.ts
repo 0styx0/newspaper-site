@@ -7,6 +7,7 @@ interface Article {
     views: number;
     issue: number;
     id: string;
+    canEdit: boolean;
 }
 
 interface PublicUserInfo {
@@ -14,6 +15,7 @@ interface PublicUserInfo {
     level: number;
     fullName: string;
     profileLink: string;
+    canEdit: boolean;
 }
 
 interface ModifiableUserInfo {

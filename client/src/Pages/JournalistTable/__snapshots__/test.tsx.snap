@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<JournalistTable> snapshots should let higher level users modify lower level users' level and delete their account 1`] = `
+exports[`<JournalistTableContainer> snapshots lets modify users' level and delete account if canEdit = true 1`] = `
 <section
   className="container "
 >
@@ -41,238 +41,7 @@ exports[`<JournalistTable> snapshots should let higher level users modify lower 
         
       </label>
     </div>
-    <form
-      onSubmit={[Function]}
-    >
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>
-                 
-                Name
-              </th>
-              <th>
-                 
-                Level
-              </th>
-              <th>
-                 
-                Articles
-              </th>
-              <th>
-                 
-                Views
-              </th>
-              <th>
-                 
-                <span
-                  className="danger"
-                >
-                  Delete
-                </span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <a
-                  href="/u/nemo"
-                  onClick={[Function]}
-                >
-                  Greg Kuhn
-                </a>
-              </td>
-              <td>
-                2
-              </td>
-              <td>
-                4
-              </td>
-              <td>
-                72
-              </td>
-              <td>
-                N/A
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a
-                  href="/u/sit"
-                  onClick={[Function]}
-                >
-                  Angelina Kutch
-                </a>
-              </td>
-              <td>
-                3
-              </td>
-              <td>
-                48
-              </td>
-              <td>
-                695
-              </td>
-              <td>
-                N/A
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a
-                  href="/u/ut"
-                  onClick={[Function]}
-                >
-                  Tracy g Gusikowski
-                </a>
-              </td>
-              <td>
-                2
-              </td>
-              <td>
-                50
-              </td>
-              <td>
-                554
-              </td>
-              <td>
-                N/A
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a
-                  href="/u/et"
-                  onClick={[Function]}
-                >
-                  Violette Schmitt
-                </a>
-              </td>
-              <td>
-                <select
-                  defaultValue="1"
-                  name="lvl"
-                  onChange={[Function]}
-                >
-                  <option
-                    value={1}
-                  >
-                    1
-                  </option>
-                  <option
-                    value={2}
-                  >
-                    2
-                  </option>
-                </select>
-              </td>
-              <td>
-                44
-              </td>
-              <td>
-                289
-              </td>
-              <td>
-                <input
-                  name="delAcc"
-                  onChange={[Function]}
-                  type="checkbox"
-                  value="et"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a
-                  href="/u/voluptatem"
-                  onClick={[Function]}
-                >
-                  Marion Z Sanford
-                </a>
-              </td>
-              <td>
-                2
-              </td>
-              <td>
-                6
-              </td>
-              <td>
-                99
-              </td>
-              <td>
-                N/A
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <label>
-          Password: 
-          <input
-            name="password"
-            required={true}
-            type="password"
-          />
-          <span
-            className="danger"
-          >
-            *
-          </span>
-          
-        </label>
-        <input
-          name=""
-          type="submit"
-          value="Modify Users"
-        />
-      </div>
-    </form>
-  </div>
-</section>
-`;
-
-exports[`<JournalistTable> snapshots should let higher level users modify lower level users' level and delete their account 2`] = `
-<section
-  className="container "
->
-  <h1>
-    Journalists
-  </h1>
-  <div>
-    <div
-      id="sortingContainer"
-    >
-      <label>
-        Sort By: 
-        <select
-          onChange={[Function]}
-        >
-          <option
-            value="lastName"
-          >
-            Last Name
-          </option>
-          <option
-            value="level"
-          >
-            Level
-          </option>
-          <option
-            value="articleCount"
-          >
-            Articles
-          </option>
-          <option
-            value="views"
-          >
-            Views
-          </option>
-        </select>
-        
-        
-      </label>
-    </div>
+    );
     <form
       onSubmit={[Function]}
     >
@@ -544,7 +313,7 @@ exports[`<JournalistTable> snapshots should let higher level users modify lower 
 </section>
 `;
 
-exports[`<JournalistTable> snapshots should render correctly 1`] = `
+exports[`<JournalistTableContainer> snapshots should render correctly 1`] = `
 <section
   className="container "
 >
@@ -580,6 +349,7 @@ exports[`<JournalistTable> snapshots should render correctly 1`] = `
         
       </label>
     </div>
+    );
     <form
       onSubmit={[Function]}
     >
@@ -690,7 +460,7 @@ exports[`<JournalistTable> snapshots should render correctly 1`] = `
 </section>
 `;
 
-exports[`<JournalistTable> snapshots should show users' levels only when one is logged in 1`] = `
+exports[`<JournalistTableContainer> snapshots should show users' levels only when one is logged in 1`] = `
 <section
   className="container "
 >
@@ -731,6 +501,7 @@ exports[`<JournalistTable> snapshots should show users' levels only when one is 
         
       </label>
     </div>
+    );
     <form
       onSubmit={[Function]}
     >

@@ -11,6 +11,7 @@ const UserQuery = gql`
             firstName
             middleName
             lastName
+            canEdit
         }
     }
 `;

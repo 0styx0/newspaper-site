@@ -116,6 +116,10 @@ const Users = new GraphQLObjectType({
                 })
             }
         },
+        canEdit: {
+            type: GraphQLBoolean,
+            resolve: (user, _, { jwt }) => jwt.id === user.id || jwt.level > user.level
+        }
 
 
         /* // PRIVATE types. Putting them here just to complete the db table
@@ -220,6 +224,10 @@ const Issues = new GraphQLObjectType({
         max: {
             type: new GraphQLNonNull(GraphQLInt),
             resolve: async (issue) => db.models.issues.max('num')
+        },
+        canEdit: {
+            type: GraphQLBoolean,
+            resolve: (issue, _, { jwt }) => jwt.level > 2 && !issue.public
         }
     })
 });
@@ -299,6 +307,10 @@ const Mission = new GraphQLObjectType({
     fields: () => ({
         mission: {
             type: GraphQLString
+        },
+        canEdit: {
+            type: GraphQLBoolean,
+            resolve: (mission, _, { jwt }) => jwt.level > 2
         }
     })
 });

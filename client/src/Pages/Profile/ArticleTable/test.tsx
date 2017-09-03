@@ -22,7 +22,6 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
             <UserArticleTableContainer
                 articles={data.articles}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : (test: {}) => false}
-                canModify={true}
             />
         </MemoryRouter>
     );
@@ -32,7 +31,11 @@ describe('<UserArticleTableContainer>', () => {
 
     describe('snapshots', () => {
 
-        function testSnap(canModify: boolean) {
+        function testSnap(canEdit: boolean) {
+
+            const articles = snapData;
+
+            articles.forEach(article => article.canEdit = canEdit);
 
             const tree = renderer.create(
 
@@ -40,7 +43,6 @@ describe('<UserArticleTableContainer>', () => {
                     <UserArticleTableContainer
                         articles={snapData}
                         deleteArticle={(test: {}) => false}
-                        canModify={canModify}
                     />
                 </MemoryRouter>
             ).toJSON();
@@ -49,9 +51,9 @@ describe('<UserArticleTableContainer>', () => {
 
         }
 
-        it('renders correctly when canModify is true', () => testSnap(true));
+        it('renders correctly when canEdit is true', () => testSnap(true));
 
-        it('renders correctly when canModify is false', () => testSnap(false));
+        it('renders correctly when canEdit is false', () => testSnap(false));
     });
 
     describe('onDelete', () => {

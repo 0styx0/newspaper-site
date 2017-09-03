@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { JournalistTable, User } from './';
+import { JournalistTableContainer } from './container';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import localStorageMock from '../../tests/localstorage.mock';
 import * as casual from 'casual';
 import snapData from './__snapshots__/users.example';
 import renderWithProps from '../../tests/snapshot.helper';
-
+import { User } from './interface.shared';
 import setFakeJwt from '../../tests/jwt.helper';
 
 /**
@@ -29,7 +29,8 @@ casual.define('users', function(amount: number, requiredLevels: number[] = []) {
                 profileLink: casual.word,
                 firstName: casual.first_name,
                 middleName: casual.coin_flip ? casual.letter : '', // 2 is the most a middleName can be
-                lastName: casual.last_name
+                lastName: casual.last_name,
+                canEdit: true
         });
 
         amount--;
@@ -48,7 +49,7 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
 
     return mount(
         <MemoryRouter>
-            <JournalistTable
+            <JournalistTableContainer
                 data={data}
                 userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : (test: any) => true}
                 userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : (test: any) => false}
@@ -57,7 +58,7 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
     );
 }
 
-describe('<JournalistTable>', () => {
+describe('<JournalistTableContainer>', () => {
 
     describe('snapshots', () => {
 
@@ -69,7 +70,7 @@ describe('<JournalistTable>', () => {
         it('should render correctly', () => {
 
             const tree = renderWithProps(
-                <JournalistTable
+                <JournalistTableContainer
                     data={fixedData}
                     userUpdate={(test: any) => true}
                     userDelete={(test: any) => false}
@@ -83,7 +84,7 @@ describe('<JournalistTable>', () => {
             setFakeJwt({level: 1});
 
             const tree = renderWithProps(
-                <JournalistTable
+                <JournalistTableContainer
                     data={fixedData}
                     userUpdate={(test: any) => true}
                     userDelete={(test: any) => false}
@@ -92,24 +93,20 @@ describe('<JournalistTable>', () => {
             expect(tree).toMatchSnapshot();
         });
 
-        it(`should let higher level users modify lower level users' level and delete their account`, () => {
+        it(`lets modify users' level and delete account if canEdit = true`, () => {
 
-            // 2 tests since lvl 2 can only modify lvl 1, and change them to lvl 2,
-            // while lvl 3 can delete/modify lvl 2 until lvl 3
-            [2, 3].forEach(level => {
+            fixedData.users.forEach(user => user.canEdit = true);
+            setFakeJwt( {level: 3});
 
-                setFakeJwt( {level});
+            const tree = renderWithProps(
+                <JournalistTableContainer
+                    data={fixedData}
+                    userUpdate={(test: any) => true}
+                    userDelete={(test: any) => false}
+                />
+            );
 
-                const tree = renderWithProps(
-                    <JournalistTable
-                        data={fixedData}
-                        userUpdate={(test: any) => true}
-                        userDelete={(test: any) => false}
-                    />
-                );
-
-                expect(tree).toMatchSnapshot();
-            });
+            expect(tree).toMatchSnapshot();
         });
     });
 
@@ -120,14 +117,14 @@ describe('<JournalistTable>', () => {
         let component: any; // really JSX class
 
         /**
-         * Finds JournalistTable and remounts it with fresh props
+         * Finds JournalistTableContainer and remounts it with fresh props
          * Also finds the `select` element that is being tested
          */
         function setupSelect() {
             wrapper = setup();
 
             sortingSelect = wrapper.find('#sortingContainer select');
-            component = wrapper.find(JournalistTable).node;
+            component = wrapper.find(JournalistTableContainer).node;
 
             component.componentWillReceiveProps({data});
         }
@@ -146,7 +143,7 @@ describe('<JournalistTable>', () => {
         /**
          * When the `option` to be sorted is a number, for example, 'level'
          */
-        function testNumberSorting(option: string, sortingIdices: Object) {
+        function testNumberSorting(option: string) {
 
             setSelectValue(option);
 
@@ -154,7 +151,7 @@ describe('<JournalistTable>', () => {
                                  sort((a, b) => +a[option] - +b[option])
                                  .map(user => user[option]);
 
-            expect(component.state.userInfo.map((user: User) => user[sortingIdices[option]])).toEqual(expected);
+            expect(component.state.users.map((user: User) => user[option])).toEqual(expected);
         }
 
         /**
@@ -164,7 +161,7 @@ describe('<JournalistTable>', () => {
          *  *   articles
          *  *   views
          */
-        function testSortByNameArticlesViews(sortingIdices: {lastName: number; articleCount: number; views: number}) {
+        function testSortByNameArticlesViews() {
 
             it('can sort by lastName', () => {
 
@@ -174,29 +171,20 @@ describe('<JournalistTable>', () => {
                                 .users as User[])
                                 .sort((a, b) => a.lastName.localeCompare(b.lastName))
                                 .map(user =>
-                                  `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`
+                                  user.lastName
                                 );
 
-                expect(component.state.userInfo.map((user: User) =>
-                user[sortingIdices.lastName].props.children)
-                ).toEqual(expected);
+                expect(component.state.users.map((user: User) => user.lastName)).toEqual(expected);
             });
 
-            it('can sort by articles', () => testNumberSorting('articleCount', sortingIdices));
+            it('can sort by articles', () => testNumberSorting('articleCount'));
 
-            it('can sort by views', () => testNumberSorting('views', sortingIdices));
+            it('can sort by views', () => testNumberSorting('views'));
         }
 
         beforeEach(setupSelect);
 
         describe('when logged in', () => {
-
-            const sortingIdices = {
-                lastName: 0,
-                level: 1,
-                articleCount: 2,
-                views: 3
-            };
 
             it('and level 1, can sort by level (regular number)', () => {
 
@@ -204,7 +192,7 @@ describe('<JournalistTable>', () => {
                 setupSelect();
 
                 setSelectValue('level');
-                testNumberSorting('level', sortingIdices);
+                testNumberSorting('level');
             });
 
             it('and above level 1, can sort by level (mixed `select` and number)', () => {
@@ -216,29 +204,21 @@ describe('<JournalistTable>', () => {
                                  sort((a, b) => a.level - b.level)
                                  .map(user => user.level);
 
-                expect(component.state.userInfo.map((user: User) =>
+                expect(component.state.users.map((user: User) =>
 
-                    user[sortingIdices.level].props ?
-                     +user[sortingIdices.level].props.defaultValue :
-                     user[sortingIdices.level])
+                     user.level
 
-                ).toEqual(expected);
+                )).toEqual(expected);
             });
 
-            testSortByNameArticlesViews(sortingIdices);
+            testSortByNameArticlesViews();
         });
 
         describe('when not logged in (and no access to level)', () => {
 
             beforeAll(() => localStorageMock.removeItem('jwt'));
 
-            const sortingIdices = {
-                lastName: 0,
-                articleCount: 1,
-                views: 2
-            };
-
-            testSortByNameArticlesViews(sortingIdices);
+            testSortByNameArticlesViews();
         });
     });
 
@@ -256,7 +236,7 @@ describe('<JournalistTable>', () => {
                 setFakeJwt({level: userLevel});
 
                 wrapper = setup();
-                component = wrapper.find(JournalistTable).node;
+                component = wrapper.find(JournalistTableContainer).node;
 
                 component.componentWillReceiveProps({data});
 
@@ -338,7 +318,7 @@ describe('<JournalistTable>', () => {
                     }
                 });
 
-                const component = wrapper.find(JournalistTable).node;
+                const component = wrapper.find(JournalistTableContainer).node;
 
                 // using data.users since already there. No difference if would generate another array of random users
                 const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
@@ -386,7 +366,7 @@ describe('<JournalistTable>', () => {
                     }
                 });
 
-                const component = wrapper.find(JournalistTable).node;
+                const component = wrapper.find(JournalistTableContainer).node;
 
                 // using data.users since already there. No difference if would generate another array of random users
                 idLevelMap = data.users.map((user: User) => [user.id, casual.random_element(expectedLevels)]);
@@ -439,7 +419,7 @@ describe('<JournalistTable>', () => {
                 setFakeJwt({level: 3});
 
                 wrapper = setup();
-                component = wrapper.find(JournalistTable).node;
+                component = wrapper.find(JournalistTableContainer).node;
 
                 component.componentWillReceiveProps({data});
 

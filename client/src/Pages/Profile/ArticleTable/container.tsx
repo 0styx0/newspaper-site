@@ -6,7 +6,6 @@ import UserArticleTable from './';
 
 interface Props {
     articles: Article[];
-    canModify: boolean;
     deleteArticle: Function;
 }
 
@@ -54,7 +53,7 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
 
         e.preventDefault();
         e.stopPropagation();
-        
+
         this.props.deleteArticle({
             variables: {
                 ids: [...this.state.idsToDelete]
@@ -67,7 +66,6 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
         return (
             <UserArticleTable
               articles={this.props.articles}
-              canModify={this.props.canModify}
               onDelete={this.onDelete}
               onSubmit={this.onSubmit}
             />

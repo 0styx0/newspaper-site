@@ -5,7 +5,7 @@ import LoginContainer from '../../Pages/Login/container';
 import Logout from '../Logout';
 import SignupContainer from '../../Pages/Signup/container';
 import JournalistTable from '../../Pages/JournalistTable';
-import IssueTable from '../../Pages/IssueTable';
+import IssueTableContainer from '../../Pages/IssueTable/container';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
 import Publish from '../../Pages/Publish';
 import ProfileContainer from '../../Pages/Profile/container';
@@ -55,7 +55,7 @@ export default function Router() {
                 <Route path="/signup" component={SignupContainer}/>
                 <Route exact path="/u" component={JournalistTable}/>
                 <Route path="/mission" component={MissionContainer}/>
-                <Route exact path="/issue" component={IssueTable}/>
+                <Route exact path="/issue" component={IssueTableContainer}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
                 {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
                 <Route path="/issue/(.*)/story/(.*)" component={StoryContainer}/>

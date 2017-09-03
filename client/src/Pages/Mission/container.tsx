@@ -3,7 +3,6 @@ import * as React from 'react';
 import { graphql, withApollo, compose } from 'react-apollo';
 import { MissionEdit, MissionQuery } from '../../graphql/mission';
 
-import { getJWT } from '../../components/jwt';
 import Mission from './';
 
 export interface Props {
@@ -16,7 +15,8 @@ export interface Props {
     }>;
     data: {
         mission: {
-            mission: string
+            mission: string;
+            canEdit: boolean;
         }
     };
 }
@@ -65,14 +65,12 @@ export class MissionContainer extends React.Component<Props, State> {
 
     render() {
 
-        const jwt = getJWT();
-
         return (
             <Mission
                 content={this.state.content}
                 onSubmit={this.onSubmit}
                 onSave={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
-                canEdit={jwt.level > 2}
+                canEdit={this.props.data.mission.canEdit}
             />
         );
     }

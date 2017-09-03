@@ -6,7 +6,6 @@ import { Article } from '../shared.interfaces';
 import ArticleLink from '../../../components/ArticleTable/Link';
 
 interface Props {
-    canModify: boolean;
     articles: Article[];
     onSubmit: Function;
     onDelete: Function;
@@ -29,7 +28,7 @@ function UserArticleTable(props: Props) {
         'Views',
     ];
 
-    if (props.canModify) {
+    if (props.articles[0].canEdit) { // if can edit one, assume can edit all. If this changes just use .every
 
         headings.push(<span className="danger">Delete</span>);
     }
@@ -48,7 +47,7 @@ function UserArticleTable(props: Props) {
             article.views
         ];
 
-        if (props.canModify) {
+        if (article.canEdit) {
             artInfo.push(
                 <input
                     type="checkbox"
@@ -71,7 +70,7 @@ function UserArticleTable(props: Props) {
                         rows={articles}
                     />
 
-                    {props.canModify ?
+                    {props.articles[0].canEdit ?
                         <div>
                             <Input
                                 label="Password"

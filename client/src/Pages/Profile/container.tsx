@@ -4,8 +4,6 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import Profile from './';
 import { Article, PublicUserInfo } from './shared.interfaces';
 
-import { getJWT } from '../../components/jwt';
-
 interface Props {
     data: {
         users: {
@@ -59,13 +57,11 @@ class ProfileContainer extends React.Component<Props, State> {
 
         const articles = this.state.articles as Article[];
         const user = this.state.user as PublicUserInfo;
-        const canModify = getJWT().profileLink === user.profileLink;
 
         return (
             <Profile
                 articles={articles}
                 user={user}
-                canModify={canModify}
             />
         );
     }

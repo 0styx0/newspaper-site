@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<UserArticleTableContainer> snapshots renders correctly when canModify is false 1`] = `
+exports[`<UserArticleTableContainer> snapshots renders correctly when canEdit is false 1`] = `
 <section
   className="container "
 >
@@ -438,7 +438,7 @@ exports[`<UserArticleTableContainer> snapshots renders correctly when canModify 
 </section>
 `;
 
-exports[`<UserArticleTableContainer> snapshots renders correctly when canModify is true 1`] = `
+exports[`<UserArticleTableContainer> snapshots renders correctly when canEdit is true 1`] = `
 <section
   className="container "
 >
