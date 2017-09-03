@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ArticleLink> snapshots renders correctly when url DOES need to be decoded for viewing 1`] = `
+<a
+  href="/issue/16/story/dolorem%20voluptatem"
+  onClick={[Function]}
+>
+  dolorem voluptatem
+</a>
+`;
+
+exports[`<ArticleLink> snapshots renders correctly when url does NOT need to be decoded for viewing 1`] = `
+<a
+  href="/issue/35/story/suscipit"
+  onClick={[Function]}
+>
+  suscipit
+</a>
+`;
