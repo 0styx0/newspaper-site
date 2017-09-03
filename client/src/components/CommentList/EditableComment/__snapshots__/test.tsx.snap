@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EditableCommentContainer> snapshots renders correctly when can edit 1`] = `
+<article
+  className="comment"
+  id="reply"
+>
+  <div>
+    <div
+      id=""
+    >
+      <button
+        className="bold"
+        onClick={[Function]}
+        type="button"
+      >
+        bold
+      </button>
+      <button
+        className="italic"
+        onClick={[Function]}
+        type="button"
+      >
+        italic
+      </button>
+      <button
+        className="underline"
+        onClick={[Function]}
+        type="button"
+      >
+        underline
+      </button>
+      <button
+        className="strikeThrough"
+        onClick={[Function]}
+        type="button"
+      >
+        strikeThrough
+      </button>
+      <button
+        className="createLink"
+        onClick={[Function]}
+        type="button"
+      >
+        createLink
+      </button>
+      <br />
+      <button
+        onClick={[Function]}
+        type="button"
+      >
+        Submit
+      </button>
+    </div>
+    <div
+      className="content"
+      contentEditable={true}
+      onBlur={[Function]}
+    />
+  </div>
+</article>
+`;
+
+exports[`<EditableCommentContainer> snapshots renders correctly when cannot edit 1`] = `
+<article
+  className="comment"
+  id="reply"
+>
+  <div
+    className="content"
+    onBlur={[Function]}
+  />
+</article>
+`;

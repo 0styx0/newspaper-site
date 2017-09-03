@@ -5,7 +5,7 @@ import { withApollo, graphql } from 'react-apollo';
 
 interface Props {
     artId: string;
-    addToList: Function; // callback where content is passed into after user submits the comment
+    addToList: (content: string) => void; // callback where content is passed into after user submits the comment
     createComment: (params: {variables: { content: string, artId: string }}) => void;
 }
 
@@ -13,12 +13,12 @@ interface State {
     content: string;
 }
 
-class EditableCommentContainer extends React.Component<Props, State> {
+export class EditableCommentContainer extends React.Component<Props, State> {
 
     constructor() {
         super();
 
-        this.save = this.save.bind(this);
+        this.onSave = this.onSave.bind(this);
 
         this.state = {
             content: ''
@@ -28,7 +28,7 @@ class EditableCommentContainer extends React.Component<Props, State> {
     /**
      * Sends comment to be saved to database
      */
-    save() {
+    onSave() {
 
         this.props.addToList(this.state.content);
 
@@ -44,7 +44,7 @@ class EditableCommentContainer extends React.Component<Props, State> {
 
         return (
             <EditableComment
-                onSubmit={this.save}
+                onSubmit={this.onSave}
                 onBlur={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
             />
         );
