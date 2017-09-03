@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { getJWT } from '../../jwt';
-import fetchFromApi from '../../../helpers/fetchFromApi';
-
+import { CommentDelete } from '../../../graphql/comment';
 import Comment from './';
+import { graphql, withApollo } from 'react-apollo';
 
 
 // @see Comment 's Props, which are much the same
-interface Props {
+export interface Props {
     profileLink: string;
     author: string;
     content: string;
     authorid: string;
     id: string;
+    // not really void. but not using return value
+    deleteComment: (params: {variables: { id: string }}) => void;
 }
 
 interface State {
@@ -23,12 +25,12 @@ interface State {
 /**
  * @param props - @see CommentContainer Props
  */
-class CommentContainer extends React.Component<Props, State> {
+export class CommentContainer extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
 
-        this.delete = this.delete.bind(this);
+        this.onDelete = this.onDelete.bind(this);
 
         this.state = {
             content: this.props.content,
@@ -41,23 +43,23 @@ class CommentContainer extends React.Component<Props, State> {
      *
      * Rerenders the Comment making it clear that it was deleted
      */
-    delete() {
+    onDelete() {
 
         this.setState({
             content: 'deleted',
             author: 'Deleted User'
         });
 
-        const info = {
-            id: this.props.id
-        };
-
-        fetchFromApi('comment', 'delete', info);
+        this.props.deleteComment({
+            variables: {
+                id: this.props.id
+            }
+        });
     }
 
     render() {
 
-        const commentProps: {author: string; profileLink: string; content: string; deleteButton?: Function} = {
+        const commentProps: {author: string; profileLink: string; content: string; onDelete?: Function} = {
             author: this.state.author,
             profileLink: this.props.profileLink,
             content: this.state.content
@@ -72,11 +74,13 @@ class CommentContainer extends React.Component<Props, State> {
             this.props.id
             ) {
 
-            commentProps.deleteButton = this.delete;
+            commentProps.onDelete = this.onDelete;
         }
 
         return <Comment {...commentProps} />;
     }
 }
 
-export default CommentContainer;
+const CommentContainerWithData = graphql(CommentDelete, {name: 'deleteComment'})(CommentContainer as any);
+
+export default withApollo(CommentContainerWithData);

@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CommentContainer> snapshots renders correctly when can't delete 1`] = `
+<article
+  className="comment"
+>
+  <a
+    className="author"
+    href="/u/et"
+    onClick={[Function]}
+  >
+    Liza Beer
+  </a>
+  <div
+    className="content"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>Test <strong>paragraph</strong></p>",
+      }
+    }
+  />
+  
+</article>
+`;
+
+exports[`<CommentContainer> snapshots renders correctly when could delete 1`] = `
+<article
+  className="comment"
+>
+  <a
+    className="author"
+    href="/u/et"
+    onClick={[Function]}
+  >
+    Liza Beer
+  </a>
+  <div
+    className="content"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>Test <strong>paragraph</strong></p>",
+      }
+    }
+  />
+  <button
+    className="deleteReply"
+    onClick={[Function]}
+    type="button"
+  >
+    Delete
+  </button>
+</article>
+`;
