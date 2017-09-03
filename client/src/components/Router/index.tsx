@@ -4,7 +4,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 import LoginContainer from '../../Pages/Login/container';
 import Logout from '../Logout';
 import SignupContainer from '../../Pages/Signup/container';
-import JournalistTable from '../../Pages/JournalistTable';
+import JournalistTableContainer from '../../Pages/JournalistTable/container';
 import IssueTableContainer from '../../Pages/IssueTable/container';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
 import Publish from '../../Pages/Publish';
@@ -53,7 +53,7 @@ export default function Router() {
             <Switch>
                 <Route path="/login" component={LoginContainer}/>
                 <Route path="/signup" component={SignupContainer}/>
-                <Route exact path="/u" component={JournalistTable}/>
+                <Route exact path="/u" component={JournalistTableContainer}/>
                 <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTableContainer}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}

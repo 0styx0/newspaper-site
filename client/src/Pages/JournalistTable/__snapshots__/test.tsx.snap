@@ -313,7 +313,7 @@ exports[`<JournalistTableContainer> snapshots lets modify users' level and delet
 </section>
 `;
 
-exports[`<JournalistTableContainer> snapshots should render correctly 1`] = `
+exports[`<JournalistTableContainer> snapshots should render correctly when canEdit = false 1`] = `
 <section
   className="container "
 >

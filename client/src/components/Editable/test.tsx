@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
-import * as casual from 'casual';
+import casual from '../../tests/casual.data';
 import EditableContainer from './container';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';

@@ -101,7 +101,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
 
         return (
             <IssueTable
-              key={this.state.loaded}
+              key={+this.state.loaded}
               onSubmit={this.onSubmit}
               onChangeIssueInfo={this.onChangeIssueInfo}
               issues={this.props.data.issues}

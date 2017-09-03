@@ -11,7 +11,8 @@ export default [
              id: 'corporis--20',
              dateCreated: '1990-05-14',
              views: 30,
-             issue: 90
+             issue: 90,
+             canEdit: true
          },
 
          {
@@ -22,7 +23,8 @@ export default [
              id: 'ipsa--19',
              dateCreated: '1985-07-13',
              views: 17,
-             issue: 27
+             issue: 27,
+             canEdit: true
          },
 
          {
@@ -33,7 +35,8 @@ export default [
              id: 'doloribus--18',
              dateCreated: '1974-11-22',
              views: 83,
-             issue: 56
+             issue: 56,
+             canEdit: true
          },
 
          {
@@ -44,7 +47,8 @@ export default [
              id: 'ut--17',
              dateCreated: '1972-02-25',
              views: 2,
-             issue: 99
+             issue: 99,
+             canEdit: true
          },
 
          {
@@ -55,7 +59,8 @@ export default [
              id: 'aliquid--16',
              dateCreated: '2002-07-07',
              views: 70,
-             issue: 21
+             issue: 21,
+             canEdit: true
          },
 
          {
@@ -66,7 +71,8 @@ export default [
              id: 'maxime--15',
              dateCreated: '2012-09-11',
              views: 24,
-             issue: 2
+             issue: 2,
+             canEdit: true
          },
 
          {
@@ -77,7 +83,8 @@ export default [
              id: 'nesciunt--14',
              dateCreated: '1989-04-13',
              views: 6,
-             issue: 78
+             issue: 78,
+             canEdit: true
          },
 
          {
@@ -88,7 +95,8 @@ export default [
              id: 'fuga--13',
              dateCreated: '1980-08-18',
              views: 84,
-             issue: 14
+             issue: 14,
+             canEdit: true
          },
 
          {
@@ -99,7 +107,8 @@ export default [
              id: 'non--12',
              dateCreated: '1994-07-27',
              views: 98,
-             issue: 88
+             issue: 88,
+             canEdit: true
          },
 
          {
@@ -110,7 +119,8 @@ export default [
              id: 'inventore--11',
              dateCreated: '1987-06-14',
              views: 13,
-             issue: 14
+             issue: 14,
+             canEdit: true
          },
 
          {
@@ -121,7 +131,8 @@ export default [
              id: 'alias--10',
              dateCreated: '1985-10-01',
              views: 78,
-             issue: 25
+             issue: 25,
+             canEdit: true
          },
 
          {
@@ -132,7 +143,8 @@ export default [
              id: 'ut--9',
              dateCreated: '2010-04-08',
              views: 29,
-             issue: 69
+             issue: 69,
+             canEdit: true
          },
 
          {
@@ -143,7 +155,8 @@ export default [
              id: 'dolores--8',
              dateCreated: '2011-05-03',
              views: 3,
-             issue: 11
+             issue: 11,
+             canEdit: true
          },
 
          {
@@ -154,7 +167,8 @@ export default [
              id: 'qui--7',
              dateCreated: '1990-01-27',
              views: 17,
-             issue: 85
+             issue: 85,
+             canEdit: true
          },
 
          {
@@ -165,7 +179,8 @@ export default [
              id: 'inventore--6',
              dateCreated: '1996-04-12',
              views: 19,
-             issue: 92
+             issue: 92,
+             canEdit: true
          },
 
          {
@@ -176,7 +191,8 @@ export default [
              id: 'repudiandae--5',
              dateCreated: '1982-05-03',
              views: 58,
-             issue: 18
+             issue: 18,
+             canEdit: true
          },
 
          {
@@ -187,7 +203,8 @@ export default [
              id: 'minima--4',
              dateCreated: '2014-06-30',
              views: 72,
-             issue: 82
+             issue: 82,
+             canEdit: true
          },
 
          {
@@ -198,7 +215,8 @@ export default [
              id: 'molestiae--3',
              dateCreated: '2009-04-21',
              views: 78,
-             issue: 8
+             issue: 8,
+             canEdit: true
          },
 
          {
@@ -209,7 +227,8 @@ export default [
              id: 'labore--2',
              dateCreated: '1973-07-28',
              views: 96,
-             issue: 4
+             issue: 4,
+             canEdit: true
          },
 
          {
@@ -220,7 +239,8 @@ export default [
              id: 'non--1',
              dateCreated: '1974-01-09',
              views: 69,
-             issue: 40
+             issue: 40,
+             canEdit: true
          },
 
          {
@@ -231,6 +251,7 @@ export default [
              id: 'eos--0',
              dateCreated: '1971-07-26',
              views: 1,
-             issue: 20
+             issue: 20,
+             canEdit: true
          }
      ];

@@ -85,7 +85,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
      * Adds an mapping of id -> e.target.value to this.state.idLevelMap
      */
     onIdLevelMap(e: Event, id: string) {
-        
+
         const target = e.target as HTMLSelectElement;
         const mapCopy = new Map(this.state.idLevelMap);
 
@@ -189,7 +189,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         return (
             <JournalistTable
-              key={this.state.users}
+              key={this.state.users.map((user: User) => user.id).join(',')}
               users={this.state.users}
               onDelete={this.onDelete}
               onSortInfo={this.sortInfo}

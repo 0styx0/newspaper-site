@@ -67,7 +67,10 @@ describe('<EditableCommentContainer>', () => {
 
             const content = casual.sentence;
 
-            const contentEditable = wrapper.find('[contentEditable]').first();
+            const contentEditable = wrapper.find('[contentEditable]').first() as any as {
+                node: { innerHTML: string }, simulate: Function
+            };
+
             contentEditable.node.innerHTML = content;
             contentEditable.simulate('blur');
             expect(wrapper.state().content).toBe(content);

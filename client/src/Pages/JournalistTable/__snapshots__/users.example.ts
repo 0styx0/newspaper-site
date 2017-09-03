@@ -13,7 +13,8 @@ export default [
         profileLink: 'nemo',
         firstName: 'Greg',
         middleName: '',
-        lastName: 'Kuhn'
+        lastName: 'Kuhn',
+        canEdit: true
     },
 
     {
@@ -24,7 +25,8 @@ export default [
         profileLink: 'sit',
         firstName: 'Angelina',
         middleName: '',
-        lastName: 'Kutch'
+        lastName: 'Kutch',
+        canEdit: true
     },
 
     {
@@ -35,7 +37,8 @@ export default [
         profileLink: 'ut',
         firstName: 'Tracy',
         middleName: 'g',
-        lastName: 'Gusikowski'
+        lastName: 'Gusikowski',
+        canEdit: true
     },
 
     {
@@ -46,7 +49,8 @@ export default [
         profileLink: 'et',
         firstName: 'Violette',
         middleName: '',
-        lastName: 'Schmitt'
+        lastName: 'Schmitt',
+        canEdit: true
     },
 
     {
@@ -57,7 +61,8 @@ export default [
         profileLink: 'voluptatem',
         firstName: 'Marion',
         middleName: 'Z',
-        lastName: 'Sanford'
+        lastName: 'Sanford',
+        canEdit: true
     },
 
 ];

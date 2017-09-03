@@ -4,7 +4,6 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import * as casual from 'casual';
-import setFakeJwt from '../../tests/jwt.helper';
 
 document.queryCommandSupported = () => true; // used in Editable component
 

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
-import * as casual from 'casual';
 import ArticleLink from './Link';
 import snapData from './__snapshots__/props.example';
 

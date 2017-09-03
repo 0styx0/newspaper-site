@@ -8,7 +8,6 @@ import localStorageMock from '../../../tests/localstorage.mock';
 import snapData from './__snapshots__/props.example';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-import { MemoryRouter } from 'react-router';
 
 const deleteCommentMock = (params: {variables: {id: string}}) => { return; };
 
@@ -20,6 +19,9 @@ casual.define('comment', (): Props => ({
     id: casual.word,
     deleteComment: deleteCommentMock
 }));
+
+type CustomCasual = typeof casual & {comment: Props};
+const customCasual = casual as CustomCasual;
 
 describe('<CommentContainer>', () => {
 
@@ -68,7 +70,7 @@ describe('<CommentContainer>', () => {
         test('clicking on delete button calls #onDelete', () => {
 
             const spy = sinon.spy();
-            const data = casual.comment;
+            const data = customCasual.comment;
             data.deleteComment = spy;
 
             const wrapper = setup(data);
@@ -79,7 +81,7 @@ describe('<CommentContainer>', () => {
 
         test('data is formatted correctly when submitted to graphql', () => {
 
-            const data = casual.comment;
+            const data = customCasual.comment;
             data.deleteComment = (params: {variables: { id: string }}) => {
                 expect(params.variables.id).toBe(data.id);
             };

@@ -67,7 +67,9 @@ describe('<JournalistTableContainer>', () => {
                         users: snapData
                     };
 
-        it('should render correctly', () => {
+        it('should render correctly when canEdit = false', () => {
+
+            fixedData.users.forEach(user => user.canEdit = false);
 
             const tree = renderWithProps(
                 <JournalistTableContainer

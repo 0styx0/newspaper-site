@@ -23,7 +23,7 @@ export default function Input(props: Props) {
     return (
         <Label
             value={props.label}
-            required={!!props.props.required}
+            required={'required' in props.props}
             abbr={props.abbr}
             children={
                 input

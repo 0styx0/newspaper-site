@@ -13,7 +13,7 @@ import { Comment } from './shared.interface';
  * TODO: Ignored since child components use graphql functions. Try getting fake grapqhl server
  */
 
-casual.define('comments', (amount: number): Comment => {
+casual.define('comments', (amount: number): Comment[] => {
 
     const comments: Comment[] = [];
 
@@ -35,13 +35,16 @@ casual.define('comments', (amount: number): Comment => {
     return comments;
 });
 
+type CustomCasual = typeof casual & { comments: (amount: number) => Comment[] };
+const customCasual = casual as CustomCasual;
+
 describe('<CommentListContainer>', () => {
 
     function setup() {
 
         return mount(
             <CommentListContainer
-              comments={casual.comments(casual.randomPositive)}
+              comments={customCasual.comments(casual.randomPositive)}
               artId={casual.word}
             />
         );
@@ -57,7 +60,7 @@ describe('<CommentListContainer>', () => {
             const tree = renderer.create(
                 <MemoryRouter>
                     <CommentListContainer
-                        comments={casual.comments(casual.randomPositive)}
+                        comments={customCasual.comments(casual.randomPositive)}
                         artId={casual.word}
                     />
                 </MemoryRouter>
@@ -83,7 +86,8 @@ describe('<CommentListContainer>', () => {
     describe('#onAdd', () => {
 
         it('gets called after comment submission', () => {
-            //
+
+            setup();
         });
 
         it('gets called with correct `content`', () => {
