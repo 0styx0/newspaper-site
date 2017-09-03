@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Input> snapshots renders correctly when abbr is NOT given 1`] = `
+<label>
+  Random: 
+  <input
+    placeholder="Hi"
+  />
+  
+  
+</label>
+`;
+
+exports[`<Input> snapshots renders correctly when abbr is given 1`] = `
+<label>
+  Random: 
+  <input
+    placeholder="Hi"
+  />
+  
+  <span>
+    <abbr
+      onClick={[Function]}
+      title="A very good hint"
+    >
+      ?
+    </abbr>
+    <span />
+  </span>
+</label>
+`;

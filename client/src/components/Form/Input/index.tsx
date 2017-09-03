@@ -1,15 +1,12 @@
 import * as React from 'react';
-
 import Label from '../Label';
-
 import './index.css';
-
 
 interface Props {
     label: string;
     abbr?: string;
     // I can't find a way to just say that html attributes should be accepted
-    props: any;
+    props: Object;
 }
 
 /**
