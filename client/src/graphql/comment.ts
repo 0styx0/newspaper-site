@@ -9,6 +9,16 @@ const CommentCreate = gql`
     }
 `;
 
+const CommentDelete = gql`
+
+    mutation CommentDelete($id: ID!) {
+        deleteComment(id: $id) {
+            id
+        }
+    }
+`;
+
 export {
-    CommentCreate
+    CommentCreate,
+    CommentDelete
 };

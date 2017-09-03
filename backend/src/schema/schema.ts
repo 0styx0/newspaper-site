@@ -195,6 +195,37 @@ const Mutation = new GraphQLObjectType({
                 return new db.models.comments(sanitize(newComment)).save();
             }
         },
+        deleteComment: {
+            type: Comments,
+            description: 'Delete a comment',
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID)
+                }
+            },
+            resolve: async (_, args: {id: string}, { jwt }) => {
+
+                const sanitized = sanitize(args);
+
+                const authorId = await db.models.comments.findOne({
+                    attributes: ['authorid'],
+                    where: {
+                        id: sanitized.id
+                    }
+                });
+
+                if (jwt.level > 2 || jwt.id === authorId.dataValues.id) {
+
+                    return db.models.comments.destroy({
+                        where: {
+                            id: sanitized.id
+                        }
+                    });
+                }
+
+                throw new Error('Unauthorized Action');
+            }
+        },
         updateIssue: {
             type: Issues,
             description: 'Alter the latest issue',
