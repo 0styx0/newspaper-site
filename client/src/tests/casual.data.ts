@@ -6,6 +6,7 @@ casual.define('randomPositive', () => casual.integer(0, 100));
 casual.define('tags', () => ({
     all: casual.array_of_words(casual.integer(1, 3)) // can have at most 3 tags, at least 1
 }));
+casual.define('function', () => { return; });
 
 interface Extended {
     articleUrl: string;
@@ -14,6 +15,7 @@ interface Extended {
     tags: {
         all: string[]
     };
+    function: Function;
 }
 
 export default casual as Extended & typeof casual;
