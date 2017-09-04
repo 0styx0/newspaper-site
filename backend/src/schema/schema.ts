@@ -464,6 +464,59 @@ const Mutation = new GraphQLObjectType({
                 };
             }
         },
+        createArticle: {
+            type: Articles,
+            description: 'Create an article',
+            args: {
+                tags: {
+                    type: new GraphQLList(GraphQLString),
+                },
+                url: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                article: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {tags: string[], article: string, url: string}, { jwt }) => {
+
+                if (!jwt.id) {
+                    return {message: 'Users must be logged in to publish'};
+                }
+
+                const sanitized = sanitize(args);
+
+                const maxIssueRow = await db.models.issues.findOne({
+                    attributes: ['num', 'ispublic']
+                });
+                let issue = maxIssueRow.dataValues.num;
+
+                if (maxIssueRow.dataValues.ispublic) {
+
+                    issue++
+
+                    new db.models.issues({
+                        num: issue + 1
+                    });
+                }
+
+                const data = {
+                    article: sanitized.article,
+                    url: sanitized.url,
+                    issue,
+                    authorid: jwt.id
+                };
+
+                const article = await new db.models.pageinfo(data).save();
+                
+                new db.models.tags({
+                    art_id: article.dataValues.id,
+                    all: sanitized.tags
+                }).save();
+
+                return article;
+            }
+        },
         updateArticles: {
             type: new GraphQLList(Articles),
             description: 'Modify article data',

@@ -132,10 +132,7 @@ const Issues = sequelize.define('issues', {
     },
     madepub: {
         type: Sequelize.DATE,
-        allowNull: true, // only filled when made public, so before that should be null
-        validate: {
-            isBefore: new Date(Date.now() + 1).toISOString()
-        }
+        allowNull: true // only filled when made public, so before that should be null
     },
     name: {
         type: Sequelize.STRING,
@@ -173,10 +170,7 @@ const Articles = sequelize.define('pageinfo', {
     created: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        validate: {
-            isBefore: new Date(Date.now() + 1).toISOString() // doing +1 since don't know if it will otherwise mess with defaultValue
-        }
+        defaultValue: Sequelize.NOW
     },
     url: {
         type: Sequelize.STRING(75),

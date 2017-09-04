@@ -7,7 +7,7 @@ import SignupContainer from '../../Pages/Signup/container';
 import JournalistTableContainer from '../../Pages/JournalistTable/container';
 import IssueTableContainer from '../../Pages/IssueTable/container';
 import ArticleTableContainer from '../../Pages/ArticleTable/container';
-import Publish from '../../Pages/Publish';
+import PublishContainer from '../../Pages/Publish/container';
 import ProfileContainer from '../../Pages/Profile/container';
 import MainPageContainer from '../../Pages/MainPage/container';
 import MissionContainer from '../../Pages/Mission/container';
@@ -57,7 +57,7 @@ export default function Router() {
                 <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTableContainer}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
-                {jwt.level ?  <Route path="/publish" component={Publish} /> : ""}
+                {jwt.level ?  <Route path="/publish" component={PublishContainer} /> : ""}
                 <Route path="/issue/(.*)/story/(.*)" component={StoryContainer}/>
                 <Route path="/tag/(.*)" component={MainPageContainer}/>
                 <Route path="/issue/(.*)" component={MainPageContainer}/>

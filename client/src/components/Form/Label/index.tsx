@@ -8,7 +8,7 @@ interface Props {
     value: string;
     required?: boolean;
     abbr?: string;
-    children: JSX.Element;
+    children?: JSX.Element | (string | JSX.Element)[]; // must have, but can be implicit (<Label><input /></Label>)
 }
 
 /**

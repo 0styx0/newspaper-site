@@ -24,6 +24,16 @@ const ArticleQuery = gql`
 
 `;
 
+const ArticleCreate = gql`
+    mutation ArticleCreate($tags: [String], $url: String!, $article: String!) {
+        createArticle(tags: $tags, url: $url, article: $article) {
+            issue
+            url
+        }
+    }
+`;
+
 export {
-    ArticleQuery
+    ArticleQuery,
+    ArticleCreate
 };
