@@ -63,6 +63,10 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
 
     render() {
 
+        if (!this.props.articles || this.props.articles.length < 1) {
+            return null;
+        }
+
         return (
             <UserArticleTable
               articles={this.props.articles}

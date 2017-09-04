@@ -65,6 +65,10 @@ export class MissionContainer extends React.Component<Props, State> {
 
     render() {
 
+        if (!this.state.content) {
+            return null;
+        }
+
         return (
             <Mission
                 content={this.state.content}
