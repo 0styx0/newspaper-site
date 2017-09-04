@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import Label from '../Label';
 
-import './index.css';
-
 interface Props {
     label: string;
     props: any; // really should be html attributes

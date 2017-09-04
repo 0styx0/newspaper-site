@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Select> snapshots renders correctly 1`] = `
+<label>
+  Label: 
+  <select
+    name="hello"
+  >
+    <option
+      value="hi"
+    >
+      Hi
+    </option>
+  </select>
+  
+</label>
+`;
