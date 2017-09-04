@@ -502,13 +502,13 @@ const Mutation = new GraphQLObjectType({
 
                 const data = {
                     article: sanitized.article,
-                    url: sanitized.url,
+                    url: encodeURIComponent(sanitized.url),
                     issue,
                     authorid: jwt.id
                 };
 
                 const article = await new db.models.pageinfo(data).save();
-                
+
                 new db.models.tags({
                     art_id: article.dataValues.id,
                     all: sanitized.tags

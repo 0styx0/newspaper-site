@@ -175,7 +175,7 @@ const Articles = sequelize.define('pageinfo', {
     url: {
         type: Sequelize.STRING(75),
         validate: {
-            is: /^[\sa-zA-Z0-9_-]+$/
+            is: /^[\sa-zA-Z0-9%_-]+$/
         },
         allowNull: false
     },
