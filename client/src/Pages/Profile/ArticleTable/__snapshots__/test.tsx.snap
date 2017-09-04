@@ -1060,7 +1060,6 @@ exports[`<UserArticleTableContainer> snapshots renders correctly when canEdit is
         >
           *
         </span>
-        
       </label>
       <input
         type="submit"

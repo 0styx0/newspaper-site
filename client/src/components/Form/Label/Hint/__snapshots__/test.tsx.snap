@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HintContainer> snapshots renders correctly 1`] = `
+<label
+  onInput={[Function]}
+>
+  Hi
+  <input
+    type="text"
+    value="hello"
+  />
+  <span>
+    <abbr
+      onClick={[Function]}
+      title="Hello"
+    >
+      ?
+    </abbr>
+    <span />
+  </span>
+</label>
+`;

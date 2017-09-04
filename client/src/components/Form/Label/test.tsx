@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import Label from './';
 
-describe('<Input>', () => {
+describe('<Label>', () => {
 
     describe('snapshots', () => {
 
