@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FormContainer> snapshots renders correctly 1`] = `
+<form
+  onClick={[Function]}
+  onSubmit={[Function]}
+>
+  <input
+    type="text"
+    value="hi"
+  />
+  <input
+    type="text"
+    value="ri"
+  />
+</form>
+`;

@@ -3,13 +3,22 @@ import * as React from 'react';
 import './index.css';
 
 interface Props {
-    props: any, // html attrs
-    children: JSX.Element;
+    children?: JSX.Element[];
+    // and any html attributes for html form element
 }
 
 export default function Form(props: Props) {
 
-    const form = React.cloneElement(<form children={props.children} />, props.props);
+    if (!props.children) { // not strictly needed, but gets rid of ts warning
+        return;
+    }
 
-    return form;
+    const childArr = (props.children.map) ? props.children : [props.children];
+
+    const children = (childArr as JSX.Element[]).map(child => React.cloneElement(child));
+
+    const p = Object.assign({}, props);
+    delete p.children;
+
+    return <form {...p}>{children}</form>;
 }
