@@ -187,6 +187,10 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
     render() {
 
+        if (!this.state.users) {
+            return null;
+        }
+
         return (
             <JournalistTable
               key={this.state.users.map((user: User) => user.id).join(',')}

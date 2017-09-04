@@ -45,7 +45,7 @@ const Users = new GraphQLObjectType({
             resolve: (user) => user.f_name
         },
         middleName: {
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
             resolve: (user) => user.m_name
         },
         lastName: {

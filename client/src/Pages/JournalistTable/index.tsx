@@ -57,7 +57,7 @@ function JournalistTable(props: Props) {
                               <option key={val.view} value={val.value}>{val.view}</option>)
                         }}
                     />
-                </div>);
+                </div>
 
                 <form onSubmit={props.onSubmit as any}>
                     <div>

@@ -49,7 +49,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
      */
     componentWillReceiveProps(props: Props) {
 
-        if (!props.data.issues || this.props.data.issues.length > 0) {
+        if (!props.data.issues || this.props.data.issues) {
             return;
         }
 
@@ -95,10 +95,10 @@ export class IssueTableContainer extends React.Component<Props, State> {
 
     render() {
 
-        if (this.props.data.issues.length < 1) {
+        if (!this.props.data.issues) {
             return null;
         }
-
+        
         return (
             <IssueTable
               key={+this.state.loaded}
@@ -114,6 +114,6 @@ export class IssueTableContainer extends React.Component<Props, State> {
 const IssueTableContainerWithData = compose(
     graphql(IssueQuery),
     graphql(IssueUpdate)
-)(IssueTable as any);
+)(IssueTableContainer as any);
 
 export default IssueTableContainerWithData;
