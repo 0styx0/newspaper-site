@@ -16,9 +16,16 @@ import { ArticleCreate } from '../../graphql/article';
 import { graphql, withApollo } from 'react-apollo';
 import './index.css';
 
-interface Props { // from react router hoc
+export interface Props { // from react router hoc
     history: string[];
-    createArticle: (params: {variables: { tags: string[], article: string, url: string }}) => Promise<any>;
+    createArticle: (params: {variables: { tags: string[], article: string, url: string }}) => Promise<{
+        data: {
+            createArticle: {
+                url: string;
+                issue: number;
+            }
+        }
+    }>;
 }
 
 interface State {
@@ -28,7 +35,7 @@ interface State {
     };
 }
 
-class PublishContainer extends React.Component<Props, State> {
+export class PublishContainer extends React.Component<Props, State> {
 
     constructor() {
 
@@ -86,7 +93,6 @@ class PublishContainer extends React.Component<Props, State> {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
         const tagList = target.querySelector('select[name=tags]') as HTMLSelectElement;
-
         const tags = Array.from(tagList.selectedOptions).map(elt => elt.value);
 
         const { data } = await this.props.createArticle({
@@ -102,6 +108,14 @@ class PublishContainer extends React.Component<Props, State> {
         this.props.history.push(`/issue/${article.issue}/story/${encodeURIComponent(article.url)}`);
     }
 
+    /**
+     * Formats article
+     *
+     * Replaces first tag with <h1> (title) if there isn't one already
+     * Replace second tag with <h4> (author) if there isn't one already
+     *
+     * Also gets rid of <br />, &nbsp
+     */
     autoFormat() {
 
         const article = this.state.editor!.getContent();
@@ -113,7 +127,8 @@ class PublishContainer extends React.Component<Props, State> {
             formattedArticle = formattedArticle.replace(/<(\w+)>([\s\S]+?)<\/\1>/, '<h1>$2</h1>');
 
             if (!/^<h1>([\s\S]+)<\/h1>[\s\S]*<h4>.+/.test(formattedArticle)) {
-                formattedArticle = formattedArticle.replace(/<\/h1>[\s\S]*?<(\w+)>([\s\S]+?)<\/\1>/i, '<h4>$2</h4>');
+                formattedArticle = formattedArticle
+                                   .replace(/<\/h1>[\s\S]*?<(\w+)>([\s\S]+?)<\/\1>/i, '</h1><h4>$2</h4>');
             }
         }
 

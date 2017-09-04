@@ -23,7 +23,6 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <label>
       Confirm Password: 
@@ -38,7 +37,6 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <label>
       Old Password: 
@@ -53,7 +51,6 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"

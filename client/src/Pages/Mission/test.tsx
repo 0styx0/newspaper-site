@@ -60,7 +60,7 @@ describe('<MissionContainer>', () => {
      */
     function setup(editMission: editMissionType) {
 
-        return mount(
+        const wrapper = mount(
             <MissionContainer
               editMission={editMission || fakeEditMission(casual.sentences())}
               data={{
@@ -71,6 +71,13 @@ describe('<MissionContainer>', () => {
               }}
             />
         );
+
+        wrapper.node.componentWillReceiveProps({data: {mission: {
+                      mission: casual.sentences(),
+                      canEdit: true
+                  }}});
+
+        return wrapper;
     }
 
     describe('editMission', () => {

@@ -22,7 +22,6 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <label>
       Email: 
@@ -36,7 +35,6 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <label>
       Last Auth Code: 
@@ -50,7 +48,6 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"

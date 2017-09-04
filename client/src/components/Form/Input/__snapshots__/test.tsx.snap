@@ -7,12 +7,13 @@ exports[`<Input> snapshots renders correctly when abbr is NOT given 1`] = `
     placeholder="Hi"
   />
   
-  
 </label>
 `;
 
 exports[`<Input> snapshots renders correctly when abbr is given 1`] = `
-<label>
+<label
+  onInput={[Function]}
+>
   Random: 
   <input
     placeholder="Hi"

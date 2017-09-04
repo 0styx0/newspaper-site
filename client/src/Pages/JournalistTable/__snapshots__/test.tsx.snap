@@ -38,10 +38,8 @@ exports[`<JournalistTableContainer> snapshots lets modify users' level and delet
           </option>
         </select>
         
-        
       </label>
     </div>
-    );
     <form
       onSubmit={[Function]}
     >
@@ -300,7 +298,6 @@ exports[`<JournalistTableContainer> snapshots lets modify users' level and delet
           >
             *
           </span>
-          
         </label>
         <input
           name=""
@@ -346,10 +343,8 @@ exports[`<JournalistTableContainer> snapshots should render correctly when canEd
           </option>
         </select>
         
-        
       </label>
     </div>
-    );
     <form
       onSubmit={[Function]}
     >
@@ -498,10 +493,8 @@ exports[`<JournalistTableContainer> snapshots should show users' levels only whe
           </option>
         </select>
         
-        
       </label>
     </div>
-    );
     <form
       onSubmit={[Function]}
     >

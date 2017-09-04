@@ -18,7 +18,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         type="number"
       />
       
-      
     </label>
     <form
       onSubmit={[Function]}
@@ -15670,7 +15669,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         >
           *
         </span>
-        
       </label>
       <input
         type="submit"

@@ -152,7 +152,6 @@ exports[`<IssueTableContainer> snapshots if canEdit = true, get chance to name a
             type="password"
           />
           
-          
         </label>
         <input
           type="submit"

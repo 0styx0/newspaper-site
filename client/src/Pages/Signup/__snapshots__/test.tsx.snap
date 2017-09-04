@@ -10,7 +10,9 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
   <form
     onSubmit={[Function]}
   >
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Username: 
       <input
         name="username"
@@ -35,7 +37,9 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Full Name: 
       <input
         name="fullName"
@@ -61,7 +65,9 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Password: 
       <input
         name="password"
@@ -84,7 +90,9 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Confirm Password: 
       <input
         name="confirmation"
@@ -106,7 +114,9 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Email: 
       <input
         name="email"
@@ -153,7 +163,6 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
       >
         *
       </span>
-      
     </label>
     <input
       className="submit"
@@ -175,7 +184,9 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
   <form
     onSubmit={[Function]}
   >
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Username: 
       <input
         name="username"
@@ -200,7 +211,9 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Full Name: 
       <input
         name="fullName"
@@ -226,7 +239,9 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Password: 
       <input
         name="password"
@@ -249,7 +264,9 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Confirm Password: 
       <input
         name="confirmation"
@@ -271,7 +288,9 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <span />
       </span>
     </label>
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Email: 
       <input
         name="email"

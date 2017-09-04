@@ -23,7 +23,6 @@ exports[`<LoginFormContainer> snapshots renders correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <label>
       Password: 
@@ -38,7 +37,6 @@ exports[`<LoginFormContainer> snapshots renders correctly 1`] = `
       >
         *
       </span>
-      
     </label>
     <input
       className="submit"

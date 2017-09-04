@@ -79,7 +79,6 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"
@@ -167,7 +166,6 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"
@@ -255,7 +253,6 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"
@@ -343,7 +340,6 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       >
         *
       </span>
-      
     </label>
     <input
       type="submit"

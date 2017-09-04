@@ -10,7 +10,9 @@ exports[`<TwoFactorContainer> snapshots renders correctly 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <label>
+    <label
+      onInput={[Function]}
+    >
       Auth Code: 
       <input
         name="authCode"

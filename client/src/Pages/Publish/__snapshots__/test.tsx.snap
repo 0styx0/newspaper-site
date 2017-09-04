@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PublishContainer> snapshots renders correctly 1`] = `
+<section
+  className="container "
+>
+  <h1>
+    Publish Story
+  </h1>
+  <form
+    onSubmit={[Function]}
+  >
+    <label>
+      Tags: 
+      <select
+        multiple={true}
+        name="tags"
+        required={true}
+      >
+        <option
+          value="news"
+        >
+          News
+        </option>
+        <option
+          value="reaction"
+        >
+          Reaction
+        </option>
+        <option
+          value="opinion"
+        >
+          Opinion
+        </option>
+        <option
+          value="poll"
+        >
+          Poll
+        </option>
+        <option
+          value="features"
+        >
+          Features
+        </option>
+        <option
+          value="sports"
+        >
+          Sports
+        </option>
+        <option
+          value="politics"
+        >
+          Politics
+        </option>
+        <option
+          value="other"
+        >
+          Other
+        </option>
+      </select>
+      
+    </label>
+    <label
+      onInput={[Function]}
+    >
+      Page Name: 
+      <input
+        autoFocus={true}
+        maxLength={75}
+        name="name"
+        pattern="^[\\\\sa-zA-Z0-9_-]+$"
+        placeholder="mystory"
+        required={true}
+        title="Must only contain letters, numbers, -, _, and spaces"
+        type="text"
+      />
+      <span
+        className="danger"
+      >
+        *
+      </span>
+      <span>
+        <abbr
+          onClick={[Function]}
+          title="This article will be located at tabceots.com/issue/n/story/name_you_enter
+                                    (where n is the issue number). Can be up to 75 characters long
+                                    (some non-word characters such as spaces may count as more)."
+        >
+          ?
+        </abbr>
+        <span />
+      </span>
+    </label>
+    <button
+      onClick={[Function]}
+      type="button"
+    >
+      Auto Format
+    </button>
+    <textarea
+      className="changed"
+      id="editor"
+      name="txtArea"
+    />
+    <input
+      className="submit"
+      name="create"
+      type="submit"
+      value="Submit"
+    />
+  </form>
+</section>
+`;
