@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NumberlineContainer> snapshots renders correctly with 5 numbers 1`] = `
+<span
+  id="issueRange"
+>
+  <a
+    href="/issue/1"
+    onClick={[Function]}
+  >
+    1
+  </a>
+  <a
+    href="/issue/2"
+    onClick={[Function]}
+  >
+    2
+  </a>
+  <a
+    href="/issue/3"
+    onClick={[Function]}
+  >
+    3
+  </a>
+  <a
+    href="/issue/4"
+    onClick={[Function]}
+  >
+    4
+  </a>
+  <a
+    href="/issue/5"
+    onClick={[Function]}
+  >
+    5
+  </a>
+</span>
+`;
+
+exports[`<NumberlineContainer> snapshots with current in the middle of line 1`] = `
+<span
+  id="issueRange"
+>
+  <a
+    href="/issue/1"
+    onClick={[Function]}
+  >
+    1
+  </a>
+  <a
+    href="/issue/2"
+    onClick={[Function]}
+  >
+    2
+  </a>
+  <a
+    href="/issue/3"
+    onClick={[Function]}
+  >
+    3
+  </a>
+  <a
+    href="/issue/4"
+    onClick={[Function]}
+  >
+    4
+  </a>
+  <a
+    href="/issue/5"
+    onClick={[Function]}
+  >
+    5
+  </a>
+  ...
+  <a
+    href="/issue/18"
+    onClick={[Function]}
+  >
+    18
+  </a>
+  <a
+    href="/issue/19"
+    onClick={[Function]}
+  >
+    19
+  </a>
+  <a
+    href="/issue/20"
+    onClick={[Function]}
+  >
+    20
+  </a>
+  <a
+    href="/issue/21"
+    onClick={[Function]}
+  >
+    21
+  </a>
+  <a
+    href="/issue/22"
+    onClick={[Function]}
+  >
+    22
+  </a>
+  <a
+    href="/issue/23"
+    onClick={[Function]}
+  >
+    23
+  </a>
+  ...
+  <a
+    href="/issue/38"
+    onClick={[Function]}
+  >
+    38
+  </a>
+  <a
+    href="/issue/39"
+    onClick={[Function]}
+  >
+    39
+  </a>
+  <a
+    href="/issue/40"
+    onClick={[Function]}
+  >
+    40
+  </a>
+</span>
+`;
+
+exports[`<NumberlineContainer> snapshots with more than 5 makes an ellipses 1`] = `
+<span
+  id="issueRange"
+>
+  <a
+    href="/issue/1"
+    onClick={[Function]}
+  >
+    1
+  </a>
+  <a
+    href="/issue/2"
+    onClick={[Function]}
+  >
+    2
+  </a>
+  <a
+    href="/issue/3"
+    onClick={[Function]}
+  >
+    3
+  </a>
+  <a
+    href="/issue/4"
+    onClick={[Function]}
+  >
+    4
+  </a>
+  <a
+    href="/issue/5"
+    onClick={[Function]}
+  >
+    5
+  </a>
+  <a
+    href="/issue/6"
+    onClick={[Function]}
+  >
+    6
+  </a>
+  <a
+    href="/issue/7"
+    onClick={[Function]}
+  >
+    7
+  </a>
+  <a
+    href="/issue/8"
+    onClick={[Function]}
+  >
+    8
+  </a>
+  ...
+  <a
+    href="/issue/18"
+    onClick={[Function]}
+  >
+    18
+  </a>
+  <a
+    href="/issue/19"
+    onClick={[Function]}
+  >
+    19
+  </a>
+  <a
+    href="/issue/20"
+    onClick={[Function]}
+  >
+    20
+  </a>
+</span>
+`;

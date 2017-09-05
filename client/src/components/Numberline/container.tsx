@@ -16,7 +16,9 @@ interface State {
  * @prop max - max number to go to
  * @prop current - current number
  *
- * @return numberline with links to issues of numbers 1-5, 4 on either side of current (including current), and last 4 numbers
+ * @return numberline with links to issues of numbers 1-5, 4 on either side of current
+ *  (including current), and last 4 numbers
+ *
  */
 export default class NumberlineContainer extends React.Component<Props, State> {
 
@@ -25,42 +27,77 @@ export default class NumberlineContainer extends React.Component<Props, State> {
 
         this.state = {
             line: []
-        }
+        };
     }
 
-    componentWillReceiveProps() {
+    componentWillMount() {
 
-        const allIssues: Array<JSX.Element | string> = Array(this.props.max)
-                               .fill(0)
-                               .map((val, issue) => <Link
-                                                      key={issue}
-                                                      to={`/issue/${issue + 1}`}
-                                                    >
-                                                      {issue + 1}
-                                                    </Link>
-                               );
+        const plainNumberline = this.addPlainNumbers();
+        const numberlineWithEllipses = this.addEllipses(plainNumberline);
 
 
-        allIssues.splice(5, this.props.current - 10, "...")  // gets 1-5 and 5 before currentIssue
-        allIssues.splice(15, allIssues.length - 20, "...") // start at 10 so keep 1-5 and 5 before current issue
+        const issueNumberLinks: Array<JSX.Element | string> = numberlineWithEllipses.map(issue => (
 
-        // get rid of trailing ...
-        for (let i = allIssues.length - 1; i > allIssues.length - 2; i--) {
-
-            if (allIssues[i] + '' === "...") {
-                allIssues.pop();
-            }
-            else {
-                break;
-            }
-        }
+            typeof issue === 'string' ?
+                issue :
+                (
+                    <Link
+                        key={issue}
+                        to={`/issue/${issue}`}
+                    >
+                        {issue}
+                    </Link>
+                )
+        ));
 
         this.setState({
-            line: allIssues
+            line: issueNumberLinks
         });
     }
 
+    /**
+     * @return raw numberline (just numbers)
+     */
+    addPlainNumbers() {
+
+        const numbers: number[] = [];
+        const plainLine = new Set<number>();
+
+        for (let i = 1; i < this.props.max + 1; i++) {
+            numbers.push(i);
+        }
+
+        [...numbers].splice(0, 5).forEach(elt => plainLine.add(elt));
+
+        [...numbers].splice(this.props.current - 3, 6).forEach(elt => plainLine.add(elt));
+        [...numbers].splice(this.props.max - 3, 6).forEach(elt => plainLine.add(elt));
+
+        return [...plainLine];
+    }
+
+    /**
+     * @return numberline with ... whenever there's a gap of more than 1 between numbers
+     */
+    addEllipses(numberline: number[]) {
+
+        const numberlineWithEllipses: (string | number)[] = [];
+
+        for (let i = 0; i < numberline.length; i++) {
+
+            numberlineWithEllipses.push(numberline[i]);
+
+            // 2 - 4 -> -2, so would add ellipse
+            if (numberline[i] - numberline[i + 1] < -1) {
+
+                numberlineWithEllipses.push('...');
+            }
+
+        }
+
+        return numberlineWithEllipses;
+    }
+
     render() {
-        return <Numberline key={this.props.current} lineContent={this.state.line} />
+        return <Numberline lineContent={this.state.line} />;
     }
 }
