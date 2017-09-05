@@ -671,7 +671,7 @@ const Mutation = new GraphQLObjectType({
                     }
                 });
 
-                if (await userHelpers.compareEncrypted(args.password, user.dataValues.password)) {
+                if (user && await userHelpers.compareEncrypted(args.password, user.dataValues.password)) {
 
                     user.dataValues.profileLink = user.dataValues.email.split('@')[0];
 
