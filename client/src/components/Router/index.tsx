@@ -30,24 +30,24 @@ export default function Router() {
 
                 <ul key={jwt.id}>
                     {/*for responsiveness */}
-                    <label htmlFor='menuToggle'>
+                    <label htmlFor="menuToggle">
                     <span className="container" />
-                        <li className='showMenu hidden'> ||| </li>
+                        <li className="showMenu hidden"> ||| </li>
                     </label>
-                    <input id='menuToggle' tabIndex={-1} type='checkbox' />
+                    <input id="menuToggle" tabIndex={-1} type="checkbox" />
 
                     <li><Link to="/">Home</Link></li>
                     <li><SelectTagPreview /></li>
-                    {jwt.level ? "" : <li><Link to="/login">Login</Link></li>}
+                    {jwt.level ? '' : <li><Link to="/login">Login</Link></li>}
                     <li><Link to="/signup">Create Account</Link></li>
                     <li><Link to="/u">Journalists</Link></li>
                     <li><Link to="/mission">Mission</Link></li>
                     <li><Link to="/issue">Issues</Link></li>
-                    {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ""}
-                    {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ""}
+                    {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ''}
+                    {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ''}
                     {jwt.level ? <li id="logout"><Logout /></li>
-                                : ""}
-                    {jwt.level ? <li className="profile"><Link to={`/u/${jwt.profileLink}`}>Profile</Link></li> : ""}
+                                : ''}
+                    {jwt.level ? <li className="profile"><Link to={`/u/${jwt.profileLink}`}>Profile</Link></li> : ''}
                 </ul>
             </nav>
             <Switch>
@@ -56,8 +56,8 @@ export default function Router() {
                 <Route exact path="/u" component={JournalistTableContainer}/>
                 <Route path="/mission" component={MissionContainer}/>
                 <Route exact path="/issue" component={IssueTableContainer}/>
-                {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ""}
-                {jwt.level ?  <Route path="/publish" component={PublishContainer} /> : ""}
+                {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ''}
+                {jwt.level ?  <Route path="/publish" component={PublishContainer} /> : ''}
                 <Route path="/issue/(.*)/story/(.*)" component={StoryContainer}/>
                 <Route path="/tag/(.*)" component={MainPageContainer}/>
                 <Route path="/issue/(.*)" component={MainPageContainer}/>
@@ -65,7 +65,7 @@ export default function Router() {
                 <Route path="/u/(.*)" component={ProfileContainer}/>
                 <Route path="/authLogin" component={TwoFactorContainer}/>
                 <Route path="/forgotPass" component={ForgotPasswordContainer}/>
-
+                <Route path="*" exact={true} component={MainPageContainer} />
             </Switch>
         </div>
         );

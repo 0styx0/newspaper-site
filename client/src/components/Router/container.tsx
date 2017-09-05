@@ -1,49 +1,19 @@
 import * as React from 'react';
 
-import fetchFromApi from '../../helpers/fetchFromApi';
-
-import { getJWT, Jwt } from '../jwt';
+import { getJWT } from '../jwt';
 import Router from './';
 
-interface State {
-    jwt: Jwt | {};
-}
-
-export default class RouterContainer extends React.Component<{}, State> {
-
-    constructor() {
-        super();
-
-        this.state = {
-            jwt: {}
-        }
-    }
+export default class RouterContainer extends React.Component<{}, {}> {
 
     componentWillUpdate() {
         // so rolled down navar won't be there after clicking link
-        (document.getElementById("menuToggle") as HTMLInputElement)!.checked = false;
-    }
-
-    componentWillMount() {
-
-        const jwt = getJWT();
-
-        fetchFromApi('userStatus')
-        .then(data => data)
-        .then(data => data.json())
-        .then(json => {
-            jwt.level = +json.level
-            jwt.profileLink = json.email
-            jwt.id = json.id
-
-            this.setState({ jwt: getJWT() });
-        });
+        (document.getElementById('menuToggle') as HTMLInputElement)!.checked = false;
     }
 
     render() {
 
         const jwt = getJWT();
 
-        return <Router key={jwt.id} />
+        return <Router key={jwt.id} />;
     }
 }
