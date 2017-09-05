@@ -5,7 +5,7 @@ import NumberlineContainer from './container';
 
 describe('<NumberlineContainer>', () => {
 
-    fdescribe('snapshots', () => {
+    describe('snapshots', () => {
 
         function snap(current: number, max: number) {
 

@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Preview> snapshots should render correctly 1`] = `
+<div
+  className="preview"
+>
+  <div
+    className="content"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>This is a lede</p>",
+      }
+    }
+  />
+  <a
+    className="small"
+    href="/issue/21/story/random_string"
+    onClick={[Function]}
+  >
+    Read More
+  </a>
+  <span
+    className="small"
+  >
+     (
+    34
+     views)
+  </span>
+</div>
+`;

@@ -24,5 +24,5 @@ export default function Preview(props: Props) {
             </Link>
             <span className="small"> ({props.views} views)</span>
         </div>
-    )
+    );
 }
