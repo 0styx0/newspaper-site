@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Slideshow> snapshots renders correctly 1`] = `
+<div
+  id="slideShow"
+>
+  <a
+    href="test"
+    onAnimationIteration={[Function]}
+    onClick={[Function]}
+  >
+    <img
+      alt=""
+      className="slideshowPic activePic"
+      src="hello.png"
+    />
+  </a>
+</div>
+`;
