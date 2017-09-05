@@ -25,7 +25,7 @@ function Profile(props: Props) {
                 views={props.user.views}
                 articles={props.articles.length}
             />
-            <ModifiableUserInfo />
+            {props.user.canEdit ? <ModifiableUserInfo /> : ''}
             {props.user.canEdit ? <ChangePassword /> : ''}
             <UserArticleTable
                 articles={props.articles}
