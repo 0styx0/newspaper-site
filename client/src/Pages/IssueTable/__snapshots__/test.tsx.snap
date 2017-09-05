@@ -10,153 +10,151 @@ exports[`<IssueTableContainer> snapshots if canEdit = true, get chance to name a
   <form
     onSubmit={[Function]}
   >
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Issue
+          </th>
+          <th>
+             
+            Name
+          </th>
+          <th>
+             
+            Views
+          </th>
+          <th>
+             
+            Published
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            <input
+              defaultValue="Sint voluptas ut"
+              name="name"
+              onChange={[Function]}
+              type="text"
+            />
+          </td>
+          <td>
+            246
+          </td>
+          <td>
+            <select
+              name="public"
+              onChange={[Function]}
+            >
+              <option
+                value={0}
+              >
+                No
+              </option>
+              <option
+                value={1}
+              >
+                Yes
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            <a
+              href="/issue/3"
+              onClick={[Function]}
+            >
+              Porro voluptatem
+            </a>
+          </td>
+          <td>
+            166
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            <a
+              href="/issue/2"
+              onClick={[Function]}
+            >
+              Omnis totam rem
+            </a>
+          </td>
+          <td>
+            451
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            <a
+              href="/issue/1"
+              onClick={[Function]}
+            >
+              Temporibus reprehenderit
+            </a>
+          </td>
+          <td>
+            460
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            0
+          </td>
+          <td>
+            <a
+              href="/issue/0"
+              onClick={[Function]}
+            >
+              Fugiat incidunt
+            </a>
+          </td>
+          <td>
+            856
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>
-               
-              Issue
-            </th>
-            <th>
-               
-              Name
-            </th>
-            <th>
-               
-              Views
-            </th>
-            <th>
-               
-              Published
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              4
-            </td>
-            <td>
-              <input
-                defaultValue="Sint voluptas ut"
-                name="name"
-                onChange={[Function]}
-                type="text"
-              />
-            </td>
-            <td>
-              246
-            </td>
-            <td>
-              <select
-                name="public"
-                onChange={[Function]}
-              >
-                <option
-                  value={0}
-                >
-                  No
-                </option>
-                <option
-                  value={1}
-                >
-                  Yes
-                </option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              3
-            </td>
-            <td>
-              <a
-                href="/issue/3"
-                onClick={[Function]}
-              >
-                Porro voluptatem
-              </a>
-            </td>
-            <td>
-              166
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              2
-            </td>
-            <td>
-              <a
-                href="/issue/2"
-                onClick={[Function]}
-              >
-                Omnis totam rem
-              </a>
-            </td>
-            <td>
-              451
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              1
-            </td>
-            <td>
-              <a
-                href="/issue/1"
-                onClick={[Function]}
-              >
-                Temporibus reprehenderit
-              </a>
-            </td>
-            <td>
-              460
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              0
-            </td>
-            <td>
-              <a
-                href="/issue/0"
-                onClick={[Function]}
-              >
-                Fugiat incidunt
-              </a>
-            </td>
-            <td>
-              856
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div>
-        <label>
-          Password: 
-          <input
-            name="password"
-            type="password"
-          />
-          
-        </label>
+      <label>
+        Password: 
         <input
-          type="submit"
+          name="password"
+          type="password"
         />
-      </div>
+        
+      </label>
+      <input
+        type="submit"
+      />
     </div>
   </form>
 </section>
@@ -172,128 +170,126 @@ exports[`<IssueTableContainer> snapshots table is created and canEdit = false 1`
   <form
     onSubmit={[Function]}
   >
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>
-               
-              Issue
-            </th>
-            <th>
-               
-              Name
-            </th>
-            <th>
-               
-              Views
-            </th>
-            <th>
-               
-              Published
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              4
-            </td>
-            <td>
-              <a
-                href="/issue/4"
-                onClick={[Function]}
-              >
-                Sint voluptas ut
-              </a>
-            </td>
-            <td>
-              246
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              3
-            </td>
-            <td>
-              <a
-                href="/issue/3"
-                onClick={[Function]}
-              >
-                Porro voluptatem
-              </a>
-            </td>
-            <td>
-              166
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              2
-            </td>
-            <td>
-              <a
-                href="/issue/2"
-                onClick={[Function]}
-              >
-                Omnis totam rem
-              </a>
-            </td>
-            <td>
-              451
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              1
-            </td>
-            <td>
-              <a
-                href="/issue/1"
-                onClick={[Function]}
-              >
-                Temporibus reprehenderit
-              </a>
-            </td>
-            <td>
-              460
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-          <tr>
-            <td>
-              0
-            </td>
-            <td>
-              <a
-                href="/issue/0"
-                onClick={[Function]}
-              >
-                Fugiat incidunt
-              </a>
-            </td>
-            <td>
-              856
-            </td>
-            <td>
-              2017-08-21T17:27:13.854Z
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>
+             
+            Issue
+          </th>
+          <th>
+             
+            Name
+          </th>
+          <th>
+             
+            Views
+          </th>
+          <th>
+             
+            Published
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            <a
+              href="/issue/4"
+              onClick={[Function]}
+            >
+              Sint voluptas ut
+            </a>
+          </td>
+          <td>
+            246
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            <a
+              href="/issue/3"
+              onClick={[Function]}
+            >
+              Porro voluptatem
+            </a>
+          </td>
+          <td>
+            166
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            <a
+              href="/issue/2"
+              onClick={[Function]}
+            >
+              Omnis totam rem
+            </a>
+          </td>
+          <td>
+            451
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            <a
+              href="/issue/1"
+              onClick={[Function]}
+            >
+              Temporibus reprehenderit
+            </a>
+          </td>
+          <td>
+            460
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+        <tr>
+          <td>
+            0
+          </td>
+          <td>
+            <a
+              href="/issue/0"
+              onClick={[Function]}
+            >
+              Fugiat incidunt
+            </a>
+          </td>
+          <td>
+            856
+          </td>
+          <td>
+            2017-08-21T17:27:13.854Z
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span />
   </form>
 </section>
 `;

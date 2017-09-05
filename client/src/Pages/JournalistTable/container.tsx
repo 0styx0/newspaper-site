@@ -161,9 +161,6 @@ export class JournalistTableContainer extends React.Component<Props, State> {
      */
     onSubmit(e: Event) {
 
-        e.preventDefault();
-        e.stopPropagation();
-
         const data = this.convertMapToArrayOfJSON(this.state.idLevelMap);
 
         if (data.length > 0) {

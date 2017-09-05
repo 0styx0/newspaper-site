@@ -19,7 +19,7 @@ casual.define('articles', function(amount: number, issue: number) {
 
     let articles: Issues = [
         {
-            num: issue || casual.integer(1, 50),
+            num: issue || casual.integer(1, 20),
             max: casual.integer(50, 100),
             articles: []
         }
@@ -56,7 +56,6 @@ const filler = () => (true as any) as any;
 
 function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
-
     return mount(
         <MemoryRouter>
             <ArticleTableContainer
@@ -77,27 +76,24 @@ function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function}
 
 describe('<ArticleTableContainer>', () => {
 
-    let wrapper: any;
-    let component: any;
-
     /**
      * Does the basic setup; gets new versions of wrapper, component and gives component new props
      */
     function setupWithProps(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
-        wrapper = setup(mockGraphql);
-        component = wrapper.find(ArticleTableContainer).node;
+        const wrapper = setup(mockGraphql);
+        const component = wrapper.find(ArticleTableContainer).node;
 
         const data = (casual as any).data();
 
         component.componentWillReceiveProps({ data });
 
-        return data;
+        return {
+            wrapper,
+            component,
+            data
+        };
     }
-
-    beforeEach(() => {
-        wrapper = setup();
-    });
 
     describe('snapshots', () => {
 
@@ -124,19 +120,14 @@ describe('<ArticleTableContainer>', () => {
 
     describe('displayOrder', () => {
 
-        let displayOrderInputs: any;
-
-        beforeEach(() => {
-
-            setupWithProps();
-            displayOrderInputs = wrapper.find('input[name="displayOrder"]');
-        });
-
         /**
          * @param inputIndex - if given, the displayOrder input at that index will be the one changed.
          * If not passed, a random input will be chosen
          */
-        function changeOneInput(inputIndex?: number) {
+        function changeOneInput(wrapper: any, inputIndex?: number) {
+
+            const displayOrderInputs = wrapper.find('input[name="displayOrder"]');
+            const component = wrapper.find(ArticleTableContainer).node;
 
             const indexOfInput = (inputIndex === undefined) ?
                 casual.integer(0, displayOrderInputs.length - 1) :
@@ -160,9 +151,10 @@ describe('<ArticleTableContainer>', () => {
         it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
 
             let expected: string[][] = [];
+            const { wrapper, component } = setupWithProps();
 
             for (let i = 0; i < casual.integer(0, 100); i++) {
-                const result = changeOneInput();
+                const result = changeOneInput(wrapper);
 
                 expected.push([result.id, +result.input.node.value]);
             }
@@ -179,36 +171,29 @@ describe('<ArticleTableContainer>', () => {
 
         it('updates displayOrder when it has been changed more than once to most recent value', () => {
 
-            const input = changeOneInput();
-            changeOneInput(input.index); // changeOneInput has the assertions
+            const { wrapper } = setupWithProps();
+            const input = changeOneInput(wrapper);
+            changeOneInput(wrapper, input.index); // changeOneInput has the assertions
         });
     });
 
     describe('tags', () => {
 
-        let tagSelects: any;
-
-        beforeEach(() => {
-
-            setupWithProps();
-
-            tagSelects = wrapper.find('select[name="tags"]');
-        });
-
         /**
          * @param inputIndex - if given, the `select` at that index will be the one changed.
-         * @param numberOfTags - how many tags to select
+         * @param 2umberOfTags - how many tags to select
          *
          * If either param is not passed, it will be random
          */
-        function changeOneSelect(inputIndex?: number, numberOfTags?: number) {
+        function changeOneSelect(wrapper: any, inputIndex?: number, numberOfTags?: number) {
 
+            const tagSelects = wrapper.find('select[name="tags"]');
             const indexOfInput = (inputIndex === undefined) ?
                 casual.integer(0, tagSelects.length - 1) :
                 inputIndex;
 
             const oneInput = tagSelects.at(indexOfInput);
-
+            const component = wrapper.find(ArticleTableContainer).node;
             const newValueSet = new Set<string>();
 
             for (let i = 0; newValueSet.size < (numberOfTags || casual.integer(1, 3)); i++) {
@@ -238,15 +223,16 @@ describe('<ArticleTableContainer>', () => {
 
         it('saves updated tags in state.updates.tags, with article id as the key', () => {
 
-            const result = changeOneSelect();
+            const { wrapper, component } = setupWithProps();
+            const result = changeOneSelect(wrapper);
 
             expect([...component.state.updates.tags]).toEqual([[result.id, result.value]]);
         });
 
         it('saves the 3 most recently selected tags if user selects more than 3', () => {
 
-
-            const result = changeOneSelect();
+            const { wrapper, component } = setupWithProps();
+            const result = changeOneSelect(wrapper);
             const expectedValues: string[] = [];
 
             const selectedOptions = [...result.input.node.options].map((option: HTMLOptionElement) => {
@@ -264,28 +250,22 @@ describe('<ArticleTableContainer>', () => {
 
         it('removes tags from array if user de-selects', () => {
 
-            const result = changeOneSelect(undefined, 3);
+            const { wrapper } = setupWithProps();
+            const result = changeOneSelect(wrapper, undefined, 3);
 
-            changeOneSelect(result.index, 2); // changeOneSelect does the assertion
+            changeOneSelect(wrapper, result.index, 2); // changeOneSelect does the assertion
         });
     });
 
     describe('delete', () => {
 
-        let deleteCheckbox: any;
-
-        beforeEach(() => {
-
-            setupWithProps();
-
-            deleteCheckbox = wrapper.find('input[name="delete"]');
-        });
-
         /**
          * checks a random `checkbox[name=delete]`
          */
-        function changeOneCheckbox() {
+        function changeOneCheckbox(wrapper: any) {
 
+            const component = wrapper.find(ArticleTableContainer).node;
+            const deleteCheckbox = wrapper.find('input[name="delete"]');
             const boxInfo = randomCheckboxToggle(deleteCheckbox);
 
             const id = component.state.articles[boxInfo.index].id;
@@ -300,13 +280,14 @@ describe('<ArticleTableContainer>', () => {
         }
 
         it('allows users to check the delete checkbox', () => {
-
-            changeOneCheckbox(); // assertion handled in function
+            const { wrapper } = setupWithProps();
+            changeOneCheckbox(wrapper); // assertion handled in function
         });
 
         it('removes id from state.updates.idsToDelete if user unchecks the box', () => {
 
-            const result = changeOneCheckbox();
+            const { wrapper, component } = setupWithProps();
+            const result = changeOneCheckbox(wrapper);
             result.input.nodes[0].checked = false;
             result.input.simulate('change');
 
@@ -322,7 +303,7 @@ describe('<ArticleTableContainer>', () => {
          * @param data - casual.data
          * @param func - to be called on every unique article
          */
-        function randomArticleLoop(data: {issues: Issues}, func: (article: Article) => void) {
+        function randomArticleLoop(wrapper: any, data: {issues: Issues}, func: (article: Article) => void) {
 
             const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
             const usedIds: string[] = [];
@@ -366,7 +347,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const tags: updateData[] = [];
 
-                const data = setupWithProps({
+                const { wrapper, component, data} = setupWithProps({
                     // called after submit event (at very bottom of this test)
                     updateArticle: (info: {variables: {data: typeof tags} }) => {
 
@@ -374,7 +355,7 @@ describe('<ArticleTableContainer>', () => {
                     }
                 });
 
-                randomArticleLoop(data, article => {
+                randomArticleLoop(wrapper, data, article => {
 
                     let tagList = getRandomTags();
 
@@ -390,7 +371,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const orders: updateData[] = [];
 
-                const data = setupWithProps({
+                const { wrapper, component, data } = setupWithProps({
                     // called after submit event (at very bottom of this test)
                     updateArticle: (info: {variables: {data: typeof orders }}) => {
 
@@ -398,7 +379,7 @@ describe('<ArticleTableContainer>', () => {
                     }
                 });
 
-                randomArticleLoop(data, article => {
+                randomArticleLoop(wrapper, data, article => {
 
                     const newOrder = casual.integer(0, 100);
 
@@ -413,7 +394,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const allData: updateData[] = [];
 
-                const data = setupWithProps({
+                const { wrapper, component, data } = setupWithProps({
 
                     updateArticle: (info: {variables: {data: typeof allData} }) => {
 
@@ -421,7 +402,7 @@ describe('<ArticleTableContainer>', () => {
                     }
                 });
 
-                randomArticleLoop(data, article => {
+                randomArticleLoop(wrapper, data, article => {
 
                     const newOrder = casual.integer(0, 100);
                     component.state.updates.displayOrder.set(article.id, newOrder);
@@ -443,7 +424,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const allData: updateData[] = [];
 
-                const data = setupWithProps({
+                const { wrapper, component, data } = setupWithProps({
 
                     updateArticle: (info: {variables: {data: typeof allData} }) => {
 
@@ -455,7 +436,7 @@ describe('<ArticleTableContainer>', () => {
                     }
                 });
 
-                randomArticleLoop(data, article => {
+                randomArticleLoop(wrapper, data, article => {
 
                     if (casual.coin_flip) {
 
@@ -487,7 +468,7 @@ describe('<ArticleTableContainer>', () => {
 
             const idsToDelete: string[] = [];
 
-            const data = setupWithProps({
+            const { wrapper, component, data } = setupWithProps({
 
                 deleteArticle: (info: {variables: {data: typeof idsToDelete} }) => {
 
@@ -495,7 +476,7 @@ describe('<ArticleTableContainer>', () => {
                 }
             });
 
-            randomArticleLoop(data, article => {
+            randomArticleLoop(wrapper, data, article => {
                 idsToDelete.push(article.id);
             });
 

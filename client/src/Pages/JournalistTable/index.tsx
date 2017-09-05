@@ -6,6 +6,7 @@ import Table from '../../components/Table';
 import { getJWT, Jwt } from '../../components/jwt';
 import { Link } from 'react-router-dom';
 import { User } from './interface.shared';
+import FormContainer from '../../components/Form/container';
 
 import './index.css';
 
@@ -44,32 +45,28 @@ function JournalistTable(props: Props) {
     }
 
     return (
-        <Container
-            heading="Journalists"
-            children={
-            <div>
-                <div id="sortingContainer">
-                    <Select
-                        label="Sort By"
-                        props={{
-                            onChange: props.onSortInfo,
-                            children: getSortingOptions(jwt).map((val) =>
-                              <option key={val.view} value={val.value}>{val.view}</option>)
-                        }}
-                    />
-                </div>
+        <Container heading="Journalists">
+            <div id="sortingContainer">
+                <Select
+                    label="Sort By"
+                    props={{
+                        onChange: props.onSortInfo,
+                        children: getSortingOptions(jwt).map((val) =>
+                            <option key={val.view} value={val.value}>{val.view}</option>)
+                    }}
+                />
+            </div>
 
-                <form onSubmit={props.onSubmit as any}>
-                    <div>
-                        <Table
-                            headings={getTableHeadings(jwt)}
-                            rows={formatDataForTable(props.users, props.onLevelChange, props.onDelete, jwt)}
-                        />
-                        {loggedInElts.map(input => input)}
-                    </div>
-                </form>
-            </div>}
-        />
+            <FormContainer onSubmit={props.onSubmit as any}>
+                <div key="table">
+                    <Table
+                        headings={getTableHeadings(jwt)}
+                        rows={formatDataForTable(props.users, props.onLevelChange, props.onDelete, jwt)}
+                    />
+                    {loggedInElts.map(input => input)}
+                </div>
+            </FormContainer>
+        </Container>
     );
 }
 

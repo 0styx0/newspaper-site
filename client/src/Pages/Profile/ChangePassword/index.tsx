@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Container from '../../../components/Container';
 import Input from '../../../components/Form/Input';
+import FormContainer from '../../../components/Form/container';
 
 interface Props {
     onSubmit: (e: Event) => void;
@@ -12,8 +13,9 @@ function ChangePassword(props: Props) {
         <Container
             heading="Change Password"
             children={
-                <form onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit as any}>
                     <Input
+                        key="new"
                         label="New Password"
                         props={{
                             pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$',
@@ -21,9 +23,9 @@ function ChangePassword(props: Props) {
                             type: 'password',
                             required: true
                         }}
-
                     />
                     <Input
+                        key="confirm"
                         label="Confirm Password"
                         props={{
                             pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$',
@@ -33,6 +35,7 @@ function ChangePassword(props: Props) {
                         }}
                     />
                     <Input
+                        key="old"
                         label="Old Password"
                         props={{
                             pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*).{6,}$',
@@ -41,8 +44,8 @@ function ChangePassword(props: Props) {
                             required: true
                         }}
                     />
-                    <input type="submit" value="Change Password" />
-                </form>}
+                    <input key="submit" type="submit" value="Change Password" />
+                </FormContainer>}
         />
     );
 }

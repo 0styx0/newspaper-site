@@ -433,7 +433,7 @@ exports[`<UserArticleTableContainer> snapshots renders correctly when canEdit is
         </tr>
       </tbody>
     </table>
-    
+    <span />
   </form>
 </section>
 `;

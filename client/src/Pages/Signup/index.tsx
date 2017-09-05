@@ -3,6 +3,7 @@ import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import { getJWT } from '../../components/jwt';
+import FormContainer from '../../components/Form/container';
 
 import './index.css';
 
@@ -16,9 +17,10 @@ function Signup(props: Props) {
 
     return (
         <Container heading="Sign Up">
-          <form onSubmit={props.onSubmit as any}>
+          <FormContainer onSubmit={props.onSubmit as any}>
 
             <Input
+              key="username"
               label="Username"
               abbr="Must not contain spaces"
               props={{
@@ -33,6 +35,7 @@ function Signup(props: Props) {
 
             <Input
               label="Full Name"
+              key="fullname"
               abbr={`Must contain only uppercase, lowercase, or
                 periods and must be at least 2 words (middle name should be left as a 1 letter initial)`}
               props={{
@@ -47,6 +50,7 @@ function Signup(props: Props) {
 
             <Input
               label="Password"
+              key="password"
               abbr="Password must contain at least: 1 uppercase, 1 lowercase, 1 number, 6 character"
               props={{
                 name: 'password',
@@ -58,6 +62,7 @@ function Signup(props: Props) {
 
             <Input
               label="Confirm Password"
+              key="confirmation"
               abbr="Must be the same as the password"
               props={{
                 name: 'confirmation',
@@ -68,6 +73,7 @@ function Signup(props: Props) {
 
             <Input
               label="Email"
+              key="email"
               abbr="Must be your assigned email."
               props={{
                 name: 'email',
@@ -81,6 +87,7 @@ function Signup(props: Props) {
               (
                 <Select
                     label="Level"
+                    key="level"
                     props={{
                       className: 'changed',
                       defaultValue: 1,
@@ -92,12 +99,12 @@ function Signup(props: Props) {
                     }}
                 />
                 )
-                : ''
+                : <span key="nothing" />
             }
 
-            <input type="submit" className="submit" name="create" value="Sign Up" />
+            <input key="submit" type="submit" className="submit" name="create" value="Sign Up" />
 
-          </form>
+          </FormContainer>
         </Container>
     );
 }

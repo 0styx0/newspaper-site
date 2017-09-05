@@ -100,7 +100,7 @@ describe('<UserArticleTableContainer>', () => {
                 toggler(indices, result.index);
             }
 
-            for (let i = 0; i < casual.integer(0, indices.size); i++) {
+            for (let i = 0; i < casual.integer(0, indices.size - 1); i++) {
 
                 const indexToRemove = casual.random_element([...indices]);
 

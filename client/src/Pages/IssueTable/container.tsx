@@ -82,9 +82,6 @@ export class IssueTableContainer extends React.Component<Props, State> {
      */
     onSubmit(e: Event) {
 
-        e.stopPropagation();
-        e.preventDefault();
-
         this.props.mutate({
             variables: {
                 name: this.state.privateIssue.name,
@@ -98,7 +95,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
         if (!this.props.data.issues) {
             return null;
         }
-        
+
         return (
             <IssueTable
               key={+this.state.loaded}

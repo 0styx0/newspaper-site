@@ -32,9 +32,6 @@ export class LoginFormContainer extends React.Component<Props, {}> {
      */
     async setJWT(e: Event) {
 
-        e.preventDefault();
-        e.stopPropagation();
-
         const target = e.target as HTMLElement;
 
         const username = (target.querySelector('[name=username]') as HTMLInputElement).value;

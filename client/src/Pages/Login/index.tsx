@@ -2,6 +2,7 @@ import * as React from 'react';
 import Input from '../../components/Form/Input';
 import Container from '../../components/Container';
 import { Link } from 'react-router-dom';
+import FormContainer from '../../components/Form/container';
 
 import './index.css';
 
@@ -13,8 +14,9 @@ function LoginForm(props: Props) {
 
     return (
         <Container heading="Login">
-          <form onSubmit={props.onLogin as any} >
+          <FormContainer onSubmit={props.onLogin as any} >
             <Input
+                key="username"
                 label="Username"
                 props={{
                     name: 'username',
@@ -25,6 +27,7 @@ function LoginForm(props: Props) {
             />
 
             <Input
+                key="password"
                 label="Password"
                 props={{
                     name: 'password',
@@ -34,11 +37,11 @@ function LoginForm(props: Props) {
                 }}
             />
 
-            <input type="submit" className="submit" value="Log In" />
-            <br />
+            <input key="submit" type="submit" className="submit" value="Log In" />
+            <br key="br"/>
 
-            <Link to="forgotPass">Forgot your password?</Link>
-          </form>
+            <Link key="link" to="forgotPass">Forgot your password?</Link>
+          </FormContainer>
         </Container>
     );
 }

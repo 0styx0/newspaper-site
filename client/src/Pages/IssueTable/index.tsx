@@ -4,6 +4,7 @@ import Container from '../../components/Container';
 import Input from '../../components/Form/Input';
 import { Link } from 'react-router-dom';
 import { Issue } from './interface.shared';
+import FormContainer from '../../components/Form/container';
 
 interface Props {
     issues: Issue[];
@@ -33,6 +34,7 @@ function IssueTable(props: Props) {
         issueArr[0][1] = (
             <input
               type="text"
+              key="name"
               name="name"
               onChange={props.onChangeIssueInfo as any}
               defaultValue={props.issues[0].name}
@@ -40,7 +42,7 @@ function IssueTable(props: Props) {
         );
 
         issueArr[0][3] = (
-            <select name="public" onChange={props.onChangeIssueInfo as any}>
+            <select key="public" name="public" onChange={props.onChangeIssueInfo as any}>
               <option value={0}>No</option>
               <option value={1}>Yes</option>
             </select>
@@ -50,21 +52,17 @@ function IssueTable(props: Props) {
     const headings = ['Issue', 'Name', 'Views', 'Published'];
 
     return (
-        <Container
-            heading="Issues"
-            children={
-                <form onSubmit={props.onSubmit as any}>
-                    <div>
-                        <Table headings={headings} rows={issueArr} />
-                        {props.issues[0].canEdit ?
-                            <div>
-                                <Input label="Password" props={{type: 'password', name: 'password'}}/>
-                                <input type="submit" />
-                            </div>
-                        : ''}
+        <Container heading="Issues">
+            <FormContainer onSubmit={props.onSubmit as any}>
+                <Table key="table" headings={headings} rows={issueArr} />
+                {props.issues[0].canEdit ?
+                    <div key="passwordDiv">
+                        <Input label="Password" props={{type: 'password', name: 'password'}}/>
+                        <input type="submit" />
                     </div>
-                    </form>}
-        />
+                : <span key="nothing" />}
+            </FormContainer>
+        </Container>
     );
 }
 

@@ -86,9 +86,6 @@ export class PublishContainer extends React.Component<Props, State> {
      */
     async onSubmit(e: Event) {
 
-        e.preventDefault();
-        e.stopPropagation();
-
         const target = e.target as HTMLFormElement;
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;

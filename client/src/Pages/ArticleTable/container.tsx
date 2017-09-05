@@ -145,9 +145,6 @@ export class ArticleTableContainer extends React.Component<Props, State> {
      */
     onChange(e: Event, article: Article) {
 
-        e.stopPropagation();
-        e.preventDefault();
-
         const target = e.target as HTMLInputElement | HTMLSelectElement;
 
         const stateUpdate = this.state.updates;
@@ -198,9 +195,6 @@ export class ArticleTableContainer extends React.Component<Props, State> {
      * Sends data from `state.updates` to server
      */
     onSubmit(e: Event) {
-
-        e.stopPropagation();
-        e.preventDefault();
 
         // separating update and delete into functions just to show they're separate stuff
         const submitUpdated = () => {

@@ -3,6 +3,7 @@ import * as React from 'react';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
 import Input from '../../components/Form/Input';
+import FormContainer from '../../components/Form/container';
 import TagSelect from '../../components/TagSelect';
 
 import { Article, Issue } from './container';
@@ -42,37 +43,34 @@ export default function ArticleTable(props: Props) {
     const rows = createArticleTableRows(props);
 
     return (
-        <Container
-            heading="Articles"
-            className="tableContainer"
-            children={
-                <div>
-                    <Input
-                        label="Issue Number"
-                        props={{
-                        type: 'number',
-                        min: 1,
-                        defaultValue: props.issue.num || '',
-                        max: props.issue.max,
-                        onChange: props.onUpdate
-                        }}
-                    />
-                    <form onSubmit={props.onSubmit as any}>
-                        <Table headings={headings} rows={rows}/>
+        <Container heading="Articles" className="tableContainer">
+            <Input
+                label="Issue Number"
+                key="issueChooser"
+                props={{
+                type: 'number',
+                min: 1,
+                defaultValue: props.issue.num || '',
+                max: props.issue.max,
+                onChange: props.onUpdate
+                }}
+            />
+            <FormContainer onSubmit={props.onSubmit as any}>
 
-                        <Input
-                            label="Password"
-                            props={{
-                                type: 'password',
-                                name: 'password',
-                                required: true
-                            }}
-                        />
-                        <input type="submit" value="Modify" />
-                    </form>
-                </div>
-            }
-        />
+                <Table key="table" headings={headings} rows={rows}/>
+
+                <Input
+                    key="password"
+                    label="Password"
+                    props={{
+                        type: 'password',
+                        name: 'password',
+                        required: true
+                    }}
+                />
+                <input key="submit" type="submit" value="Modify" />
+            </FormContainer>
+        </Container>
     );
 }
 

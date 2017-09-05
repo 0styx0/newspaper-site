@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Container from '../../components/Container';
 import Input from '../../components/Form/Input';
+import FormContainer from '../../components/Form/container';
 
 interface Props {
     onSubmit: Function;
@@ -10,8 +11,9 @@ function ForgotPassword(props: Props) {
 
     return (
         <Container heading="Recover Password">
-            <form onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit as any}>
                 <Input
+                    key="username"
                     label="Username"
                     props={{
                         required: true,
@@ -20,6 +22,7 @@ function ForgotPassword(props: Props) {
                     }}
                 />
                 <Input
+                    key="email"
                     label="Email"
                     props={{
                         type: 'email',
@@ -28,6 +31,7 @@ function ForgotPassword(props: Props) {
                     }}
                 />
                 <Input
+                    key="authcode"
                     label="Last Auth Code"
                     props={{
                         type: 'password',
@@ -36,8 +40,8 @@ function ForgotPassword(props: Props) {
                     }}
                 />
 
-                <input type="submit" />
-            </form>
+                <input key="submit" type="submit" />
+            </FormContainer>
         </Container>
     );
 }

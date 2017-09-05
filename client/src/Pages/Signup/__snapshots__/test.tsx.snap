@@ -313,7 +313,7 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <span />
       </span>
     </label>
-    
+    <span />
     <input
       className="submit"
       name="create"

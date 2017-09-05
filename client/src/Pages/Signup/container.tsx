@@ -20,8 +20,6 @@ export class SignupContainer extends React.Component<Props, {}> {
      */
     onSignup(e: Event) {
 
-        e.preventDefault();
-
         const namesToSearchFor = ['email', 'password', 'confirmation', 'level', 'fullName', 'username'];
 
         // only doing types for props that are using here, in this function

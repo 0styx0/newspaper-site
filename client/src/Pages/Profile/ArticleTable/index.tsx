@@ -4,6 +4,7 @@ import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
 import { Article } from '../shared.interfaces';
 import ArticleLink from '../../../components/ArticleTable/Link';
+import FormContainer from '../../../components/Form/container';
 
 interface Props {
     articles: Article[];
@@ -64,14 +65,15 @@ function UserArticleTable(props: Props) {
         <Container
             heading="Articles"
             children={
-                <form onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit as any}>
                     <Table
+                        key="table"
                         headings={headings}
                         rows={articles}
                     />
 
                     {props.articles[0].canEdit ?
-                        <div>
+                        <div key="submitDiv">
                             <Input
                                 label="Password"
                                 props={{
@@ -82,8 +84,8 @@ function UserArticleTable(props: Props) {
                             />
                             <input type="submit" />
                         </div>
-                    : ''}
-                </form>}
+                    : <span key="nothing" />}
+                </FormContainer>}
         />
     );
 }

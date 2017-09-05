@@ -49,10 +49,7 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
     /**
      * Sends idsToDelete to server to be deleted
      */
-    onSubmit(e: Event) {
-
-        e.preventDefault();
-        e.stopPropagation();
+    onSubmit() {
 
         this.props.deleteArticle({
             variables: {
