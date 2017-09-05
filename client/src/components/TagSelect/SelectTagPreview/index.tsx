@@ -5,7 +5,7 @@ import TagSelect from '../';
 
 interface State {
     redirect: string;
-};
+}
 
 export default class SelectTagPreview extends React.Component<{}, State> {
 
@@ -13,33 +13,35 @@ export default class SelectTagPreview extends React.Component<{}, State> {
         super();
 
         this.state = {
-            redirect: ""
-        }
+            redirect: ''
+        };
+
         this.onChange = this.onChange.bind(this);
     }
 
+    /**
+     * Redirects to /tag/tag_user_selected
+     */
     onChange(event: Event) {
-
 
         this.setState({
             redirect: `/tag/${(event.target as HTMLSelectElement).value}`
-        })
+        });
     }
-
 
     render() {
 
-        return  <span key={this.state.redirect}>
-                    <TagSelect
-                        tags={["Current Issue"]}
-                        props={{
-                            defaultValue: window.location.pathname.split("/")[2] || "../",
-                            onChange: this.onChange
-                        }}
-                    />
-                    {this.state.redirect ? <Redirect to={this.state.redirect} /> : ""}
-                </span>
-
+        return (
+            <span key={this.state.redirect}>
+                <TagSelect
+                    tags={['Current Issue']}
+                    props={{
+                        defaultValue: window.location.pathname.split('/')[2] || '../',
+                        onChange: this.onChange
+                    }}
+                />
+                {this.state.redirect ? <Redirect to={this.state.redirect} /> : ''}
+            </span>
+        );
     }
 }
-

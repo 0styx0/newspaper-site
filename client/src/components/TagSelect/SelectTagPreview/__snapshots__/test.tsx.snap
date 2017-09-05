@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Slideshow> snapshots renders correctly 1`] = `
+<span>
+  <select
+    defaultValue="../"
+    onChange={[Function]}
+  >
+    <option
+      value="Current Issue"
+    >
+      Current Issue
+    </option>
+    <option
+      value="news"
+    >
+      News
+    </option>
+    <option
+      value="reaction"
+    >
+      Reaction
+    </option>
+    <option
+      value="opinion"
+    >
+      Opinion
+    </option>
+    <option
+      value="poll"
+    >
+      Poll
+    </option>
+    <option
+      value="features"
+    >
+      Features
+    </option>
+    <option
+      value="sports"
+    >
+      Sports
+    </option>
+    <option
+      value="politics"
+    >
+      Politics
+    </option>
+    <option
+      value="other"
+    >
+      Other
+    </option>
+  </select>
+  
+</span>
+`;

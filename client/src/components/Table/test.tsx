@@ -1,9 +1,6 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import Table from './';
-import casual from '../../tests/casual.data';
-
-
 
 describe('<Slideshow>', () => {
 
