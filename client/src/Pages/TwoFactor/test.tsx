@@ -13,7 +13,7 @@ localStorageMock.clear();
 const fakeVerifyEmail = async (params: { query: Function, variables: { authCode: string } }) =>
   ({data: { verifyEmail: { jwt: encodeJwt({id: Math.random() }) } } });
 
-function setup(verifyEmail = fakeVerifyEmail) {
+function setup(verifyEmail: typeof fakeVerifyEmail = fakeVerifyEmail) {
 
     return mount(
         <TwoFactorContainer

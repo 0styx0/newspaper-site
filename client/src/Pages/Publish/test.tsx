@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PublishContainer, Props } from './container';
+import { PublishContainer } from './container';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
@@ -16,15 +16,17 @@ describe('<PublishContainer>', () => {
             }
         };
 
-    const mockCreateArticle = ((params: createArticleParams) =>
-        Promise.resolve({
+    function mockCreateArticle(params?: createArticleParams) {
+
+        return Promise.resolve({
             data: {
                 createArticle: {
                     url: casual.url,
                     issue: casual.randomPositive
                 }
             }
-        })) as any as Props['createArticle'];
+        });
+    }
 
     function setup(createArticle?: typeof mockCreateArticle) {
 
@@ -82,7 +84,7 @@ describe('<PublishContainer>', () => {
             const wrapper = setup();
             setFakeEditor(wrapper, content);
 
-            const component = wrapper.node;
+            const component = (wrapper as any).node;
             component.autoFormat();
             const newEditorContents = component.state.editor.getContent();
 
@@ -162,7 +164,8 @@ describe('<PublishContainer>', () => {
 
         it('calls props.createArticle when submit button is clicked', () => {
 
-            const spy = sinon.stub().returns(mockCreateArticle());
+            const spy = sinon.stub()
+            .returns(mockCreateArticle());
 
             const wrapper = setup(spy);
 

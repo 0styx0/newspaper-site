@@ -6,11 +6,11 @@ import { mount } from 'enzyme';
 
 describe('<FormContainer>', () => {
 
-    function setup(onSubmit = () => { return; }) {
+    function setup(onSubmit: Function = () => { return; }) {
 
         return mount(
             <FormContainer onSubmit={onSubmit}>
-              <option key="1" type="text" name="fried rice" />
+              <input key="1" type="text" name="fried rice" />
             </FormContainer>
         );
     }

@@ -72,7 +72,7 @@ describe('<MissionContainer>', () => {
             />
         );
 
-        wrapper.node.componentWillReceiveProps({data: {mission: {
+        (wrapper as any).node.componentWillReceiveProps({data: {mission: {
                       mission: casual.sentences(),
                       canEdit: true
                   }}});

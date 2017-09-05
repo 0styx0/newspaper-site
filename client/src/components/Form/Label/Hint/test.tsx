@@ -11,7 +11,7 @@ describe('<HintContainer>', () => {
         /**
          * Takes snapshots
          */
-        function snap(title?: string) {
+        function snap(title: string) {
 
             const tree = renderer.create(
                 <HintContainer
@@ -44,7 +44,7 @@ describe('<HintContainer>', () => {
 
         wrapper.find('abbr').first().simulate('click');
 
-        expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(1);
+        expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
     }
 
     describe('hint is revealed when', () => {
@@ -55,7 +55,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('abbr').first().simulate('click');
 
-            expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(1);
+            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
         });
 
         test(`its props.children is invalid (after user has done some input)`, () => {
@@ -64,7 +64,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('input').first().simulate('input', {target: {checkValidity: () => false}});
 
-            expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(1);
+            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
         });
     });
 
@@ -74,7 +74,7 @@ describe('<HintContainer>', () => {
 
             const wrapper = setup();
 
-            expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(0);
+            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
         });
 
         it('is clicked a second time', () => {
@@ -84,7 +84,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('abbr').first().simulate('click');
 
-            expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(0);
+            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
         });
 
         test(`its input becomes valid (after user has done some input)`, () => {
@@ -94,7 +94,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('input').first().simulate('input', {target: {checkValidity: () => true}});
 
-            expect(wrapper.find('.abbrMessage').first().nodes).toHaveLength(0);
+            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
         });
     });
 });

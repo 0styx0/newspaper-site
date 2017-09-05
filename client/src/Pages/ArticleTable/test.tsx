@@ -82,7 +82,7 @@ describe('<ArticleTableContainer>', () => {
     function setupWithProps(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
         const wrapper = setup(mockGraphql);
-        const component = wrapper.find(ArticleTableContainer).node;
+        const component = (wrapper.find(ArticleTableContainer) as any).node;
 
         const data = (casual as any).data();
 

@@ -2,11 +2,7 @@ import * as React from 'react';
 
 import Form from './';
 
-interface Props {
-    children?: JSX.Element;
-}
-
-export default class FormContainer extends React.Component<Props, {}> {
+export default class FormContainer extends React.Component<any, {}> {
 
     constructor() {
         super();
