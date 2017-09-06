@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Comment } from './shared.interface';
-import { getJWT } from '../jwt';
+import { getJWT } from '../../helpers/jwt';
 
 import CommentList from './';
 

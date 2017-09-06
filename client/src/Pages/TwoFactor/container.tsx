@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setJWT } from '../../components/jwt';
+import { setJWT } from '../../helpers/jwt';
 import { graphql, withApollo } from 'react-apollo';
 import { UserVerifyEmail } from '../../graphql/user';
 import TwoFactor from './';

@@ -3,7 +3,7 @@ import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import Table from '../../components/Table';
-import { getJWT, Jwt } from '../../components/jwt';
+import { getJWT, Jwt } from '../../helpers/jwt';
 import { Link } from 'react-router-dom';
 import { User } from './interface.shared';
 import FormContainer from '../../components/Form/container';

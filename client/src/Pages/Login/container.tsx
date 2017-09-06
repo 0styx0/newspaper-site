@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setJWT, getJWT } from '../../components/jwt';
+import { setJWT, getJWT } from '../../helpers/jwt';
 import LoginForm from './';
 import { UserLogin } from '../../graphql/user';
 import { graphql, withApollo } from 'react-apollo';

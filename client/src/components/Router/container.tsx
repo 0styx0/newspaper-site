@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { getJWT } from '../jwt';
+import { getJWT } from '../../helpers/jwt';
 import Router from './';
 
 export default class RouterContainer extends React.Component<{}, {}> {

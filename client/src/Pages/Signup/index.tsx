@@ -2,7 +2,7 @@ import * as React from 'react';
 import Input from '../../components/Form/Input';
 import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
-import { getJWT } from '../../components/jwt';
+import { getJWT } from '../../helpers/jwt';
 import FormContainer from '../../components/Form/container';
 
 import './index.css';

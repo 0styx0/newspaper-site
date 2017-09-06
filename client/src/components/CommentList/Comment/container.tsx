@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getJWT } from '../../jwt';
+import { getJWT } from '../../../helpers/jwt';
 import { CommentDelete } from '../../../graphql/comment';
 import Comment from './';
 import { graphql, withApollo } from 'react-apollo';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EditableContainer from '../../Editable/container';
-import { getJWT } from '../../jwt';
+import { getJWT } from '../../../helpers/jwt';
 
 import '../Comment/index.css';
 import './index.css';
