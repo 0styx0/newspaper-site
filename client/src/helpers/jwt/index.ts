@@ -11,6 +11,10 @@ let jwt: Jwt = {
     profileLink: ''
 };
 
+/**
+ * @return parsed jwt's body, if the jwt exists in window.localStorage,
+ *  else returns {jwt} (basically a placeholder)
+ */
 function getJWT(): Jwt {
 
     const encodedToken = window.localStorage.getItem('jwt');
@@ -26,6 +30,11 @@ function getJWT(): Jwt {
     }
 }
 
+/**
+ * Stores the jwt
+ *
+ * @param newJwt - properly encoded json web token
+ */
 function setJWT(newJwt: string) {
 
     window.localStorage.setItem('jwt', newJwt);
