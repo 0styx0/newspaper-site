@@ -6,7 +6,8 @@ export default function toggler(set: Set<any>, value: any) {
 
     if (set.has(value)) {
         set.delete(value);
+        return set;
     }
 
-    set.add(value);
+    return set.add(value);
 }
