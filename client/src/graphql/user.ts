@@ -37,7 +37,7 @@ const PrivateUserQuery = gql`
 `;
 
 const UserUpdate = gql`
-    mutation updateUser(
+    mutation updateProfile(
         $id: String!, $notificationStatus: boolean, $twoFactor: boolean, $newPassword: String
     ) {
         updateUser(

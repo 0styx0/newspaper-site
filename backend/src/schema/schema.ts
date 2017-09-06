@@ -407,11 +407,21 @@ const Mutation = new GraphQLObjectType({
             description: 'Modify your own settings',
             args: {
                 notificationStatus: {type: GraphQLBoolean},
-                twoFactor: {type: GraphQLBoolean}
+                twoFactor: {type: GraphQLBoolean},
+                newPassword: {type: GraphQLString}
             },
-            resolve: async (_, args: {notificationState?: boolean; id: string; twoFactor?: boolean}, { jwt }) => {
+            resolve: async (
+                _,
+                args: {notificationState?: boolean; twoFactor?: boolean; newPassword?: string},
+                { jwt }
+            ) => {
 
-                const sanitized = sanitize(args);
+                let sanitized = sanitize(args);
+
+                if (args.newPassword) {
+                    sanitized.password = userHelpers.encrypt(args.newPassword);
+                    delete sanitized.newPassword;
+                }
 
                 return db.models.users.update(sanitized, {
                     where: {
