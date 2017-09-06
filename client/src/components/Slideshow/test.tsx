@@ -22,7 +22,7 @@ casual.define('images', () => {
 });
 
 type CustomCasual = typeof casual & {images: Image[]};
-const customCasual: CustomCasual = casual;
+const customCasual = casual as CustomCasual;
 
 describe('<Slideshow>', () => {
 

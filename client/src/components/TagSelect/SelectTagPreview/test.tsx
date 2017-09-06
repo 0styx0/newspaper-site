@@ -6,7 +6,7 @@ import { mount } from 'enzyme';
 
 describe('<Slideshow>', () => {
 
-    function setup(images: Image[]) {
+    function setup() {
 
         return mount(
             <MemoryRouter>
@@ -38,7 +38,7 @@ describe('<Slideshow>', () => {
 
             expect(component.state.redirect).toBe('');
 
-            const optionToChange = wrapper.find('option').first();
+            const optionToChange = wrapper.find('option').first() as any;
 
             optionToChange.simulate('change');
 
