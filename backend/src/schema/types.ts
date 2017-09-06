@@ -277,6 +277,21 @@ const Tags = new GraphQLObjectType({
         all: {
             type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
             resolve: tags => [tags.tag1, tags.tag2, tags.tag3].filter(tag => !!tag)
+        },
+        tags: {
+            type: new GraphQLList(GraphQLString),
+            resolve: async () => {
+
+                const rows = await db.query(`SELECT tags FROM (
+                        SELECT DISTINCT tag1 AS tags FROM tags
+                          UNION
+                        SELECT DISTINCT tag2 FROM tags
+                          UNION
+                        SELECT DISTINCT tag3 FROM tags
+                      ) AS tags`, { type: db.QueryTypes.SELECT});
+
+                return rows.map(row => row.tags).filter(tag => !!tag)
+            }
         }
    })
 });

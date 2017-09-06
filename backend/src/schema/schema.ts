@@ -157,7 +157,15 @@ const Query = new GraphQLObjectType({
             args: {
                 artId: {type: GraphQLID},
             },
-            resolve: (_, args) => db.models.tags.findAll({where: sanitize(args)})
+            resolve: async (_, args: {artId?: string}) => {
+
+                if (args.artId) {
+                    return db.models.tags.findAll({where: sanitize(args)});
+                }
+
+                // just so trigger Tags.tags custom resolver
+                return db.query(`SELECT id FROM tags LIMIT 1`, { type: db.QueryTypes.SELECT});
+            }
         },
         mission: {
             type: Mission,
