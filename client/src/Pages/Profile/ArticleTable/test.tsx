@@ -5,9 +5,10 @@ import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../casual.data';
 import snapData from './articles.example';
-import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
+import { randomCheckboxToggle, setInput, submitForm } from '../../../tests/enzyme.helpers';
 import toggler from '../../../helpers/toggler';
 import setFakeJwt from '../../../tests/jwt.helper';
+import * as sinon from 'sinon';
 
 setFakeJwt({level: 3});
 
@@ -111,6 +112,32 @@ describe('<UserArticleTableContainer>', () => {
             }
 
             expect([...component.state.idsToDelete].sort()).toEqual([...expectedIds].sort());
+        });
+
+        it('formats data correctly', () => {
+
+            const expected = {
+                password: '',
+                ids: casual.array_of_words()
+            };
+
+            const spy = sinon.spy();
+
+            wrapper = setup({
+                deleteArticle: (params: {variables: { ids: string[], password: string }}) => {
+                    spy();
+
+                    expect(params.variables).toEqual(expected);
+                }
+            });
+
+            component = wrapper.find(UserArticleTableContainer).node;
+            component.state.idsToDelete = expected.ids;
+            expected.password = setInput(wrapper);
+
+            submitForm(wrapper);
+
+            expect(spy.called).toBeTruthy();
         });
     });
 });

@@ -17,8 +17,8 @@ const UserQuery = gql`
 `;
 
 const UserUpdate = gql`
-    mutation updateUsers($data: [IdLevelList]) {
-        updateUsers(data: $data) {
+    mutation updateUsers($data: [IdLevelList], $password: String!) {
+        updateUsers(data: $data, password: $password) {
             id
             profileLink
             level
@@ -27,8 +27,8 @@ const UserUpdate = gql`
 `;
 
 const UserDelete = gql`
-    mutation deleteUsers($ids: [ID]) {
-        deleteUsers(ids: $ids) {
+    mutation deleteUsers($ids: [ID], $password: String!) {
+        deleteUsers(ids: $ids, password: $password) {
             id
         }
     }

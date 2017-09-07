@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router';
 import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
-import { randomCheckboxToggle } from '../../tests/enzyme.helpers';
+import { randomCheckboxToggle, submitForm, setInput } from '../../tests/enzyme.helpers';
 
 import setFakeJwt from '../../tests/jwt.helper';
 
@@ -346,12 +346,16 @@ describe('<ArticleTableContainer>', () => {
             test('only tags have changed', () => {
 
                 const tags: updateData[] = [];
+                let password = '';
 
                 const { wrapper, component, data} = setupWithProps({
                     // called after submit event (at very bottom of this test)
                     updateArticle: (info: {variables: {data: typeof tags} }) => {
 
-                         expect(info.variables.data).toEqual(tags);
+                         expect(info.variables).toEqual({
+                             data: tags,
+                             password
+                         });
                     }
                 });
 
@@ -364,18 +368,24 @@ describe('<ArticleTableContainer>', () => {
                     component.state.updates.tags.set(article.id, [...tagList]);
                 });
 
-                component.onSubmit(new Event('submit'));
+                password = setInput(wrapper);
+
+                submitForm(wrapper);
             });
 
             test('when only order has changed', () => {
 
                 const orders: updateData[] = [];
+                let password = '';
 
                 const { wrapper, component, data } = setupWithProps({
                     // called after submit event (at very bottom of this test)
                     updateArticle: (info: {variables: {data: typeof orders }}) => {
 
-                         expect(info.variables.data).toEqual(orders);
+                         expect(info.variables).toEqual({
+                             data: orders,
+                             password
+                         });
                     }
                 });
 
@@ -387,18 +397,24 @@ describe('<ArticleTableContainer>', () => {
                     component.state.updates.displayOrder.set(article.id, newOrder);
                 });
 
-                component.onSubmit(new Event('submit'));
+                password = setInput(wrapper);
+
+                submitForm(wrapper);
             });
 
             test('displayOrder and tags both refer to same article', () => {
 
                 const allData: updateData[] = [];
+                let password = '';
 
                 const { wrapper, component, data } = setupWithProps({
 
                     updateArticle: (info: {variables: {data: typeof allData} }) => {
 
-                         expect(info.variables.data).toEqual(allData);
+                         expect(info.variables).toEqual({
+                             data: allData,
+                             password
+                         });
                     }
                 });
 
@@ -417,12 +433,15 @@ describe('<ArticleTableContainer>', () => {
                     });
                 });
 
-                component.onSubmit(new Event('submit'));
+                password = setInput(wrapper);
+
+                submitForm(wrapper);
             });
 
             test('displayOrder and tags refer to different articles', () => {
 
                 const allData: updateData[] = [];
+                let password = '';
 
                 const { wrapper, component, data } = setupWithProps({
 
@@ -432,7 +451,10 @@ describe('<ArticleTableContainer>', () => {
                         info.variables.data.sort(sortFunc);
                         allData.sort(sortFunc);
 
-                        expect(info.variables.data).toEqual(allData);
+                        expect(info.variables).toEqual({
+                            data: allData,
+                            password
+                        });
                     }
                 });
 
@@ -460,19 +482,25 @@ describe('<ArticleTableContainer>', () => {
                     }
                 });
 
-                component.onSubmit(new Event('submit'));
+                password = setInput(wrapper);
+
+                submitForm(wrapper);
             });
         });
 
         it('sends idsToDelete in correct format', () => {
 
             const idsToDelete: string[] = [];
+            let password = '';
 
-            const { wrapper, component, data } = setupWithProps({
+            const { wrapper, data } = setupWithProps({
 
                 deleteArticle: (info: {variables: {data: typeof idsToDelete} }) => {
 
-                    expect(info.variables.data).toEqual(idsToDelete);
+                    expect(info.variables).toEqual({
+                        data: idsToDelete,
+                        password
+                    });
                 }
             });
 
@@ -480,7 +508,9 @@ describe('<ArticleTableContainer>', () => {
                 idsToDelete.push(article.id);
             });
 
-            component.onSubmit(new Event('submit'));
+            password = setInput(wrapper);
+
+            submitForm(wrapper);
         });
     });
 });

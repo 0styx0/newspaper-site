@@ -386,46 +386,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -775,46 +735,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -1167,46 +1087,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -1558,46 +1438,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -1947,46 +1787,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -2335,46 +2135,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -2726,46 +2486,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -3116,46 +2836,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -3504,46 +3184,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -3896,46 +3536,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -4285,46 +3885,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -4673,46 +4233,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -5064,46 +4584,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -5453,46 +4933,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -5844,46 +5284,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -6234,46 +5634,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -6622,46 +5982,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -7012,46 +6332,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -7400,46 +6680,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -7791,46 +7031,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -8180,46 +7380,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -8572,46 +7732,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -8961,46 +8081,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -9352,46 +8432,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -9741,46 +8781,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -10132,46 +9132,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -10521,46 +9481,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -10912,46 +9832,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -11302,46 +10182,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -11690,46 +10530,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -12081,46 +10881,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -12470,46 +11230,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -12861,46 +11581,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -13251,46 +11931,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -13639,46 +12279,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -14031,46 +12631,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -14420,46 +12980,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -14811,46 +13331,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -15200,46 +13680,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>
@@ -15591,46 +14031,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="poll"
-              >
-                Poll
-              </option>
-              <option
-                value="features"
-              >
-                Features
-              </option>
-              <option
-                value="sports"
-              >
-                Sports
-              </option>
-              <option
-                value="politics"
-              >
-                Politics
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>

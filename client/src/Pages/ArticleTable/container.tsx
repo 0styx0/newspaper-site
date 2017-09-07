@@ -196,6 +196,9 @@ export class ArticleTableContainer extends React.Component<Props, State> {
      */
     onSubmit(e: Event) {
 
+        const target = e.target as HTMLFormElement;
+        const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
+
         // separating update and delete into functions just to show they're separate stuff
         const submitUpdated = () => {
 
@@ -227,7 +230,8 @@ export class ArticleTableContainer extends React.Component<Props, State> {
 
             this.props.updateArticle({
                 variables: {
-                    data
+                    data,
+                    password
                 }
             });
         };
@@ -238,7 +242,8 @@ export class ArticleTableContainer extends React.Component<Props, State> {
 
                 this.props.deleteArticle({
                     variables: {
-                        ids: [...this.state.updates.idsToDelete]
+                        ids: [...this.state.updates.idsToDelete],
+                        password
                     }
                 });
             }

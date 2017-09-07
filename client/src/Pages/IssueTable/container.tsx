@@ -85,7 +85,8 @@ export class IssueTableContainer extends React.Component<Props, State> {
         this.props.mutate({
             variables: {
                 name: this.state.privateIssue.name,
-                public: !!this.state.privateIssue.public
+                public: !!this.state.privateIssue.public,
+                password: ((e.target as HTMLFormElement).querySelector('[name=password]') as HTMLInputElement).value
             }
         });
     }

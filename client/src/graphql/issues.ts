@@ -15,8 +15,8 @@ const IssueQuery = gql`
 `;
 
 const IssueUpdate = gql`
-    mutation updateIssue($name: String, $public: Boolean) {
-        updateIssue(name: $name, public: $public) {
+    mutation updateIssue($name: String, $public: Boolean, $password: String!) {
+        updateIssue(name: $name, public: $public, password: $password) {
             name
             public
         }
@@ -26,4 +26,4 @@ const IssueUpdate = gql`
 export {
     IssueQuery,
     IssueUpdate
-}
+};

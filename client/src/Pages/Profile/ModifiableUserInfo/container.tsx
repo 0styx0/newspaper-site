@@ -66,7 +66,9 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
     /**
      * Sends `state.updates` to server
      */
-    onSubmit() {
+    onSubmit(e: Event) {
+
+        const target = e.target as HTMLFormElement;
 
         if (this.state.delete) {
             return this.deleteUser();
@@ -74,7 +76,9 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
         if (Object.keys(this.state.updates).length > 0) {
             this.props.updateUser({
-                variables: this.state.updates
+                variables: Object.assign(this.state.updates, {
+                    password: (target.querySelector('[name=password]') as HTMLInputElement).value
+                })
             });
         }
     }

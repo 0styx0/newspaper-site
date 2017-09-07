@@ -8,6 +8,8 @@ import snapData from './__snapshots__/users.example';
 import renderWithProps from '../../tests/snapshot.helper';
 import { User } from './interface.shared';
 import setFakeJwt from '../../tests/jwt.helper';
+import { setInput } from '../../tests/enzyme.helpers';
+import * as sinon from 'sinon';
 
 /**
  * @param amount - how many users to return
@@ -298,10 +300,10 @@ describe('<JournalistTableContainer>', () => {
 
         describe('when sending level data to server', () => {
 
-
             it('formats data correctly when multiple ids, 1 level', () => {
 
                 const expectedLevel = 2;
+                const password = casual.password;
 
                 const wrapper: any = setup({
                     // this will execute after everything else
@@ -311,16 +313,18 @@ describe('<JournalistTableContainer>', () => {
                                                 (accumulator: string[], user: User) => accumulator.concat(user.id), []
                                             );
 
-                        expect(mapping.variables.data).toEqual(
-                            [{
+                        expect(mapping.variables).toEqual({
+                            data: [{
                                 level: expectedLevel,
                                 ids: [...new Set(expectedIds)]
-                            }]
-                        );
+                            }],
+                            password
+                        });
                     }
                 });
 
                 const component = wrapper.find(JournalistTableContainer).node;
+                setInput(wrapper, password);
 
                 // using data.users since already there. No difference if would generate another array of random users
                 const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
@@ -333,24 +337,26 @@ describe('<JournalistTableContainer>', () => {
             it('formats data correctly when multiple ids, multiple levels', () => {
 
                 const expectedLevels = [2, 3];
+                let password = '';
                 let idLevelMap: Array<string | number>[];
 
                 const wrapper: any = setup({
                     // this will execute after everything else
-                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+                    userUpdate: (params: {variables: {data: {level: number, ids: string[]}[]}, password: string}) => {
 
-                        let expectedFormat = [] as {level: number, ids: string[]}[];
+                        const expectedFormat = [] as {level: number, ids: string[]}[];
 
                         expectedLevels.forEach(level => expectedFormat.push({level, ids: []}));
 
+                        // puts ids from each level into `expectedFormat`
                         idLevelMap.forEach(mapping => {
 
-                            const place = expectedFormat.find(elt => elt.level === mapping[1]);
+                            const elt = expectedFormat.find(elt => elt.level === mapping[1]); // [1] = level
 
-                            place && place.ids.push(mapping[0] as string)
+                            elt && elt.ids.push(mapping[0] as string);
                         });
 
-                        expectedFormat = expectedFormat
+                        const uniqueExpectedFormat = expectedFormat
                                          .filter(elt => !!elt.ids.length)
                                          .map(elt => {
 
@@ -360,11 +366,18 @@ describe('<JournalistTableContainer>', () => {
 
                         const sortBy = (a: {level: number}, b: typeof a) => a.level - b.level;
 
-                        mapping.variables.data.forEach(elt => elt.ids.sort());
-                        expectedFormat.forEach(elt => elt.ids.sort());
+                        params.variables.data.forEach(elt => elt.ids.sort());
+                        uniqueExpectedFormat.forEach(elt => elt.ids.sort());
+
+                        let sortedData = Object.assign(params.variables, { data: params.variables.data.sort(sortBy) });
+
+                        let expected = {
+                            data: uniqueExpectedFormat.sort(sortBy),
+                            password
+                        };
 
                         // the sorting is so test doesn't fail because indices don't match
-                        expect(mapping.variables.data.sort(sortBy)).toEqual(expectedFormat.sort(sortBy));
+                        expect(sortedData).toEqual(expected);
                     }
                 });
 
@@ -374,6 +387,7 @@ describe('<JournalistTableContainer>', () => {
                 idLevelMap = data.users.map((user: User) => [user.id, casual.random_element(expectedLevels)]);
 
                 component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
+                password = setInput(wrapper);
 
                 wrapper.find('form').first().simulate('submit');
             });
@@ -382,20 +396,25 @@ describe('<JournalistTableContainer>', () => {
             it('sends the same data to server that was put into state when level `select`s were changed', () => {
 
                 const expectedLevel = 2;
+                let password = '';
 
                 const wrapper = setup({
                     // this will execute after everything else
-                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}, password: string}) => {
 
                         const expectedIds = data.users.reduce(
                                                 (accumulator: string[], user: User) => accumulator.concat(user.id), []
                                             );
 
-                        expect(mapping.variables.data).toEqual([{level: expectedLevel, ids: expectedIds}]);
+                        expect(mapping.variables).toEqual({
+                            data: [{level: expectedLevel, ids: expectedIds}],
+                            password
+                        });
                     }
                 });
 
                 const levelSelect = wrapper.find('select[name="lvl"]');
+                setInput(wrapper);
 
                 for (let i = 0; i < levelSelect.length; i++) {
 
@@ -425,7 +444,7 @@ describe('<JournalistTableContainer>', () => {
 
                 component.componentWillReceiveProps({data});
 
-                deleteCheckbox = wrapper.find('input[name="delAcc"]')
+                deleteCheckbox = wrapper.find('input[name="delAcc"]');
             });
 
             /**
@@ -465,29 +484,56 @@ describe('<JournalistTableContainer>', () => {
 
         describe('when sending delete data to server', () => {
 
+            beforeEach(() => setFakeJwt({level: 3}));
+
+            it('deleteUser is called when form is submitted', () => {
+
+                const spy = sinon.spy();
+                wrapper = setup({userDelete: spy});
+
+                component = (wrapper.find(JournalistTableContainer) as any).node;
+                component.componentWillReceiveProps({data});
+
+                wrapper
+                 .find('input[name="delAcc"]')
+                 .first()
+                 .simulate('change', { target: { checked: true, value: casual.word } });
+
+                wrapper.find('form').first().simulate('submit');
+
+                expect(spy.called).toBeTruthy();
+            });
+
             it('sends the same ids that were put into state.usersToDelete when checkboxes were toggled', () => {
 
-               const wrapper = setup({
-                    // this will execute after everything else
-                    userUpdate: (mapping: {variables: {ids: string[]}}) => {
+                let password = '';
+                wrapper = setup({
+                        // this will execute after everything else
+                        userDelete: (mapping: {variables: {ids: string[]}, password: string}) => {
+                            const expectedIds = data
+                                                .users
+                                                .reduce(
+                                                    (accumulator: string[], user: User) =>
+                                                      user.level < 3 ? accumulator.concat(user.id) : accumulator,
+                                                    []
+                                                );
 
-                        const expectedIds = data
-                                            .users
-                                            .reduce(
-                                                (accumulator: string[], user: User) => accumulator.concat(user.id), []
-                                            );
+                            expect(mapping.variables).toEqual({ids: expectedIds, password});
+                        }
+                    });
 
-                        expect(mapping.variables).toEqual({ids: expectedIds});
-                    }
-                });
+                component = (wrapper.find(JournalistTableContainer) as any).node;
+                component.componentWillReceiveProps({data});
 
-               const deleteCheckboxes: any = wrapper.find('input[name="delAcc"]');
+                const deleteCheckboxes: any = wrapper.find('input[name="delAcc"]');
+                password = setInput(wrapper);
 
-               for (let i = 0; i < deleteCheckboxes.length; i++) {
-                    deleteCheckboxes.at(i).nodes[0].checked = true;
+                for (let i = 0; i < deleteCheckboxes.length; i++) {
+                    const box = deleteCheckboxes.at(i);
+                    box.simulate('change', { target: { checked: true, value: box.node.value } });
                 }
 
-               wrapper.find('form').first().simulate('submit');
+                wrapper.find('form').first().simulate('submit');
             });
         });
     });

@@ -3,7 +3,7 @@ import { ModifiableUserInfoContainer } from './container';
 import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
-import { randomCheckboxToggle } from '../../../tests/enzyme.helpers';
+import { randomCheckboxToggle, setInput } from '../../../tests/enzyme.helpers';
 import * as sinon from 'sinon';
 
 import { ModifiableUserInfo } from '../shared.interfaces';
@@ -166,18 +166,22 @@ describe('<ModifiableUserInfoContainer>', () => {
                     test(`${elt[0]} has changed`, () => {
 
                         const expectedValue = true;
+                        let password = '';
 
                         const wrapper = setup(
                             {notificationStatus: false, twoFactor: false},
                             {updateUser: (data: {variables: {twoFactor?: boolean, notificationStatus?: boolean}}) => {
 
-                                const expected = {};
+                                const expected = {
+                                    password
+                                };
                                 expected[elt[1]] = expectedValue;
 
                                 expect(data.variables).toEqual(expected);
                         }});
 
                         (wrapper.find(ModifiableUserInfoContainer) as any).node.state.updates[elt[1]] = expectedValue;
+                        password = setInput(wrapper);
 
                         wrapper.find('form').first().simulate('submit');
                     })
@@ -239,6 +243,7 @@ describe('<ModifiableUserInfoContainer>', () => {
         test('2 updates have changed', () => {
 
             const expectedValue = true;
+            let password = '';
 
             const wrapper = setup(
                 {notificationStatus: false, twoFactor: false},
@@ -246,7 +251,8 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                 const expected = {
                     notificationStatus: expectedValue,
-                    twoFactor: expectedValue
+                    twoFactor: expectedValue,
+                    password
                 };
 
                 expect(data.variables).toEqual(expected);
@@ -256,6 +262,8 @@ describe('<ModifiableUserInfoContainer>', () => {
                 notificationStatus: expectedValue,
                 twoFactor: expectedValue
             };
+
+            password = setInput(wrapper);
 
             wrapper.find('form').first().simulate('submit');
         });

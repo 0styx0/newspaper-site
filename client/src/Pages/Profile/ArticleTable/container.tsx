@@ -49,11 +49,14 @@ export class UserArticleTableContainer extends React.Component<Props, {idsToDele
     /**
      * Sends idsToDelete to server to be deleted
      */
-    onSubmit() {
+    onSubmit(e: Event) {
+        
+        const target = e.target as HTMLFormElement;
 
         this.props.deleteArticle({
             variables: {
-                ids: [...this.state.idsToDelete]
+                ids: [...this.state.idsToDelete],
+                password: (target.querySelector('[name=password]') as HTMLInputElement).value
             }
         });
     }

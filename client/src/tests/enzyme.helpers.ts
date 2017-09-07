@@ -16,3 +16,22 @@ export function randomCheckboxToggle(checkboxList: any, indexToToggle?: number) 
         input: oneCheckbox,
     };
 }
+
+export function submitForm(wrapper: any) {
+    wrapper.find('form').first().simulate('submit');
+}
+
+/**
+ * Sets an input
+ *
+ * @param wrapper - result of enzyme#mount
+ * @param value - what to set the input to
+ * @param name - of input to set
+ */
+export function setInput(wrapper: any, value: string = casual.password, name = 'password') {
+
+    (wrapper.find(`input[name="${name}"]`) as any).node.value = value;
+
+    return value;
+}
+

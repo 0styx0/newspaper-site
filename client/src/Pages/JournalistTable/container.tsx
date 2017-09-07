@@ -163,11 +163,15 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         const data = this.convertMapToArrayOfJSON(this.state.idLevelMap);
 
+        const target = e.target as HTMLFormElement;
+        const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
+
         if (data.length > 0) {
 
             this.props.userUpdate({
                 variables: {
-                    data
+                    data,
+                    password
                 }
             });
         }
@@ -176,7 +180,8 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
             this.props.userDelete({
                 variables: {
-                    ids: [...this.state.usersToDelete]
+                    ids: [...this.state.usersToDelete],
+                    password
                 }
             });
         }

@@ -126,9 +126,12 @@ describe('<IssueTableContainer>', () => {
 
     test('issue data mutation is submitted in correct format', () => {
 
+        const password = casual.password;
+
         const expectedData = { // this is already tested in the 2 previous tests
             public: true,
-            name: casual.title
+            name: casual.title,
+            password
         };
 
         wrapper = setup({mutate: (graphql: {variables: {public: boolean; name: string}}) =>
@@ -138,7 +141,8 @@ describe('<IssueTableContainer>', () => {
         const component = wrapper.find(IssueTableContainer).node;
 
         component.state.privateIssue = expectedData;
+        (wrapper.find('input[type="password"]') as any).node.value = password;
 
-        component.onSubmit(new Event('submit')); // this triggers wrapper's mutate function
+        wrapper.find('form').first().simulate('submit'); // this triggers wrapper's mutate function
     });
 });
