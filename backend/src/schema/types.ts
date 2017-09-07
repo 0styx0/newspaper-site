@@ -147,6 +147,15 @@ const Articles = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString),
             resolve: article => {
 
+                /**
+                 * Adds view to article
+                 */
+                (async function addView() {
+
+                    const row = await db.models.pageinfo.findOne({where: {id: article.id}});
+                    row.update({views: article.views + 1});
+                })();
+
                 let content = article.lede + article.body;
 
                 (article.img_url || []).forEach((img: string) => {
