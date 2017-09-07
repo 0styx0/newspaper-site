@@ -159,11 +159,10 @@ export class JournalistTableContainer extends React.Component<Props, State> {
     /**
      * Sends data to server, if there's data to be sent from this.state usersToDelete and/or idLevelMap
      */
-    onSubmit(e: Event) {
+    onSubmit(target: HTMLFormElement) {
 
         const data = this.convertMapToArrayOfJSON(this.state.idLevelMap);
 
-        const target = e.target as HTMLFormElement;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
 
         if (data.length > 0) {

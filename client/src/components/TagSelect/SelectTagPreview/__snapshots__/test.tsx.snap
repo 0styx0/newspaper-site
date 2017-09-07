@@ -12,9 +12,9 @@ exports[`<Slideshow> snapshots renders correctly 1`] = `
       Current Issue
     </option>
     <option
-      value="news"
+      value="opinion"
     >
-      News
+      Opinion
     </option>
     <option
       value="reaction"
@@ -22,29 +22,9 @@ exports[`<Slideshow> snapshots renders correctly 1`] = `
       Reaction
     </option>
     <option
-      value="opinion"
+      value="news"
     >
-      Opinion
-    </option>
-    <option
-      value="poll"
-    >
-      Poll
-    </option>
-    <option
-      value="features"
-    >
-      Features
-    </option>
-    <option
-      value="sports"
-    >
-      Sports
-    </option>
-    <option
-      value="politics"
-    >
-      Politics
+      News
     </option>
     <option
       value="other"

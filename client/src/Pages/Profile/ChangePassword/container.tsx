@@ -18,9 +18,7 @@ export class ChangePasswordContainer extends React.Component<Props, {}> {
     /**
      * Send data to server
      */
-    onSubmit(e: Event) {
-
-        const target = e.target as HTMLFormElement;
+    onSubmit(target: HTMLFormElement) {
 
         const oldPassword = target.querySelector('[name=password]') as HTMLInputElement;
         const newPassword = target.querySelector('[name=newPassword]') as HTMLInputElement;

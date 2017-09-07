@@ -24,9 +24,7 @@ export class ForgotPasswordContainer extends React.Component<Props, {}> {
     /**
      * Sends data to server
      */
-    onSubmit(e: Event) {
-
-        const target = e.target as HTMLFormElement;
+    onSubmit(target: HTMLFormElement) {
 
         this.props.recoverPassword({
             query: RecoverPassword,

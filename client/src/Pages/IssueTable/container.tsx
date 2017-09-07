@@ -80,13 +80,13 @@ export class IssueTableContainer extends React.Component<Props, State> {
      *
      * Sends this.state.privateIssue data to server (so name and/or public status can be saved to db)
      */
-    onSubmit(e: Event) {
+    onSubmit(target: HTMLFormElement) {
 
         this.props.mutate({
             variables: {
                 name: this.state.privateIssue.name,
                 public: !!this.state.privateIssue.public,
-                password: ((e.target as HTMLFormElement).querySelector('[name=password]') as HTMLInputElement).value
+                password: (target.querySelector('[name=password]') as HTMLInputElement).value
             }
         });
     }

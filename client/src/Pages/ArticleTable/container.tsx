@@ -194,9 +194,8 @@ export class ArticleTableContainer extends React.Component<Props, State> {
     /**
      * Sends data from `state.updates` to server
      */
-    onSubmit(e: Event) {
+    onSubmit(target: HTMLFormElement) {
 
-        const target = e.target as HTMLFormElement;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
 
         // separating update and delete into functions just to show they're separate stuff

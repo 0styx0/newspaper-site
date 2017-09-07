@@ -52,10 +52,13 @@ describe('<FormContainer>', () => {
             expect(spy.called).toBeTruthy();
         });
 
-        it('calls actual onSubmit handler after intercepting it', () => {
+        it('calls actual onSubmit handler after intercepting it with correct args', () => {
 
             const spy = sinon.spy();
-            const wrapper = setup(spy);
+            const wrapper = setup((target: HTMLFormElement, event: Event) => {
+                spy();
+                expect(event.target).toEqual(target);
+            });
 
             wrapper.find('form').first().simulate('submit');
             expect(spy.called).toBeTruthy();

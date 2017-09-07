@@ -18,14 +18,14 @@ export class SignupContainer extends React.Component<Props, {}> {
     /**
      * Sends data to server so user can be created
      */
-    onSignup(e: Event) {
+    onSignup(target: HTMLFormElement) {
 
         const namesToSearchFor = ['email', 'password', 'confirmation', 'level', 'fullName', 'username'];
 
         // only doing types for props that are using here, in this function
         let values = {} as { fullName: string, level: number, password: string, confirmation: string };
 
-        const inputs = (e.target as HTMLFormElement).querySelectorAll('input, select');
+        const inputs = target.querySelectorAll('input, select');
 
         for (const input of inputs as any as HTMLInputElement[]) {
 

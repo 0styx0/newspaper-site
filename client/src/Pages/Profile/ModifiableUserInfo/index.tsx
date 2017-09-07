@@ -3,6 +3,7 @@ import Container from '../../../components/Container';
 import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
 import { ModifiableUserInfo } from '../shared.interfaces';
+import FormContainer from '../../../components/Form/container';
 
 interface Props extends ModifiableUserInfo {
     onSubmit: Function;
@@ -53,12 +54,14 @@ function ModifiableUserInfo(props: Props) {
             heading="Options"
             className="tableContainer"
             children={
-                <form onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit as any}>
                     <Table
+                        key="table"
                         headings={headings}
                         rows={[row]}
                     />
                     <Input
+                        key="password"
                         label="Password"
                         props={{
                             type: 'password',
@@ -66,8 +69,8 @@ function ModifiableUserInfo(props: Props) {
                             required: true
                         }}
                     />
-                    <input type="submit" />
-                </form>}
+                    <input type="submit" key="submit" />
+                </FormContainer>}
         />
     );
 

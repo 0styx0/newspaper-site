@@ -30,9 +30,7 @@ export class LoginFormContainer extends React.Component<Props, {}> {
      *
      * @param e - even from form with [name=username], [name=password]
      */
-    async setJWT(e: Event) {
-
-        const target = e.target as HTMLElement;
+    async setJWT(target: HTMLFormElement) {
 
         const username = (target.querySelector('[name=username]') as HTMLInputElement).value;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;

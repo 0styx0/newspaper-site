@@ -84,9 +84,7 @@ export class PublishContainer extends React.Component<Props, State> {
     /**
      * Sends data to server to save article
      */
-    async onSubmit(e: Event) {
-
-        const target = e.target as HTMLFormElement;
+    async onSubmit(target: HTMLFormElement) {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
         const tagList = target.querySelector('select[name=tags]') as HTMLSelectElement;

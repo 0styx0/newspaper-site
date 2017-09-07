@@ -66,9 +66,7 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
     /**
      * Sends `state.updates` to server
      */
-    onSubmit(e: Event) {
-
-        const target = e.target as HTMLFormElement;
+    onSubmit(target: HTMLFormElement) {
 
         if (this.state.delete) {
             return this.deleteUser();

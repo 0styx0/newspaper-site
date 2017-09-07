@@ -24,9 +24,7 @@ export class TwoFactorContainer extends React.Component<Props, {}> {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    async onSubmit(e: Event) {
-
-        const target = e.target as HTMLFormElement;
+    async onSubmit(target: HTMLFormElement) {
 
         const { data } = await this.props.verifyEmail({
             query: UserVerifyEmail,
