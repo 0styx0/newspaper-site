@@ -11,6 +11,8 @@ import {
   GraphQLInputObjectType
 } from 'graphql';
 
+import errors from '../helpers/errors';
+
 import {
     Users,
     Articles,
@@ -194,6 +196,8 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: (_, args: {artId: string, content: string}, { jwt }) => {
 
+                userHelpers.mustBeLoggedIn(jwt);
+
                 const newComment: {art_id?: string, artId?: string, content: string, authorid: string} =
                   Object.assign({authorid: jwt.id}, args);
 
@@ -231,7 +235,7 @@ const Mutation = new GraphQLObjectType({
                     });
                 }
 
-                throw new Error('Unauthorized Action');
+                throw new Error(errors.authority);
             }
         },
         updateIssue: {
@@ -239,12 +243,17 @@ const Mutation = new GraphQLObjectType({
             description: 'Alter the latest issue',
             args: {
                 name: {type: GraphQLString},
-                public: {type: GraphQLBoolean}
+                public: {type: GraphQLBoolean},
+                password: {type: new GraphQLNonNull(GraphQLString)}
             },
-            resolve: async (_, args, { jwt }) => {
+            resolve: async (_, args: {password: string}, { jwt }) => {
 
-                if (jwt.level < 3) {
-                    return false;
+                if (!jwt.level || jwt.level < 3) {
+                    throw new Error(errors.authority);
+                }
+
+                if (!await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
                 }
 
                 const maxIssueRow = await db.models.issues.findOne({
@@ -323,6 +332,7 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLList(Users),
             description: 'Modify user data',
             args: {
+                password: {type: new GraphQLNonNull(GraphQLString)},
                 data: {
                     type: new GraphQLList(
                         new GraphQLInputObjectType({
@@ -341,9 +351,13 @@ const Mutation = new GraphQLObjectType({
                     )
                 }
             },
-            resolve: (_, args: {data: {ids: string[]; level: number}[]}, { jwt }) => {
+            resolve: async (_, args: {data: {ids: string[]; level: number}[], password: string}, { jwt }) => {
 
                 const sanitized: typeof args = sanitize(args);
+
+                if (jwt.level < 2 || !await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
+                }
 
                 sanitized.data.forEach(level => {
 
@@ -371,9 +385,16 @@ const Mutation = new GraphQLObjectType({
             args: {
                 ids: {
                     type: new GraphQLList(GraphQLID)
+                },
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, args: {ids: string[]}, { jwt }) => {
+            resolve: async (_, args: {ids: string[], password: string}, { jwt }) => {
+
+                if (!await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
+                }
 
                 const sanitized: typeof args = sanitize(args);
 
@@ -392,7 +413,7 @@ const Mutation = new GraphQLObjectType({
 
                 if (adminAndDeletingNonAdmins || regularAndDeletingSelf) {
 
-                    db.models.users.destroy({
+                    return db.models.users.destroy({
                         where: {
                             id: {
                                 $in: sanitized.ids
@@ -400,6 +421,8 @@ const Mutation = new GraphQLObjectType({
                         }
                     });
                 }
+
+                throw new Error(errors.authority);
             }
         },
         updateProfile: {
@@ -408,13 +431,21 @@ const Mutation = new GraphQLObjectType({
             args: {
                 notificationStatus: {type: GraphQLBoolean},
                 twoFactor: {type: GraphQLBoolean},
-                newPassword: {type: GraphQLString}
+                newPassword: {type: GraphQLString},
+                password: {type: new GraphQLNonNull(GraphQLString)}
             },
             resolve: async (
                 _,
-                args: {notificationState?: boolean; twoFactor?: boolean; newPassword?: string},
+                args: {notificationState?: boolean; twoFactor?: boolean; newPassword?: string, password: string},
                 { jwt }
             ) => {
+
+                userHelpers.mustBeLoggedIn(jwt);
+
+                if (!await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
+                }
+                delete args.password; // so password isn't updated
 
                 let sanitized = sanitize(args);
 
@@ -498,9 +529,7 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: async (_, args: {tags: string[], article: string, url: string}, { jwt }) => {
 
-                if (!jwt.id) {
-                    return {message: 'Users must be logged in to publish'};
-                }
+                userHelpers.mustBeLoggedIn(jwt);
 
                 const sanitized = sanitize(args);
 
@@ -539,6 +568,9 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLList(Articles),
             description: 'Modify article data',
             args: {
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
                 data: {
                     type: new GraphQLList(
                         new GraphQLInputObjectType({
@@ -564,9 +596,17 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: async (
                 _,
-                args: {data: {id: string, article?: string, tags?: string[], displayOrder?: number, display_order?: number}[]},
+                args: {
+                    data: {id: string, article?: string, tags?: string[], displayOrder?: number, display_order?: number}[],
+                    password: string
+                },
                 { jwt }
             ) => {
+
+                if (!await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
+                }
+                delete args.password;
 
                 const sanitized: typeof args = sanitize(args);
 
@@ -585,7 +625,7 @@ const Mutation = new GraphQLObjectType({
                 return sanitized.data.map((article, i) => {
 
                     if (jwt.level < 3 && rows[i].dataValues.authorid !== jwt.id) {
-                        return;
+                        throw new Error(errors.authority);
                     }
 
                     // displayOrder doesn't exist in db, calling it that since js like camels but sql likes snakes
@@ -609,9 +649,16 @@ const Mutation = new GraphQLObjectType({
             args: {
                 ids: {
                     type: new GraphQLList(GraphQLID)
+                },
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, args: {ids: string[]}, { jwt }) => {
+            resolve: async (_, args: {ids: string[], password: string}, { jwt }) => {
+
+                if (!await userHelpers.checkPassword(jwt.id, args.password)) {
+                    throw new Error(errors.password);
+                }
 
                 const sanitized: typeof args = sanitize(args);
 
@@ -628,7 +675,7 @@ const Mutation = new GraphQLObjectType({
                 const onlyArticlesOfCurrentUser = uniqueAuthors.length === 1 && uniqueAuthors[0] === jwt.id
 
                 if (jwt.level < 3 && !onlyArticlesOfCurrentUser) {
-                    return;
+                    throw new Error(errors.authority);
                 }
 
                 await db.models.comments.destroy({
@@ -696,7 +743,7 @@ const Mutation = new GraphQLObjectType({
                     return { jwt: setJWT(user.dataValues) };
                 }
 
-                throw new Error('Incorrect password');
+                throw new Error(errors.password);
             }
         },
         verifyEmail: {
@@ -709,6 +756,10 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: async (_, args: {authCode: string}, { jwt, req }) => {
 
+                if (!jwt.id) { // not using userHelpers.mustBeLoggedIn since user isn't really logged in now
+                    throw new Error(errors.noUser);
+                }
+
                 const user = await db.models.users.findOne({
 
                     attributes: ['id', 'email', 'level', 'auth', 'auth_time'],
@@ -716,10 +767,6 @@ const Mutation = new GraphQLObjectType({
                         id: jwt.id
                     }
                 });
-
-                if (!jwt.id) {
-                    throw new Error('User not logged in');
-                }
 
                 if (user.dataValues.email[0] !== '.') {
                     return { jwt: setJWT(jwt) };
@@ -753,7 +800,7 @@ const Mutation = new GraphQLObjectType({
                     return { jwt: setJWT(user.dataValues) };
                 }
 
-                throw new Error('Invalid auth code');
+                throw new Error(errors.authCode);
             }
         },
         editMission: {
@@ -776,7 +823,7 @@ const Mutation = new GraphQLObjectType({
                         (err) => {
                             if (err) {
                                 console.log(err);
-                                throw new Error('Unknown Error');
+                                throw new Error(errors.unknown);
                             }
                         }
                     );
@@ -784,7 +831,7 @@ const Mutation = new GraphQLObjectType({
                     return { mission: sanitized.mission };
                 }
 
-                throw new Error('Invalid Authority');
+                throw new Error(errors.authority);
             }
         }
     }),

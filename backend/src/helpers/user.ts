@@ -2,6 +2,8 @@ import * as randomstring from 'randomstring';
 import * as bcrypt from 'bcrypt';
 import SendMail from './SendMail';
 import db from '../db/models';
+import errors from './errors';
+import { jwt } from './jwt';
 
 export default {
 
@@ -21,6 +23,24 @@ export default {
      */
     async compareEncrypted(plaintext: string, encrypted: string) {
         return await bcrypt.compare(plaintext, encrypted.replace(/^\$2y/, '$2a'))
+    },
+
+    /**
+     * Checks passwordGiven against actual password
+     *
+     * @param id - of user to check
+     * @param passwordGiven - what user gave
+     */
+    async checkPassword(id: string, passwordGiven: string) {
+
+        const userRow = await db.models.users.findOne({
+            attributes: ['password'],
+            where: {
+                id
+            }
+        });
+
+        return this.compareEncrypted(passwordGiven, userRow.dataValues.password);
     },
 
     /**
@@ -54,5 +74,15 @@ export default {
             });
 
         SendMail.emailAuth(userInfo.email.substr(1), userInfo.profileLink.substr(1), authCode);
+    },
+
+    /**
+     * @throws Error @see errors.noUser if user isn't logged in
+     */
+    mustBeLoggedIn(jwt: jwt) {
+
+        if (!jwt.id) {
+            throw new Error(errors.noUser);
+        }
     }
 }
