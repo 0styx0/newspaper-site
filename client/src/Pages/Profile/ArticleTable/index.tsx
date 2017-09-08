@@ -44,7 +44,7 @@ function UserArticleTable(props: Props) {
                 />
             ),
             article.dateCreated,
-            article.tags.all.join(', '),
+            article.tags.join(', '),
             article.views
         ];
 

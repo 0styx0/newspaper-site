@@ -89,8 +89,9 @@ function createArticleTableRows(props: Props) {
 
     // any extra tags that aren't hardcoded into #TagSelect will be included
     // doing this mainly for unit tests, when randomly generating tags
+    /** @deprecated since TagSelect now queries tags from database */
     const allTags = new Set<string>();
-    props.articles.forEach(article => article.tags.all.forEach(tag => allTags.add(tag)));
+    props.articles.forEach(article => article.tags.forEach(tag => allTags.add(tag)));
 
     return props.articles.map((article: Article) => {
 
@@ -111,7 +112,7 @@ function createArticleTableRows(props: Props) {
                             name: 'tags',
                             onChange: (e: any) => props.onChange(e, article),
                             multiple: true,
-                            defaultValue: article.tags.all,
+                            defaultValue: article.tags,
                             required: true,
                         }}
                     />

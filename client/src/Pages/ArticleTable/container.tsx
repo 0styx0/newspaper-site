@@ -5,9 +5,7 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import ArticleTable from './';
 
 export interface Article {
-    tags: {
-            all: string[];
-        };
+    tags: string[];
     url: string;
     id: string;
     displayOrder: number;

@@ -22,12 +22,14 @@ import {
     Jwt,
     PasswordRecovery,
     getMaxIssueAllowed,
+    Images,
     Mission
 } from './types';
 import sanitize from '../helpers/sanitize';
 import SendMail from '../helpers/SendMail';
 
 import db from '../db/models';
+import * as dbHelpers from '../db/helpers';
 import userHelpers from '../helpers/user';
 import userValidator from '../helpers/user.validators';
 
@@ -83,9 +85,9 @@ const Query = new GraphQLObjectType({
             resolve: async (_, args, { jwt }) => {
 
                 const where = Object.assign({
-                    issue: {
-                        $ne: await getMaxIssueAllowed(jwt)
-                    }
+                    // issue: {
+                    //     $ne: await getMaxIssueAllowed(jwt)
+                    // }
                 }, sanitize(args));
 
                 return db.models.pageinfo.findAll({
@@ -159,14 +161,45 @@ const Query = new GraphQLObjectType({
             args: {
                 artId: {type: GraphQLID},
             },
-            resolve: async (_, args: {artId?: string}) => {
+            resolve: (_, args: {artId?: string}) => {
 
-                if (args.artId) {
-                    return db.models.tags.findAll({where: sanitize(args)});
+                return db.models.tags.findAll({
+                    where: sanitize(args),
+                    distinct: true
+                });
+            }
+        },
+        /*images: {
+            type: Images,
+            description: 'Images in articles',
+            args: {
+                artId: {
+                    type: GraphQLID
+                },
+                issue: {
+                    type: GraphQLInt
+                },
+                slide: {
+                    type: GraphQLBoolean
                 }
+            },
+            resolve: async (_, args: {where: Object}) => {
 
-                // just so trigger Tags.tags custom resolver
-                return db.query(`SELECT id FROM tags LIMIT 1`, { type: db.QueryTypes.SELECT});
+                return db.models.images.findAll({
+                    where: sanitize(args)
+                });
+            }
+        },*/
+        allTags: {
+            type: new GraphQLList(GraphQLString),
+            description: 'All tags in database',
+            resolve: async () => {
+
+                const tagRows = await db.models.tags.findAll({ attributes: ['tag'], distinct: true});
+
+                const tags = tagRows.reduce((accum, elt) => accum.concat([elt.dataValues.tag]), [])
+
+                return new Set(tags);
             }
         },
         mission: {
@@ -547,8 +580,11 @@ const Mutation = new GraphQLObjectType({
                     });
                 }
 
+                const { lede, body, images } = dbHelpers.modifyArticle(sanitized.article);
+
                 const data = {
-                    article: sanitized.article,
+                    lede,
+                    body,
                     url: encodeURIComponent(sanitized.url),
                     issue,
                     authorid: jwt.id
@@ -556,10 +592,10 @@ const Mutation = new GraphQLObjectType({
 
                 const article = await new db.models.pageinfo(data).save();
 
-                new db.models.tags({
-                    art_id: article.dataValues.id,
-                    all: sanitized.tags
-                }).save();
+                db.models.images.bulkCreate(Object.assign(images, {art_id: article.dataValues.id}));
+
+                const tags = sanitized.tags.map(tag => {tag, art_id: article.dataValues.id});
+                new db.models.tags.bulkCreate(tags).save();
 
                 return article;
             }
@@ -622,7 +658,7 @@ const Mutation = new GraphQLObjectType({
                         include: [ { model : db.models.tags }]
                     });
 
-                return sanitized.data.map((article, i) => {
+                return sanitized.data.map(async (article, i) => {
 
                     if (jwt.level < 3 && rows[i].dataValues.authorid !== jwt.id) {
                         throw new Error(errors.authority);
@@ -636,10 +672,29 @@ const Mutation = new GraphQLObjectType({
 
                     if (article.tags) {
 
-                        db.models.tags.update({all: article.tags}, {where: {art_id: article.id}});
+                        db.models.tags.destroy({where: { art_id: article.id }});
+
+                        const tags = article.tags.map(tag => {tag, art_id: article.id});
+
+                        db.models.tags.bulkCreate(tags);
+                        delete article.tags;
                     }
 
-                    return rows[i].update(article);
+                    const { lede, body, images } = dbHelpers.modifyArticle(article.article);
+
+                    delete article.article;
+
+                    const updatedArticle = await rows[i].update(Object.assign(article, {lede, body}));
+
+                    db.models.images.destroy({
+                        where: {
+                            art_id: article.id
+                        }
+                    });
+
+                    db.models.images.bulkCreate(Object.assign(images, {art_id: article.id}));
+
+                    return updatedArticle;
                 });
             }
         },
@@ -693,6 +748,14 @@ const Mutation = new GraphQLObjectType({
                         }
                     }
                 });
+
+                await db.models.images.destroy({
+                    where: {
+                        art_id: {
+                            $in: sanitized.ids
+                        }
+                    }
+                })
 
                 await db.models.pageinfo.destroy({
                     where: {

@@ -77,9 +77,7 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
             body,
             canEdit: article.canEdit,
             comments: article.comments || [],
-            tags: {
-                all: article.tags.all
-            },
+            tags: article.tags,
             id: article.id
         });
     }

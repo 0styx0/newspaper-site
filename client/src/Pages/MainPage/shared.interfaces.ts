@@ -6,7 +6,9 @@ interface Issue {
 
 interface Article {
     url: string;
-    slideImages: string[];
+    images: {
+       url: string
+    }[];
     displayOrder: number;
     views: number;
     lede: string;

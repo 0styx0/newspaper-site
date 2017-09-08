@@ -6,6 +6,7 @@ const ArticleQuery = gql`
             id,
             article,
             canEdit,
+            tags,
             comments {
                 id
                 content,
@@ -15,9 +16,6 @@ const ArticleQuery = gql`
                     fullName,
                     profileLink
                 }
-            }
-            tags {
-                all
             }
         }
     }

@@ -190,42 +190,6 @@ const Articles = sequelize.define('pageinfo', {
         type: Sequelize.BLOB,
         allowNull: false,
     },
-    img_url: {
-        type: Sequelize.STRING(100),
-        allowNull: false,
-        validate: {
-            isJSON: true,
-            validImage: function(pics: string) {
-
-                const acceptedImgFormats = ['jpg', 'jpeg', 'png', 'jif', 'jfif', 'tiff', 'tif', 'gif', 'bmp'];
-
-                for (let pic of JSON.parse(pics)) {
-
-                    const imgFormat = (/^\//.test(pic)) ? 'data' : 'png' // data uri or local imags
-
-                    if (!/^https?/.test(pic) || // googleusercontent is just letting users use pics from google docs
-                      (acceptedImgFormats.indexOf(imgFormat) == -1 && (pic.indexOf('googleusercontent') == -1))) {
-
-                            throw new Error('Invalid Image');
-                    }
-                }
-            }
-        },
-        get() {
-            return JSON.parse(this.getDataValue('img_url'));
-        }
-    },
-    slide_img: {
-        type: Sequelize.STRING(100),
-        allowNull: false,
-        validate: {
-            isJSON: true,
-            is: /\[[0-1,]*\]/
-        },
-        get() {
-            return JSON.parse(this.getDataValue('slide_img'));
-        }
-    },
     issue: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
@@ -263,35 +227,6 @@ const Articles = sequelize.define('pageinfo', {
         allowNull: false
     }
 }, {
-    getterMethods: {
-
-        slideImages: function() {
-
-            const slideshowImages = this.slide_img;
-            return this.img_url.filter((img: string, i: number) => !!+slideshowImages[i]);
-        }
-    },
-    setterMethods: {
-
-        /**
-         * Splits up an article into lede, body, slide_img, and img_url
-         */
-        article(article: string) {
-
-            const { modifiedArticle, img_url, slide_img } = separatePics(article);
-
-            const firstParagraph = (modifiedArticle.match(/[^\/>]<\/p>/) || modifiedArticle.match(/<\/p>/)!)[0];
-
-            const lede = modifiedArticle.substring(0, article.indexOf(firstParagraph) + 5);
-
-            let body = modifiedArticle.substring(article.indexOf(firstParagraph) + 5);
-
-            this.setDataValue('lede', lede);
-            this.setDataValue('body', body);
-            this.setDataValue('img_url', JSON.stringify(img_url));
-            this.setDataValue('slide_img', JSON.stringify(slide_img));
-        }
-    },
     paranoid: true,
     underscored: true, // consisten with preexisting fields
     timestamps: false,
@@ -318,46 +253,65 @@ const Tags = sequelize.define('tags', {
             key: 'id'
         }
     },
-    tag1: {
+    tag: {
         type: Sequelize.STRING(15),
         allowNull: false,
         validate: {
             is: /^[\sa-zA-Z0-9_-]+$/
         },
-    },
-    tag2: {
-        type: Sequelize.STRING(15),
-        allowNull: true,
-        validate: {
-            is: /^[\sa-zA-Z0-9_-]+$/
-        },
-    },
-    tag3: {
-        type: Sequelize.STRING(15),
-        allowNull: true,
-        validate: {
-            is: /^[\sa-zA-Z0-9_-]+$/
-        },
     }
 }, {
-    setterMethods: {
-
-        all(tags: string[]) {
-
-            ['tag1', 'tag2', 'tag3'].forEach((col, i) => this.setDataValue(col, tags[i]));
-        }
-    },
     underscored: true,
     timestamps: false,
     indexes: [
         {
             unique: true,
             name: 'unique_tags',
-            fields: ['tag1', 'tag2', 'tag3']
+            fields: ['art_id', 'tag']
         }
     ]
 });
 
+const Images = sequelize.define('images', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    art_id: {
+        type: Sequelize.UUID,
+        references: {
+            model: Articles,
+            key: 'id'
+        }
+    },
+    url: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+        validate: {
+            validImage: function(pic: string) {
+
+                const acceptedImgFormats = ['jpg', 'jpeg', 'png', 'jif', 'jfif', 'tiff', 'tif', 'gif', 'bmp'];
+
+                const imgFormat = (/^\//.test(pic)) ? 'data' : 'png' // data uri or local imags
+
+                if (!/^https?/.test(pic) || // googleusercontent is just letting users use pics from google docs
+                    (acceptedImgFormats.indexOf(imgFormat) == -1 && (pic.indexOf('googleusercontent') == -1))) {
+
+                        throw new Error('Invalid Image');
+                }
+            }
+        }
+    },
+    slide: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
+    }
+}, {
+    underscored: true,
+    timestamps: false
+});
 
 sequelize.define('comments', {
     id: {
@@ -407,47 +361,7 @@ sequelize.define('comments', {
     timestamps: false
 });
 
-Articles.hasOne(Tags, { foreignKey: 'art_id' });
-
-
-/**
- *
- * @return {
- *  slide_img - (0 | 1)[] if img_url corresponding to it can be in slideshow in frontend's MainPage
- *  img_url - array of img urls taken from `article`'s `img src`s
- *  modifiedArticle - `article`, but with all <img> `src` replaced with `data-src`
- * }
- */
-function separatePics(article: string) {
-
-    const img_url: string[] = [];
-    let match: RegExpExecArray | null;
-    const regex = /src='([^']+)'/gi;
-
-
-    while ((match = regex.exec(article)) !== null) {
-        img_url.push(match[1]);
-    }
-
-    const slide_img = (new Array(Math.max(0, img_url.length))).fill(1);
-
-    const modifiedArticle = article.replace(/src='[^']+'/gi, 'data-src');
-
-    const images = article.match(/<img.[^>]+/gi) || [];
-
-    for (let i = 0; i < images.length; i++) {
-
-        if (images[i].indexOf('previewHidden') != -1) {
-            slide_img[i] = 0;
-        }
-    }
-
-    return {
-        modifiedArticle,
-        img_url,
-        slide_img
-    }
-}
-
+Articles.hasMany(Tags, { foreignKey: 'art_id' });
+Articles.hasMany(Images, { foreignKey: 'art_id' });
 
 export default sequelize;

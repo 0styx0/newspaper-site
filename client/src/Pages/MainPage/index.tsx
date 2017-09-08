@@ -16,9 +16,9 @@ function MainPage(props: Props) {
     // takes all slide images and urls from all articles and flattens them into 1 array
     const slides = props.articles.reduce((accum, elt) =>
 
-        accum.concat(elt.slideImages.reduce((imgUrls, img) =>
+        accum.concat(elt.images.reduce((imgUrls, img) =>
             imgUrls.concat([{
-                img,
+                img: img.url,
                 url: `/issue/${props.issue.num}/story/${elt.url}`
             }]), [] as Image[]))
 

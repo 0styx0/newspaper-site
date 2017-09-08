@@ -5,6 +5,9 @@ import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
 
+// import { TagQuery } from '../../graphql/tags';
+
+// import mockGraphql from '../../tests/graphql.helper';
 
 describe('<PublishContainer>', () => {
 
@@ -29,6 +32,12 @@ describe('<PublishContainer>', () => {
     }
 
     function setup(createArticle?: typeof mockCreateArticle) {
+
+        // return mockGraphql(
+        //     TagQuery,
+        //     {tags: ['hi', 'bye', 'go'] },
+        //     <PublishContainer history={[]} createArticle={createArticle || mockCreateArticle}/>
+        // ).wrapper;
 
         return mount(
             <PublishContainer
@@ -60,11 +69,13 @@ describe('<PublishContainer>', () => {
 
         it('renders correctly', () => {
 
+
             const tree = renderer.create(
-                <PublishContainer
-                  history={[]}
-                  createArticle={mockCreateArticle}
-                />
+
+                    <PublishContainer
+                    history={[]}
+                    createArticle={mockCreateArticle}
+                    />
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
@@ -84,7 +95,8 @@ describe('<PublishContainer>', () => {
             const wrapper = setup();
             setFakeEditor(wrapper, content);
 
-            const component = (wrapper as any).node;
+            const component = (wrapper.find(PublishContainer) as any).node;
+
             component.autoFormat();
             const newEditorContents = component.state.editor.getContent();
 
@@ -148,7 +160,9 @@ describe('<PublishContainer>', () => {
             while (tags.size < casual.integer(1, 3)) {
 
                 const indexOfTag = casual.integer(1, tagOptions.length - 1);
-
+                // console.log('====================================');
+                // console.log(tagOptions);
+                // console.log('====================================');
                 tagOptions[indexOfTag].selected = true;
                 tags.add(tagOptions[indexOfTag]);
             }

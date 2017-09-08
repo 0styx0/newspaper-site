@@ -8,9 +8,7 @@ const UserQuery = gql`
                 id
                 url
                 dateCreated
-                tags {
-                    all
-                }
+                tags
                 views
                 issue
                 canEdit

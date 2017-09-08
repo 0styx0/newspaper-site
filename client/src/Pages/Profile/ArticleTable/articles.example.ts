@@ -4,9 +4,7 @@
 export default [
 
          {
-             tags: {
-                 all: ['quia']
-             },
+             tags: ['quia'],
              url: 'A%20nam',
              id: 'corporis--20',
              dateCreated: '1990-05-14',
@@ -16,9 +14,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['nobis', 'et']
-             },
+             tags: ['nobis', 'et'],
              url: 'Sint%20et',
              id: 'ipsa--19',
              dateCreated: '1985-07-13',
@@ -28,9 +24,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['velit', 'tenetur', 'voluptate']
-             },
+             tags: ['velit', 'tenetur', 'voluptate'],
              url: 'Dolor%20qui',
              id: 'doloribus--18',
              dateCreated: '1974-11-22',
@@ -40,9 +34,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['facere', 'quia']
-             },
+             tags: ['facere', 'quia'],
              url: 'Ut%20facilis',
              id: 'ut--17',
              dateCreated: '1972-02-25',
@@ -52,9 +44,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['sint']
-             },
+             tags: ['sint'],
              url: 'Animi%20iure',
              id: 'aliquid--16',
              dateCreated: '2002-07-07',
@@ -64,9 +54,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['sed', 'necessitatibus']
-             },
+             tags: ['sed', 'necessitatibus'],
              url: 'Nihil%20nisi',
              id: 'maxime--15',
              dateCreated: '2012-09-11',
@@ -76,9 +64,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['quo', 'consequatur']
-             },
+             tags: ['quo', 'consequatur'],
              url: 'A%20consequatur%20doloremque',
              id: 'nesciunt--14',
              dateCreated: '1989-04-13',
@@ -88,9 +74,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['dolorum', 'sint', 'rerum']
-             },
+             tags: ['dolorum', 'sint', 'rerum'],
              url: 'Illo%20est%20sed',
              id: 'fuga--13',
              dateCreated: '1980-08-18',
@@ -100,9 +84,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['quis', 'itaque', 'harum']
-             },
+             tags: ['quis', 'itaque', 'harum'],
              url: 'Repudiandae%20asperiores%20repellat',
              id: 'non--12',
              dateCreated: '1994-07-27',
@@ -112,9 +94,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['in', 'consequatur']
-             },
+             tags: ['in', 'consequatur'],
              url: 'Neque%20ad',
              id: 'inventore--11',
              dateCreated: '1987-06-14',
@@ -124,9 +104,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['velit', 'recusandae']
-             },
+             tags: ['velit', 'recusandae'],
              url: 'Dicta%20at%20harum',
              id: 'alias--10',
              dateCreated: '1985-10-01',
@@ -136,9 +114,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['et', 'laudantium']
-             },
+             tags: ['et', 'laudantium'],
              url: 'Quo%20at',
              id: 'ut--9',
              dateCreated: '2010-04-08',
@@ -148,9 +124,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['mollitia']
-             },
+             tags: ['mollitia'],
              url: 'Ut%20ipsam',
              id: 'dolores--8',
              dateCreated: '2011-05-03',
@@ -160,9 +134,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['expedita', 'temporibus']
-             },
+             tags: ['expedita', 'temporibus'],
              url: 'Consequuntur%20placeat',
              id: 'qui--7',
              dateCreated: '1990-01-27',
@@ -172,9 +144,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['dignissimos', 'molestias']
-             },
+             tags: ['dignissimos', 'molestias'],
              url: 'Possimus%20dolorem%20molestias',
              id: 'inventore--6',
              dateCreated: '1996-04-12',
@@ -184,9 +154,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['qui', 'a']
-             },
+             tags: ['qui', 'a'],
              url: 'Illum%20quo%20consequatur',
              id: 'repudiandae--5',
              dateCreated: '1982-05-03',
@@ -196,9 +164,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['non', 'iure']
-             },
+             tags: ['non', 'iure'],
              url: 'Hic%20laborum',
              id: 'minima--4',
              dateCreated: '2014-06-30',
@@ -208,9 +174,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['enim', 'et']
-             },
+             tags: ['enim', 'et'],
              url: 'Laborum%20omnis%20quam',
              id: 'molestiae--3',
              dateCreated: '2009-04-21',
@@ -220,9 +184,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['saepe']
-             },
+             tags: ['saepe'],
              url: 'Voluptatem%20accusantium',
              id: 'labore--2',
              dateCreated: '1973-07-28',
@@ -232,9 +194,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['vel', 'quis']
-             },
+             tags: ['vel', 'quis'],
              url: 'Exercitationem%20velit',
              id: 'non--1',
              dateCreated: '1974-01-09',
@@ -244,9 +204,7 @@ export default [
          },
 
          {
-             tags: {
-                 all: ['odit', 'eum']
-             },
+             tags: ['odit', 'eum'],
              url: 'Libero%20voluptas',
              id: 'eos--0',
              dateCreated: '1971-07-26',

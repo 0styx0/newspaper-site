@@ -4,9 +4,7 @@ interface Story {
     canEdit: boolean;
     article: string;
     comments?: Comment[];
-    tags: {
-        all: string[]
-    };
+    tags: string[];
     id: string;
 }
 

@@ -29,7 +29,9 @@ casual.define('preview', () => {
 
        previews.issues[0].articles.push({
             url: casual.articleUrl + '--' + amount,
-            slideImages: Array(casual.randomPositive).fill(null).map(() => casual.url),
+            images: Array(casual.randomPositive).fill(null).map(() => ({
+                url: casual.url
+            })),
             displayOrder: casual.randomPositive,
             views: casual.randomPositive,
             lede: casual.text

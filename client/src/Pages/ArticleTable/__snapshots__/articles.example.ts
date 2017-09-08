@@ -6,9 +6,7 @@ export default [{
         num: 12,
         max: 57,
         articles: [{
-                tags: {
-                    all: ['non']
-                },
+                tags: ['non'],
                 url: 'Voluptas%20laboriosam',
                 id: 'voluptas--39',
                 displayOrder: 54,
@@ -20,9 +18,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['quo', 'voluptas']
-                },
+                tags: ['quo', 'voluptas'],
                 url: 'Et%20rerum%20porro',
                 id: 'ex--38',
                 displayOrder: 29,
@@ -34,9 +30,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['molestias', 'sed', 'ut']
-                },
+                tags: ['molestias', 'sed', 'ut'],
                 url: 'Consequatur%20consequatur%20voluptate',
                 id: 'eveniet--37',
                 displayOrder: 29,
@@ -48,9 +42,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['sed', 'et', 'iste']
-                },
+                tags: ['sed', 'et', 'iste'],
                 url: 'Perspiciatis%20dolores%20consectetur',
                 id: 'sed--36',
                 displayOrder: 48,
@@ -62,9 +54,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['blanditiis']
-                },
+                tags: ['blanditiis'],
                 url: 'Mollitia%20consequatur%20debitis',
                 id: 'est--35',
                 displayOrder: 80,
@@ -76,9 +66,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['eaque']
-                },
+                tags: ['eaque'],
                 url: 'Placeat%20unde',
                 id: 'aut--34',
                 displayOrder: 3,
@@ -90,9 +78,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['fugiat', 'temporibus']
-                },
+                tags: ['fugiat', 'temporibus'],
                 url: 'Neque%20distinctio%20maxime',
                 id: 'ea--33',
                 displayOrder: 66,
@@ -104,9 +90,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['temporibus', 'repellendus']
-                },
+                tags: ['temporibus', 'repellendus'],
                 url: 'Qui%20nesciunt%20quod',
                 id: 'nam--32',
                 displayOrder: 52,
@@ -118,9 +102,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['eos']
-                },
+                tags: ['eos'],
                 url: 'Repellendus%20eum%20nobis',
                 id: 'quod--31',
                 displayOrder: 73,
@@ -132,9 +114,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['unde', 'maiores', 'corrupti']
-                },
+                tags: ['unde', 'maiores', 'corrupti'],
                 url: 'Voluptatem%20eaque',
                 id: 'dolores--30',
                 displayOrder: 48,
@@ -146,9 +126,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['ratione']
-                },
+                tags: ['ratione'],
                 url: 'Saepe%20ducimus%20voluptatem',
                 id: 'eaque--29',
                 displayOrder: 72,
@@ -160,9 +138,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['ut']
-                },
+                tags: ['ut'],
                 url: 'Recusandae%20eum',
                 id: 'incidunt--28',
                 displayOrder: 88,
@@ -174,9 +150,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['rerum', 'maxime']
-                },
+                tags: ['rerum', 'maxime'],
                 url: 'Odio%20illo%20placeat',
                 id: 'blanditiis--27',
                 displayOrder: 79,
@@ -188,9 +162,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['qui', 'mollitia']
-                },
+                tags: ['qui', 'mollitia'],
                 url: 'Quam%20rerum',
                 id: 'et--26',
                 displayOrder: 99,
@@ -202,9 +174,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['totam', 'accusantium']
-                },
+                tags: ['totam', 'accusantium'],
                 url: 'Cupiditate%20porro',
                 id: 'a--25',
                 displayOrder: 72,
@@ -216,9 +186,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['quidem', 'eum']
-                },
+                tags: ['quidem', 'eum'],
                 url: 'Esse%20sunt%20cum',
                 id: 'et--24',
                 displayOrder: 8,
@@ -230,9 +198,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['id']
-                },
+                tags: ['id'],
                 url: 'Sed%20iusto',
                 id: 'blanditiis--23',
                 displayOrder: 14,
@@ -244,9 +210,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['velit']
-                },
+                tags: ['velit'],
                 url: 'Totam%20delectus%20et',
                 id: 'ipsa--22',
                 displayOrder: 69,
@@ -258,9 +222,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['aperiam']
-                },
+                tags: ['aperiam'],
                 url: 'Impedit%20qui',
                 id: 'enim--21',
                 displayOrder: 46,
@@ -272,9 +234,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['soluta', 'vel']
-                },
+                tags: ['soluta', 'vel'],
                 url: 'Nemo%20omnis%20commodi',
                 id: 'recusandae--20',
                 displayOrder: 62,
@@ -286,9 +246,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['enim', 'ipsa']
-                },
+                tags: ['enim', 'ipsa'],
                 url: 'Ea%20odit%20debitis',
                 id: 'voluptas--19',
                 displayOrder: 45,
@@ -300,9 +258,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['dignissimos', 'illum', 'dolorem']
-                },
+                tags: ['dignissimos', 'illum', 'dolorem'],
                 url: 'Laudantium%20molestiae%20atque',
                 id: 'magni--18',
                 displayOrder: 60,
@@ -314,9 +270,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['sunt', 'autem']
-                },
+                tags: ['sunt', 'autem'],
                 url: 'Deleniti%20non',
                 id: 'autem--17',
                 displayOrder: 42,
@@ -328,9 +282,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['ipsum', 'tempore']
-                },
+                tags: ['ipsum', 'tempore'],
                 url: 'Neque%20impedit%20aut',
                 id: 'in--16',
                 displayOrder: 4,
@@ -342,9 +294,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['distinctio', 'consequuntur']
-                },
+                tags: ['distinctio', 'consequuntur'],
                 url: 'Qui%20atque%20laborum',
                 id: 'reiciendis--15',
                 displayOrder: 71,
@@ -356,9 +306,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['est', 'consequuntur']
-                },
+                tags: ['est', 'consequuntur'],
                 url: 'Ratione%20qui',
                 id: 'expedita--14',
                 displayOrder: 71,
@@ -370,9 +318,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['sit', 'consequatur']
-                },
+                tags: ['sit', 'consequatur'],
                 url: 'Est%20velit',
                 id: 'odit--13',
                 displayOrder: 44,
@@ -384,9 +330,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['sunt', 'molestiae']
-                },
+                tags: ['sunt', 'molestiae'],
                 url: 'Inventore%20nobis%20commodi',
                 id: 'incidunt--12',
                 displayOrder: 48,
@@ -398,9 +342,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['dolorem', 'mollitia']
-                },
+                tags: ['dolorem', 'mollitia'],
                 url: 'Consequatur%20sed%20rerum',
                 id: 'vero--11',
                 displayOrder: 55,
@@ -412,9 +354,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['id']
-                },
+                tags: ['id'],
                 url: 'Optio%20ut',
                 id: 'excepturi--10',
                 displayOrder: 85,
@@ -426,9 +366,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['labore', 'dolorum']
-                },
+                tags: ['labore', 'dolorum'],
                 url: 'Explicabo%20ullam%20earum',
                 id: 'qui--9',
                 displayOrder: 71,
@@ -440,9 +378,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['corrupti', 'rerum']
-                },
+                tags: ['corrupti', 'rerum'],
                 url: 'Eum%20architecto%20esse',
                 id: 'aut--8',
                 displayOrder: 70,
@@ -454,9 +390,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['eaque', 'accusamus']
-                },
+                tags: ['eaque', 'accusamus'],
                 url: 'Eaque%20esse',
                 id: 'velit--7',
                 displayOrder: 11,
@@ -468,9 +402,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['laborum', 'reiciendis']
-                },
+                tags: ['laborum', 'reiciendis'],
                 url: 'Officiis%20eligendi%20molestiae',
                 id: 'fugiat--6',
                 displayOrder: 62,
@@ -482,9 +414,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['modi']
-                },
+                tags: ['modi'],
                 url: 'Quae%20odio%20maxime',
                 id: 'aut--5',
                 displayOrder: 50,
@@ -496,9 +426,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['magni', 'asperiores', 'est']
-                },
+                tags: ['magni', 'asperiores', 'est'],
                 url: 'Quia%20blanditiis',
                 id: 'autem--4',
                 displayOrder: 77,
@@ -510,9 +438,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['libero', 'qui']
-                },
+                tags: ['libero', 'qui'],
                 url: 'Illum%20est%20vero',
                 id: 'saepe--3',
                 displayOrder: 63,
@@ -524,9 +450,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['quos', 'praesentium']
-                },
+                tags: ['quos', 'praesentium'],
                 url: 'Exercitationem%20tenetur%20doloremque',
                 id: 'eos--2',
                 displayOrder: 95,
@@ -538,9 +462,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['voluptas', 'aperiam']
-                },
+                tags: ['voluptas', 'aperiam'],
                 url: 'Occaecati%20ut',
                 id: 'qui--1',
                 displayOrder: 11,
@@ -552,9 +474,7 @@ export default [{
                 }
             },
             {
-                tags: {
-                    all: ['doloribus', 'et', 'commodi']
-                },
+                tags: ['doloribus', 'et', 'commodi'],
                 url: 'At%20iusto%20et',
                 id: 'qui--0',
                 displayOrder: 36,

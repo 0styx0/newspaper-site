@@ -7,9 +7,7 @@ const ArticleQuery = gql`
           max
           num
           articles {
-            tags {
-                all
-            }
+            tags
             url
             id
             displayOrder
@@ -33,10 +31,12 @@ const ArticlePreviewQuery = gql`
           name
           articles {
             url
-            slideImages
             displayOrder
             views
             lede
+            images(slide: true) {
+                url
+            }
           }
         }
     }
@@ -47,9 +47,7 @@ const ArticleUpdate = gql`
     mutation ArticleUpdate($data: [Fields]) {
         updateArticles(data: $data) {
             id
-            tags {
-                all
-            }
+            tags
             displayOrder
         }
     }

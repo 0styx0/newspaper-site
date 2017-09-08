@@ -42,7 +42,7 @@ casual.define('articles', function(amount: number, issue: number) {
     }
 
     allTags.clear();
-    articles[0].articles.forEach(article => article.tags.all.forEach(tag => allTags.add(tag)));
+    articles[0].articles.forEach(article => article.tags.forEach(tag => allTags.add(tag)));
 
     return articles;
 });

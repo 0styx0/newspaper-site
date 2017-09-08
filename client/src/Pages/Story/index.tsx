@@ -14,7 +14,7 @@ function Story(props: Props) {
 
         return (
             <div>
-                <div id="tags">Tag(s): {props.tags.all.join(', ')}</div>
+                <div id="tags">Tag(s): {props.tags.join(', ')}</div>
                 <article id="story">
 
                     <EditableContainer

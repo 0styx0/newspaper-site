@@ -16,7 +16,7 @@ import ForgotPasswordContainer from '../../Pages/ForgotPassword/container';
 import TwoFactorContainer from '../../Pages/TwoFactor/container';
 import SelectTagPreview from '../TagSelect/SelectTagPreview';
 
-import { getJWT } from '../jwt';
+import { getJWT } from '../../helpers/jwt';
 
 import './index.css';
 

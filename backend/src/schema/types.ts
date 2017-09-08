@@ -168,8 +168,6 @@ const Articles = new GraphQLObjectType({
                 return content;
             }
         },
-        imgUrl: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
-        slideImages: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         issue: {type: new GraphQLNonNull(GraphQLInt)},
         views: {type: new GraphQLNonNull(GraphQLInt)},
         displayOrder: {
@@ -177,10 +175,16 @@ const Articles = new GraphQLObjectType({
             resolve: article => article.display_order
         },
         tags: {
-            type: new GraphQLNonNull(Tags),
-            resolve: (article) => db.models.tags.findOne({
-                where: {art_id: article.id}
-            })
+            type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+            resolve: async (article) => {
+
+                const tags = await db.models.tags.findAll({
+                    where: {art_id: article.id},
+                    attributes: ['tag']
+                });
+
+                return tags.reduce((accum, elt) => accum.concat([elt.dataValues.tag]), []);
+            }
         },
         authorId: {type: new GraphQLNonNull(GraphQLID)},
         author: {
@@ -193,6 +197,28 @@ const Articles = new GraphQLObjectType({
                 where: {art_id: article.id}
             })
         },
+        images: {
+            type: new GraphQLList(Images),
+            args: {
+                slide: {
+                    type: GraphQLBoolean
+                }
+            },
+            resolve: (article, args: {slide: boolean | boolean}) => {
+
+                const sanitized = sanitize(args);
+
+                const where = Object.assign(sanitized, {art_id: article.id});
+
+                if (sanitized.slide) {
+                    sanitized.slide = +args.slide
+                }
+
+                return db.models.images.findAll({
+                    where
+                });
+            }
+        },
         canEdit: {
             type: new GraphQLNonNull(GraphQLBoolean),
             resolve: (article, _, { jwt }) => {
@@ -201,6 +227,21 @@ const Articles = new GraphQLObjectType({
         }
     })
 });
+
+const Images = new GraphQLObjectType({
+    name: 'Images',
+    description: 'Images in articles',
+    fields: () => ({
+        id: {type: new GraphQLNonNull(GraphQLID)},
+        url: {type: new GraphQLNonNull(GraphQLString)},
+        slide: {type: new GraphQLNonNull(GraphQLBoolean)},
+        artId: { 
+            type: new GraphQLNonNull(GraphQLID),
+            resolve: image => image.art_id
+        },
+
+    })
+})
 
 const Issues = new GraphQLObjectType({
     name: 'Issues',
@@ -275,33 +316,12 @@ const Tags = new GraphQLObjectType({
    name: 'Tags',
    description: 'Tags of articles',
    fields: () => ({
-       id: {type: new GraphQLNonNull(GraphQLID)},
+        id: {type: new GraphQLNonNull(GraphQLID)},
         artId: {
             type: new GraphQLNonNull(GraphQLID),
             resolve: tag => tag.art_id
         },
-        tag1: {type: new GraphQLNonNull(GraphQLString)},
-        tag2: {type: GraphQLString},
-        tag3: {type: GraphQLString},
-        all: {
-            type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-            resolve: tags => [tags.tag1, tags.tag2, tags.tag3].filter(tag => !!tag)
-        },
-        tags: {
-            type: new GraphQLList(GraphQLString),
-            resolve: async () => {
-
-                const rows = await db.query(`SELECT tags FROM (
-                        SELECT DISTINCT tag1 AS tags FROM tags
-                          UNION
-                        SELECT DISTINCT tag2 FROM tags
-                          UNION
-                        SELECT DISTINCT tag3 FROM tags
-                      ) AS tags`, { type: db.QueryTypes.SELECT});
-
-                return rows.map(row => row.tags).filter(tag => !!tag)
-            }
-        }
+        tag: {type: new GraphQLNonNull(GraphQLString)}
    })
 });
 
@@ -347,5 +367,6 @@ export {
     Tags,
     Jwt,
     PasswordRecovery,
+    Images,
     Mission
 };
