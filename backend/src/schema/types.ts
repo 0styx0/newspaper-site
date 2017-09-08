@@ -145,15 +145,17 @@ const Articles = new GraphQLObjectType({
         url: {type: new GraphQLNonNull(GraphQLString)},
         article: {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: article => {
+            resolve: (article, _, { jwt }) => {
 
                 /**
                  * Adds view to article
                  */
                 (async function addView() {
 
-                    const row = await db.models.pageinfo.findOne({where: {id: article.id}});
-                    row.update({views: article.views + 1});
+                    if (!jwt.id) {
+                        const row = await db.models.pageinfo.findOne({where: {id: article.id}});
+                        row.update({views: article.views + 1});
+                    }
                 })();
 
                 let content = article.lede + article.body;
@@ -235,7 +237,7 @@ const Images = new GraphQLObjectType({
         id: {type: new GraphQLNonNull(GraphQLID)},
         url: {type: new GraphQLNonNull(GraphQLString)},
         slide: {type: new GraphQLNonNull(GraphQLBoolean)},
-        artId: { 
+        artId: {
             type: new GraphQLNonNull(GraphQLID),
             resolve: image => image.art_id
         },
