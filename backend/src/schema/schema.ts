@@ -184,11 +184,12 @@ const Query = new GraphQLObjectType({
             description: 'All tags in database',
             resolve: async () => {
 
-                const tagRows = await db.models.tags.findAll({ attributes: ['tag'], distinct: true});
+                const tagRows = await db.models.tag_list.findAll();
 
-                const tags = tagRows.reduce((accum, elt) => accum.concat([elt.dataValues.tag]), [])
+                const tags = tagRows.reduce((accum: string[], elt: {dataValues: { tag: string}}) =>
+                  accum.concat([elt.dataValues.tag]), [])
 
-                return new Set(tags);
+                return tags;
             }
         },
         mission: {

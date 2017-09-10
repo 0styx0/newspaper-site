@@ -5,6 +5,7 @@ import db from './models';
 
 splitPageinfoToImages();
 chopTags();
+tagsToEnums();
 
 async function splitPageinfoToImages() {
 
@@ -66,5 +67,37 @@ async function chopTags() {
 
 }
 
+async function tagsToEnums() {
 
-// TODO: alter TAGS to have [id, art_id, tag]
+    (async function createListTable() {
+
+        await db.query(`CREATE TABLE IF NOT EXISTS tag_list
+                    (
+                        tag VARCHAR(20) PRIMARY KEY
+                    );`);
+
+        const uniqueTags = (await db.query(`SELECT DISTINCT tag FROM tags`))[0];
+        uniqueTags.forEach(async tag => await db.query(`INSERT INTO tag_list (tag) VALUES("${tag.tag}")`));
+    })()
+
+    await db.query(`CREATE TABLE IF NOT EXISTS tags1
+                (
+                    id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                    tag VARCHAR(10),
+                    art_id INTEGER NOT NULL,
+                    FOREIGN KEY (art_id) REFERENCES pageinfo(id),
+                    FOREIGN KEY (tag) REFERENCES tag_list(tag),
+                    UNIQUE KEY unique_tags (art_id, tag)
+                );`);
+
+
+    const tagsQuery = `SELECT tag, art_id FROM tags`;
+
+    const tags = (await db.query(tagsQuery))[0];
+
+    tags.forEach(tag => db.query(`INSERT INTO tags1 (tag, art_id) VALUES("${tag.tag}", ${tag.art_id})`));
+
+    await db.query('DROP TABLE tags');
+
+    db.query('RENAME TABLE `tags1` TO `tags`');
+}

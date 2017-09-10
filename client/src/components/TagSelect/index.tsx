@@ -15,7 +15,7 @@ function TagSelect(props: Props) {
 
     let dbTags: string[] = [];
 
-    if (props.data!.allTags) { // later, remove `tags` from props since will get all tags from graphql
+    if (true && props.data!.allTags) { // later, remove `tags` from props since will get all tags from graphql
         dbTags = false && ['opinion', 'reaction', 'news', 'other'] || props.data!.allTags;
     }
 

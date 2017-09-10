@@ -240,6 +240,18 @@ const Articles = sequelize.define('pageinfo', {
     ]
 });
 
+const TagList = sequelize.define('tag_list', {
+    tag: {
+        type: Sequelize.STRING(20),
+        primaryKey: true,
+    }
+}, {
+
+    underscored: true,
+    timestamps: false,
+    freezeTableName: true
+});
+
 const Tags = sequelize.define('tags', {
     id: {
         type: Sequelize.UUID,
@@ -259,6 +271,10 @@ const Tags = sequelize.define('tags', {
         validate: {
             is: /^[\sa-zA-Z0-9_-]+$/
         },
+        references: {
+            model: TagList,
+            key: 'tag'
+        }
     }
 }, {
     underscored: true,
