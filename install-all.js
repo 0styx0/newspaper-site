@@ -12,6 +12,8 @@ function installModules() {
 
     commands.forEach((command, i) => {
 
+        console.log(`Installing npm modules for ${command[1][1]}...`);
+
         const node_modulesInstallation = cp.spawn(command[0], command[1]);
 
         node_modulesInstallation.stdout.on('data', function(data) {
@@ -32,34 +34,35 @@ function installModules() {
 
 async function initializeDatabase() {
 
+    console.log('Initializing database...');
+
     let DB = require('./backend/dist/config');
     DB = DB.default.DB
     const fs = require.main.require('./backend/node_modules/fs-extra');
-    const mysql = require.main.require('./backend/node_modules/sequelize');
+    const mysql = require.main.require('./backend/node_modules/mysql2/promise');
+
+    const connection = mysql.createConnection({
+        host: DB.HOST,
+        port: DB.PORT,
+        user: DB.USER,
+        password: DB.PASS,
+        multipleStatements: true
+    });
+
+    const asyncDB = await connection;
 
     fs.readFile('schema.sql', 'utf8', async (err, data) => {
 
-        const connection = require('./backend/dist/src/db/connection');
+        await asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${DB.NAME}`);
+        await asyncDB.query(`USE ${DB.NAME}`);
 
-        await connection.query(`CREATE DATABASE IF NOT EXISTS ${DB.NAME}`);
-        await connection.query(`USE ${DB.NAME}`);
+        await asyncDB.query(data);
 
-        try {
-            await connection.query(data);
-        }
-        catch(error) {
-            console.warn("Database schema not set up: There is already content in it");
-            process.exit(1);
-        }
-
-        createAdmin();
+        createAdmin(asyncDB);
     });
 }
 
-async function createAdmin() {
-
-    // must be here and not at top of file since not installed yet
-    const connection = require('./backend/dist/src/db/connection');
+async function createAdmin(asyncDB) {
 
     const bcrypt = require.main.require('./backend/node_modules/bcrypt');
 
@@ -75,7 +78,7 @@ async function createAdmin() {
         process.exit(1);
     }
 
-    if ((await connection.query('SELECT * FROM users WHERE username = ?', ['admin']))[0][0]) {
+    if ((await asyncDB.query('SELECT * FROM users WHERE username = ?', ['admin']))[0][0]) {
 
         console.log("Admin already exists!");
     }
@@ -83,7 +86,7 @@ async function createAdmin() {
 
         const hashedPassword = (await bcrypt.hash(password, 10)).replace(/^\$2a/, '$2y'); // replacing so compatible with php's password_hash
 
-        connection.query(`INSERT INTO users (username, f_name, m_name, l_name, password, level, email, notifications)
+        asyncDB.query(`INSERT INTO users (username, f_name, m_name, l_name, password, level, email, notifications)
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                                     ['admin', 'Admin', null, 'Account', hashedPassword,
                                     3, email, 1]);

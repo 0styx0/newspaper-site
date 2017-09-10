@@ -2,19 +2,12 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
 -- Generation Time: Sep 10, 2017 at 11:41 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
---
--- Database: `newspaper`
---
-CREATE DATABASE IF NOT EXISTS `newspaper` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `newspaper`;
 
 -- --------------------------------------------------------
 
