@@ -25,7 +25,7 @@ const IssueUpdate = gql`
 
 const IssueInfoQuery = gql`
     query IssueInfo($num: ID) {
-      issues(num: $num) {
+      issues(num: $num, limit: 1) {
           num
           max
           name

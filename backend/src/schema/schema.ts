@@ -81,41 +81,26 @@ const Query = new GraphQLObjectType({
             },
             resolve: async (_, args: {num?: number | Object; public?: boolean; ispublic?: number, limit?: number}, { jwt }) => {
 
-                let limit = args.limit;
-                delete args.limit;
+                const sanitized = sanitize(args);
+                let limit = +sanitized.limit;
+                delete sanitized.limit;
 
-                if ('num' in args) {
+                const maxIssueAllowed = await getMaxIssueAllowed(jwt);
 
-                    const maxIssueAllowed = await getMaxIssueAllowed(jwt);
+                if ('num' in sanitized) {
 
-                    if (args.num == maxIssueAllowed && !jwt.id) {
-                        args.num = maxIssueAllowed - 1;
+                    if (+sanitized.num < 1 || sanitized.num >= maxIssueAllowed && !jwt.id) {
+                        sanitized.num = maxIssueAllowed - 1;
                     }
 
-                    if (+args.num === 0) {
-
-                        args.num = (
-                            await db.models.issues.findOne({
-                                order: [ [ 'num', 'DESC' ]]
-                            })).dataValues.num
-
-                    }
-                    else if (!args.num) {
-                        delete args.num;
-                    }
                 } else {
-                    args.num = {
-                        $ne: await getMaxIssueAllowed(jwt)
+                    sanitized.num = {
+                        $ne: maxIssueAllowed
                     }
-                }
-
-                if ('public' in args) {
-                    args.ispublic = +args.public;
-                    delete args.public;
                 }
 
                 return db.models.issues.findAll({
-                    where: sanitize(args),
+                    where: sanitized,
                     order: [['num', 'DESC']],
                     limit
                     })

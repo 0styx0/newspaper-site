@@ -12,7 +12,7 @@ interface Props {
 }
 
 function MainPage(props: Props) {
-    
+
     // takes all slide images and urls from all articles and flattens them into 1 array
     const slides = props.articles.reduce((accum, elt) =>
 

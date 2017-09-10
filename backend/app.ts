@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -28,6 +28,7 @@ app.use(function(req, res, next) {
 
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET, PUT");
+  res.header("Access-Control-Allow-Credentials", "true");
 
   if (req.method === 'OPTIONS') {
       res.status(200);
@@ -50,7 +51,7 @@ app.use('/graphql', GraphHTTP((req) => {
     schema: Schema,
     pretty: true,
     graphiql: true,
-    context: { loaders, jwt, req }
+    context: { loaders, jwt, req, res: req.res }
   }
 }));
 

@@ -11,6 +11,8 @@ import {
 
 import db from '../db/models';
 import sanitize from '../helpers/sanitize';
+import * as Cookies from 'cookies';
+
 
 /**
  * @return max issue + 1 a user can view, or infinity if user is logged in
@@ -19,16 +21,16 @@ import sanitize from '../helpers/sanitize';
  */
 export async function getMaxIssueAllowed(jwt: jwt) {
 
-    if (jwt && jwt.id) {
-        return null;
-    }
-
     const maxIssueRow = (await db.models.issues.findOne({
         attributes: ['num'],
         where: {
             ispublic: false
         }
     }));
+
+    if (jwt && jwt.id) {
+        return maxIssueRow.dataValues.num + 1;
+    }
 
     return maxIssueRow.dataValues.num;
 }
@@ -145,17 +147,28 @@ const Articles = new GraphQLObjectType({
         url: {type: new GraphQLNonNull(GraphQLString)},
         article: {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (article, _, { jwt }) => {
+            resolve: (article, _, { jwt, req, res }) => {
 
                 /**
                  * Adds view to article
                  */
                 (async function addView() {
 
-                    if (!jwt.id) {
+                    const cookie = new Cookies(req, res);
+                    const articlesViewed = JSON.parse(cookie.get('eotsViews') || JSON.stringify([]));
+console.log('====================================');
+console.log(req.cookies);
+console.log(cookie.get('eotsViews'));
+console.log('====================================');
+                    if (!jwt.id && articlesViewed.indexOf(article.id) === -1) {
+
                         const row = await db.models.pageinfo.findOne({where: {id: article.id}});
                         row.update({views: article.views + 1});
+
+                        articlesViewed.push(article.id);
                     }
+
+                    cookie.set('eotsViews', JSON.stringify(articlesViewed), {overwrite: true, secure: false})
                 })();
 
                 let content = article.lede + article.body;

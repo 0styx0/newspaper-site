@@ -13,6 +13,9 @@ import { ApolloProvider } from 'react-apollo';
 
 const networkInterface = createNetworkInterface({
   uri: 'http://localhost:4000/graphql?',
+  opts: {
+    credentials: 'include'
+  }
 });
 
 networkInterface.use([{
