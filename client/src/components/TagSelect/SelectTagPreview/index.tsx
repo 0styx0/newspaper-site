@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 
 import TagSelect from '../';
 
@@ -25,7 +25,7 @@ export default class SelectTagPreview extends React.Component<{}, State> {
     onChange(event: Event) {
 
         this.setState({
-            redirect: `/tag/${(event.target as HTMLSelectElement).value}`
+            redirect: (event.target as HTMLSelectElement).value
         });
     }
 
@@ -36,11 +36,11 @@ export default class SelectTagPreview extends React.Component<{}, State> {
                 <TagSelect
                     tags={['Current Issue']}
                     props={{
-                        defaultValue: window.location.pathname.split('/')[2] || '../',
-                        onChange: this.onChange
+                        defaultValue: this.state.redirect,
+                        onInput: this.onChange
                     }}
                 />
-                {this.state.redirect ? <Redirect to={this.state.redirect} /> : ''}
+                {this.state.redirect ? <Redirect to={`/tag/${this.state.redirect}`} /> : ''}
             </span>
         );
     }

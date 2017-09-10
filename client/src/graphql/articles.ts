@@ -22,21 +22,35 @@ const ArticleQuery = gql`
     }
 `;
 
-const ArticlePreviewQuery = gql`
+const ArticlePreviewIssueQuery = gql`
 
-    query ArticleQuery($issue: ID) {
+    query ArticleIssueQuery($issue: ID) {
         issues(limit: 1, num: $issue) {
-          num
-          max
-          name
           articles {
             url
+            issue
             displayOrder
             views
             lede
             images(slide: true) {
                 url
             }
+          }
+        }
+    }
+`;
+
+const ArticlePreviewTagQuery = gql`
+
+    query ArticleTagQuery($issue: Int, $tag: String) {
+        articles(issue: $issue, tag: $tag) {
+          url
+          issue
+          displayOrder
+          views
+          lede
+          images(slide: true) {
+              url
           }
         }
     }
@@ -65,7 +79,8 @@ const ArticleDelete = gql`
 
 export {
     ArticleQuery,
-    ArticlePreviewQuery,
+    ArticlePreviewIssueQuery,
+    ArticlePreviewTagQuery,
     ArticleUpdate,
     ArticleDelete
 };

@@ -3,8 +3,8 @@
 exports[`<Slideshow> snapshots renders correctly 1`] = `
 <span>
   <select
-    defaultValue="../"
-    onChange={[Function]}
+    defaultValue=""
+    onInput={[Function]}
   >
     <option
       value="Current Issue"

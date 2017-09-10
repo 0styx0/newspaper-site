@@ -12,7 +12,7 @@ interface Props {
 }
 
 function MainPage(props: Props) {
-
+    
     // takes all slide images and urls from all articles and flattens them into 1 array
     const slides = props.articles.reduce((accum, elt) =>
 
@@ -42,7 +42,7 @@ function MainPage(props: Props) {
                       views={article.views}
                       lede={article.lede}
                       url={article.url}
-                      issue={props.issue.num}
+                      issue={article.issue}
                     />)}
             </div>
             <NumberlineContainer max={props.issue.max} current={props.issue.num}/>

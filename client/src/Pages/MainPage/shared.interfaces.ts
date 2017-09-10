@@ -6,6 +6,7 @@ interface Issue {
 
 interface Article {
     url: string;
+    issue: number;
     images: {
        url: string
     }[];

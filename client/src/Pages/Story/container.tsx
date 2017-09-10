@@ -55,7 +55,7 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
 
         const path = window.location.pathname.split('/');
         const issue = +path[2];
-        const url = path[4];
+        const url = decodeURIComponent(path[4]);
 
         const { data } = await this.props.client.query({
             query: ArticleQuery,

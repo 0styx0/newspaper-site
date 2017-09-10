@@ -23,7 +23,20 @@ const IssueUpdate = gql`
     }
 `;
 
+const IssueInfoQuery = gql`
+    query IssueInfo($num: ID) {
+      issues(num: $num) {
+          num
+          max
+          name
+      }
+    }
+`;
+
+
+
 export {
     IssueQuery,
+    IssueInfoQuery,
     IssueUpdate
 };

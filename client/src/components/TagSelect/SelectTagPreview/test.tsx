@@ -38,7 +38,7 @@ describe('<Slideshow>', () => {
 
             expect(component.state.redirect).toBe('');
 
-            const optionToChange = wrapper.find('option').first() as any;
+            const optionToChange = wrapper.find('option').at(0) as any;
 
             optionToChange.simulate('change');
 

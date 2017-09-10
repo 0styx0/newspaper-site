@@ -13,7 +13,7 @@ export default function ArticleLink(props: Props) {
 
     return (
         <Link
-            to={`/issue/${props.issue}/story/${props.url}`}
+            to={`/issue/${props.issue}/story/${encodeURIComponent(props.url)}`}
         >
             {decodeURIComponent(props.url)}
         </Link>

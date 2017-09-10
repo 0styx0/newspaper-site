@@ -18,11 +18,9 @@ import {
     Articles,
     Issues,
     Comments,
-    Tags,
     Jwt,
     PasswordRecovery,
     getMaxIssueAllowed,
-    Images,
     Mission
 } from './types';
 import sanitize from '../helpers/sanitize';
@@ -70,28 +68,6 @@ const Query = new GraphQLObjectType({
 
                 return db.models.users.findAll({
                     where: sanitized
-                })
-            }
-        },
-        articles: {
-            type: new GraphQLList(Articles),
-            description: 'Articles',
-            args: {
-                id: {type: GraphQLID},
-                authorid: {type: GraphQLID},
-                url: {type: GraphQLString},
-                issue: {type: GraphQLInt},
-            },
-            resolve: async (_, args, { jwt }) => {
-
-                const where = Object.assign({
-                    // issue: {
-                    //     $ne: await getMaxIssueAllowed(jwt)
-                    // }
-                }, sanitize(args));
-
-                return db.models.pageinfo.findAll({
-                    where
                 })
             }
         },
@@ -155,41 +131,54 @@ const Query = new GraphQLObjectType({
             },
             resolve: (_, args) => db.models.comments.findAll({where: sanitize(args)})
         },
-        tags: {
-            type: new GraphQLList(Tags),
-            description: 'Tags of articles',
+        articles: {
+            type: new GraphQLList(Articles),
+            name: 'Previews',
+            description: 'Preview of articles',
             args: {
-                artId: {type: GraphQLID},
-            },
-            resolve: (_, args: {artId?: string}) => {
+                tag: {
+                    type: GraphQLString
+                },
+                id: {type: GraphQLID},
+                authorid: {type: GraphQLID},
+                issue: {type: GraphQLInt},
+                url: {type: GraphQLString},
 
-                return db.models.tags.findAll({
-                    where: sanitize(args),
-                    distinct: true
-                });
+            },
+            resolve: async (
+                _,
+                args: {issue?: number, tag?: string, id?: string, authorid?: string, url?: string},
+                { jwt }) => {
+
+                const noArgs = !Object.values(args).some(arg => !!arg && arg != '0');
+
+                if (noArgs) {
+                    args.issue = await getMaxIssueAllowed(jwt) - 1;
+                }
+
+                const where = Object.assign({ // sequelize will  throw error if fields don't exist
+                    maxIssue: await getMaxIssueAllowed(jwt),
+                    tag: null,
+                    issue: null,
+                    id: null,
+                    url: null,
+                    authorid: null
+                }, sanitize(args));
+
+                return db.query(`SELECT * FROM pageinfo
+                          WHERE (
+                               (issue = :issue AND url = :url)
+                              OR
+                               id IN (
+                                   SELECT art_id FROM tags WHERE tag = :tag
+                               )
+                               OR authorid = :authorid
+                               OR id = :id
+                          )
+                              AND issue < :maxIssue
+                          `, { replacements: where, type: db.QueryTypes.SELECT });
             }
         },
-        /*images: {
-            type: Images,
-            description: 'Images in articles',
-            args: {
-                artId: {
-                    type: GraphQLID
-                },
-                issue: {
-                    type: GraphQLInt
-                },
-                slide: {
-                    type: GraphQLBoolean
-                }
-            },
-            resolve: async (_, args: {where: Object}) => {
-
-                return db.models.images.findAll({
-                    where: sanitize(args)
-                });
-            }
-        },*/
         allTags: {
             type: new GraphQLList(GraphQLString),
             description: 'All tags in database',

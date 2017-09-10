@@ -314,19 +314,6 @@ const Comments = new GraphQLObjectType({
     })
 });
 
-const Tags = new GraphQLObjectType({
-   name: 'Tags',
-   description: 'Tags of articles',
-   fields: () => ({
-        id: {type: new GraphQLNonNull(GraphQLID)},
-        artId: {
-            type: new GraphQLNonNull(GraphQLID),
-            resolve: tag => tag.art_id
-        },
-        tag: {type: new GraphQLNonNull(GraphQLString)}
-   })
-});
-
 const Jwt = new GraphQLObjectType({
     name: 'JWT',
     description: 'JSON web token',
@@ -366,7 +353,6 @@ export {
     Articles,
     Issues,
     Comments,
-    Tags,
     Jwt,
     PasswordRecovery,
     Images,
