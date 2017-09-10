@@ -7,8 +7,11 @@ import * as loaders from './src/schema/dataloaders';
 import Schema from './src/schema/schema';
 import * as GraphHTTP from 'express-graphql';
 import { getJWT, jwt } from './src/helpers/jwt';
+import * as helmet from 'helmet';
 
-var app = express();
+const app = express();
+app.use(helmet());
+
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
   // application specific logging, throwing an error, or other logic here
