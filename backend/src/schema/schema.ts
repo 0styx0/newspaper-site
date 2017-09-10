@@ -82,7 +82,7 @@ const Query = new GraphQLObjectType({
             resolve: async (_, args: {num?: number | Object; public?: boolean; ispublic?: number, limit?: number}, { jwt }) => {
 
                 const sanitized = sanitize(args);
-                let limit = +sanitized.limit;
+                let limit = sanitized.limit ? +sanitized.limit : null;
                 delete sanitized.limit;
 
                 const maxIssueAllowed = await getMaxIssueAllowed(jwt);
@@ -103,7 +103,7 @@ const Query = new GraphQLObjectType({
                     where: sanitized,
                     order: [['num', 'DESC']],
                     limit
-                    })
+                })
             }
         },
         comments: {
