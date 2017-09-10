@@ -1,7 +1,9 @@
 # eyeStorm-nodeJS
 
 <h1>Background</h1>
-<p>I created this project for my school's newspaper. It is built using full stack JavaScript (with react and express for front and backend respectively). This project has a twin written in php called eyeStorm if anyone is curious</p>
+<p>I created this project for my school's newspaper. It is built using full stack JavaScript
+(with react, express, graphql, and mysql). This project has a twin written
+in php called eyeStorm if anyone is curious (which is no longer actively maintained)</p>
 
 <h1>About - Simple Version</h1>
 <p>This is a newspaper site. Simply put, one can create an account, publish articles, and eventually have it world viewable.</p>
@@ -92,9 +94,9 @@
 
 <h3 id="configFile">Config File</h3>
 
-<p>Create a file called <code>config.json</code> in the project root and write</p>
+<p>Create a file called <code>config.ts</code> in <code>backend/</code></p>
 <pre>
-     {
+     export default {
         "DB": {
             "HOST": your_server_host,
             "PORT": port_of_your_mysql_server,
@@ -119,7 +121,7 @@
 <details>
   <summary>Example file</summary>
   <pre>
-    {
+    export default {
         "DB": {
             "HOST": "localhost",
             "PORT": 8889,
@@ -145,13 +147,14 @@
 
 <h3>Firing Up</h3>
 
-<p>You MUST have filled out config.json before this step</p>
+<p>You MUST have filled out <code>backend/config.ts</code> before this step</p>
 
 <ol>
     <li>
       <details>
         <summary>
-          <code>node ./install-all -email your_email -password secure_password</code>(note: bcrypt module might cause problems. Rerun the command if that happens and it should work
+          <code>$ node ./install-all -email your_email -password secure_password</code>
+          (note: bcrypt module might cause problems. Rerun the command if that happens and it should work)
         </summary>
         <ul>
           <li>Installs nodejs modules needed for backend and frontend</li>
@@ -159,7 +162,7 @@
           <li>Creates an account with the username "admin" with the email and password passed in</li>
         </ul>
     </li>
-    <li><code>node ./start-all</code>//starts front and backend servers</li>
+    <li><code>node ./start-all</code> // starts front and backend servers</li>
     <li>Go to <a href="http://localhost:3001">http://localhost:3001</a> in your browser</li>
 </ol>
 
@@ -208,9 +211,13 @@
     <li><code>created</code> - date comment was posted</li>
 </ul>
 
+<h3>tag_list</h3>
+<ul>
+    <li><code>tag</code> - string. Only entries in here can be used as <code>tag</code> in the <code>tags</code> table</li>
+</ul>
+
 <h3>tags</h3>
 <ul>
     <li><code>art_id</code> - see comments.art_id</li>
-    <li><code>tag1</code>, <code>tag2</code>, <code>tag3</code> - tags of the article</li>
-
+    <li><code>tag</code> - tags of the article</li>
 </ul>
