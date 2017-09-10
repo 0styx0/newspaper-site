@@ -458,15 +458,17 @@ const Mutation = new GraphQLObjectType({
                 let sanitized = sanitize(args);
 
                 if (args.newPassword) {
-                    sanitized.password = userHelpers.encrypt(args.newPassword);
+                    sanitized.password = await userHelpers.encrypt(args.newPassword);
                     delete sanitized.newPassword;
                 }
 
-                return db.models.users.update(sanitized, {
+                db.models.users.update(sanitized, {
                     where: {
                         id: jwt.id
                     }
                 });
+
+                return { id: jwt.id };
             }
         },
         recoverPassword: {
