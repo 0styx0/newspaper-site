@@ -7,6 +7,16 @@ const TagQuery = gql`
     }
 `;
 
+const TagCreate = gql`
+
+    mutation createTag($tag: String!) {
+        createTag(tag: $tag) {
+            tag
+        }
+    }
+`;
+
 export {
-    TagQuery
+    TagQuery,
+    TagCreate
 };

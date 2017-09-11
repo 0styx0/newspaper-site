@@ -873,6 +873,21 @@ const Mutation = new GraphQLObjectType({
 
                 throw new Error(errors.authority);
             }
+        },
+        createTag: {
+            type: new GraphQLList(GraphQLString),
+            description: 'All tags in database',
+            args: {
+                tag: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, args: {tag: string}, { jwt }) => {
+
+                userHelpers.mustBeLoggedIn(jwt);
+
+                return new db.models.tag_list(sanitize(args)).save();
+            }
         }
     }),
 });

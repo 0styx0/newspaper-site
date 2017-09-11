@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
-
+import { submitForm } from '../../tests/enzyme.helpers';
 // import { TagQuery } from '../../graphql/tags';
 
 // import mockGraphql from '../../tests/graphql.helper';
@@ -31,7 +31,10 @@ describe('<PublishContainer>', () => {
         });
     }
 
-    function setup(createArticle?: typeof mockCreateArticle) {
+    function setup(
+        createArticle: typeof mockCreateArticle = mockCreateArticle,
+        createTag: Function = casual.function
+     ) {
 
         // return mockGraphql(
         //     TagQuery,
@@ -42,7 +45,8 @@ describe('<PublishContainer>', () => {
         return mount(
             <PublishContainer
               history={[]}
-              createArticle={createArticle || mockCreateArticle}
+              createArticle={createArticle}
+              createTag={createTag}
             />
         );
     }
@@ -69,13 +73,12 @@ describe('<PublishContainer>', () => {
 
         it('renders correctly', () => {
 
-
             const tree = renderer.create(
 
-                    <PublishContainer
+                <PublishContainer
                     history={[]}
                     createArticle={mockCreateArticle}
-                    />
+                />
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
@@ -136,6 +139,40 @@ describe('<PublishContainer>', () => {
                 `<p>${title}</p><strong>${author}</strong><em>This should not change</em>`,
                 `<h1>${title}</h1><h4>${author}</h4><em>This should not change</em>`
             );
+        });
+    });
+
+    describe('#onTagChange', () => {
+
+        it(`toggles addTag input when 'other' is selected`, () => {
+
+            const wrapper = setup();
+
+            expect(wrapper.find('input[name="addTag"]').node).toBeFalsy();
+
+            wrapper.find('option[value="other"]').simulate('change');
+
+            expect(wrapper.find('input[name="addTag"]').node).toBeTruthy();
+        });
+
+        it('submits new tag to createTag', () => {
+
+            let newTag = casual.word;
+            const spy = sinon.spy();
+
+            const wrapper = setup(mockCreateArticle, (params: { variables: { tag: string} }) => {
+                spy();
+                expect(params.variables.tag).toBe(newTag);
+            });
+
+            setFakeEditor(wrapper, '');
+
+            wrapper.find('option[value="other"]').simulate('change');
+            wrapper.find('input[name="addTag"]').node.value = newTag;
+
+            submitForm(wrapper);
+
+            expect(spy.called).toBeTruthy(); // make sure that createTag was called
         });
     });
 

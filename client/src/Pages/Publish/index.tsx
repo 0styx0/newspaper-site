@@ -10,6 +10,8 @@ import './index.css';
 interface Props {
     onSubmit: Function;
     onAutoFormat: Function;
+    onTagChange: Function;
+    showTagInput: boolean;
 }
 
 function Publish(props: Props) {
@@ -20,13 +22,30 @@ function Publish(props: Props) {
 
                 <Label key="tags" value="Tags" >
                     <TagSelect
+                        tags={['other']}
                         props={{
                             name: 'tags',
                             multiple: true,
-                            required: true
+                            required: true,
+                            onChange: props.onTagChange
                         }}
                     />
                 </Label>
+
+                { props.showTagInput ?
+                    (
+                        <Input
+                          key="addTag"
+                          label="Custom Tag"
+                          props={{
+                              name: 'addTag',
+                              type: 'text'
+                          }}
+                        />
+                    )
+                  :
+                  <span key="nothing" />
+                }
 
                 <Input
                     key="url"

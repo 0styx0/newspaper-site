@@ -15,8 +15,14 @@ exports[`<PublishContainer> snapshots renders correctly 1`] = `
       <select
         multiple={true}
         name="tags"
+        onChange={[Function]}
         required={true}
       >
+        <option
+          value="other"
+        >
+          Other
+        </option>
         <option
           value="opinion"
         >
@@ -32,14 +38,10 @@ exports[`<PublishContainer> snapshots renders correctly 1`] = `
         >
           News
         </option>
-        <option
-          value="other"
-        >
-          Other
-        </option>
       </select>
       
     </label>
+    <span />
     <label
       onInput={[Function]}
     >

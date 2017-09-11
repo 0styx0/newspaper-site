@@ -13,7 +13,8 @@ import 'tinymce/plugins/paste';
 import 'tinymce/plugins/code';
 
 import { ArticleCreate } from '../../graphql/article';
-import { graphql, withApollo } from 'react-apollo';
+import { TagCreate } from '../../graphql/tags';
+import { graphql, withApollo, compose } from 'react-apollo';
 import './index.css';
 
 export interface Props { // from react router hoc
@@ -26,6 +27,7 @@ export interface Props { // from react router hoc
             }
         }
     }>;
+    createTag: (params: { variables: { tag: string } }) => void;
 }
 
 interface State {
@@ -33,6 +35,7 @@ interface State {
         getContent: Function;
         setContent: Function;
     };
+    showTagInput: boolean;
 }
 
 export class PublishContainer extends React.Component<Props, State> {
@@ -43,9 +46,11 @@ export class PublishContainer extends React.Component<Props, State> {
 
         this.onSubmit = this.onSubmit.bind(this);
         this.autoFormat = this.autoFormat.bind(this);
+        this.onTagChange = this.onTagChange.bind(this);
 
         this.state = {
-            editor: undefined
+            editor: undefined,
+            showTagInput: false
         };
     }
 
@@ -81,6 +86,13 @@ export class PublishContainer extends React.Component<Props, State> {
         (tinymce as any).remove(this.state.editor);
     }
 
+    onTagChange(e: Event) {
+
+        this.setState({
+            showTagInput: (e.currentTarget as HTMLOptionElement).value === 'other'
+        });
+    }
+
     /**
      * Sends data to server to save article
      */
@@ -88,7 +100,20 @@ export class PublishContainer extends React.Component<Props, State> {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
         const tagList = target.querySelector('select[name=tags]') as HTMLSelectElement;
-        const tags = Array.from(tagList.selectedOptions).map(elt => elt.value);
+        const tags = Array.from(tagList.selectedOptions || []).map(elt => elt.value);
+
+        if (this.state.showTagInput) {
+
+            const newTag = (target.querySelector('[name=addTag]') as HTMLInputElement).value;
+
+            await this.props.createTag({
+                variables: {
+                    tag: newTag
+                }
+            });
+
+            tags.push(newTag);
+        }
 
         const { data } = await this.props.createArticle({
             variables: {
@@ -134,6 +159,8 @@ export class PublishContainer extends React.Component<Props, State> {
 
         return (
             <Publish
+              onTagChange={this.onTagChange}
+              showTagInput={this.state.showTagInput}
               onAutoFormat={this.autoFormat}
               onSubmit={this.onSubmit}
             />
@@ -141,6 +168,9 @@ export class PublishContainer extends React.Component<Props, State> {
     }
 }
 
-const PublishContainerWithData = graphql(ArticleCreate, {name: 'createArticle'})(PublishContainer as any);
+const PublishContainerWithData = compose(
+    graphql(ArticleCreate, {name: 'createArticle'}),
+    graphql(TagCreate, {name: 'createTag'}),
+)(PublishContainer as any);
 
 export default withApollo(PublishContainerWithData);
