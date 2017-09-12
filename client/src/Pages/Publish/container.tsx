@@ -27,7 +27,7 @@ export interface Props { // from react router hoc
             }
         }
     }>;
-    createTag: (params: { variables: { tag: string } }) => void;
+    createTag: (params: { variables: { tag: string } }) => any;
 }
 
 interface State {

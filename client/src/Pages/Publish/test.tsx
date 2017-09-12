@@ -9,6 +9,8 @@ import { submitForm } from '../../tests/enzyme.helpers';
 
 // import mockGraphql from '../../tests/graphql.helper';
 
+const createTagMock = (params: { variables: { tag: string; }; }) => { return; };
+
 describe('<PublishContainer>', () => {
 
     type createArticleParams = {
@@ -33,7 +35,7 @@ describe('<PublishContainer>', () => {
 
     function setup(
         createArticle: typeof mockCreateArticle = mockCreateArticle,
-        createTag: Function = casual.function
+        createTag: typeof createTagMock = createTagMock
      ) {
 
         // return mockGraphql(
@@ -78,6 +80,7 @@ describe('<PublishContainer>', () => {
                 <PublishContainer
                     history={[]}
                     createArticle={mockCreateArticle}
+                    createTag={createTagMock}
                 />
             ).toJSON();
 
@@ -148,11 +151,11 @@ describe('<PublishContainer>', () => {
 
             const wrapper = setup();
 
-            expect(wrapper.find('input[name="addTag"]').node).toBeFalsy();
+            expect((wrapper.find('input[name="addTag"]') as any).node).toBeFalsy();
 
             wrapper.find('option[value="other"]').simulate('change');
 
-            expect(wrapper.find('input[name="addTag"]').node).toBeTruthy();
+            expect((wrapper.find('input[name="addTag"]') as any).node).toBeTruthy();
         });
 
         it('submits new tag to createTag', () => {
@@ -163,12 +166,13 @@ describe('<PublishContainer>', () => {
             const wrapper = setup(mockCreateArticle, (params: { variables: { tag: string} }) => {
                 spy();
                 expect(params.variables.tag).toBe(newTag);
+                return;
             });
 
             setFakeEditor(wrapper, '');
 
             wrapper.find('option[value="other"]').simulate('change');
-            wrapper.find('input[name="addTag"]').node.value = newTag;
+            (wrapper.find('input[name="addTag"]') as any).node.value = newTag;
 
             submitForm(wrapper);
 
