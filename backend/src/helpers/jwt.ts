@@ -1,5 +1,4 @@
 import * as jsonwebtoken from 'jsonwebtoken';
-import config from '../../config';
 
 export interface jwt {
     id: string;
@@ -11,7 +10,7 @@ export function getJWT(req) {
 
     const token = (req.get('authorization') || '').split('Bearer ')[1];
 
-    return token ? jsonwebtoken.verify(token, config.JWT.SECRET) as jwt : {} as jwt;
+    return token ? jsonwebtoken.verify(token, process.env.JWT_SECRET) as jwt : {} as jwt;
 };
 
 /**
@@ -31,7 +30,7 @@ export function setJWT(user: jwt) {
         payload.level = user.level;
     }
 
-    return jsonwebtoken.sign(payload, config.JWT.SECRET, {
+    return jsonwebtoken.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '1h',
             subject: user.id.toString()
     });

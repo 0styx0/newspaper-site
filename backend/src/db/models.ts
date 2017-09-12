@@ -1,7 +1,5 @@
 import { sequelize } from './connection';
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
-import config from '../../config';
-const EMAIL_HOST = config.EMAIL_HOST;
 import * as validator from 'validator';
 
 const Users = sequelize.define('users', {
@@ -46,10 +44,10 @@ const Users = sequelize.define('users', {
         validate: {
             validEmail(email: string) {
 
-                const validHost = new RegExp(`^.+${EMAIL_HOST === '*' ? '' : EMAIL_HOST}$`);
+                const validHost = new RegExp(`^.+${process.env.USER_EMAIL_HOST === '*' ? '' : process.env.USER_EMAIL_HOST}$`);
 
                 if (!validHost.test(email)) {
-                    throw new RangeError(`Email must end with '@${EMAIL_HOST}'`);
+                    throw new RangeError(`Email must end with '@${process.env.USER_EMAIL_HOST}'`);
                 }
 
                 // when signing up, email will start with '.'

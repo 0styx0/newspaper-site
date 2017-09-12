@@ -1,10 +1,13 @@
 const Sequelize = require('sequelize'); // typescript throws errors if do es6 import
-import config from '../../config';
-const DB = config.DB;
+import * as dotenv from 'dotenv-safe';
 
-const sequelize = new Sequelize(DB.NAME, DB.USER, DB.PASS, {
-  host: DB.HOST,
-  port: DB.PORT,
+dotenv.load({
+  path: './tests/.env'
+});
+
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
   dialect: 'mysql'
 });
 

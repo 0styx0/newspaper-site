@@ -1,5 +1,4 @@
 import * as nodemailer from 'nodemailer';
-import config from '../../config';
 import db from '../db/models';
 
 export default {
@@ -107,17 +106,17 @@ export default {
     mail(to: string[] = [], subject: string, message: string) {
 
         const transporter = nodemailer.createTransport({
-            host: config.EMAIL.HOST,
-            port: config.EMAIL.PORT,
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
             auth: {
-                user: config.EMAIL.ADDR,
-                pass: config.EMAIL.PASS
+                user: process.env.EMAIL_ADDR,
+                pass: process.env.EMAIL_PASS
             }
         });
 
         // setup email data with unicode symbols
         const mailOptions = {
-            from: `"${config.EMAIL.NAME}" <${config.EMAIL.ADDR}>`, // sender address
+            from: `"${process.env.EMAIL_NAME}" <${process.env.EMAIL_ADDR}>`, // sender address
             to: to.join(', '),
             subject: subject,
             html: message

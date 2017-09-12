@@ -1,12 +1,12 @@
 import * as express from 'express';
 import * as path from 'path';
-import * as logger from 'morgan';
+// import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as loaders from './src/schema/dataloaders';
 import Schema from './src/schema/schema';
 import * as GraphHTTP from 'express-graphql';
-import { getJWT, jwt } from './src/helpers/jwt';
+import { getJWT } from './src/helpers/jwt';
 import * as helmet from 'helmet';
 
 const app = express();

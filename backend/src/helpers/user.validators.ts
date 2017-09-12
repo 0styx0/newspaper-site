@@ -1,4 +1,3 @@
-import config from '../../config';
 import * as validator from 'validator';
 
 export default {
@@ -44,14 +43,14 @@ export default {
     /**
      * @param email - of user
      *
-     * @throws {RangeError} if invalid email format or email host is not as specified in config.EMAIL_HOST
+     * @throws {RangeError} if invalid email format or email host is not as specified in process.env.USER_EMAIL_HOST
      *
      * @return email (unmodified)
      */
     email(email: string) {
-        
+
         if (validator.isEmail(email) &&
-            (config.EMAIL_HOST === '*' || email.split('@')[1] === config.EMAIL_HOST)) {
+            (process.env.USER_EMAIL_HOST === '*' || email.split('@')[1] === process.env.USER_EMAIL_HOST)) {
 
             return email;
         }

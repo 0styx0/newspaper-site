@@ -1,7 +1,5 @@
 import * as faker from 'faker';
 
-import config from '../config';
-
 import * as fs from 'fs-extra';
 const mysql = require('mysql2/promise');
 
@@ -375,17 +373,17 @@ const database = {
 let numberOfTests = 500;
 
 /**
- * Creates database with name given in @see config.ts DB.TEST.NAME
+ * Creates database with name given in @see .env process.env.DB_TEST_NAME
  */
 async function createTestDatabase() {
 
     console.log('Initializing database...');
 
     const connection = mysql.createConnection({
-        host: config.DB.HOST,
-        port: config.DB.PORT,
-        user: config.DB.USER,
-        password: config.DB.TEST.PASS,
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
         multipleStatements: true
     });
 
@@ -398,8 +396,8 @@ async function createTestDatabase() {
             return;
         }
 
-        await asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${config.DB.TEST.NAME}`);
-        await asyncDB.query(`USE ${config.DB.TEST.NAME}`);
+        await asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
+        await asyncDB.query(`USE ${process.env.DB_NAME}`);
         await asyncDB.query(schema);
 
         console.log('Database created...');
@@ -445,7 +443,7 @@ async function insertMockData(asyncDB: any, data: {
 }
 
 async function removeTestDatabase(asyncDB: any) {
-    await asyncDB.query(`DROP DATABASE ${config.DB.TEST.NAME}`);
+    await asyncDB.query(`DROP DATABASE ${process.env.DB_NAME}`);
     console.log('Database dropped');
 
     if (numberOfTests > 0) {
