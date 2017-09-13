@@ -1,18 +1,22 @@
 import * as chai from 'chai';
 import * as chaiHttp from 'chai-http';
+import * as faker from 'faker';
+import TestDatabase from './database.mock';
 import app from '../app';
-// import gql from 'graphql-tag';
+
+const Database = new TestDatabase();
+
+before(function() {
+    this.timeout(9000);
+    return Database.init()
+});
+
+after(() => Database.drop());
 
 const expect = chai.expect;
 
-/*
-{
-    "query": "# Welcome to GraphiQL\n#\n# GraphiQL is an in-browser tool for writing, validating, and\n# testing GraphQL queries.\n#\n# Type queries into this side of the screen, and you will see intelligent\n# typeaheads aware of the current GraphQL type schema and live syntax and\n# validation errors highlighted within the text.\n#\n# GraphQL queries typically start with a \"{\" character. Lines that starts\n# with a # are ignored.\n#\n# An example GraphQL query might look like:\n#\n#     {\n#       field(arg: \"value\") {\n#         subField\n#       }\n#     }\n#\n# Keyboard shortcuts:\n#\n#       Run Query:  Ctrl-Enter (or press the play button above)\n#\n#   Auto Complete:  Ctrl-Space (or just start typing)\n#\n\n\n    query users($profileLink: String) {\n        users(profileLink: $profileLink) {\n            articles {\n                id\n                url\n                dateCreated\n                tags\n                views\n                issue\n                canEdit\n            }\n            views\n            level\n            id\n            fullName\n            canEdit\n        }\n    }\n\n",
-    "variables": null,
-    "operationName": "users"
-}*/
-
 chai.use(chaiHttp);
+
 
 describe('queries', () => {
 
@@ -42,12 +46,18 @@ describe('queries', () => {
                 }
             `;
 
-            chai.request(app).post('/graphql').send({query, variables: {profileLink: }, operationName: 'users'}).end(async (err, res) => {
+            const user = faker.random.arrayElement(Database.tables.values.users);
+
+            chai.request(app)
+            .post('/graphql')
+            .send({query, variables: { profileLink: user.email.split('@')[0]}, operationName: 'users'})
+            .end(async (err, res) => {
+
 
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
 
-                console.log((await res).body);
+                console.log('73: res.body', ((await res).body.data.users[0]));
 
                 done();
             });

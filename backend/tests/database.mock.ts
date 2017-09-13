@@ -87,6 +87,7 @@ const randomNumber = () => Math.max(1, faker.random.number(100));
 export default class TestDatabase {
 
     asyncDB: any;
+    initialized = false;
 
     constructor() {
 
@@ -127,16 +128,17 @@ export default class TestDatabase {
 
         await this.asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
         await this.asyncDB.query(`USE ${process.env.DB_NAME}`).then(() => console.log('here'));
-        await this.asyncDB.query(schema);
+        return await this.asyncDB.query(schema).then(() => {
 
-        console.log('Database created...');
+            console.log('Database created...');
+        });
     }
 
     async insertMockData() {
 
         const data = this.mock.all();
 
-        Object.keys(data).forEach(table => {
+        return Promise.all(Object.keys(data).map(table => {
 
             console.log('Inserting into table', table);
 
@@ -151,13 +153,13 @@ export default class TestDatabase {
 
             const values = `(${valuesArr.join('),(')})`;
 
-            this.asyncDB.query(`INSERT INTO ${table} (${fields}) VALUES ${values}`).catch(e => {
+            return this.asyncDB.query(`INSERT INTO ${table} (${fields}) VALUES ${values}`).catch(e => {
                 console.warn(e);
                 console.warn('Error in table', table);
                 console.log(`INSERT INTO ${table} (${fields})`);
                 process.exit(1);
             });
-        });
+        }));
     }
 
     async drop() {
@@ -169,7 +171,7 @@ export default class TestDatabase {
 
         await this.connect();
         await this.create();
-        await this.insertMockData();
+        return await this.insertMockData();
     }
 
     /**
