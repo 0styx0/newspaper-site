@@ -156,10 +156,7 @@ const Articles = new GraphQLObjectType({
 
                     const cookie = new Cookies(req, res);
                     const articlesViewed = JSON.parse(cookie.get('eotsViews') || JSON.stringify([]));
-console.log('====================================');
-console.log(req.cookies);
-console.log(cookie.get('eotsViews'));
-console.log('====================================');
+                    
                     if (!jwt.id && articlesViewed.indexOf(article.id) === -1) {
 
                         const row = await db.models.pageinfo.findOne({where: {id: article.id}});

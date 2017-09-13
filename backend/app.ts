@@ -72,3 +72,5 @@ app.use(function(err, req, res, next) {
 app.listen(4000, ()=> {
   console.log(`App listening on port 3000`);
 });
+
+export default app; // for tests
