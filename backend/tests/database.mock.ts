@@ -3,6 +3,16 @@ import * as faker from 'faker';
 import * as fs from 'fs-extra';
 const mysql = require('mysql2/promise');
 
+import * as dotenv from 'dotenv-safe';
+
+dotenv.load({
+  path: './tests/.env'
+});
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
 
 interface User {
     id: number;
@@ -74,13 +84,99 @@ interface Database {
 
 const randomNumber = () => Math.max(1, faker.random.number(100));
 
-const database = {
+export default class TestDatabase {
+
+    asyncDB: any;
+
+    constructor() {
+
+        Object.keys(this.tables.generate)
+        .forEach(property =>
+          this.tables.generate[property] = this.tables.generate[property].bind(this));
+
+        Object.keys(this.mock)
+        .forEach(property =>
+          this.mock[property] = this.mock[property].bind(this));
+    }
+
+    async connect() {
+
+        await mysql.createConnection({
+            host: process.env.DB_HOST,
+            port: process.env.DB_PORT,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            multipleStatements: true
+        }).then((asyncDB: {query: Function}) => {
+            this.asyncDB = asyncDB
+        });
+    }
+
+    /**
+     * Creates database with name given in @see .env process.env.DB_TEST_NAME
+     */
+    async create() {
+
+        console.log('Initializing database...');
+
+        const schema = await fs.readFile(__dirname + '/../../../schema.sql', 'utf8').catch(err => {
+            console.warn(err);
+            process.abort();
+            return;
+        });
+
+        await this.asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
+        await this.asyncDB.query(`USE ${process.env.DB_NAME}`).then(() => console.log('here'));
+        await this.asyncDB.query(schema);
+
+        console.log('Database created...');
+    }
+
+    async insertMockData() {
+
+        const data = this.mock.all();
+
+        Object.keys(data).forEach(table => {
+
+            console.log('Inserting into table', table);
+
+            if (!data[table][0]) {
+                console.log('No data for table', table);
+                return;
+            }
+
+            const fields = Object.keys(data[table][0]).join(',');
+
+            const valuesArr = data[table].reduce((accum, row) => accum.concat('"' + Object.values(row).join('","') + '"'), []);
+
+            const values = `(${valuesArr.join('),(')})`;
+
+            this.asyncDB.query(`INSERT INTO ${table} (${fields}) VALUES ${values}`).catch(e => {
+                console.warn(e);
+                console.warn('Error in table', table);
+                console.log(`INSERT INTO ${table} (${fields})`);
+                process.exit(1);
+            });
+        });
+    }
+
+    async drop() {
+        await this.asyncDB.query(`DROP DATABASE ${process.env.DB_NAME}`);
+        console.log('Database dropped');
+    }
+
+    async init() {
+
+        await this.connect();
+        await this.create();
+        await this.insertMockData();
+    }
 
     /**
      * Each of the following map to their respective table in the database and generate info for that table
      * (to the extent that they can, since some have foreign keys of others)
      */
-    tables: {
+    tables = {
 
         generate: {
 
@@ -183,9 +279,9 @@ const database = {
             comments: [] as Comment[],
             issues: [] as Issue[],
         }
-    },
+    }
 
-    mock: {
+    mock = {
 
         /**
          * The following methods must be called in the order defined for foreign keys to work
@@ -199,14 +295,14 @@ const database = {
             const users: User[] = [];
 
             while (amount-- > 0) {
-                const user = database.tables.generate.user();
+                const user = this.tables.generate.user();
                 user.id = amount;
                 user.username += amount;
                 user.f_name += amount;
                 users.push(user);
             }
 
-            database.tables.values.users = users;
+            this.tables.values.users = users;
             return users;
         },
 
@@ -216,7 +312,7 @@ const database = {
 
             while (amount-- > 0) {
 
-                const issue = database.tables.generate.issue();
+                const issue = this.tables.generate.issue();
                 issue.num = amount + 1;
                 issue.name += amount;
 
@@ -225,7 +321,7 @@ const database = {
 
             issues[0].ispublic = 0;
 
-            database.tables.values.issues = issues;
+            this.tables.values.issues = issues;
             return issues;
         },
 
@@ -236,23 +332,23 @@ const database = {
 
             while (amount-- > 0) {
 
-                const pageinfo = database.tables.generate.pageinfo();
+                const pageinfo = this.tables.generate.pageinfo();
                 pageinfo.id = amount;
 
-                if (issuesUsed.size < database.tables.values.issues.length) {
+                if (issuesUsed.size < this.tables.values.issues.length) {
                     pageinfo.issue = amount;
                     issuesUsed.add(amount);
                 } else {
-                    pageinfo.issue = faker.random.number(database.tables.values.issues.length);
+                    pageinfo.issue = faker.random.number(this.tables.values.issues.length);
                 }
 
-                pageinfo.authorid = faker.random.arrayElement(database.tables.values.users).id
+                pageinfo.authorid = faker.random.arrayElement(this.tables.values.users).id
                 pageinfo.url += '/' + pageinfos.length;
 
                 pageinfos.push(pageinfo);
             }
 
-            database.tables.values.pageinfo = pageinfos;
+            this.tables.values.pageinfo = pageinfos;
             return pageinfos;
         },
 
@@ -262,12 +358,12 @@ const database = {
 
             while (amount-- > 0) {
 
-                tagList.add(database.tables.generate.tag_list().tag + amount);
+                tagList.add(this.tables.generate.tag_list().tag + amount);
             }
 
-            database.tables.values.tag_list = [...tagList].map(tag => ({ tag }));
+            this.tables.values.tag_list = [...tagList].map(tag => ({ tag }));
 
-            return database.tables.values.tag_list
+            return this.tables.values.tag_list
         },
 
         /**
@@ -277,16 +373,16 @@ const database = {
 
             const tags = new Set<Tag>();
 
-            database.tables.values.pageinfo.forEach(article => {
+            this.tables.values.pageinfo.forEach(article => {
 
-                let numberOfTags = faker.random.number(database.tables.values.tag_list.length);
-                const unusedTags = new Set([...database.tables.values.tag_list].map(list => list.tag));
+                let numberOfTags = faker.random.number(this.tables.values.tag_list.length);
+                const unusedTags = new Set([...this.tables.values.tag_list].map(list => list.tag));
 
                 while (unusedTags.size - numberOfTags > 0) {
 
                     const tag = faker.random.arrayElement([...unusedTags]);
 
-                    tags.add(Object.assign(database.tables.generate.tag(), {
+                    tags.add(Object.assign(this.tables.generate.tag(), {
                         art_id: article.id,
                         id: tags.size + '0' + article.id,
                         tag
@@ -296,43 +392,43 @@ const database = {
                 }
             });
 
-            database.tables.values.tags = [...tags];
-            return database.tables.values.tags
+            this.tables.values.tags = [...tags];
+            return this.tables.values.tags
         },
 
         comments() {
 
             const comments = new Set<Comment>();
 
-            database.tables.values.pageinfo.forEach(article => {
+            this.tables.values.pageinfo.forEach(article => {
 
                 let numberOfComments = randomNumber();
 
                 while (numberOfComments-- > 0) {
 
-                    comments.add(Object.assign(database.tables.generate.comment(), {
-                        art_id: faker.random.arrayElement(database.tables.values.pageinfo).id,
+                    comments.add(Object.assign(this.tables.generate.comment(), {
+                        art_id: faker.random.arrayElement(this.tables.values.pageinfo).id,
                         id: comments.size,
-                        authorid: faker.random.arrayElement(database.tables.values.users).id
+                        authorid: faker.random.arrayElement(this.tables.values.users).id
                     }));
                 }
             });
 
-            database.tables.values.comments = [...comments];
-            return database.tables.values.comments
+            this.tables.values.comments = [...comments];
+            return this.tables.values.comments
         },
 
         images() {
 
             const images = new Set<Image>();
 
-            database.tables.values.pageinfo.forEach((article, i) => {
+            this.tables.values.pageinfo.forEach((article, i) => {
 
                 if (faker.random.boolean) {
 
                     for (let j = 0, amount = randomNumber(); j < amount; j++) {
 
-                        images.add(Object.assign(database.tables.generate.image(), {
+                        images.add(Object.assign(this.tables.generate.image(), {
                             id: images.size,
                             art_id: article.id,
                         }));
@@ -342,8 +438,8 @@ const database = {
                 }
             });
 
-            database.tables.values.images = [...images];
-            return database.tables.values.images
+            this.tables.values.images = [...images];
+            return this.tables.values.images
         },
 
         all() {
@@ -352,13 +448,13 @@ const database = {
 
             console.log('Starting...');
 
-            const mocks = Object.keys(database.mock);
+            const mocks = Object.keys(this.mock);
             mocks.pop(); // stops recursion
 
             mocks.forEach(mock => {
 
                 console.log(`Working on ${mock}`);
-                const data = database.mock[mock]();
+                const data = this.mock[mock]();
 
                 allMocks[mock] = data;
             });
@@ -366,90 +462,6 @@ const database = {
             console.log('Completed');
             return allMocks;
         }
-
     }
 };
 
-let numberOfTests = 500;
-
-/**
- * Creates database with name given in @see .env process.env.DB_TEST_NAME
- */
-async function createTestDatabase() {
-
-    console.log('Initializing database...');
-
-    const connection = mysql.createConnection({
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        multipleStatements: true
-    });
-
-    const asyncDB = await connection;
-
-    fs.readFile(__dirname + '/../../../schema.sql', 'utf8', async (err: Error, schema: string) => {
-
-        if (err) {
-            console.warn(err);
-            return;
-        }
-
-        await asyncDB.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
-        await asyncDB.query(`USE ${process.env.DB_NAME}`);
-        await asyncDB.query(schema);
-
-        console.log('Database created...');
-
-        const data = database.mock.all();
-        return insertMockData(asyncDB, data);
-    });
-}
-
-
-createTestDatabase()
-// .then((asyncDB) => removeTestDatabase(asyncDB));
-.catch(asyncDB => removeTestDatabase(asyncDB));
-
-async function insertMockData(asyncDB: any, data: {
-    users: User[], tag_list: TagList[], issues: Issue[], pageinfo: Pageinfo[], images: Image[], tags: Tag[], comments: Comment[]
- }) {
-
-     Object.keys(data).forEach(table => {
-
-        console.log('Inserting into table', table);
-
-        if (!data[table][0]) {
-            console.log('No data for table', table);
-            return;
-        }
-
-        const fields = Object.keys(data[table][0]).join(',');
-
-        const valuesArr = data[table].reduce((accum, row) => accum.concat('"' + Object.values(row).join('","') + '"'), []);
-
-        const values = `(${valuesArr.join('),(')})`;
-
-        asyncDB.query(`INSERT INTO ${table} (${fields}) VALUES ${values}`).catch(e => {
-            console.warn(e);
-            console.warn('Error in table', table);
-            console.log(`INSERT INTO ${table} (${fields})`);
-            process.exit(1);
-        });
-     });
-
-    removeTestDatabase(asyncDB);
-}
-
-async function removeTestDatabase(asyncDB: any) {
-    await asyncDB.query(`DROP DATABASE ${process.env.DB_NAME}`);
-    console.log('Database dropped');
-
-    if (numberOfTests > 0) {
-        createTestDatabase();
-        numberOfTests--;
-    } else {
-        process.exit(1);
-    }
-}
