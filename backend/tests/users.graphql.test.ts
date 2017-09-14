@@ -2,7 +2,9 @@ import * as chai from 'chai';
 import * as chaiHttp from 'chai-http';
 import * as faker from 'faker';
 import TestDatabase from './database.mock';
+import { User } from './database.mock';
 import app from '../app';
+import { setJWT, jwt } from '../src/helpers/jwt';
 
 const Database = new TestDatabase();
 
@@ -21,18 +23,25 @@ chai.use(chaiHttp);
 describe('queries', () => {
 
     /**
-     * @param args - {query: graphql_query_string, variables: graphql_variables }
+     * Sends graphql request
      *
-     * @return {Promise} resolving to array of users with data specified by query
+     * @param args - {query: graphql_query_string, variables: graphql_variables }
      */
-    async function request(args: {query: string, variables: {id?: string | number, profileLink?: string}}) {
+    async function request(
+        args: {query: string, variables?: {id?: string | number, profileLink?: string}},
+        jwt?: string
+     ): Promise<User[]> {
 
-        const res = await chai.request(app)
-            .post('/graphql')
-            .send(Object.assign(args, { operationName: 'users' }))
-            .catch((err: Error) => expect(err).to.be.null(args));
+        const req = chai.request(app)
+            .post('/graphql');
 
-        return res.res.body.data.users;
+        if (jwt) {
+            req.set('Authorization', `Bearer: ${jwt}`);
+        }
+
+        const res = await req.send(Object.assign(args, { operationName: 'users' }));
+
+        return res && res.res.body.data.users;
     }
 
     /**
@@ -43,22 +52,22 @@ describe('queries', () => {
         return faker.random.arrayElement(Database.tables.values.users);
     }
 
-    describe('work with args', () => {
-
-        const singleUserQuery = `
-            query users($profileLink: String, $id: ID) {
-                users(profileLink: $profileLink, id: $id) {
-                    id
-                }
+    const userExistsQuery = `
+        query users($profileLink: String, $id: ID) {
+            users(profileLink: $profileLink, id: $id) {
+                id
             }
-        `;
+        }
+    `;
+
+    describe('work with args', () => {
 
         it('profileLink', async () => {
 
             const user = getRandomUser();
 
             const users = await request({
-                query: singleUserQuery,
+                query: userExistsQuery,
                 variables: {
                     profileLink: user.email.split('@')[0]
                 }
@@ -74,7 +83,7 @@ describe('queries', () => {
             const user = getRandomUser();
 
             const users = await request({
-                query: singleUserQuery,
+                query: userExistsQuery,
                 variables: {
                     id: user.id
                 }
@@ -86,16 +95,47 @@ describe('queries', () => {
         });
     });
 
-    it('gets all users if no args', () => {
+    it('gets all users if no args', async () => {
 
+        const users = await request({query: userExistsQuery});
+
+        expect(users.map(user => user.id)).to.have.members(Database.tables.values.users.map(user => user.id));
     });
 
     describe('when not logged in as current user, cannot access', () => {
 
-        // foreach set level to 3
+        let jwt: string;
+        let currentUser: User;
 
-        it('password', () => {
+        before(() => {
 
+            // setting level to 3 to make sure info is or isn't sent based totally on if current user
+            const user = JSON.parse(JSON.stringify(Database.tables.values.users.find(user => user.level == 3)));
+            currentUser = user;
+
+            user.profileLink = user.email.split('@')[0];
+
+            jwt = setJWT(user);
+        });
+
+        it('password', async () => {
+
+            const userPasswordQuery = `
+                query users($profileLink: String, $id: ID) {
+                    users(profileLink: $profileLink, id: $id) {
+                        password
+                    }
+                }
+            `;
+
+            const users = await request({
+                query: userPasswordQuery,
+                variables: {
+                    id: currentUser.id
+                }
+            }, jwt).catch(e => {
+                expect(e).to.not.be.empty;
+            });
 
         });
 

@@ -14,7 +14,7 @@ process.on('unhandledRejection', (reason, p) => {
   // application specific logging, throwing an error, or other logic here
 });
 
-interface User {
+export interface User {
     id: number;
     username: string;
     f_name: string;
