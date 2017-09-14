@@ -20,52 +20,69 @@ chai.use(chaiHttp);
 
 describe('queries', () => {
 
+    /**
+     * @param args - {query: graphql_query_string, variables: graphql_variables }
+     *
+     * @return {Promise} resolving to array of users with data specified by query
+     */
+    async function request(args: {query: string, variables: {id?: string | number, profileLink?: string}}) {
+
+        const res = await chai.request(app)
+            .post('/graphql')
+            .send(Object.assign(args, { operationName: 'users' }))
+            .catch((err: Error) => expect(err).to.be.null(args));
+
+        return res.res.body.data.users;
+    }
+
+    /**
+     * @return random user that is in database
+     */
+    function getRandomUser() {
+
+        return faker.random.arrayElement(Database.tables.values.users);
+    }
+
     describe('work with args', () => {
 
-        it('profileLink', (done) => {
-
-            const query = `
-
-                query users($profileLink: String) {
-                    users(profileLink: $profileLink) {
-                        articles {
-                            id
-                            url
-                            dateCreated
-                            tags
-                            views
-                            issue
-                            canEdit
-                        }
-                        views
-                        level
-                        id
-                        fullName
-                        canEdit
-                    }
+        const singleUserQuery = `
+            query users($profileLink: String, $id: ID) {
+                users(profileLink: $profileLink, id: $id) {
+                    id
                 }
-            `;
+            }
+        `;
 
-            const user = faker.random.arrayElement(Database.tables.values.users);
+        it('profileLink', async () => {
 
-            chai.request(app)
-            .post('/graphql')
-            .send({query, variables: { profileLink: user.email.split('@')[0]}, operationName: 'users'})
-            .end(async (err, res) => {
+            const user = getRandomUser();
 
+            const users = await request({
+                query: singleUserQuery,
+                variables: {
+                    profileLink: user.email.split('@')[0]
+                }
+            });
 
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-
-                console.log('73: res.body', ((await res).body.data.users[0]));
-
-                done();
+            expect(users[0]).to.deep.equal({
+                id: user.id.toString()
             });
         });
 
-        it('id', () => {
+        it('id', async () => {
 
+            const user = getRandomUser();
 
+            const users = await request({
+                query: singleUserQuery,
+                variables: {
+                    id: user.id
+                }
+            });
+
+            expect(users[0]).to.deep.equal({
+                id: user.id
+            });
         });
     });
 

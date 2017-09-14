@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "tsc; clear; clear; mocha dist/tests/**/*.test.js"
+    "test": "tsc; clear; clear; mocha -t 100000 dist/tests/**/*.test.js"
   },
   "dependencies": {
     "@types/chai-http": "^3.0.3",

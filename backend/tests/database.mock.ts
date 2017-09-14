@@ -170,6 +170,7 @@ export default class TestDatabase {
     async init() {
 
         await this.connect();
+        await this.drop().catch(() => null); // in case db already exists
         await this.create();
         return await this.insertMockData();
     }
@@ -298,7 +299,7 @@ export default class TestDatabase {
 
             while (amount-- > 0) {
                 const user = this.tables.generate.user();
-                user.id = amount;
+                user.id = amount.toString();
                 user.username += amount;
                 user.f_name += amount;
                 users.push(user);
