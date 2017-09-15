@@ -1,18 +1,26 @@
 <?php
 
+require_once('../vendor/autoload.php');
 
 class Helper {
 
-        /**
+   /**
+     * @return random user that is in database
+     */
+    public static function getRandomUser() {
+        throw new Error('Not implemented');
+    }
+
+    /**
       * Helper method to create http request to api while passing along the jwt
       *
-      * @param $url - last part of url in a path like http(s)://{domain name}/api/{$url}
-      * @param $query - query string (in format of key1=value1&key2=value2 etc)
-      * @param $method - http method GET, POST, PUT, or DELETE
+      * @param $args - assoc array [query => query_string, variables?: assoc_array]
+      * @param $operationName - graphql operation name
+      * @param $jwt - string, json web token
       *
-      * @return json decoded data given back by the call
+      * @return data given back by graphql
       */
-    public static function createHTTPRequest(string $url, array $variables, string $operationName) {
+    public static function createHTTPRequest(array $args, string $operationName, string $jwt) {
 
         $ch = curl_init();
 
