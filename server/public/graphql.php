@@ -12,11 +12,13 @@ use Youshido\GraphQL\Type\Object\ObjectType;
 
 require_once(__DIR__ . '/../src/graphql/types/users.php');
 require_once(__DIR__ . '/../src/graphql/types/login.php');
+require_once(__DIR__ . '/../src/graphql/types/articles.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
     'fields' => [
-        new UsersField()
+        new UsersField(),
+        new ArticlesField()
     ]
 ]);
 
