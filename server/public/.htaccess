@@ -1,0 +1,23 @@
+
+# I, Dovid Meiseles created this, not built in with mac so won't break computer if mess around
+
+
+Options +FollowSymlinks
+RewriteEngine On
+
+RewriteBase /
+
+
+# remove need for .php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# redirect to https
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+# RewriteRule ^(.*) https://tabceots.com/ [L,R=301]
+
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
+
+
+
