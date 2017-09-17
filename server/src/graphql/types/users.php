@@ -60,16 +60,13 @@ class UsersField extends AbstractField {
         return new ListType(new UsersType());
     }
 
+    // TODO: deal with jwt
     public function resolve($root, array $args, ResolveInfo $info) {
 
         $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
 
-        $where = '';
+        $where = Db::setPlaceholders($args);
 
-        foreach (array_keys($args) as $field) {
-
-            $where .= "{$field} = :{$field}";
-        }
 
         // basic fields, no authentication or filtering needed
         return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,

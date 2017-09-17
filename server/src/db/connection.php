@@ -38,6 +38,25 @@ class Db {
             $DBH->rollback();
         }
     }
+
+    /**
+     * @param $keys - assoc array of placeholders
+     *
+     * @return string of key = :key
+     *
+     * @example setPlaceholders(['one' => true, 'two' => 456]) => "one = :one, two = :two"
+     */
+    static function setPlaceholders(array $args) {
+
+        $where = '';
+
+        foreach (array_keys($args) as $field) {
+
+            $where .= "{$field} = :{$field}";
+        }
+
+        return $where;
+    }
 }
 
 
