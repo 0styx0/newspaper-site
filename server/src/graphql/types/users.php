@@ -1,13 +1,10 @@
 <?php
 
-// namespace EyeStorm\Server\PostType;
-
-
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Field\AbstractField;
-
+use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\Scalar\IdType;
@@ -19,22 +16,29 @@ use Youshido\GraphQL\Type\ListType\ListType;
 class UsersType extends AbstractObjectType {
 
     public function build($config) {
-        $config
-            ->addField('id', new NonNullType(new IdType()))
-            ->addField('username', new StringType())
-            ->addField('firstName', new NonNullType(new StringType()))
-            ->addField('middleName', new StringType())
-            ->addField('lastName', new NonNullType(new StringType()))
-            ->addField('fullName', new NonNullType(new StringType()))
-            ->addField('email', new NonNullType(new StringType()))
-            ->addField('level', new IntType())
-            ->addField('notifications', new BooleanType())
-            ->addField('twoFactor', new BooleanType())
-            ->addField('views', new NonNullType(new IntType()))
-            ->addField('articleCount', new NonNullType(new IntType()))
-            ->addField('profileLink', new NonNullType(new StringType()))
-            ->addField('articles', new NonNullType(new ListType(''))) // ArticleType
-            ->addField('canEdit', new NonNullType(new BooleanType()));
+
+        $config->addFields([
+            'id' => new NonNullType(new IdType()),
+            'username' => new StringType(),
+            'firstName' => new NonNullType(new StringType()),
+            'middleName' => new StringType(),
+            'lastName' => new NonNullType(new StringType()),
+            'fullName' => new NonNullType(new StringType()),
+            'email' => new NonNullType(new StringType()),
+            'level' => new IntType(),
+            'notifications' => new BooleanType(),
+            'twoFactor' => new BooleanType(),
+            'views' => new NonNullType(new IntType()),
+            'articleCount' => new NonNullType(new IntType()),
+            'profileLink' => [
+                'type' => new NonNullType(new StringType()),
+                'resolve' => function($user) {
+                    return explode('@', $user['email'])[0];
+                }
+            ],
+            'articles' => new NonNullType(new ListType('')), // ArticleType
+            'canEdit' => new NonNullType(new BooleanType())
+        ]);
     }
 
     public function getName() {
@@ -44,13 +48,32 @@ class UsersType extends AbstractObjectType {
 
 class UsersField extends AbstractField {
 
+    public function build(FieldConfig $config) {
+
+        $config->addArguments([
+            'id' => new IdType(),
+            'profileLink' => new StringType()
+        ]);
+    }
+
     public function getType() {
         return new ListType(new UsersType());
     }
 
-    public function resolve($value, array $args, ResolveInfo $info) {
+    public function resolve($root, array $args, ResolveInfo $info) {
 
-        return Db::query('SELECT username, id FROM users')->fetchAll(PDO::FETCH_ASSOC);
+        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
+
+        $where = '';
+
+        foreach (array_keys($args) as $field) {
+
+            $where .= "{$field} = :{$field}";
+        }
+
+        // basic fields, no authentication or filtering needed
+        return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
+          email, level FROM users WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
