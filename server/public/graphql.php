@@ -9,7 +9,9 @@ use Youshido\GraphQL\Execution\Processor;
 use Youshido\GraphQL\Schema\Schema;
 use Youshido\GraphQL\Type\Object\ObjectType;
 
-require_once __DIR__ . '/../src/graphql/types/users.php';       // including PostType definition
+
+require_once(__DIR__ . '/../src/graphql/types/users.php');
+require_once(__DIR__ . '/../src/graphql/types/login.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
@@ -18,14 +20,20 @@ $rootQueryType = new ObjectType([
     ]
 ]);
 
+$rootMutationType = new ObjectType([
+    'name' => 'RootMutationType',
+    'fields' => [
+        new LoginField()
+    ]
+]);
+
 $processor = new Processor(new Schema([
-    'query' => $rootQueryType
+    'query' => $rootQueryType,
+    'mutation' => $rootMutationType
 ]));
 
 $rawBody = file_get_contents('php://input');
 $decodedBody = json_decode($rawBody);
-
-$payload = '{ users { username, id } }';
 
 $processor->processPayload($decodedBody->query, $decodedBody->variables);
 echo json_encode($processor->getResponseData()) . "\n";
