@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
-require_once(__DIR__ . '/articles.php');
+require_once(__DIR__ . '/article.php');
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -16,7 +16,7 @@ use Youshido\GraphQL\Type\Scalar\TimestampType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
-class IssuesType extends AbstractObjectType {
+class IssueType extends AbstractObjectType {
 
     public function build($config) {
 
@@ -53,33 +53,3 @@ class IssuesType extends AbstractObjectType {
         ]);
     }
 }
-
-class IssuesField extends AbstractField {
-
-    public function build(FieldConfig $config) {
-
-        $config->addArguments([
-            'num' => new IdType(),
-            'public' => new BooleanType(),
-            'limit' => new IntType()
-        ]);
-    }
-
-    public function getType() {
-        return new ListType(new IssuesType());
-    }
-
-    public function resolve($root, array $args, ResolveInfo $info) {
-
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
-
-        $where = Db::setPlaceholders($args);
-
-        return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
-           (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views
-          FROM issues
-          WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-?>

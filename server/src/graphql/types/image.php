@@ -14,7 +14,7 @@ use Youshido\GraphQL\Type\Scalar\TimestampType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
-class ImagesType extends AbstractObjectType {
+class ImageType extends AbstractObjectType {
 
     public function build($config) {
 

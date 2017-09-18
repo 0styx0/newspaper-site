@@ -10,15 +10,19 @@ use Youshido\GraphQL\Schema\Schema;
 use Youshido\GraphQL\Type\Object\ObjectType;
 
 
-require_once(__DIR__ . '/../src/graphql/types/users.php');
-require_once(__DIR__ . '/../src/graphql/types/login.php');
-require_once(__DIR__ . '/../src/graphql/types/articles.php');
+require_once(__DIR__ . '/../src/graphql/fields/queries/articles.php');
+require_once(__DIR__ . '/../src/graphql/fields/queries/comments.php');
+require_once(__DIR__ . '/../src/graphql/fields/queries/issues.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/login.php');
+require_once(__DIR__ . '/../src/graphql/fields/queries/users.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
     'fields' => [
         new UsersField(),
-        new ArticlesField()
+        new ArticlesField(),
+        new IssuesField(),
+        new CommentsField()
     ]
 ]);
 

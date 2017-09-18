@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
-require_once(__DIR__ . '/users.php');
-require_once(__DIR__ . '/images.php');
+require_once(__DIR__ . '/user.php');
+require_once(__DIR__ . '/image.php');
+require_once(__DIR__ . '/comment.php');
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -17,7 +18,7 @@ use Youshido\GraphQL\Type\Scalar\TimestampType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
-class ArticlesType extends AbstractObjectType {
+class ArticleType extends AbstractObjectType {
 
     public function build($config) {
 
@@ -59,7 +60,7 @@ class ArticlesType extends AbstractObjectType {
             ],
             'authorId' => new NonNullType(new IdType()),
             'author' => [
-                'type' => new NonNullType(new UsersType()),
+                'type' => new NonNullType(new UserType()),
                 'resolve' => function ($article) {
 
                     return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
@@ -67,15 +68,16 @@ class ArticlesType extends AbstractObjectType {
                 }
             ],
             'comments' => [
-                'type' => new NonNullType(new ListType('')), // CommentType
+                'type' => new NonNullType(new ListType(new CommentType)), // CommentType
                 'resolve' => function ($article) {
-                    return Db::Query("SELECT id, art_id, authorid, content, created AS dateCreated
-                      FROM comments
-                      WHERE art_id = ?", [$article['id']])->fetchAll(PDO::FETCH_ASSOC);
+
+                    return Db::query("SELECT id, art_id AS artId, authorid AS authorId, content, created AS dateCreated
+                        FROM comments
+                        WHERE art_id = ?", [$article['id']])->fetchAll(PDO::FETCH_ASSOC);
                 }
             ],
             'images' => [
-                'type' => new NonNullType(new ListType(new ImagesType())), // ImageType
+                'type' => new NonNullType(new ListType(new ImageType())), // ImageType
                 'args' => [
                     'slide' => new BooleanType()
                 ],
@@ -99,41 +101,3 @@ class ArticlesType extends AbstractObjectType {
         ]);
     }
 }
-
-class ArticlesField extends AbstractField {
-
-    public function build(FieldConfig $config) {
-
-        $config->addArguments([
-            'id' => new IdType(),
-            'authorid' => new IdType(),
-            'artId' => new IdType(),
-            'tag' => new StringType(),
-            'issue' => new StringType(),
-            'url' => new StringType(),
-        ]);
-    }
-
-    public function getType() {
-        return new ListType(new ArticlesType());
-    }
-
-    public function resolve($root, array $args, ResolveInfo $info) {
-
-        if (empty($args)) {
-            throw new Error('Gives most recent issue articles');
-        }
-
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
-
-        $where = Db::setPlaceholders($args);
-
-        // basic fields, no authentication or filtering needed
-        return Db::query("SELECT id, created AS dateCreated, lede, body, url, issue,
-          views, display_order AS displayOrder, authorId
-          FROM pageinfo
-          WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-?>

@@ -13,7 +13,7 @@ use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
-class UsersType extends AbstractObjectType {
+class UserType extends AbstractObjectType {
 
     public function build($config) {
 
@@ -40,38 +40,4 @@ class UsersType extends AbstractObjectType {
             'canEdit' => new NonNullType(new BooleanType())
         ]);
     }
-
-    public function getName() {
-        return 'Users';
-    }
 }
-
-class UsersField extends AbstractField {
-
-    public function build(FieldConfig $config) {
-
-        $config->addArguments([
-            'id' => new IdType(),
-            'profileLink' => new StringType()
-        ]);
-    }
-
-    public function getType() {
-        return new ListType(new UsersType());
-    }
-
-    // TODO: deal with jwt
-    public function resolve($root, array $args, ResolveInfo $info) {
-
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
-
-        $where = Db::setPlaceholders($args);
-
-
-        // basic fields, no authentication or filtering needed
-        return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-          email, level FROM users WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-?>
