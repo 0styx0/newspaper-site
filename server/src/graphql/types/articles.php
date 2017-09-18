@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once(__DIR__ . '/users.php');
+require_once(__DIR__ . '/images.php');
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -37,8 +38,10 @@ class ArticlesType extends AbstractObjectType {
 
                     foreach ($images as $image) {
 
-                        if (strpos($content, 'data-src') !== false) {
-                            $content = substr_replace($content, "src='${$img}'", $imagePos, strlen('data-src'));
+                        $imagePos = strpos($content, 'data-src');
+
+                        if ($imagePos !== false) {
+                            $content = substr_replace($content, "src='{$image}'", $imagePos, strlen('data-src'));
                         }
                     }
 
@@ -72,11 +75,11 @@ class ArticlesType extends AbstractObjectType {
                 }
             ],
             'images' => [
-                'type' => new NonNullType(new ListType('')), // ImageType
+                'type' => new NonNullType(new ListType(new ImagesType())), // ImageType
                 'args' => [
                     'slide' => new BooleanType()
                 ],
-                'resolve' => function ($article, $args) {
+                'resolve' => function ($article, array $args) {
 
                     $sql = "SELECT id, slide, art_id, url FROM images WHERE art_id = ?";
 
