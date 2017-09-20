@@ -33,13 +33,13 @@ class UserQueryArgsTest extends UserTest {
         $this->assertEquals($users[0]['id'], $user['id']);
     }
 
-    function testNoArgs() {
+    function testNoArgsGetAllUsers() {
 
         $users = $this->request([
            'query' => $this->userExistsQuery
         ]);
 
-        TestDatabase::users
+        $this->assertEquals($users,  TestDatabase::users);
     }
 
 
