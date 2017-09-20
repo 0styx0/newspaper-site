@@ -88,7 +88,7 @@ class GenerateMockRow {
     public function comment(Faker\Generator $faker) {
 
         return [
-            'id' => $faker->unique()->randomNumber(),
+            'id' => $faker->unique()->randomNumber() + 1,
             'art_id' => -1, // replaced later
             'authorid' => -1, // replaced later
             'content' => $faker->randomHtml(),

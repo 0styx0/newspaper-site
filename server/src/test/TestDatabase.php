@@ -84,7 +84,5 @@ class TestDatabase {
     }
 }
 
-$db = new TestDatabase();
-$db->init();
 
 ?>
