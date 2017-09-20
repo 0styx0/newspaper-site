@@ -75,7 +75,7 @@ CREATE TABLE `pageinfo` (
 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL,
-  `tag` varchar(10) DEFAULT NULL,
+  `tag` varchar(20) DEFAULT NULL,
   `art_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
