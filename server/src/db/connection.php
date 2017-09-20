@@ -35,6 +35,16 @@ class Db {
         }
         catch(Exception $e) {
 
+
+            if ($_ENV['test']) {
+
+                // print_r($params);
+
+                echo explode('?', $cmd)[0];
+                echo $e->getMessage();
+                exit;
+            }
+
             $DBH->rollback();
         }
     }
@@ -56,6 +66,22 @@ class Db {
         }
 
         return $where;
+    }
+
+    /**
+     * Sets `where` clause of sql
+     *
+     * @param $args - @see param $args of #setPlaceholders
+     *
+     * @return Db::setPlaceholders with "where" prepended
+     */
+    static function setArgs(array $args) {
+
+        if (empty($args)) {
+            return '';
+        }
+
+        return "WHERE " . Db::setPlaceholders($args);
     }
 }
 
