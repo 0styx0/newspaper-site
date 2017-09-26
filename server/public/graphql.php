@@ -41,7 +41,7 @@ $processor = new Processor(new Schema([
 $rawBody = file_get_contents('php://input');
 $decodedBody = json_decode($rawBody);
 
-$processor->processPayload($decodedBody->query, $decodedBody->variables);
+$processor->processPayload($decodedBody->query, (array) $decodedBody->variables);
 echo json_encode($processor->getResponseData()) . "\n";
 
 ?>
