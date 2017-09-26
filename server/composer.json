@@ -11,7 +11,9 @@
     },
     "autoload": {
 		"classmap": [
-			"src/db/connection.php"
+			"src/db/connection.php",
+            "src/test/TestDatabase.php",
+            "src/test/HelpTests.php"
 		]
 	}
 }
