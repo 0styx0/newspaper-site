@@ -82,7 +82,25 @@ class HelpTests extends TestCase {
         $this->assertEquals($expected, $actual, "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
     }
 
+    /**
+     * Searches array for an element with a certain value
+     *
+     * @param $array - haystack
+     * @param $qualifier - function applied to each element
+     *
+     * @return element of array where $qualifier returns true
+     */
+    public static function searchArray(array $array, callable $qualifier) {
 
+        foreach ($array as $element) {
+
+            if ($qualifier($element)) {
+                return $element;
+            }
+        }
+
+        return [];
+    }
 }
 
 
