@@ -33,7 +33,7 @@ class IssuesField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
+        $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $where = Db::setPlaceholders($args);
 

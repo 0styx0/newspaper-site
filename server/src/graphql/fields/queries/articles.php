@@ -37,7 +37,7 @@ class ArticlesField extends AbstractField {
             throw new Error('Gives most recent issue articles');
         }
 
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
+        $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $where = Db::setPlaceholders($args);
 

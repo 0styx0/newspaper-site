@@ -29,14 +29,21 @@ class UsersField extends AbstractField {
     // TODO: deal with jwt
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $sanitized = filter_var($args, FILTER_SANITIZE_STRING);
+        $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        $where = Db::setPlaceholders($args);
+        $where = Db::setArgs($args);
 
+        if (isset($sanitized['profileLink'])) {
 
+            $where = str_replace('profileLink = :profileLink', "email LIKE '{$sanitized['profileLink']}@%'", $where);
+
+            $sanitized['email'] = $sanitized['profileLink'];
+            unset($sanitized['profileLink']);
+        }
+        
         // basic fields, no authentication or filtering needed
         return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-          email, level FROM users WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
+          email, level FROM users {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
