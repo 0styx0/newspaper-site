@@ -2,14 +2,14 @@
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/GenerateMockRows.php');
+use Faker\Provider\Base;
 
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
 $dotenv->load();
 
 class TestDatabase {
 
-    private $DBH;
-    private $GenerateRows;
+    public $GenerateRows;
 
     public function __construct() {
 
@@ -81,6 +81,16 @@ class TestDatabase {
 
         $this->create();
         $this->insertMockData();
+    }
+
+    /**
+     * @return random user that is in database
+     */
+    public function getRandomUser() {
+
+        $faker = Faker\Factory::create();
+
+        return $faker->randomElement($this->GenerateRows->users);
     }
 }
 
