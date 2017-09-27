@@ -6,6 +6,13 @@ require_once(__DIR__ . '/../../../vendor/autoload.php');
 
 class UserTest extends TestCase {
 
+    protected $TestDatabase;
+
+    protected function setup() {
+
+        $this->TestDatabase = new TestDatabase();
+        $this->TestDatabase->init();
+    }
 
     /**
       * @param $args - @see HelpTests::createHTTPRequest param $args
