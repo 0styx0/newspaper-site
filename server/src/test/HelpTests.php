@@ -46,7 +46,7 @@ class HelpTests extends TestCase {
             echo "HERE";print_r([$res_info, $content,$api_response_body]);
         }
 
-        if (isset($api_response_body['errors'])) {
+        if ($debug && isset($api_response_body['errors'])) {
             echo "Caller: " . debug_backtrace()[2]['function'] . "\n";
             echo "Args: "; print_r($args);
             echo substr($content, $res_info['header_size']); // api_response_body, but not decoded
@@ -100,6 +100,11 @@ class HelpTests extends TestCase {
         }
 
         return [];
+    }
+
+    public static function getProfileLink(string $email) {
+
+        return explode('@', $email)[0];
     }
 }
 
