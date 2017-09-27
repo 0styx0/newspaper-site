@@ -2,6 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 class HelpTests extends TestCase {
@@ -71,6 +74,23 @@ class HelpTests extends TestCase {
             preg_match('/jwt=([^;]*)/', $matches[0], $jwt);
             $_COOKIE['eyeStorm-jwt'] = $jwt[1];
         }
+    }
+
+    /**
+     * @param $user - 1 element of @see TestDatabase->users
+     *
+     * @return a json web token valid for $user
+     */
+    public static function getJwt(array $user) {
+
+        return (new Builder())->setIssuer('https://tabceots.com')
+                                ->setAudience('https://tabceots.com')
+                                ->setIssuedAt(time())
+                                ->setId($user['id'], true)
+                                ->set('profileLink', HelpTests::getProfileLink($user['email']))
+                                ->set('level', $user['level'])
+                                ->sign($signer, $_ENV['JWT_SECRET'])
+                                ->getToken(); // Retrieves the generated token
     }
 
     /**
