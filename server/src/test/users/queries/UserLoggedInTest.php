@@ -64,6 +64,7 @@ class UserLoggedInTest extends UserTest {
         $this->assertFalse(in_array(false, array_column($lowerLevelUsers, 'canEdit')));
     }
 
+    // expects canEdit to be false, and twoFactor = notifications = null
     function testLevelSameOrLowerThanOtherUserCannotEdit() {
 
         $level = rand(1, 3);
@@ -75,7 +76,9 @@ class UserLoggedInTest extends UserTest {
         $data = $this->request([
             'query' => 'query users {
                             users {
-                                canEdit
+                                canEdit,
+                                notifications,
+                                twoFactor
                             }
                         }'
         ], HelpTests::getJwt($user));
@@ -84,9 +87,15 @@ class UserLoggedInTest extends UserTest {
             return $currentUser['level'] >= $higherLevel && $user['id'];
         });
 
-        $this->assertFalse(in_array(true, array_column($lowerLevelUsers, 'canEdit')));
+        HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser) {
+
+            $this->assertFalse($currentUser['canEdit']);
+            $this->assertNull($currentUser['notifications']);
+            $this->assertNull($currentUser['twoFactor']);
+        });
     }
 
+    // opposite expectations of #testLevelSameOrLowerThanOtherUserCannotEdit
     function testCanSeeOwnSettings() {
 
         $user = $this->getRandomUser();
