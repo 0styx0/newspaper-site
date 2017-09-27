@@ -12,7 +12,7 @@ class UserTest extends TestCase {
       */
     protected function request(array $args = [], $jwt = '') {
 
-        return HelpTests::createHTTPRequest($args , 'users', $jwt);
+        return HelpTests::createHTTPRequest($args , 'users', $jwt)['data'];
     }
 
 }
