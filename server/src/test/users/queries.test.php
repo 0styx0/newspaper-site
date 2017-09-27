@@ -25,9 +25,9 @@ class UserQueryArgsTest extends UserTest {
                             }
                         }',
             'variables' => [
-                'profileLink' => explode('@', $user['email'])[0]
+                'profileLink' => HelpTests::getProfileLink($user['email']),
             ]
-        ])['data'];
+        ]);
 
         $this->assertEquals($user['id'], $data['users'][0]['id']);
         $this->assertEquals(1, count($data['users']));
@@ -46,7 +46,7 @@ class UserQueryArgsTest extends UserTest {
             'variables' => [
                 'id' => $user['id']
             ]
-        ])['data'];
+        ]);
 
         $this->assertEquals($user['id'], $data['users'][0]['id']);
         $this->assertEquals(1, count($data['users']));
@@ -60,7 +60,7 @@ class UserQueryArgsTest extends UserTest {
                                 id
                             }
                         }'
-        ])['data'];
+        ]);
 
         $expected = array_column($this->TestDatabase->GenerateRows->users, 'id');
         $actual = array_column($data['users'], 'id');
@@ -69,16 +69,62 @@ class UserQueryArgsTest extends UserTest {
         $HelpTests->compareArrayContents($expected, $actual);
     }
 
+    /**
+     * Checks if can get $attribute when not logged in
+     *
+     * @param $attribute - graphql field
+     */
+    private function helperTestNotLoggedIn(string $attribute) {
 
+        $user = HelpTests::searchArray($this->TestDatabase->GenerateRows->users, function (array $user) {
+            return $user['level'] == 3;
+        });
+
+        $data = $this->request([
+            'query' => "query users(\$id: ID) {
+                            users(id: \$id) {
+                                {$attribute}
+                            }
+                        }",
+            'variables' => [
+                'id' => $user['id']
+            ]
+        ]);
+
+        $this->assertNull($data['users'][0][$attribute]);
+    }
+
+    function testNotLoggedInCannotGetPassword() {
+
+        $this->helperTestNotLoggedIn('password');
+    }
+
+    function testNotLoggedInCannotGetUsername() {
+
+        $this->helperTestNotLoggedIn('username');
+    }
+
+    function testNotLoggedInCannotGetNotificationSetting() {
+
+        $this->helperTestNotLoggedIn('notifications');
+    }
+
+    function testNotLoggedInCannotGetTwoFactor() {
+
+        $this->helperTestNotLoggedIn('twoFactor');
+    }
+
+
+    function testNotLoggedInGetOnlyPublicArticleCount() {
+
+        $user = HelpTests::searchArray($this->TestDatabase->GenerateRows->users, function (array $user) {
+            return $user['level'] == 3;
+        });
+
+
+    }
 
     /*
-    it('gets all users if no args', async () => {
-
-        const users = await request({query: userExistsQuery});
-
-        expect(users.map(user => user.id)).to.have.members(Database.tables.values.users.map(user => user.id));
-    });
-
     describe('when not logged in as current user, cannot access', () => {
 
         let jwt: string;
@@ -93,42 +139,6 @@ class UserQueryArgsTest extends UserTest {
             user.profileLink = user.email.split('@')[0];
 
             jwt = setJWT(user);
-        });
-
-        it('password', async () => {
-
-            const userPasswordQuery = `
-                query users($profileLink: String, $id: ID) {
-                    users(profileLink: $profileLink, id: $id) {
-                        password
-                    }
-                }
-            `;
-
-            const users = await request({
-                query: userPasswordQuery,
-                variables: {
-                    id: currentUser.id
-                }
-            }, jwt).catch(e => {
-                expect(e).to.not.be.empty;
-            });
-
-        });
-
-        it('username', () => {
-
-
-        });
-
-        it('notifications setting', () => {
-
-
-        });
-
-        it('two factor setting', () => {
-
-
         });
     });
 
