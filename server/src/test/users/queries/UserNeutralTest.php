@@ -5,7 +5,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UserLoggedInTest extends UserTest {
+class UserNeutralTest extends UserTest {
 
     function testProfileLinkArg() {
 

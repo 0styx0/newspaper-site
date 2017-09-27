@@ -14,6 +14,11 @@ class UserTest extends TestCase {
         $this->TestDatabase->init();
     }
 
+    protected function helpGetRandomUser() {
+
+        return $this->TestDatabase->users[ rand(0, count($this->TestDatabase->users)) - 1 ];
+    }
+
     /**
       * @param $args - @see HelpTests::createHTTPRequest param $args
       */

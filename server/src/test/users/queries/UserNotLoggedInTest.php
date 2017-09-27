@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
 
-class UserTest extends UserTest {
+class UserNotLoggedInTest extends UserTest {
 
     /**
      * Checks if can get $attribute when not logged in
@@ -51,12 +51,7 @@ class UserTest extends UserTest {
 
         $this->helperTest('twoFactor');
     }
-
-    protected function helpGetRandomUser() {
-
-        return $this->TestDatabase->users[ rand(0, count($this->TestDatabase->users)) - 1 ];
-    }
-
+    
     /**
      * Checks if article is public
      *
