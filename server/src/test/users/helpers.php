@@ -27,5 +27,15 @@ class UserTest extends TestCase {
         return HelpTests::createHTTPRequest($args , 'users', $jwt)['data'];
     }
 
+    /**
+     * @param $length - how long string should be
+     *
+     * @return random string
+     */
+    protected function generateRandomString(int $length) {
+
+        return bin2hex(random_bytes($length));
+    }
+
 }
 ?>
