@@ -5,9 +5,15 @@ use PHPUnit\Framework\TestCase;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 
+use Faker\Provider\Base;
+
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 class HelpTests extends TestCase {
+
+    public static function faker() {
+        return Faker\Factory::create();
+    }
 
     /**
       * Helper method to create http request to api while passing along the jwt
