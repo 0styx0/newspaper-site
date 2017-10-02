@@ -23,24 +23,6 @@ class UserLoggedInTest extends UserTest {
         $this->assertEqual($expected, $data['users'][0]['articleCount']);
     }
 
-    function testCanSeeAnyArticle() {
-
-        $user = $this->TestDatabase->getRandomUser();
-        $expectedIds = array_column($this->TestDatabase->pageinfo, 'id');
-
-        $data = $this->request([
-            'query' => 'query users {
-                            users {
-                                articles {
-                                    id
-                                }
-                            }
-                        }'
-        ], HelpTests::getJwt($user));
-
-        $this->expectEqual($expectedIds, array_column($data['users'][0]['articles'], 'id'));
-    }
-
     function testLevelHigherThanOtherUserCanEdit() {
 
         $higherLevel = rand(2, 3);
