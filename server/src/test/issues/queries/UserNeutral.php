@@ -33,7 +33,7 @@ class NeutralIssueTest extends IssueTest {
                             }
                         }",
             'variables' => $variableValues
-        ], HelpTests::getJwt($this->Database->GenerateMockRows->users[0]));
+        ]);
     }
 
     function testCanQueryByNum() {
