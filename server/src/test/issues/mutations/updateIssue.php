@@ -19,21 +19,11 @@ class UpdateIssueTest extends IssueTest {
             $currentUser['level'] == $userLevel;
         });
 
-        $variableArr = ['$password: String'];
-        $keyMappingsArr = ['password: $password'];
-
-        foreach ($variableTypes as $field => $type) {
-
-            $variableArr[] = "{$field}: {$type}"; // $num: ID
-            $keyMappingsArr[] = substr($field, 1) . ":{$field}"; // num: $num
-        }
-
-        $variablesString = implode(',', $variableArr);
-        $keyMappingsString = implode(',', $keyMappingsArr);
+        $variablesStrings = HelpTests::convertVariableArrayToGraphql(array_merge($variableTypes, ['$password' => 'String']));
 
         return $this->request([
-            'query' => "mutation updateIssue({$variablesString}) {
-                            updateIssue($keyMappingsString) {
+            'query' => "mutation updateIssue({$variablesStrings['types']}) {
+                            updateIssue({$variablesStrings['mappings']}) {
                                 name
                                 public
                             }

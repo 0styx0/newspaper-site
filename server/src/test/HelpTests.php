@@ -132,6 +132,31 @@ class HelpTests extends TestCase {
 
         return explode('@', $email)[0];
     }
+
+    /**
+     * @param $variableTypes - graphql variables with type. Example: ['$num: => 'ID', '$limit': 'Int']
+     *
+     * @return $variableTypes converted to a string
+     *
+     * @example convertVariableArrayToGraphql(['$num' => 'ID']) =>
+     *   ['types' => '$num: ID', 'mappings' => 'num: $num']
+     */
+    public static function convertVariableArrayToGraphql(array $variableTypes) {
+
+        $variableArr = [];
+        $keyMappingsArr = [];
+
+        foreach ($variableTypes as $field => $type) {
+
+            $variableArr[] = "{$field}: {$type}"; // $num: ID
+            $keyMappingsArr[] = substr($field, 1) . ":{$field}"; // num: $num
+        }
+
+        $variablesString = implode(',', $variableArr);
+        $keyMappingsString = implode(',', $keyMappingsArr);
+
+        return ['types' => $variablesString, 'mappings' => $keyMappingsString];
+    }
 }
 
 
