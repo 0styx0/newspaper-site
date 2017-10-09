@@ -5,8 +5,21 @@ require_once(__DIR__ . '/../helpers.php');
 
 class LoggedInIssueTest extends IssueTest {
 
-    function testGetMostRecentIssueIfNoArgsPassed() {
+    function testGetMostRecentIssueIfInvalidNumPassed() {
 
+        $data = $this->request([
+            'query' => 'query IssueInfo($num: ID) {
+                            issues(num: $num, limit: 1) {
+                                num
+                                max
+                                name
+                            }
+                        }',
+            'variables' => [
+                'num' => $this->Database->GenerateMockRows->issues[0]['num'] + 1
+            ]
+        ]);
+
+        $this->assertNull($data['issues']);
     }
-
 }
