@@ -13,21 +13,11 @@ class NeutralUserCommentTest extends CommentTest {
      */
     protected function helpTestArgs(array $variableTypes, array $variableValues) {
 
-        $variableArr = [];
-        $keyMappingsArr = [];
-
-        foreach ($variableTypes as $field => $type) {
-
-            $variableArr[] = "{$field}: {$type}"; // $num: ID
-            $keyMappingsArr[] = substr($field, 1) . ":{$field}"; // num: $num
-        }
-
-        $variablesString = implode(',', $variableArr);
-        $keyMappingsString = implode(',', $keyMappingsArr);
+        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
-            'query' => "query CommentQuery({$variablesString}) {
-                            comments({$keyMappingsString}) {
+            'query' => "query CommentQuery({$variablesString['types']}) {
+                            comments({$variableStrings['mappings']}) {
                                 id
                                 content,
                                 dateCreated,
