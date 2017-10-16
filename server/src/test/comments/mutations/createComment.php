@@ -94,15 +94,9 @@ class CreateCommentTest extends CommentTest {
 
     function testContentCannotBeMalicious() { // bad content should be converted to nothing or escaped
 
-        $badContent = [
-            '<script>alert("hi")</script>',
-            '<?php echo "hello" ?>',
-            '<p onClick="alert(hi)">goodbye</p>'
-        ];
-
         $articleToCommentOn = $this->helpGetArticle();
 
-        foreach ($badContent as $content) {
+        foreach (HelpTests::unsafeData as $content) {
 
             $data = $this->helpTest($articleToCommentOn, $content);
 

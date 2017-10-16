@@ -15,6 +15,13 @@ class HelpTests extends TestCase {
         return Faker\Factory::create();
     }
 
+    public static $unsafeData = [
+        '<script>alert("hi")</script>',
+        '<?php echo "hello" ?>',
+        '<p onClick="alert(hi)">goodbye</p>'
+    ];
+
+
     /**
       * Helper method to create http request to api while passing along the jwt
       *
