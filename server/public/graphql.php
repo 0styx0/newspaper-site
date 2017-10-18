@@ -15,6 +15,7 @@ require_once(__DIR__ . '/../src/graphql/fields/queries/comments.php');
 require_once(__DIR__ . '/../src/graphql/fields/queries/issues.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/login.php');
 require_once(__DIR__ . '/../src/graphql/fields/queries/users.php');
+require_once(__DIR__ . '/../src/graphql/fields/queries/allTags.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
@@ -22,7 +23,8 @@ $rootQueryType = new ObjectType([
         new UsersField(),
         new ArticlesField(),
         new IssuesField(),
-        new CommentsField()
+        new CommentsField(),
+        new AllTagsField()
     ]
 ]);
 
