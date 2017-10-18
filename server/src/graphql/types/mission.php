@@ -9,6 +9,7 @@ use Youshido\GraphQL\Config\Field\FieldConfig;
 
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
+use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\NonNullType;
 
 class MissionType extends AbstractObjectType {
