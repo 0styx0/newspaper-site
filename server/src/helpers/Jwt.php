@@ -29,6 +29,8 @@ class Jwt {
 
             $parsedToken = (new Parser())->parse($encodedToken);
             Jwt::$token = $parsedToken; // Retrieves the token claims
+
+            return Jwt::$token;
         }
 
         return false;
