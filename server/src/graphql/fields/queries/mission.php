@@ -22,7 +22,7 @@ class MissionField extends AbstractField {
 
         return [
             'mission' => file_get_contents(__DIR__ . '/../../../../public/missionView.html'),
-            'canEdit' => new Error('Must get access to jwt before implementing')
+            'canEdit' => Jwt::getToken()->getClaim('level') > 2
         ];
     }
 }
