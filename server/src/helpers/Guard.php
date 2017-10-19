@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 class Guard {
 
     /**
@@ -12,7 +14,7 @@ class Guard {
     public static function userMustBeLoggedIn() {
 
         if (!Jwt::getToken()) {
-            throw new Error('User must be logged in');
+            throw new Error('User not logged in');
         }
 
         return true;
