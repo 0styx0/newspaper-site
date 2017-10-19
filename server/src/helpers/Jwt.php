@@ -31,7 +31,7 @@ class Jwt {
             Jwt::$token = $parsedToken; // Retrieves the token claims
         }
 
-        return Jwt::$token;
+        return false;
     }
 
 }

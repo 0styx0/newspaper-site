@@ -15,7 +15,8 @@
 			"src/db/connection.php",
             "src/test/TestDatabase.php",
             "src/test/HelpTests.php",
-            "src/helpers/Jwt.php"
+            "src/helpers/Jwt.php",
+            "src/helpers/Guard.php"
 		]
 	}
 }
