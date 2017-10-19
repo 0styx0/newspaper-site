@@ -54,7 +54,7 @@ class Db {
     }
 
     /**
-     * @param $keys - assoc array of placeholders
+     * @param $args - assoc array of placeholders
      *
      * @return string of key = :key
      *
@@ -75,7 +75,7 @@ class Db {
     /**
      * Sets `where` clause of sql
      *
-     * @param $args - @see param $args of #setPlaceholders
+     * @param $args - assoc array of placeholders
      *
      * @return Db::setPlaceholders with "where" prepended
      */
