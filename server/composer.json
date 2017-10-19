@@ -3,7 +3,8 @@
     "require": {
         "youshido/graphql": "^1.5",
         "vlucas/phpdotenv": "^2.4",
-        "lcobucci/jwt": "^3.2"
+        "lcobucci/jwt": "^3.2",
+        "ezyang/htmlpurifier": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
@@ -13,7 +14,8 @@
 		"classmap": [
 			"src/db/connection.php",
             "src/test/TestDatabase.php",
-            "src/test/HelpTests.php"
+            "src/test/HelpTests.php",
+            "src/helpers/Jwt.php"
 		]
 	}
 }
