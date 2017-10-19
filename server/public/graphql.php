@@ -17,6 +17,8 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/login.php');
 require_once(__DIR__ . '/../src/graphql/fields/queries/users.php');
 require_once(__DIR__ . '/../src/graphql/fields/queries/allTags.php');
 require_once(__DIR__ . '/../src/graphql/fields/queries/mission.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/createComment.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteComment.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
@@ -33,7 +35,9 @@ $rootQueryType = new ObjectType([
 $rootMutationType = new ObjectType([
     'name' => 'RootMutationType',
     'fields' => [
-        new LoginField()
+        new LoginField(),
+        new CreateCommentField(),
+        new DeleteCommentField()
     ]
 ]);
 
