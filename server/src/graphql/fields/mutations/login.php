@@ -54,6 +54,7 @@ class LoginField extends AbstractField {
                                 ->setIssuedAt(time())
                                 ->setExpiration(time() + 3600)
                                 ->setId($user['id'], true)
+                                ->set('id', $user['id'])
                                 ->set('profileLink', $user['profileLink'])
                                 ->set('level', $user['level'])
                                 ->sign($signer, $_ENV['JWT_SECRET'])
