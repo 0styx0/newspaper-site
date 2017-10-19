@@ -4,6 +4,8 @@
 
 class Db {
 
+    public static $lastInsertId;
+
     /**
      * <p>
      * All database related stuff passes through here
@@ -28,6 +30,8 @@ class Db {
             $query = $DBH->prepare($cmd);
 
             $query->execute($params);
+
+            Db::$lastInsertId = $DBH->lastInsertId();
 
             $DBH->commit();
 
