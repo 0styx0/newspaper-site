@@ -87,6 +87,17 @@ class Db {
 
         return "WHERE " . Db::setPlaceholders($args);
     }
+
+    /**
+     * Generates a string of comma separated '?', one '?' for each elt in $params
+     *
+     * @param $params - length will determine how many question marks are generated
+     *
+     */
+    static function generatePlaceholders($params) {
+
+        return implode(',', array_fill(0, count($params), '?'));
+    }
 }
 
 

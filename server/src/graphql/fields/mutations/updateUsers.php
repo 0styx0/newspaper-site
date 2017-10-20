@@ -49,7 +49,7 @@ class UpdateUsersField extends AbstractField {
 
         foreach ($args['data'] as $level) {
 
-            $placeholders = implode(',', array_fill(0, count($level['ids']), '?'));
+            $placeholders = Db::generatePlaceholders($level['ids']);
 
             $maxUserLevel = Db::query("SELECT MAX(level) FROM users WHERE id IN ({$placeholders})", $level['ids'])->fetchColumn();
 
