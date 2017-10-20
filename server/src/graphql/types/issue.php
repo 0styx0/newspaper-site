@@ -26,7 +26,7 @@ class IssueType extends AbstractObjectType {
             'public' => new NonNullType(new BooleanType()),
             'datePublished' => new TimestampType(),
             'articles' => [
-                'type' => new NonNullType(new ListType(new ArticlesType())),
+                'type' => new NonNullType(new ListType(new ArticleType())),
                 'resolve' => function ($issue) {
 
                     return Db::query("SELECT id, created AS dateCreated, lede, body, url, issue,
