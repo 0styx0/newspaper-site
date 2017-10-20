@@ -39,6 +39,21 @@ class Guard {
 
         return true;
     }
+
+    /**
+     * @param $password - password user gives
+     * @throws Incorrect password exception
+     */
+    public static function withPassword(string $password) {
+
+        $hash = Db::query("SELECT password FROM users WHERE id = ?", [Jwt::getToken()->getClaim('id')])->fetchColumn();
+
+        if (!password_verify($password, $hash)) {
+            throw new Exception('Incorrect password');
+        }
+
+        return true;
+    }
 }
 
 
