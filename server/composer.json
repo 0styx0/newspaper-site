@@ -18,7 +18,8 @@
             "src/test/HelpTests.php",
             "src/helpers/Jwt.php",
             "src/helpers/Guard.php",
-            "src/helpers/Validate.php"
+            "src/helpers/Validate.php",
+            "src/helpers/SendMail.php"
 		]
 	}
 }
