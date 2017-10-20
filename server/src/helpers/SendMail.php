@@ -1,6 +1,9 @@
 <?php
 
-require_once(__DIR__."/../vendor/autoload.php");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class SendMail {
 
@@ -13,8 +16,8 @@ class SendMail {
       *
       * @return true if successful, else false
       */
-    public function specific(string $email, string $subject, string $message) {
-        return $this->phpMail($email, $subject, $message);
+    public static function specific(string $email, string $subject, string $message) {
+        return SendMail::phpMail($email, $subject, $message);
     }
 
     /**
@@ -26,7 +29,7 @@ class SendMail {
       *
       * @return true if sent, else false
       */
-    public function articlePublished(string $tags, int $issueNum, string $name) {
+    public static function articlePublished(string $tags, int $issueNum, string $name) {
 
         $subject = "An article has been published";
 
@@ -36,7 +39,7 @@ class SendMail {
             <br />
             View details <a href='https://tabceots.com/modifyArticles'>here</a>";
 
-        return $this->toLevel(3, $subject, $message);
+        return SendMail::toLevel(3, $subject, $message);
     }
 
     /**
@@ -48,7 +51,7 @@ class SendMail {
       *
       * @return true if sent, else false
       */
-    public function toLevel(int $lvl, string $subject = "", string $message = "") {
+    public static function toLevel(int $lvl, string $subject = "", string $message = "") {
 
         $db = new MyDB();
 
@@ -56,7 +59,7 @@ class SendMail {
 
         $toEmail = $db->catchMistakes("SELECT DISTINCT EMAIL FROM USERS WHERE LEVEL = ? AND SUBSTRING(EMAIL, 0, 1) != ? AND NOTIFICATIONS = 1", [$filteredLvl, "."]);
 
-        return $this->phpMail($toEmail->fetchAll(PDO::FETCH_COLUMN, 0), $subject, $message);
+        return SendMail::phpMail($toEmail->fetchAll(PDO::FETCH_COLUMN, 0), $subject, $message);
     }
 
     /**
@@ -67,29 +70,29 @@ class SendMail {
       *
       * @return true if email sent, else false
       */
-    public function twoFactor(string $email, string $emailVerifyCode) {
+    public static function twoFactor(string $email, string $emailVerifyCode) {
 
         $message = "Your code is <br />" . $emailVerifyCode . "<br/>This code is valid for 10 minutes.";
 
-        return $this->phpMail([$email], "Auth code for Eye Of The Storm", $message);
+        return SendMail::phpMail([$email], "Auth code for Eye Of The Storm", $message);
     }
 
     /**
       * Sends email user gets either right after signing up, or after changing email
       *
-      * @param $email - valid email address of user EXCEPT that a dot (.) must be preceeding the address
+      * @param $email - email address of user
       * @param $username - username of user
       * @param $code - decrypted version of auth code
       *
       * @return true if sent, else false
       */
-    public function emailAuth(string $email, string $username, string $code) {
+    public static function emailVerification(string $email, string $code) {
 
         $message = "Your code is <br />{$code}<br/>This code is valid for 1 day.
                     Your account may be deleted if this is not
-                    <a href='https://tabceots.com/u/{$username}'>verified</a>.";
+                    <a href='https://tabceots.com/login}'>verified</a>.";
 
-        return $this->phpMail([substr($email, 1)], "Verify Your EOTS Account", $message);
+        return SendMail::phpMail([$email], "Verify Your EOTS Account", $message);
     }
 
     /**
@@ -101,7 +104,7 @@ class SendMail {
       *
       * @return true if sent, else false
       */
-    public function passwordRecovery(string $newPassword, string $username, string $email) {
+    public static function passwordRecovery(string $newPassword, string $username, string $email) {
 
         $message = "Your new password is <br />".
                       $newPassword
@@ -110,7 +113,7 @@ class SendMail {
                       <br />To prevent passwords from being forgotten, consider using a password manager such as
                       1Password or LastPass";
 
-        return $this->phpMail([$email], "Recovery Code for Eye Of The Storm", $message);
+        return SendMail::phpMail([$email], "Recovery Code for Eye Of The Storm", $message);
     }
 
     /**
@@ -122,15 +125,15 @@ class SendMail {
       *
       * @return true if all emails to $to have been sent, else false
       */
-    private function phpMail(array $to, string $subject, string $message) {
+    private static function phpMail(array $to, string $subject, string $message) {
 
-        if ($Jwt::getToken()->getClaim('test')) {
+        if (Jwt::getToken() && Jwt::getToken()->getClaim('test')) {
             return true;
         }
 
         $mail = new PHPMailer();
 
-        if (EMAIL_HOST == "smtp.gmail.com") {
+        if ($_ENV['EMAIL_HOST'] == "smtp.gmail.com") {
             $mail->IsSMTP();                           // telling the class to use SMTP
             // $mail->SMTPDebug = 2;
         }
@@ -146,7 +149,7 @@ class SendMail {
 
         foreach ($to as $individual) {
 
-            if (!$this->validate($individual)) {
+            if (!filter_var($individual, FILTER_VALIDATE_EMAIL)) {
 
                 return false;
             }
