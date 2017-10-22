@@ -99,16 +99,17 @@ class SendMail {
       * Sends email when users forgets password. Contains new password
       *
       * @param $newPassword - new, unencrypted password of user
-      * @param $username - username of user
       * @param $email - email address of user
       *
       * @return true if sent, else false
       */
-    public static function passwordRecovery(string $newPassword, string $username, string $email) {
+    public static function passwordRecovery(string $newPassword, string $email) {
+
+        $profileLink = explode('@', $email)[0];
 
         $message = "Your new password is <br />".
                       $newPassword
-                      ."<br /> You are strongly advised to <a href='https://tabceots.com/u/{$username}'>change</a>
+                      ."<br /> You are strongly advised to <a href='https://tabceots.com/u/{$profileLink}'>change</a>
                       it as soon as possible.
                       <br />To prevent passwords from being forgotten, consider using a password manager such as
                       1Password or LastPass";
