@@ -19,7 +19,8 @@
             "src/helpers/Jwt.php",
             "src/helpers/Guard.php",
             "src/helpers/Validate.php",
-            "src/helpers/SendMail.php"
+            "src/helpers/SendMail.php",
+            "src/helpers/Article.php"
 		]
 	}
 }
