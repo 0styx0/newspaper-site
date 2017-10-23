@@ -17,9 +17,11 @@ class UpdateArticleType extends AbstractObjectType {
     public function build($config) {
 
         $config
-            ->addField('id', new NonNullType(new ListType(new IdType())))
-            ->addField('tags', new NonNullType(new ListType(new StringType())))
-            ->addField('displayOrder', new IntType())
-            ->addField('article', new StringType());
+            ->addFields([
+                'id' => new NonNullType(new IdType()),
+                'tags' => new ListType(new StringType()),
+                'displayOrder' => new IntType(),
+                'article' => new StringType()
+            ]);
     }
 }
