@@ -52,15 +52,8 @@ class CreateArticleField extends AbstractField {
 
         $articleId = Db::query("SELECT id FROM pageinfo WHERE issue = ? and url = ?", [$issue, $modifiedUrl])->fetchColumn();
 
-        $placeholders = implode(',', array_fill(0, count($args['tags']), '(?, ?)'));
-
-        // doing the $placeholders and loop here since I think it's more efficient than running sql in a loop
-        $tagInfo = [];
-        foreach ($sanitized['tags'] as $tag) {
-            array_push($tagInfo, $articleId, $tag);
-        }
-
-        Db::query("INSERT INTO tags (art_id, tag) VALUES {$placeholders}", $tagInfo);
+        $ArticleHelper->addImages($imageInfo);
+        $ArticleHelper->addTags($articleId, $sanitized['tags']);
 
         return [
             'url' => $modifiedUrl
