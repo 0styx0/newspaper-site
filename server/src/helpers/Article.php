@@ -79,6 +79,44 @@ class ArticleHelper {
         $toStrip = $purifier->purify($toStrip);
         return strip_tags($toStrip, '<h1><h2><h3><h4><h5><h6><pre><img><p><a><table><td><tr><th><tbody><thead><tfoot><strong><b><em><i><u><sub><sup><font><strike><ul><ol><li><q><blockquote><br><abbr><div><span>');
     }
+
+    /**
+     * Adds tags to article
+     *
+     * @param $articleId - id of article to give tags to
+     * @param $tags - string[] new tags to give article
+     */
+    public function addTags(string $articleId, array $tags) {
+
+        $placeholders = implode(',', array_fill(0, count($tags), '(?, ?)'));
+
+        // doing the $placeholders and loop here since I think it's more efficient than running sql in a loop
+        $tagInfo = [];
+        foreach ($tags as $tag) {
+            array_push($tagInfo, $articleId, $tag);
+        }
+
+        Db::query("INSERT INTO tags (art_id, tag) VALUES {$placeholders}", $tagInfo);
+    }
+
+    /**
+     * Adds images to image db table
+     *
+     * @param $articleId - id of article the images came from
+     * @param $images - assoc array ['url' => url_of_img, 'slide' => if_img_should_be_in_slideshow]
+     */
+    public function addImages(string $articleId, array $images) {
+
+        $placeholders = implode(',', array_fill(0, count($images), '(?, ?, ?)'));
+
+        // doing the $placeholders and loop here since I think it's more efficient than running sql in a loop
+        $imageInfo = [];
+        foreach ($images as $image) {
+            array_push($imageInfo, $articleId, $image['url'], $image['slide']);
+        }
+
+        Db::query("INSERT INTO images (art_id, url, slide) VALUES {$placeholders}", $imageInfo);
+    }
 }
 
 ?>
