@@ -31,7 +31,7 @@ class HelpTests extends TestCase {
       *
       * @return data given back by graphql
       */
-    public static function createHTTPRequest(array $args, string $operationName, string $jwt, $debug = false) {
+    public static function createHTTPRequest(array $args, string $operationName, string $jwt = null, $debug = false) {
 
         $ch = curl_init();
 
@@ -46,19 +46,21 @@ class HelpTests extends TestCase {
         curl_setopt($ch, CURLOPT_HEADER, 1);
 
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow redirects (since .htaccess forces all api stuff through /router)
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-type: application/graphql'));
-        curl_setopt($ch, CURLOPT_COOKIE, $jwt);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json',
+            'Content-type: application/graphql',
+            "Authorization: Bearer {$jwt}"
+        ]);
+        
         $content = trim(curl_exec($ch));
         $res_info = curl_getinfo($ch);
-
-        HelpTests::getCookiesFromCurl($content);
 
         $api_response_body = (array) json_decode(substr($content, $res_info['header_size']), true);
 
         // echo "\n". debug_backtrace()[2]['function']. " : ".$res_info["http_code"];
         curl_close($ch);
 
-        if ($debug) {
+        if (true || $debug) {
             echo "HERE";print_r([$res_info, $content,$api_response_body]);
         }
 
@@ -73,22 +75,6 @@ class HelpTests extends TestCase {
         return $api_response_body;
     }
 
-        /**
-      * @param $content - result of curl_exec
-      *
-      * @return cookies found
-      */
-    public static function getCookiesFromCurl($content) {
-
-        preg_match('/Set-Cookie[\s\S]+?\n/', $content, $matches);
-
-        if (!empty($matches[0])) {
-
-            preg_match('/jwt=([^;]*)/', $matches[0], $jwt);
-            $_COOKIE['eyeStorm-jwt'] = $jwt[1];
-        }
-    }
-
     /**
      * @param $user - 1 element of @see TestDatabase->users
      *
@@ -96,12 +82,15 @@ class HelpTests extends TestCase {
      */
     public static function getJwt(array $user) {
 
+        $signer = new Sha256();
+
         return (new Builder())->setIssuer('https://tabceots.com')
                                 ->setAudience('https://tabceots.com')
                                 ->setIssuedAt(time())
                                 ->setId($user['id'], true)
                                 ->set('profileLink', HelpTests::getProfileLink($user['email']))
                                 ->set('level', $user['level'])
+                                ->set('id', $user['id'])
                                 ->sign($signer, $_ENV['JWT_SECRET'])
                                 ->getToken(); // Retrieves the generated token
     }
