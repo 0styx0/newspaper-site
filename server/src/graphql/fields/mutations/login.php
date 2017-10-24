@@ -12,9 +12,6 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\NonNullType;
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-
 class LoginField extends AbstractField {
 
     public function build(FieldConfig $config) {
@@ -37,39 +34,36 @@ class LoginField extends AbstractField {
      */
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $signer = new Sha256();
-
-        $user = Db::query("SELECT id, level, password, TRIM(TRAILING ? FROM email) AS profileLink
+        $user = Db::query("SELECT id, level, password, TRIM(TRAILING ? FROM email) AS profileLink, email
           FROM users
-          WHERE username = ? OR email = ?
+          WHERE username = ? OR email = ? OR email = CONCAT('.', ?)
           LIMIT 1",
-          [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC)[0];
+          [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC)[0];
 
         if (!password_verify($args['password'], $user['password'])) {
             throw new Error('Invalid Password');
         }
 
-        $token = (new Builder())->setIssuer('https://tabceots.com')
-                                ->setAudience('https://tabceots.com')
-                                ->setIssuedAt(time())
-                                ->setExpiration(time() + 3600)
-                                ->setId($user['id'], true)
-                                ->set('id', $user['id'])
-                                ->sign($signer, $_ENV['JWT_SECRET'])
-                                ->getToken(); // Retrieves the generated token
+        $token = Jwt::setToken($user);
 
-        $emailIsVerified = $user['profileLink'][0] !== '.';
-
-        if ($emailIsVerified) {
-
-            $token = $token->set('profileLink', $user['profileLink'])
-                            ->set('level', $user['level']);
+        $emailIsVerified = $user['email'][0] === '.';
+        if (!$emailIsVerified) {
+            $this->sendEmailVerification($user['id'], substr($user['email'], 1));
         }
 
         return ['jwt' => $token];
     }
 
+    private function sendEmailVerification(string $id, string $email) {
 
+            $fifteenMinutesFromNow = date('Y-m-d H:i:s', strtotime("+15 minutes"));
+            $authCode = bin2hex(random_bytes(7));
+
+            Db::query("UPDATE users SET auth_time = ?, auth = ? WHERE id = ?",
+              [$fifteenMinutesFromNow, $authCode, $id]);
+
+            SendMail::emailVerification($email, $authCode);
+    }
 }
 
 ?>
