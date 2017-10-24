@@ -52,5 +52,19 @@ class LoginTest extends LoginTest {
 
         $this->assertNotNull($jwt);
     }
+
+    function testUnverifiedEmail() {
+
+        $faker = HelpTests::faker();
+        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+
+        Db::query("UPDATE users SET email = CONCAT('.', email) WHERE id = ?", $user['id']);
+
+        $jwt = $this->helpLogin($user['username'], $user['password']);
+
+        $this->assertNotNull($jwt);
+
+        throw new Error('See how to test that cannot fully log in until verify email');
+    }
 }
 ?>
