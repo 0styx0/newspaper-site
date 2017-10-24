@@ -23,7 +23,7 @@ class VerifyTest extends VerifyEmailTest {
      *
      * @param $emailIsVerified - bool if should get user with a verified email or not
      *
-     * @return user 
+     * @return user
      */
     protected function helpGetUser(bool $emailIsVerified = false) {
 
@@ -42,7 +42,7 @@ class VerifyTest extends VerifyEmailTest {
     function testBadAuthCode() {
 
         $user = $this->helpGetUser(true);
-        $user['auth_code'] = $user['dauth_code'] . HelpTests::faker()->randomWord();
+        $user['auth_code'] = $user['auth_code'] . HelpTests::faker()->randomWord();
 
         $data = $this->helpSendQuery($user);
 
