@@ -27,6 +27,7 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/updateProfile.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/recoverPassword.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/createArticle.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/updateArticles.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteArticles.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
@@ -53,7 +54,8 @@ $rootMutationType = new ObjectType([
         new UpdateProfileField(),
         new RecoverPasswordField(),
         new CreateArticleField(),
-        new UpdateArticlesField()
+        new UpdateArticlesField(),
+        new DeleteArticlesField()
     ]
 ]);
 
