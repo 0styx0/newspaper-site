@@ -29,6 +29,7 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/createArticle.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/updateArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/editMission.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/createTag.php');
 
 $rootQueryType = new ObjectType([
     'name' => 'RootQueryType',
@@ -57,7 +58,8 @@ $rootMutationType = new ObjectType([
         new CreateArticleField(),
         new UpdateArticlesField(),
         new DeleteArticlesField(),
-        new EditMissionField()
+        new EditMissionField(),
+        new CreateTagField(),
     ]
 ]);
 
