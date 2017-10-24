@@ -55,10 +55,16 @@ class LoginField extends AbstractField {
                                 ->setExpiration(time() + 3600)
                                 ->setId($user['id'], true)
                                 ->set('id', $user['id'])
-                                ->set('profileLink', $user['profileLink'])
-                                ->set('level', $user['level'])
                                 ->sign($signer, $_ENV['JWT_SECRET'])
                                 ->getToken(); // Retrieves the generated token
+
+        $emailIsVerified = $user['profileLink'][0] !== '.';
+
+        if ($emailIsVerified) {
+
+            $token = $token->set('profileLink', $user['profileLink'])
+                            ->set('level', $user['level']);
+        }
 
         return ['jwt' => $token];
     }
