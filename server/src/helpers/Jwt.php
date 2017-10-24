@@ -36,5 +36,34 @@ class Jwt {
         return false;
     }
 
+    /**
+     * Creates jwt
+     *
+     * @param $user - assoc array with keys that include id, level, profileLink
+     *
+     * @return jwt with that user's info
+     */
+    public static function setToken(array $user) {
+
+        $token = (new Builder())->setIssuer('https://tabceots.com')
+                                ->setAudience('https://tabceots.com')
+                                ->setIssuedAt(time())
+                                ->setExpiration(time() + 3600)
+                                ->setId($user['id'], true)
+                                ->set('id', $user['id'])
+                                ->sign($signer, $_ENV['JWT_SECRET'])
+                                ->getToken(); // Retrieves the generated token
+
+        $emailIsVerified = $user['profileLink'][0] !== '.';
+
+        if ($emailIsVerified) {
+
+            $token = $token->set('profileLink', $user['profileLink'])
+                            ->set('level', $user['level']);
+        }
+
+        return $token;
+    }
+
 }
 ?>
