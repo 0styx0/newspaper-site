@@ -46,12 +46,18 @@ class HelpTests extends TestCase {
         curl_setopt($ch, CURLOPT_HEADER, 1);
 
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow redirects (since .htaccess forces all api stuff through /router)
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+
+        $headers = [
             'Accept: application/json',
-            'Content-type: application/graphql',
-            "Authorization: Bearer {$jwt}"
-        ]);
-        
+            'Content-type: application/graphql'
+        ];
+
+        if ($jwt) {
+            array_push($headers, "Authorization: Bearer {$jwt}");
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
         $content = trim(curl_exec($ch));
         $res_info = curl_getinfo($ch);
 
