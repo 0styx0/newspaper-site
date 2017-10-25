@@ -5,11 +5,14 @@ require_once(__DIR__ . '/../helpers.php');
 
 class CreateArticleTest extends ArticleTest {
 
-    protected function helpCreate(bool $loggedIn = true, int $tags = 3, string $url) {
+    protected function helpCreate(bool $loggedIn = true, int $tags = 3, string $url = null) {
 
         $faker = HelpTests::faker();
-        $newArticle = $this->Database->GenerateRow->pageinfo($faker);
+        $newArticle = $this->Database->GenerateRows->pageinfo();
         $author = $faker->randomElement($this->Database->GenerateRows->users);
+        $tagList = $this->Database->GenerateRows->tag_list;
+
+        $tagsToGet = ($tags > count($tagList)) ? count($tagList) : $tags;
 
         return $this->request([
             'query' => 'mutation ArticleCreate($tags: [String], $url: String!, $article: String!) {
@@ -19,11 +22,11 @@ class CreateArticleTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'url' => isset($url) ? $url : $newArticle['url'],
+                'url' => !empty($url) ? $url : $newArticle['url'],
                 'article' => $newArticle['lede'] . $newArticle['body'],
-                'tags' => $faker->randomElements($this->Database->GenerateRows->tag_list, $tags)
+                'tags' => array_column($faker->randomElements($this->Database->GenerateRows->tag_list, $tagsToGet), 'tag')
             ]
-        ], $loggedIn ? HelpTests::getJwt($author) : null);
+        ], $loggedIn ? HelpTests::getJwt($author) : null)['createArticle'];
     }
 
     function testNotLoggedInCannotCreate() {
@@ -38,9 +41,10 @@ class CreateArticleTest extends ArticleTest {
         $this->assertNull($data);
     }
 
+
     function testArticleMustHaveUrl() {
 
-        $data = $this->helpCreate(true, 3, null);
+        $data = $this->helpCreate(true, 3);
         $this->assertNull($data);
     }
 
