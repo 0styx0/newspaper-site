@@ -107,7 +107,7 @@ class ArticleHelper {
             array_push($tagInfo, $articleId, $tag);
         }
 
-        Db::query("INSERT INTO tags (art_id, tag) VALUES ({$placeholders})", $tagInfo);
+        Db::query("INSERT INTO tags (art_id, tag) VALUES {$placeholders}", $tagInfo);
     }
 
     /**
