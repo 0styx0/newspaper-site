@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../helpers.php');
 
 class CreateArticleTest extends ArticleTest {
 
-    protected function helpCreate(bool $loggedIn = true, int $tags = 3, string $url = null) {
+    protected function helpCreate(bool $loggedIn = true, int $tags = 3, $url = true) {
 
         $faker = HelpTests::faker();
         $newArticle = $this->Database->GenerateRows->pageinfo();
@@ -22,7 +22,7 @@ class CreateArticleTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'url' => !empty($url) ? $url : $newArticle['url'],
+                'url' => $url ? '' : $newArticle['url'],
                 'article' => $newArticle['lede'] . $newArticle['body'],
                 'tags' => array_column($faker->randomElements($this->Database->GenerateRows->tag_list, $tagsToGet), 'tag')
             ]
@@ -44,10 +44,10 @@ class CreateArticleTest extends ArticleTest {
 
     function testArticleMustHaveUrl() {
 
-        $data = $this->helpCreate(true, 3);
+        $data = $this->helpCreate(true, 3, false);
         $this->assertNull($data);
     }
-
+/*
     function testArticleIsInMostRecentPrivateIssue() {
 
         $data = $this->helpCreate();
@@ -75,6 +75,6 @@ class CreateArticleTest extends ArticleTest {
         array_unshift($this->Database->GenerateRows->issues, [
             'num' => $issue
         ]);
-    }
+    }*/
 }
 ?>

@@ -42,6 +42,10 @@ class CreateArticleField extends AbstractField {
             throw new Exception('Must have at least 1 tag');
         }
 
+        if (strlen($sanitized['url']) < 6) {
+            throw new Exception('Url must be 6 or more characters');
+        }
+
         $modifiedUrl = str_replace(' ', '-', $sanitized['url']); // spaces in url are now deprecated
 
         $ArticleHelper = new ArticleHelper();
