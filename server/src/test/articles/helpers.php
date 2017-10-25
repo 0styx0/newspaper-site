@@ -6,12 +6,12 @@ require_once(__DIR__ . '/../../../vendor/autoload.php');
 
 class ArticleTest extends TestCase {
 
-    protected $TestDatabase;
+    protected $Database;
 
     protected function setup() {
 
-        $this->TestDatabase = new TestDatabase();
-        $this->TestDatabase->init();
+        $this->Database = new TestDatabase();
+        $this->Database->init();
     }
 
     /**
@@ -19,7 +19,9 @@ class ArticleTest extends TestCase {
      */
     protected function request(array $args = [], $jwt = '') {
 
-        return HelpTests::createHTTPRequest($args , 'articles', $jwt)['data'];
+        $result = HelpTests::createHTTPRequest($args , 'articles', $jwt);
+
+        return $result['data'];
     }
 }
 ?>
