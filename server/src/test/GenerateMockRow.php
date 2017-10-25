@@ -54,6 +54,11 @@ class GenerateMockRow {
         ];
     }
 
+    private function randomHtml() {
+
+        return strip_tags(GenerateMockRow::$faker->randomHtml(), "<h1><h2><h3><h4><h5><h6><pre><img><p><a><table><td><tr><th><tbody><thead><tfoot><strong><b><em><i><u><sub><sup><font><strike><ul><ol><li><q><blockquote><br><abbr><div><span>");
+    }
+
     public function pageinfo() {
 
         $faker = GenerateMockRow::$faker;
@@ -66,7 +71,7 @@ class GenerateMockRow {
                 <h1>{$faker->word()}</h1>
                 <h4>{$faker->name()}</h4>
                 <p>{$faker->paragraph()}</p>",
-            'body' => GenerateMockRow::$faker->randomHtml(),
+            'body' => $this->randomHtml(),
             'issue' => GenerateMockRow::$faker->randomNumber(), // todo: replace, foreign key
             'authorid' => GenerateMockRow::$faker->randomNumber(), // ditto
             'views' => GenerateMockRow::$faker->randomNumber(),
@@ -99,7 +104,7 @@ class GenerateMockRow {
             'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1,
             'art_id' => -1, // replaced later
             'authorid' => -1, // replaced later
-            'content' => GenerateMockRow::$faker->randomHtml(),
+            'content' => $this->randomHtml(),
             'created' => GenerateMockRow::$faker->date()
         ];
     }
