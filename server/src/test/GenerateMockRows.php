@@ -10,23 +10,21 @@ class GenerateMockRows extends GenerateMockRow {
 
     public function users() {
 
-        $faker = Faker\Factory::create();
 
         $amount = rand(1, 100);
 
         while ($amount-- > 0) {
-            $this->users[] = $this->user($faker);
+            $this->users[] = $this->user();
         }
     }
 
     public function issues() {
 
-        $faker = Faker\Factory::create();
         $amount = rand(1, 100);
 
         while ($amount-- > 1) {
 
-            $issue = $this->issue($faker);
+            $issue = $this->issue();
             $issue['num'] = $amount;
 
             $this->issues[] = $issue;
@@ -46,7 +44,7 @@ class GenerateMockRows extends GenerateMockRow {
 
         while ($amount-- > 0) {
 
-            $page = parent::pageinfo($faker);
+            $page = parent::pageinfo();
 
             $page['authorid'] = $faker->randomElement($this->users)['id'];
 
@@ -65,12 +63,11 @@ class GenerateMockRows extends GenerateMockRow {
 
     public function tag_lists() {
 
-        $faker = Faker\Factory::create();
         $amount = rand(1, 100);
 
         while ($amount-- > 0) {
 
-            $this->tag_list[] = parent::tag_list($faker);
+            $this->tag_list[] = parent::tag_list();
         }
     }
 
@@ -87,7 +84,7 @@ class GenerateMockRows extends GenerateMockRow {
 
             foreach ($tags as $tag) {
 
-                $articleTag = parent::tag($faker);
+                $articleTag = parent::tag();
 
                 $articleTag['tag'] = $tag;
                 $articleTag['art_id'] = $article['id'];
@@ -107,7 +104,7 @@ class GenerateMockRows extends GenerateMockRow {
 
             while ($numberOfComments-- > 0) {
 
-                $comment = parent::comment($faker);
+                $comment = parent::comment();
 
                 $comment['art_id'] = $article['id'];
                 $comment['authorid'] = $faker->randomElement($this->users)['id'];
@@ -129,7 +126,7 @@ class GenerateMockRows extends GenerateMockRow {
 
                 $article['body'] .= '<img data-src />';
 
-                $image = parent::image($faker);
+                $image = parent::image();
                 $image['art_id'] = $article['id'];
 
                 $this->images[] = $image;
