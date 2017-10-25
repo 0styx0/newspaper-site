@@ -38,11 +38,15 @@ class CreateArticleField extends AbstractField {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
+        if (count($sanitized['tags']) < 1) {
+            throw new Exception('Must have at least 1 tag');
+        }
+
         $modifiedUrl = str_replace(' ', '-', $sanitized['url']); // spaces in url are now deprecated
 
         $ArticleHelper = new ArticleHelper();
-
         $safeArticle = $ArticleHelper->stripTags($args['article']);
+
         list($lede, $body, $imageInfo) = $ArticleHelper->breakDownArticle($safeArticle);
 
         $issue = $this->getPrivateIssue();
@@ -52,11 +56,15 @@ class CreateArticleField extends AbstractField {
 
         $articleId = Db::query("SELECT id FROM pageinfo WHERE issue = ? and url = ?", [$issue, $modifiedUrl])->fetchColumn();
 
-        $ArticleHelper->addImages($imageInfo);
+        if ($imageInfo) {
+            $ArticleHelper->addImages($articleId, $imageInfo);
+        }
+
         $ArticleHelper->addTags($articleId, $sanitized['tags']);
 
         return [
-            'url' => $modifiedUrl
+            'url' => $modifiedUrl,
+            'issue' => +$issue
         ];
     }
 
