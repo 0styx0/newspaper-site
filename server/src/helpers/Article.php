@@ -68,6 +68,7 @@ class ArticleHelper {
      * @return $toStrip, stripped of all tags except ones listed in function
      */
     public function stripTags(string $toStrip) {
+
         $config = HTMLPurifier_Config::createDefault();
         $config->set('URI.AllowedSchemes', ['http' => true,
                                             'https' => true,
@@ -75,9 +76,15 @@ class ArticleHelper {
                                             'tel' => true,
                                             'data'=>true]);
         $config->set('Attr.DefaultImageAlt', '');
+        $config->set('HTML.Allowed', 'h1,h2,h3,h4,h5,h6,pre,img,p,a,table,td,tr,th,tbody,thead,tfoot,strong,b,em,i,u,sub,sup,font,strike,ul,ol,li,q,blockquote,br,abbr,div,span');
+        $config->set('AutoFormat.RemoveEmpty', true); // remove empty tag pairs
+        $config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true); // remove empty, even if it contains an &nbsp;
+        $config->set('AutoFormat.AutoParagraph', true); // remove empty tag pairs
+
         $purifier = new HTMLPurifier($config);
-        $toStrip = $purifier->purify($toStrip);
-        return strip_tags($toStrip, '<h1><h2><h3><h4><h5><h6><pre><img><p><a><table><td><tr><th><tbody><thead><tfoot><strong><b><em><i><u><sub><sup><font><strike><ul><ol><li><q><blockquote><br><abbr><div><span>');
+        $purified = $purifier->purify($toStrip);
+
+        return $purified;
     }
 
     /**
@@ -88,6 +95,10 @@ class ArticleHelper {
      */
     public function addTags(string $articleId, array $tags) {
 
+        if (empty($tags)) {
+            return;
+        }
+
         $placeholders = implode(',', array_fill(0, count($tags), '(?, ?)'));
 
         // doing the $placeholders and loop here since I think it's more efficient than running sql in a loop
@@ -96,7 +107,7 @@ class ArticleHelper {
             array_push($tagInfo, $articleId, $tag);
         }
 
-        Db::query("INSERT INTO tags (art_id, tag) VALUES {$placeholders}", $tagInfo);
+        Db::query("INSERT INTO tags (art_id, tag) VALUES ({$placeholders})", $tagInfo);
     }
 
     /**
@@ -107,6 +118,10 @@ class ArticleHelper {
      */
     public function addImages(string $articleId, array $images) {
 
+        if (empty($images)) {
+            return;
+        }
+
         $placeholders = implode(',', array_fill(0, count($images), '(?, ?, ?)'));
 
         // doing the $placeholders and loop here since I think it's more efficient than running sql in a loop
@@ -115,7 +130,7 @@ class ArticleHelper {
             array_push($imageInfo, $articleId, $image['url'], $image['slide']);
         }
 
-        Db::query("INSERT INTO images (art_id, url, slide) VALUES {$placeholders}", $imageInfo);
+        Db::query("INSERT INTO images (art_id, url, slide) VALUES ({$placeholders})", $imageInfo);
     }
 }
 
