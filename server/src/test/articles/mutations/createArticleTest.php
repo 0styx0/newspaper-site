@@ -22,7 +22,7 @@ class CreateArticleTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'url' => $url ? '' : $newArticle['url'],
+                'url' => $url ? $newArticle['url'] : '',
                 'article' => $newArticle['lede'] . $newArticle['body'],
                 'tags' => array_column($faker->randomElements($this->Database->GenerateRows->tag_list, $tagsToGet), 'tag')
             ]
@@ -47,34 +47,36 @@ class CreateArticleTest extends ArticleTest {
         $data = $this->helpCreate(true, 3, false);
         $this->assertNull($data);
     }
-/*
+
     function testArticleIsInMostRecentPrivateIssue() {
 
         $data = $this->helpCreate();
         $this->assertNotNull($data);
 
-        $issue = Db::query("SELECT issue FROM pageinfo WHERE id = ?", [$data['articles'][0]['num']])->fetchColumn();
+        $issue = Db::query("SELECT issue FROM pageinfo WHERE issue = ? AND url = ?",
+          [$data['issue'], $data['url']])->fetchColumn();
 
-        $this->assertEqual($this->Database->GenerateRows->issues[0]['num'], $issue);
+        $this->assertEquals($this->Database->GenerateRows->issues[0]['num'], $issue);
     }
 
     // if all issues are public, then a new issue is created with new article in it
     function testIfNoPrivateIssuePrivateIssueIsCreated() {
 
-        $faker = HelpTests::$faker();
+        $faker = HelpTests::faker();
 
-        Db::query("UPDATE issues SET public = ?", [1]);
+        Db::query("UPDATE issues SET ispublic = ?", [1]);
 
         $data = $this->helpCreate();
         $this->assertNotNull($data);
 
-        $issue = Db::query("SELECT issue FROM pageinfo WHERE id = ?", [$data['articles'][0]['num']])->fetchColumn();
+        $issue = Db::query("SELECT issue FROM pageinfo WHERE issue = ? AND url = ?",
+          [$data['issue'], $data['url']])->fetchColumn();
 
-        $this->assertEqual($this->Database->GenerateRows->issues[0]['num'] + 1, $issue);
+        $this->assertEquals($this->Database->GenerateRows->issues[0]['num'] + 1, $issue);
 
         array_unshift($this->Database->GenerateRows->issues, [
             'num' => $issue
         ]);
-    }*/
+    }
 }
 ?>

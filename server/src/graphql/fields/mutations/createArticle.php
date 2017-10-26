@@ -42,7 +42,7 @@ class CreateArticleField extends AbstractField {
             throw new Exception('Must have at least 1 tag');
         }
 
-        if (strlen($sanitized['url']) < 6) {
+        if (strlen($sanitized['url']) < $_ENV['URL_LENGTH']) {
             throw new Exception('Url must be 6 or more characters');
         }
 
@@ -82,7 +82,7 @@ class CreateArticleField extends AbstractField {
 
         if ($maxIssueInfo['ispublic']) {
 
-            $maxIssue = $maxIssue['num'] + 1;
+            $maxIssue = $maxIssueInfo['num'] + 1;
             Db::query("INSERT INTO issues (num) VALUES(?)", [$maxIssue]);
         } else {
             $maxIssue = $maxIssueInfo['num'];
