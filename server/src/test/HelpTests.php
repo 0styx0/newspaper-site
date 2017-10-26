@@ -115,14 +115,15 @@ class HelpTests extends TestCase {
      *
      * @param $array - haystack
      * @param $qualifier - function applied to each element
+     * @param $outsideVariables - anything that you want to access from inside $qualifier, will be passed as second argument
      *
      * @return element of array where $qualifier returns true
      */
-    public static function searchArray(array $array, callable $qualifier) {
+    public static function searchArray(array $array, callable $qualifier, $outsideVariables = null) {
 
         foreach ($array as $element) {
 
-            if ($qualifier($element)) {
+            if ($qualifier($element, $outsideVariables)) {
                 return $element;
             }
         }
