@@ -10,7 +10,7 @@ use Youshido\GraphQL\Config\Field\FieldConfig;
 
 use Youshido\GraphQL\Type\InputObject\AbstractInputObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
-use Youshido\GraphQL\Type\Scalar\idType;
+use Youshido\GraphQL\Type\Scalar\IdType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
@@ -23,7 +23,7 @@ class DeleteUsersField extends AbstractField {
 
         $config->addArguments([
             'password' => new NonNullType(new StringType()),
-            'ids' => new NonNullType(new ListType(new idType()))
+            'ids' => new NonNullType(new ListType(new IdType()))
         ]);
     }
 

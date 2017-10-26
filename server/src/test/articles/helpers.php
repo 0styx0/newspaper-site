@@ -20,7 +20,7 @@ class ArticleTest extends TestCase {
     protected function request(array $args = [], $jwt = '') {
 
         $result = HelpTests::createHTTPRequest($args , 'articles', $jwt);
-
+print_r($result);
         return $result['data'];
     }
 }
