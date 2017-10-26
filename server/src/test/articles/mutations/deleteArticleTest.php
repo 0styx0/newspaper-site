@@ -7,27 +7,21 @@ class DeleteArticleTest extends ArticleTest {
 
     function helpTest(bool $author = false, int $minLevel = 1, bool $loggedIn = true, bool $correctPassword = true) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $minLevel) {
 
-            $isAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
-                $currentArticle['authorid'] == $currentUser['id'];
-            });
+            $isAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $currentUser) {
+                return $currentArticle['authorid'] == $currentUser['id'];
+            }, $currentUser);
 
-            if ($currentUser['level'] >= $minLevel && $isAnAuthor) {
-                return true;
-            }
+            return $currentUser['level'] >= $minLevel && $isAnAuthor;
 
-            return false;
-        });
+        }, $minLevel);
 
-        $articleId = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
+        $articleId = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $info) {
 
-            if ($author && $currentArticle['authorid'] == $user['id']) {
-                return true;
-            }
+            return $info['author'] && $currentArticle['authorid'] == $info['user']['id'];
+        }, ['author' => $author, 'user' => $user]);
 
-            return false;
-        });
 
         return $this->request([
             'query' => 'mutation deleteArticles($ids: [ID]) {
@@ -44,19 +38,19 @@ class DeleteArticleTest extends ArticleTest {
     }
 
     function testNotLevelThreeNotOwnerCannotDelete() {
-        $this->assertNull($this->helpTest()['articles']);
+        $this->assertNull($this->helpTest()['deleteArticles']);
     }
 
     function testOwnerCanDeleteArticle() {
-        $this->assertNotNull($this->helpTest(true)['articles']);
+        $this->assertNotNull($this->helpTest(true)['deleteArticles']);
     }
 
     function testLevelThreeCanDeleteArticle() {
-        $this->assertNotNull($this->helpTest(false, 3)['articles']);
+        $this->assertNotNull($this->helpTest(false, 3)['deleteArticles']);
     }
 
     function testCannotUseIncorrectPassword() {
-        $this->assertNull($this->helpTest(false, 3, true, false)['articles']);
+        $this->assertNull($this->helpTest(false, 3, true, false)['deleteArticles']);
     }
 }
 ?>
