@@ -63,10 +63,16 @@ class GenerateMockRow {
 
         $faker = GenerateMockRow::$faker;
 
+        $url = '';
+
+        while (strlen($url) < $_ENV['URL_LENGTH']) {
+            $url .= $faker->unique()->domainWord();
+        }
+
         return [
             'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1,
             'created' => GenerateMockRow::$faker->date(),
-            'url' => GenerateMockRow::$faker->unique()->domainWord(),
+            'url' => $url,
             'lede' => "
                 <h1>{$faker->word()}</h1>
                 <h4>{$faker->name()}</h4>
