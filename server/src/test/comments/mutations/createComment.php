@@ -41,13 +41,13 @@ class CreateCommentTest extends CommentTest {
      */
     protected function helpGetArticle(bool $public = false) {
 
-        return HelpTests::searchArray($this->Database->GenerateMockRows->pageinfo, function (array $currentArticle) {
+        return HelpTests::searchArray($this->Database->GenerateMockRows->pageinfo, function (array $currentArticle, bool $public) {
 
             $privateIssue = $this->Database->GenerateMockRows['issue'][0]['num'];
             $articleIsPrivate = $privateIssue !== $currentArticle['issue'];
 
             return $public ? !$articleIsPrivate : $articleIsPrivate;
-        });
+        }, $public);
     }
 
     function testBadNotLoggedIn() {

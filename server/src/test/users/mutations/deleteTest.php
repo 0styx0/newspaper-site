@@ -15,9 +15,9 @@ class DeleteUserTest extends UserTest {
     protected function helpMutate(callable $canDeleteUser, bool $useCorrectPassword = true, bool $loggedIn = true) {
 
         $user = $this->getRandomUser();
-        $userToDelete = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            return $canDeleteUser($currentUser, $user);
-        });
+        $userToDelete = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
+            return $outsideVars['canDeleteUser']($currentUser, $outsideVars['user']);
+        }, ['canDeleteUser' => $canDeleteUser, 'user' => $user]);
 
         return $this->request([
            'query' => 'mutation deleteUsers($ids: [ID], $password: String) {

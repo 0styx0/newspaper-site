@@ -35,7 +35,7 @@ class MissionTest extends MissionTest {
     function testNonLevelThreeCannotEdit() {
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            return $user['level'] < 3;
+            return $currentUser['level'] < 3;
         });
 
         $mission = $this->helpGetMission($user);
@@ -46,7 +46,7 @@ class MissionTest extends MissionTest {
     function testLevelThreeCanEdit() {
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            return $user['level'] > 2;
+            return $currentUser['level'] > 2;
         });
 
         $mission = $this->helpGetMission($user);

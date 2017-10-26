@@ -143,9 +143,9 @@ class CreateUserTest extends UserTest {
 
         $userToCreate['level'] = rand(2, 3);
 
-        $user = HelpTests::searchArray($this->GenerateRows->users, function ($user) {
-           $user['level'] < $userToCreate['level'];
-        });
+        $user = HelpTests::searchArray($this->GenerateRows->users, function ($currentUser, $userToCreate) {
+           $currentUser['level'] < $userToCreate['level'];
+        }, $userToCreate);
 
         $data = $this->request([
             'query' => "mutation createUser({$types}) {
@@ -167,9 +167,9 @@ class CreateUserTest extends UserTest {
 
         $userToCreate['level'] = rand(1, 2);
 
-        $user = HelpTests::searchArray($this->GenerateRows->users, function ($user) {
-           $user['level'] >= $userToCreate['level'];
-        });
+        $user = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $userToCreate) {
+           $currentUser['level'] >= $userToCreate['level'];
+        }, $userToCreate);
 
         $data = $this->request([
             'query' => "mutation createUser({$types}) {

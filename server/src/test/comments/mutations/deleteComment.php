@@ -57,9 +57,9 @@ class DeleteCommentTest extends CommentTest {
 
         $commentToDelete = $this->faker()->randomElement($this->Database->GenerateRows->comments);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $commentToDelete) {
             return $currentUser['level'] < 3 && $currentUser['id'] !== $commentToDelete['id'];
-        });
+        }, $commentToDelete);
 
         $this->helpTest($commentToDelete, $user);
 
@@ -76,9 +76,9 @@ class DeleteCommentTest extends CommentTest {
                 return false;
             }
 
-            $userComment = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment) {
+            $userComment = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
                 return $user['id'] === $currentComment['authorid'];
-            });
+            }, $user);
 
             $commentToDelete = $userComment;
 
@@ -101,9 +101,9 @@ class DeleteCommentTest extends CommentTest {
                 return false;
             }
 
-            $commentToDelete = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment) {
+            $commentToDelete = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
                 return $user['id'] !== $currentComment['authorid'];
-            });
+            }, $user);
 
             return true;
         });

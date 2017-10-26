@@ -26,11 +26,11 @@ class UpdateUserTest extends UserTest {
 
         $user = $this->getRandomUser();
 
-        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser) {
+        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $outsideVars) {
 
-            $result = $getUserBy($currentUser);
-            return $result && $currentUser['id'] != $user['id'];
-        });
+            $result = $outsideVars['getUserBy']($currentUser);
+            return $result && $currentUser['id'] != $outsideVars['user']['id'];
+        }, ['getUserBy' => $getUserBy, 'user' => $user]);
 
         return $this->request([
             'query' => $this->mutation,
@@ -84,9 +84,9 @@ class UpdateUserTest extends UserTest {
 
         $user = $this->getRandomUser();
 
-        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser) {
+        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $user) {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level'];
-        });
+        }, $user);
 
         $newLevel = rand(1, $user['level']);
 

@@ -37,16 +37,16 @@ class NotLoggedInCommentTest extends IssueTest {
      */
     protected function helpGetComment(bool $public = false) {
 
-        return HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentComment) {
+        return HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentComment, bool $public) {
 
-            $articleOfComment = HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentArticle) {
+            $articleOfComment = HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentArticle, array $currentComment) {
                 return $currentComment['art_id'] == $currentArticle['id'];
-            });
+            }, $currentComment);
 
             $privateIssue = $this->Database->GenerateMockRows['issue'][0]['num'];
 
             return ($public) ? $articleOfComment['issue'] != $privateIssue : $articleOfComment['issue'] == $privateIssue;
-        });
+        }, $public);
     }
 
     function testCannotGetCommentsOfPrivateArticlesById() {

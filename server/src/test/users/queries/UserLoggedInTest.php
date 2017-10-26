@@ -27,9 +27,9 @@ class UserLoggedInTest extends UserTest {
 
         $higherLevel = rand(2, 3);
 
-        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser, int $higherLevel) {
             return $currentUser['level'] == $higherLevel;
-        });
+        }, $higherLevel);
 
         $data = $this->request([
             'query' => 'query users {
@@ -39,9 +39,9 @@ class UserLoggedInTest extends UserTest {
                         }'
         ], HelpTests::getJwt($user));
 
-        $lowerLevelUsers = HelpTests::searchArray($data['users'], function (array $currentUser) {
+        $lowerLevelUsers = HelpTests::searchArray($data['users'], function (array $currentUser, int $higherLevel) {
             return $currentUser['level'] < $higherLevel;
-        });
+        }, $higherLevel);
 
         $this->assertFalse(in_array(false, array_column($lowerLevelUsers, 'canEdit')));
     }
@@ -51,9 +51,9 @@ class UserLoggedInTest extends UserTest {
 
         $level = rand(1, 3);
 
-        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser, int $level) {
             return $currentUser['level'] == $level;
-        });
+        }, $level);
 
         $data = $this->request([
             'query' => 'query users {
@@ -65,11 +65,11 @@ class UserLoggedInTest extends UserTest {
                         }'
         ], HelpTests::getJwt($user));
 
-        $users = HelpTests::searchArray($data['users'], function (array $currentUser) {
-            return $currentUser['level'] >= $higherLevel && $user['id'];
-        });
+        $users = HelpTests::searchArray($data['users'], function (array $currentUser, $outsideVars) {
+            return $currentUser['level'] >= $outsideVars['level'] && $outsideVars['user']['id'];
+        }, ['user' => $user, 'level' => $level]);
 
-        HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser) {
+        HelpTests::searchArray($users, function (array $currentUser) {
 
             $this->assertFalse($currentUser['canEdit']);
             $this->assertNull($currentUser['notifications']);

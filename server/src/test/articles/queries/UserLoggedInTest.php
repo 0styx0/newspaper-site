@@ -27,9 +27,9 @@ class UserLoggedInTest extends ArticleTest {
         // get user with at least 1 article
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
 
-            $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $article) {
+            $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $article, array $currentUser) {
                 return $article['authorid'] == $currentUser['id'];
-            });
+            }, $currentUser);
 
             return $article && $currentUser['level'] == 1; // just to show that canEdit own article *even* if only lvl 1
         });
@@ -57,9 +57,9 @@ class UserLoggedInTest extends ArticleTest {
             return $currentUser['level'] == rand(2, 3);
         });
 
-        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
             return $currentUser['level'] < $user['level'];
-        });
+        }, $user);
 
         $data = $this->request([
 
@@ -84,9 +84,9 @@ class UserLoggedInTest extends ArticleTest {
             return $currentUser['level'] == rand(1, 2);
         });
 
-        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
             return $currentUser['level'] >= $user['level'];
-        });
+        }, $user);
 
         $data = $this->request([
 
@@ -109,9 +109,9 @@ class UserLoggedInTest extends ArticleTest {
             return $currentArticle['issue'] == $this->Database->GenerateRows->issues[0]['num'];
         });
 
-        $author = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $author = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $articleToTest) {
            return $currentUser['id'] == $articleToTest['authorid'];
-        });
+        }, $articleToTest);
 
         $data = $this->request([
 

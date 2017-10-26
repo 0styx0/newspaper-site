@@ -43,7 +43,7 @@ class NotLoggedInIssueTest extends IssueTest {
             ]
         ]);
 
-        $publicIssue = HelpTests::searchArray($this->Database->GenerateMockRows->issues, function ($issue) {
+        $publicIssue = HelpTests::searchArray($this->Database->GenerateMockRows->issues, function (array $issue) {
             return $issue['public'];
         });
 

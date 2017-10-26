@@ -14,18 +14,18 @@ class UpdateArticleTest extends ArticleTest {
 
         $articleToUpdate = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, $findArticle);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
 
-           if ($author) {
+           if ($scopedVars['author']) {
+               return $currentUser['id'] == $scopedVars['articleToUpdate']['authorid'];
 
-               return $currentUser['id'] == $articleToUpdate['authorid'];
-           } else if ($currentUser['level'] == $level) {
+           } else if ($currentUser['level'] == $scopedVars['level']) {
 
                return true;
            }
 
            return false;
-        });
+        }, ['author' => $author, 'articleToUpdate' => $articleToUpdate, 'level' => $level]);
 
         $newData = [
                     'id' => $articleToUpdate['id'],
