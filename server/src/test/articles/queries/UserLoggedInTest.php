@@ -8,8 +8,8 @@ class UserLoggedInTest extends ArticleTest {
 
     function testCanSeeAnyArticle() {
 
-        $user = $this->TestDatabase->getRandomUser();
-        $expectedIds = array_column($this->TestDatabase->pageinfo, 'id');
+        $user = $this->Database->getRandomUser();
+        $expectedIds = array_column($this->Database->GenerateRows->pageinfo, 'id');
 
         $data = $this->request([
             'query' => 'query articles {
@@ -19,7 +19,7 @@ class UserLoggedInTest extends ArticleTest {
                         }'
         ], HelpTests::getJwt($user));
 
-        $this->expectEqual($expectedIds, array_column($data['articles'], 'id'));
+        $this->assertEquals($expectedIds, array_column($data['articles'], 'id'));
     }
 
     function testCanEditOwnArticles() {
