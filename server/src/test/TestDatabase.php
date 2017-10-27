@@ -52,6 +52,12 @@ class TestDatabase {
             $fields = implode(',', array_keys($table[0]));
 
             $valuesArr = array_reduce($table, function ($accum, $row) {
+
+                if (!empty($row['password'])) {
+                    $row['password'] = password_hash($row['password'], PASSWORD_DEFAULT);
+                    $row['auth'] = password_hash($row['auth'], PASSWORD_DEFAULT);
+                }
+
                 return array_merge($accum, array_values($row));
             }, []);
 
