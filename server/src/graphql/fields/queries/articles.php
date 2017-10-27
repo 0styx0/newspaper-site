@@ -33,19 +33,20 @@ class ArticlesField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        if (empty($args)) {
-            throw new Error('Gives most recent issue articles');
-        }
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $where = Db::setPlaceholders($args);
 
+        if (empty($args)) {
+            $where = 1;
+        }
+
         // basic fields, no authentication or filtering needed
         return Db::query("SELECT id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorId
           FROM pageinfo
-          WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
