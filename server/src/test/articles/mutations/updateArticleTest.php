@@ -32,7 +32,7 @@ class UpdateArticleTest extends ArticleTest {
         foreach ($this->Database->GenerateRows->tags as $tag) {
 
             if ($tag['art_id'] === $articleToUpdate['id']) {
-                array_push($articleToUpdate['tags'], $tag);
+                array_push($articleToUpdate['tags'], $tag['tag']);
             }
         }
 
@@ -46,7 +46,7 @@ class UpdateArticleTest extends ArticleTest {
         $newData[$fieldToChange] = $newValue;
 
         return $this->request([
-            'query' => 'mutation ArticleUpdate($data: [Fields], $password: String) {
+            'query' => 'mutation ArticleUpdate($data: [UpdateArticle], $password: String) {
                             updateArticles(data: $data, password: $password) {
                                 id
                                 tags
@@ -54,7 +54,7 @@ class UpdateArticleTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'data' => $newData,
+                'data' => [$newData],
                 'password' => $user['password']
             ]
         ], $loggedIn ? HelpTests::getJwt($user) : null);
@@ -84,7 +84,7 @@ class UpdateArticleTest extends ArticleTest {
 
     function testNotLoggedInCannotEditTags() {
 
-        $newTags = HelpTests::$faker()->randomElements($this->Database->GenerateRows->tag_list);
+        $newTags = HelpTests::faker()->randomElements($this->Database->GenerateRows->tag_list);
 
         $data = $this->helpTestUpdate(function () {
             return true;
@@ -143,7 +143,7 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'tags', $newTags, true, false, 3);
+        }, 'tags', array_column($newTags, 'tag'), true, false, 3);
 
         $this->assertNotNull($data['updateArticles']);
     }
