@@ -48,7 +48,7 @@ class UpdateArticlesField extends AbstractField {
 
         foreach ($sanitized['data'] as $i => $article) {
 
-            if (Jwt::getToken()->getClaim('id') !== $authorIds[$i]) {
+            if (Jwt::getToken()->getClaim('id') != $authorIds[$i]) {
                 Guard::userMustBeLevel(3);
             }
 

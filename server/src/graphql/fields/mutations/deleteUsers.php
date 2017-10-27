@@ -65,7 +65,7 @@ class DeleteUsersField extends AbstractField {
     private function ensureLevelIsGreaterThanAllTryingToDelete(array $ids) {
 
         // can delete self regardless of level
-        if (Jwt::getToken()->getClaim('id') === $ids[0] && count($ids) === 1) {
+        if (Jwt::getToken()->getClaim('id') == $ids[0] && count($ids) === 1) {
             return true;
         }
 
