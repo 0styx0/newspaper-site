@@ -27,6 +27,15 @@ class UpdateArticleTest extends ArticleTest {
            return false;
         }, ['author' => $author, 'articleToUpdate' => $articleToUpdate, 'level' => $level]);
 
+
+        $articleToUpdate['tags'] = [];
+        foreach ($this->Database->GenerateRows->tags as $tag) {
+
+            if ($tag['art_id'] === $articleToUpdate['id']) {
+                array_push($articleToUpdate['tags'], $tag);
+            }
+        }
+
         $newData = [
                     'id' => $articleToUpdate['id'],
                     'tags' => $articleToUpdate['tags'],
@@ -59,7 +68,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'article', $newArticle['lede'] . $newArticle['body'], false);
 
-        $this->assertNull($data['articles']);
+        $this->assertNull($data['updateArticles']);
     }
 
     function testNotLoggedInCannotEditDisplayOrder() {
@@ -70,7 +79,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'displayOrder', $newArticle['display_order'], false);
 
-        $this->assertNull($data['articles']);
+        $this->assertNull($data['updateArticles']);
     }
 
     function testNotLoggedInCannotEditTags() {
@@ -81,7 +90,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'tags', $newTags, false);
 
-        $this->assertNull($data['articles']);
+        $this->assertNull($data['updateArticles']);
     }
 
     function testCanEditOwnArticleText() {
@@ -92,7 +101,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'article', $newArticle['lede'] . $newArticle['body'], true, true);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertNotNull($data['updateArticles']);
     }
 
     function testCanEditAnyArticleTextIfLevelGreaterThanTwo() {
@@ -103,7 +112,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'article', $newArticle['lede'] . $newArticle['body'], true, false, 3);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertNotNull($data['updateArticles']);
     }
 
     function testCannotEditIfWrongPassword() {
@@ -114,7 +123,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'article', $newArticle['lede'] . $newArticle['body'], true, false, 3, false);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertNotNull($data['updateArticles']);
     }
 
     function testLevelThreeCanModifyDisplayOrder() {
@@ -125,7 +134,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'displayOrder', $newArticle['display_order'], true, false, 3);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertNotNull($data['updateArticles']);
     }
 
     function testLevelThreeCanModifyTags() {
@@ -136,7 +145,7 @@ class UpdateArticleTest extends ArticleTest {
             return true;
         }, 'tags', $newTags, true, false, 3);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertNotNull($data['updateArticles']);
     }
 }
 ?>
