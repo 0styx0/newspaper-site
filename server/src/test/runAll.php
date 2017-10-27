@@ -2,7 +2,8 @@
 
 $filesToTest = [
     'articles/mutations/createArticleTest.php',
-    'articles/mutations/deleteArticleTest.php'
+    'articles/mutations/deleteArticleTest.php',
+    'articles/mutations/updateArticleTest.php'
 ];
 
 echo `clear`;
