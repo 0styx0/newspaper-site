@@ -66,8 +66,8 @@ class HelpTests extends TestCase {
         // echo "\n". debug_backtrace()[2]['function']. " : ".$res_info["http_code"];
         curl_close($ch);
 
-        if (true || $debug) {
-            echo "HERE";print_r([$res_info, $content,$api_response_body]);
+        if ($debug) {
+            echo "HERE";print_r(['content' => $content, 'api_response_body' => $api_response_body]);
         }
 
         if ($debug && isset($api_response_body['errors'])) {
