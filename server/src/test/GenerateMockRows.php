@@ -48,13 +48,25 @@ class GenerateMockRows extends GenerateMockRow {
         $issueUsed = 1;
         $maxIssue = count($this->issues);
 
+        $authorsOfLevel = [1, 2, 3];
+
         $amount = rand(1, 100);
 
         while ($amount-- > 0) {
 
             $page = parent::pageinfo();
 
-            $page['authorid'] = $faker->randomElement($this->users)['id'];
+            if (!empty($authorsOfLevel)) {
+
+                $author = HelpTests::searchArray($this->users, function($currentUser, int $levelOfAuthor) {
+                    return $currentUser['level'] == $levelOfAuthor;
+                }, array_shift($authorsOfLevel));
+
+                $page['authorid'] = $author['id'];
+
+            } else {
+                $page['authorid'] = $faker->randomElement($this->users)['id'];
+            }
 
             // if not all issues have an article, give it one, else assign random issue
             if ($issueUsed < $maxIssue) {
