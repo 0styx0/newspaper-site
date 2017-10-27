@@ -10,11 +10,19 @@ class GenerateMockRows extends GenerateMockRow {
 
     public function users() {
 
+        $amount = rand(3, 100);
 
-        $amount = rand(1, 100);
+        $levelsNeeded = [1, 2, 3];
 
         while ($amount-- > 0) {
-            $this->users[] = $this->user();
+
+            $user = $this->user();
+
+            if (!empty($levelsNeeded)) {
+                $user['level'] = array_shift($levelsNeeded);
+            }
+
+            $this->users[] = $user;
         }
     }
 
