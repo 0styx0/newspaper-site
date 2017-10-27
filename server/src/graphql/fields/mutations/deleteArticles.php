@@ -2,7 +2,7 @@
 
 
 require_once __DIR__ . '/../../../../vendor/autoload.php';
-require_once(__DIR__ . '/../../types/article.php');
+require_once(__DIR__ . '/../../types/idList.php');
 
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Field\AbstractField;
@@ -28,7 +28,7 @@ class DeleteArticlesField extends AbstractField {
     }
 
     public function getType() {
-        return new NonNullType(new ListType(new ArticleType()));
+        return new NonNullType(new IdListType());
     }
 
     public function resolve($root, array $args, ResolveInfo $info) {
@@ -42,7 +42,7 @@ class DeleteArticlesField extends AbstractField {
         $authorIds = Db::query("SELECT DISTINCT authorid FROM pageinfo WHERE id IN ({$placeholders})", $sanitized['ids'])->fetchAll(PDO::FETCH_COLUMN, 0);
 
 
-        $userIsAuthor = count($authorIds) === 1 && Jwt::getToken()->getClaim('id') === $authorIds[0];
+        $userIsAuthor = count($authorIds) === 1 && Jwt::getToken()->getClaim('id') == $authorIds[0];
 
         if (!$userIsAuthor) {
             Guard::userMustBeLevel(3);
@@ -56,7 +56,7 @@ class DeleteArticlesField extends AbstractField {
 
         Db::query("DELETE FROM pageinfo WHERE id IN ({$placeholders})", $sanitized['ids']);
 
-        return $sanitized['ids'];
+        return ['id' => $sanitized['ids']];
     }
 }
 
