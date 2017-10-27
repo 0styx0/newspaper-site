@@ -5,44 +5,45 @@ require_once(__DIR__ . '/../helpers.php');
 
 class DeleteArticleTest extends ArticleTest {
 
-    function helpTest(bool $author = false, int $minLevel = 1, bool $loggedIn = true, bool $correctPassword = true) {
+    function helpTest(bool $author = false, int $level = 3, bool $loggedIn = true, bool $correctPassword = true) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $minLevel) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $level) {
 
             $isAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $currentUser) {
                 return $currentArticle['authorid'] == $currentUser['id'];
             }, $currentUser);
 
-            return $currentUser['level'] >= $minLevel && $isAnAuthor;
+            return $currentUser['level'] == $level && $isAnAuthor;
 
-        }, $minLevel);
+        }, $level);
 
-        $articleId = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $info) {
+        $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $info) {
 
-            return $info['author'] && $currentArticle['authorid'] == $info['user']['id'];
+            $userIsAuthor = $currentArticle['authorid'] == $info['user']['id'];
+            return $info['author'] ? $userIsAuthor : !$userIsAuthor;
+
         }, ['author' => $author, 'user' => $user]);
 
-
         return $this->request([
-            'query' => 'mutation deleteArticles($ids: [ID]) {
-                            deleteArticles(ids: $ids) {
+            'query' => 'mutation deleteArticles($ids: [ID], $password: String) {
+                            deleteArticles(ids: $ids, password: $password) {
                                 id
                             }
                         }',
             'variables' => [
-                'ids' => [$articleId],
-                'password' => $correctPassword ? $user['password'] : $user['password'] . HelpTests::faker()->randomWord()
+                'ids' => [$article['id']],
+                'password' => $correctPassword ? $user['password'] : $user['password'] . HelpTests::faker()->text()
             ]
-        ]);
+        ], $loggedIn ? HelpTests::getJwt($user) : null);
 
     }
 
     function testNotLevelThreeNotOwnerCannotDelete() {
-        $this->assertNull($this->helpTest()['deleteArticles']);
+        $this->assertNull($this->helpTest(false, rand(1, 2))['deleteArticles']);
     }
 
     function testOwnerCanDeleteArticle() {
-        $this->assertNotNull($this->helpTest(true)['deleteArticles']);
+        $this->assertNotNull($this->helpTest(true, rand(1, 2))['deleteArticles']);
     }
 
     function testLevelThreeCanDeleteArticle() {
