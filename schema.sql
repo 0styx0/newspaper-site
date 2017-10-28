@@ -61,8 +61,8 @@ CREATE TABLE `pageinfo` (
   `url` varchar(75) NOT NULL,
   `lede` blob NOT NULL,
   `body` blob NOT NULL,
-  `issue` int(11) NOT NULL,
-  `authorid` varchar(8) DEFAULT NULL,
+  `issue` int(11) UNSIGNED NOT NULL,
+  `authorid` int(11) NOT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
   `display_order` int(2) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -96,18 +96,18 @@ CREATE TABLE `tag_list` (
 --
 
 CREATE TABLE `users` (
-  `ID` int(11) NOT NULL,
-  `USERNAME` char(20) NOT NULL,
-  `F_NAME` varchar(10) NOT NULL,
-  `M_NAME` char(3) DEFAULT NULL,
-  `L_NAME` varchar(20) NOT NULL,
-  `PASSWORD` text NOT NULL,
-  `EMAIL` varchar(255) DEFAULT NULL,
-  `LEVEL` int(11) UNSIGNED NOT NULL,
-  `AUTH` text,
-  `AUTH_TIME` timestamp NULL DEFAULT NULL,
-  `NOTIFICATIONS` tinyint(1) NOT NULL DEFAULT '1',
-  `TWO_FA_ENABLED` tinyint(1) NOT NULL DEFAULT '0'
+  `id` int(11) NOT NULL,
+  `username` char(20) NOT NULL,
+  `f_name` varchar(10) NOT NULL,
+  `m_name` char(3) DEFAULT NULL,
+  `l_name` varchar(20) NOT NULL,
+  `password` text NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `level` int(11) UNSIGNED NOT NULL,
+  `auth` text,
+  `auth_time` timestamp NULL DEFAULT NULL,
+  `notifications` tinyint(1) NOT NULL DEFAULT '1',
+  `two_fa_enabled` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -162,9 +162,9 @@ ALTER TABLE `tag_list`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `USERNAME` (`USERNAME`),
-  ADD UNIQUE KEY `F_NAME` (`F_NAME`,`M_NAME`,`L_NAME`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `f_name` (`f_name`,`m_name`,`l_name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -199,7 +199,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
@@ -209,13 +209,21 @@ ALTER TABLE `users`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`art_id`) REFERENCES `pageinfo` (`id`),
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`authorid`) REFERENCES `users` (`ID`);
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`authorid`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `images`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`art_id`) REFERENCES `pageinfo` (`id`);
+
+
+--
+-- Constraints for table `pageinfo`
+--
+ALTER TABLE `pageinfo`
+  ADD CONSTRAINT `pageinfo_ibfk_1` FOREIGN KEY (`authorid`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `pageinfo_ibfk_2` FOREIGN KEY (`issue`) REFERENCES `issues` (`num`);
 
 --
 -- Constraints for table `tags`
