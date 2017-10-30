@@ -57,10 +57,10 @@ class ArticlesField extends AbstractField {
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,
-          (authorid = :authorid OR author.level < :level) AS canEdit
+          (authorid = :userId OR author.level < :level) AS canEdit
           FROM pageinfo
           JOIN users AS author ON author.id = authorid
-          WHERE {$where}", array_merge($sanitized, ['authorid' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
     }
