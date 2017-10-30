@@ -50,7 +50,7 @@ class GenerateMockRows extends GenerateMockRow {
 
         $authorsOfLevel = [1, 2, 3];
 
-        $amount = rand(1, 100);
+        $amount = rand($maxIssue, 100);
 
         while ($amount-- > 0) {
 
@@ -69,7 +69,7 @@ class GenerateMockRows extends GenerateMockRow {
             }
 
             // if not all issues have an article, give it one, else assign random issue
-            if ($issueUsed < $maxIssue) {
+            if ($issueUsed <= $maxIssue) {
 
                 $page['issue'] = $issueUsed++;
             } else {
