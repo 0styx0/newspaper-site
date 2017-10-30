@@ -34,9 +34,10 @@ class ArticlesField extends AbstractField {
 
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
-        $sanitized = $this->transformArgs($args);
+        $sanitized = $this->transformArgs($sanitized);
 
-        $where = Db::setPlaceholders($args);
+        $where = Db::setPlaceholders($sanitized);
+        $where = str_replace('pageinfoId =', 'pageinfo.id =', $where); // sql: can't have a dot in placeholder
 
         if (empty($args)) {
 
@@ -57,9 +58,10 @@ class ArticlesField extends AbstractField {
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,
-          (authorid = :userId OR author.level < :level) AS canEdit
+          ((authorid = :userId AND ispublic = 0) OR author.level < :level) AS canEdit
           FROM pageinfo
           JOIN users AS author ON author.id = authorid
+          JOIN issues ON num = pageinfo.issue
           WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
@@ -70,8 +72,8 @@ class ArticlesField extends AbstractField {
      */
     private function transformArgs(array $args) {
 
-        if (array_search('id', array_keys($args))) { // stops ambigious id in sql
-            $args['pageinfo.id'] = $args['id'];
+        if (array_search('id', array_keys($args)) !== false) { // stops ambigious id in sql
+            $args['pageinfoId'] = $args['id'];
             unset($args['id']);
         }
 
