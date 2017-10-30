@@ -95,7 +95,7 @@ class ArticleType extends AbstractObjectType {
             'canEdit' => [
                 'type' => new NonNullType(new BooleanType()),
                 'resolve' => function ($article) {
-                    return false;
+                    return !!$article['canEdit'];
                 }
             ]
         ]);

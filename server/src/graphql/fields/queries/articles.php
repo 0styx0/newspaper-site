@@ -39,14 +39,30 @@ class ArticlesField extends AbstractField {
         $where = Db::setPlaceholders($args);
 
         if (empty($args)) {
-            $where = 1;
+
+            try {
+
+                Guard::userMustBeLoggedIn();
+                $where = 1;
+            } catch(Exception $e) {
+
+                $privateIssue = Db::query("SELECT num FROM issues WHERE ispublic = ?", [0])->fetchColumn();
+                $where = "issue < {$privateIssue}";
+            }
         }
 
+        $userId = Jwt::getToken() ? Jwt::getToken()->getClaim('id') : null;
+        $userLevel = Jwt::getToken() ? Jwt::getToken()->getClaim('level') : 0;
+
         // basic fields, no authentication or filtering needed
-        return Db::query("SELECT id, created AS dateCreated, lede, body, url, issue,
-          views, display_order AS displayOrder, authorId
+        $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
+          views, display_order AS displayOrder, authorid AS authorId,
+          (authorid = :authorid OR author.level < :level) AS canEdit
           FROM pageinfo
-          WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
+          JOIN users AS author ON author.id = authorid
+          WHERE {$where}", array_merge($sanitized, ['authorid' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
+
+        return $rows;
     }
 }
 
