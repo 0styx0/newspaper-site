@@ -20,7 +20,6 @@ class ArticlesField extends AbstractField {
         $config->addArguments([
             'id' => new IdType(),
             'authorid' => new IdType(),
-            'artId' => new IdType(),
             'tag' => new StringType(),
             'issue' => new StringType(),
             'url' => new StringType(),
@@ -35,6 +34,7 @@ class ArticlesField extends AbstractField {
 
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
+        $sanitized = $this->transformArgs($args);
 
         $where = Db::setPlaceholders($args);
 
@@ -63,6 +63,19 @@ class ArticlesField extends AbstractField {
           WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
+    }
+
+    /**
+     * Transforms user-given args into arguments that can be used in sql
+     */
+    private function transformArgs(array $args) {
+
+        if (array_search('id', array_keys($args))) { // stops ambigious id in sql
+            $args['pageinfo.id'] = $args['id'];
+            unset($args['id']);
+        }
+
+        return $args;
     }
 }
 
