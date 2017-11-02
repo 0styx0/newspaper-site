@@ -98,6 +98,19 @@ class TestDatabase {
 
         return $faker->randomElement($this->GenerateRows->users);
     }
+
+    /**
+     *
+     * @param $level - level of user to get
+     *
+     * @return user of level $level from database
+     */
+    public function getUserOfLevel(int $level) {
+
+        return HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, int $levelToGet) {
+            return $currentUser['level'] == $levelToGet;
+        }, $level);
+    }
 }
 
 
