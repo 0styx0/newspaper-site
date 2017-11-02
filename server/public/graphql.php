@@ -31,49 +31,67 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/editMission.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/createTag.php');
 
-$rootQueryType = new ObjectType([
-    'name' => 'RootQueryType',
-    'fields' => [
-        new UsersField(),
-        new ArticlesField(),
-        new IssuesField(),
-        new CommentsField(),
-        new AllTagsField(),
-        new MissionField()
-    ]
-]);
+function process() {
 
-$rootMutationType = new ObjectType([
-    'name' => 'RootMutationType',
-    'fields' => [
-        new LoginField(),
-        new CreateCommentField(),
-        new DeleteCommentField(),
-        new UpdateIssueField(),
-        new CreateUserField(),
-        new UpdateUsersField(),
-        new DeleteUsersField(),
-        new UpdateProfileField(),
-        new RecoverPasswordField(),
-        new CreateArticleField(),
-        new UpdateArticlesField(),
-        new DeleteArticlesField(),
-        new EditMissionField(),
-        new CreateTagField(),
-    ]
-]);
+    $rootQueryType = new ObjectType([
+        'name' => 'RootQueryType',
+        'fields' => [
+            new UsersField(),
+            new ArticlesField(),
+            new IssuesField(),
+            new CommentsField(),
+            new AllTagsField(),
+            new MissionField()
+        ]
+    ]);
 
-$processor = new Processor(new Schema([
-    'query' => $rootQueryType,
-    'mutation' => $rootMutationType
-]));
+    $rootMutationType = new ObjectType([
+        'name' => 'RootMutationType',
+        'fields' => [
+            new LoginField(),
+            new CreateCommentField(),
+            new DeleteCommentField(),
+            new UpdateIssueField(),
+            new CreateUserField(),
+            new UpdateUsersField(),
+            new DeleteUsersField(),
+            new UpdateProfileField(),
+            new RecoverPasswordField(),
+            new CreateArticleField(),
+            new UpdateArticlesField(),
+            new DeleteArticlesField(),
+            new EditMissionField(),
+            new CreateTagField(),
+        ]
+    ]);
 
-$rawBody = file_get_contents('php://input');
-$decodedBody = json_decode($rawBody);
+    $processor = new Processor(new Schema([
+        'query' => $rootQueryType,
+        'mutation' => $rootMutationType
+    ]));
 
-$variables = isset($decodedBody->variables) ? (array) $decodedBody->variables : [];
+    $phpInput = file_get_contents('php://input');
 
-$processor->processPayload($decodedBody->query, (array) $variables);
-echo json_encode($processor->getResponseData()) . "\n";
+    if (empty($_POST['graphql']) && empty($phpInput)) {
+        return json_encode(['error' => 'No request']);
+    }
+
+    $rawBody = $_ENV['test'] ? $_POST['graphql'] : $phpInput;
+    $decodedBody = json_decode($rawBody);
+
+    $variables = isset($decodedBody->variables) ? (array) $decodedBody->variables : [];
+
+    $processor->processPayload($decodedBody->query, (array) $variables);
+
+    $result = json_encode($processor->getResponseData()) . "\n";
+
+    if ($_ENV['test']) {
+        return $result;
+    }
+
+    echo $result;
+}
+
+process();
 
 ?>

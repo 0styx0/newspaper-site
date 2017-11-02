@@ -9,6 +9,7 @@ use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
+use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\IdType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
@@ -21,7 +22,7 @@ class ArticlesField extends AbstractField {
             'id' => new IdType(),
             'authorid' => new IdType(),
             'tag' => new StringType(),
-            'issue' => new StringType(),
+            'issue' => new IntType(),
             'url' => new StringType(),
         ]);
     }
@@ -54,15 +55,15 @@ class ArticlesField extends AbstractField {
 
         $userId = Jwt::getToken() ? Jwt::getToken()->getClaim('id') : null;
         $userLevel = Jwt::getToken() ? Jwt::getToken()->getClaim('level') : 0;
-
+        
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,
-          ((authorid = :userId AND ispublic = 0) OR author.level < :level) AS canEdit
+          (((authorid = :userId OR author.level < :level) AND ispublic = 0) OR :admin) AS canEdit
           FROM pageinfo
           JOIN users AS author ON author.id = authorid
           JOIN issues ON num = pageinfo.issue
-          WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel]))->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel, 'admin' => $userLevel > 2]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
     }

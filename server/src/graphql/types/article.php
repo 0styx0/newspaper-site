@@ -49,7 +49,12 @@ class ArticleType extends AbstractObjectType {
                     return $content;
                 }
             ],
-            'issue' => new NonNullType(new IntType()),
+            'issue' => [
+                'type' => new NonNullType(new IntType()),
+                'resolve' => function ($article) {
+                    return +$article['issue'];
+                }
+            ],
             'views' => new NonNullType(new IntType()),
             'displayOrder' => new NonNullType(new IntType()),
             'tags' => [
