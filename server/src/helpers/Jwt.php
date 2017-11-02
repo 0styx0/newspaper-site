@@ -17,22 +17,31 @@ class Jwt {
     */
     public static function getToken() {
 
-        if (Jwt::$token) {
+        if (Jwt::$token && !$_ENV['test']) {
             return Jwt::$token;
         }
 
-        $clientHeaders = getallheaders();
+        try {
+            $clientHeaders = getallheaders();
+
+        } catch (Error $e) {
+
+            if ($_ENV['test']) {
+                $clientHeaders = ['Authorization' => $_POST['jwt']];
+            }
+        }
+
         $jwt = [];
 
         if (key_exists('Authorization', $clientHeaders)) {
 
-            $aHeader = filter_var($clientHeaders["Authorization"], FILTER_SANITIZE_STRING);
+            $aHeader = filter_var($clientHeaders['Authorization'], FILTER_SANITIZE_STRING);
 
             $encodedToken = substr($aHeader, strlen('Bearer '));
 
             $parsedToken = (new Parser())->parse($encodedToken);
-            Jwt::$token = $parsedToken; // Retrieves the token claims
 
+            Jwt::$token = $parsedToken; // Retrieves the token claims
             return Jwt::$token;
         }
 

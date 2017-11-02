@@ -8,6 +8,7 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Faker\Provider\Base;
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/../../public/graphql.php');
 
 class HelpTests extends TestCase {
 
@@ -33,51 +34,15 @@ class HelpTests extends TestCase {
       */
     public static function createHTTPRequest(array $args, string $operationName, string $jwt = null, $debug = false) {
 
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($args));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        //   curl_setopt($ch, CURLOPT_VERBOSE, true);
-
-        curl_setopt($ch, CURLOPT_URL, 'http://localhost/graphql.php');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // makes response get returned instead of echoing to terminal
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow redirects (since .htaccess forces all api stuff through /router)
-
-        $headers = [
-            'Accept: application/json',
-            'Content-type: application/graphql'
-        ];
-
         if ($jwt) {
-            array_push($headers, "Authorization: Bearer {$jwt}");
+            header("Authorization: Bearer {$jwt}");
+            $_POST['jwt'] = "Bearer {$jwt}";
         }
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $_POST['graphql'] = json_encode($args);
+        $result = process();
 
-        $content = trim(curl_exec($ch));
-        $res_info = curl_getinfo($ch);
-
-        $api_response_body = (array) json_decode(substr($content, $res_info['header_size']), true);
-
-        // echo "\n". debug_backtrace()[2]['function']. " : ".$res_info["http_code"];
-        curl_close($ch);
-
-        if ($debug) {
-            echo "HERE";print_r(['content' => $content, 'api_response_body' => $api_response_body]);
-        }
-
-        if (false && isset($api_response_body['errors'])) {
-            echo "Caller: " . debug_backtrace()[2]['function'] . "\n";
-            echo "Args: "; print_r($args);
-            echo substr($content, $res_info['header_size']); // api_response_body, but not decoded
-            print_r($api_response_body['errors']);
-        }
-
-        return $api_response_body;
+        return json_decode($result, true);
     }
 
     /**
@@ -105,8 +70,11 @@ class HelpTests extends TestCase {
      */
     public function compareArrayContents(array $expected, array $actual) {
 
+        sort($expected);
+        sort($actual);
+
         // https://stackoverflow.com/a/28189403
-        $this->assertEquals($expected, $actual, "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -126,8 +94,6 @@ class HelpTests extends TestCase {
                 return $element;
             }
         }
-
-        return [];
     }
 
     public static function getProfileLink(string $email) {

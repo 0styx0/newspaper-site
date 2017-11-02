@@ -8,11 +8,15 @@ class GenerateMockRows extends GenerateMockRow {
 
     public $users = [], $issues = [], $pageinfo = [], $tag_list = [], $tags = [], $comments = [], $images = [];
 
+    /**
+     * Generates random number of users, but always at least 1 user per level
+     *
+     */
     public function users() {
 
-        $amount = rand(3, 100);
-
         $levelsNeeded = [1, 2, 3];
+
+        $amount = rand(count($levelsNeeded), 100);
 
         while ($amount-- > 0) {
 
@@ -26,9 +30,13 @@ class GenerateMockRows extends GenerateMockRow {
         }
     }
 
+    /**
+     * Generates random number of issues, the last being private the others public. [0] is private
+     *
+     */
     public function issues() {
 
-        $amount = rand(1, 100);
+        $amount = rand(2, 100); // 2, so at least 1 public 1 private
 
         while ($amount-- > 1) {
 
@@ -41,44 +49,66 @@ class GenerateMockRows extends GenerateMockRow {
         $this->issues[0]['ispublic'] = 0;
     }
 
-    public function pageinfos() {
+    private function ensureAllIssuesHaveArticle(int $maxIssue, GenerateMockRows $self) {
 
         $faker = Faker\Factory::create();
-
-        $issueUsed = 1;
-        $maxIssue = count($this->issues);
-
-        $authorsOfLevel = [1, 2, 3];
-
         $amount = rand($maxIssue, 100);
 
-        while ($amount-- > 0) {
+        while ($amount-- > 1) {
 
-            $page = parent::pageinfo();
+            $page = $self->pageinfo();
 
-            if (!empty($authorsOfLevel)) {
+            $page['authorid'] = $faker->randomElement($self->users)['id'];
 
-                $author = HelpTests::searchArray($this->users, function($currentUser, int $levelOfAuthor) {
-                    return $currentUser['level'] == $levelOfAuthor;
-                }, array_shift($authorsOfLevel));
+            $page['issue'] = $amount > $maxIssue ? $faker->randomElement($self->issues)['num'] : $amount;
 
-                $page['authorid'] = $author['id'];
-
-            } else {
-                $page['authorid'] = $faker->randomElement($this->users)['id'];
-            }
-
-            // if not all issues have an article, give it one, else assign random issue
-            if ($issueUsed <= $maxIssue) {
-
-                $page['issue'] = $issueUsed++;
-            } else {
-
-                $page['issue'] = rand(1, $maxIssue);
-            }
-
-            $this->pageinfo[] = $page;
+            $self->pageinfo[] = $page;
         }
+    }
+
+    private function ensureAllLevelsHavePrivateArticle(int $maxIssue, GenerateMockRows $self) {
+
+        for ($i = 1; $i < 4; $i++) {
+
+            $page = $self->pageinfo();
+
+            $author = HelpTests::searchArray($self->users, function($currentUser, int $levelOfAuthor) {
+                return $currentUser['level'] == $levelOfAuthor;
+            }, $i);
+
+            $page['authorid'] = $author['id'];
+            $page['issue'] = $maxIssue;
+            $self->pageinfo[] = $page;
+        }
+    }
+
+
+    private function ensureAllLevelsHavePublicArticle(int $maxIssue, GenerateMockRows $self) {
+
+        for ($i = 1; $i < 4; $i++) {
+
+            $page = $self->pageinfo();
+
+            $author = HelpTests::searchArray($self->users, function($currentUser, int $levelOfAuthor) {
+                return $currentUser['level'] == $levelOfAuthor;
+            }, $i);
+
+            $page['authorid'] = $author['id'];
+            $page['issue'] = rand(1, $maxIssue - 1);
+            $self->pageinfo[] = $page;
+        }
+    }
+
+
+    public function pageinfos() {
+
+        $maxIssue = count($this->issues);
+
+        $this->ensureAllIssuesHaveArticle($maxIssue, $this);
+
+        $this->ensureAllLevelsHavePrivateArticle($maxIssue, $this);
+
+        $this->ensureAllLevelsHavePrivateArticle($maxIssue, $this);
     }
 
     public function tag_lists() {
