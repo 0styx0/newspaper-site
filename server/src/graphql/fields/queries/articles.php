@@ -39,7 +39,8 @@ class ArticlesField extends AbstractField {
 
         $where = Db::setPlaceholders($sanitized);
         $where = str_replace('pageinfoId =', 'pageinfo.id =', $where); // sql: can't have a dot in placeholder
-
+        $where = str_replace('tag = :tag', 'pageinfo.id IN (SELECT art_id FROM tags WHERE tag = :tag)', $where);
+        
         if (empty($args)) {
 
             try {
@@ -55,7 +56,7 @@ class ArticlesField extends AbstractField {
 
         $userId = Jwt::getToken() ? Jwt::getToken()->getClaim('id') : null;
         $userLevel = Jwt::getToken() ? Jwt::getToken()->getClaim('level') : 0;
-        
+
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,
@@ -63,7 +64,8 @@ class ArticlesField extends AbstractField {
           FROM pageinfo
           JOIN users AS author ON author.id = authorid
           JOIN issues ON num = pageinfo.issue
-          WHERE {$where}", array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel, 'admin' => $userLevel > 2]))->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where}",
+          array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel, 'admin' => $userLevel > 2]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
     }
