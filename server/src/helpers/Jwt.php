@@ -21,12 +21,14 @@ class Jwt {
             return Jwt::$token;
         }
 
+        $clientHeaders = [];
+
         try {
             $clientHeaders = getallheaders();
 
         } catch (Error $e) {
 
-            if ($_ENV['test']) {
+            if ($_ENV['test'] && isset($_POST['jwt'])) {
                 $clientHeaders = ['Authorization' => $_POST['jwt']];
             }
         }
