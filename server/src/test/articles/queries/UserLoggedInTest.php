@@ -112,7 +112,6 @@ class UserLoggedInTest extends ArticleTest {
             if (($articleIsPublic && $canEditPublicArticles) || !$articleIsPublic) {
                 $this->assertTrue($article['canEdit']);
             } else {
-                print_r(['true?' => $article]);
                 $this->assertFalse($article['canEdit']);
             }
         }
