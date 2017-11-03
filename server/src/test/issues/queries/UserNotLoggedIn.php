@@ -25,7 +25,7 @@ class NotLoggedInIssueTest extends IssueTest {
             }
         }
 
-        $this->assertEqual($expectedCount, count($data['issues']));
+        $this->assertEquals($expectedCount, count($data['issues']));
     }
 
     function testGetMostRecentPublicIssueIfNoArgPassed() {
@@ -47,6 +47,6 @@ class NotLoggedInIssueTest extends IssueTest {
             return $issue['public'];
         });
 
-        $this->assertEqual($publicIssue['num'], $data['issues'][0]['num']);
+        $this->assertEquals($publicIssue['num'], $data['issues'][0]['num']);
     }
 }

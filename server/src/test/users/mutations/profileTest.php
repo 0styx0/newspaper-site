@@ -77,7 +77,7 @@ class ProfileTest extends UserTest {
 
         $this->helpTestMutation($user, $toChange, function (array $data) {
 
-            $this->assertEqual($newValue, $data[$gQlField]);
+            $this->assertEquals($newValue, $data[$gQlField]);
         });
 
         return $user;
@@ -153,8 +153,8 @@ class ProfileTest extends UserTest {
             'variables' => $params
         ], HelpTests::getJwt($user))['users'][0];
 
-        $this->assertEqual($params['notifications'], $data['notifications']);
-        $this->assertEqual($params['twoFactor'], $data['twoFactor']);
+        $this->assertEquals($params['notifications'], $data['notifications']);
+        $this->assertEquals($params['twoFactor'], $data['twoFactor']);
         $this->helpTestPassword($user, $params['newPassword']);
     }
 }

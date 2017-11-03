@@ -20,7 +20,7 @@ class UserLoggedInTest extends UserTest {
                        }'
         ], HelpTests::getJwt($user));
 
-        $this->assertEqual($expected, $data['users'][0]['articleCount']);
+        $this->assertEquals($expected, $data['users'][0]['articleCount']);
     }
 
     function testLevelHigherThanOtherUserCanEdit() {
@@ -98,8 +98,8 @@ class UserLoggedInTest extends UserTest {
         $actualUser = $data['users'][0];
 
         $this->assertTrue($actualUser['canEdit']);
-        $this->assertEqual($user['notifications'], $actualUser['notifications']);
-        $this->assertEqual($user['two_fa_enabled'], $actualUser['twoFactor']);
+        $this->assertEquals($user['notifications'], $actualUser['notifications']);
+        $this->assertEquals($user['two_fa_enabled'], $actualUser['twoFactor']);
     }
 }
 

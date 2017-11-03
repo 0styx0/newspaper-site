@@ -43,7 +43,7 @@ class NeutralIssueTest extends IssueTest {
         $limit = rand(0, count($this->Database->GenerateMockRows->issues) - 1);
 
         $data = $this->helpTestArgs(['$limit' => 'Int'], ['limit' => $limit]);
-        $this->assertEqual($limit, count($data['issues']));
+        $this->assertEquals($limit, count($data['issues']));
     }
 }
 ?>

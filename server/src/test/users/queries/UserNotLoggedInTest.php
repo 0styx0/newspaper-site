@@ -51,7 +51,7 @@ class UserNotLoggedInTest extends UserTest {
 
         $this->helperTest('twoFactor');
     }
-    
+
     /**
      * Checks if article is public
      *
@@ -88,7 +88,7 @@ class UserNotLoggedInTest extends UserTest {
             ]
         ]);
 
-        $this->assertEqual($actualPublicArticleCount, $data['users'][0]['articleCount']);
+        $this->assertEquals($actualPublicArticleCount, $data['users'][0]['articleCount']);
     }
 
     function helpGetPublicArticles() {
@@ -130,7 +130,7 @@ class UserNotLoggedInTest extends UserTest {
             ]
         ]);
 
-        $this->assertEqual($expectedIds, array_column($articles['users']['articles'], 'id'));
+        $this->assertEquals($expectedIds, array_column($articles['users']['articles'], 'id'));
     }
 
     function testCannotEditUsers() {

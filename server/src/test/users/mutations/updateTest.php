@@ -103,7 +103,7 @@ class UpdateUserTest extends UserTest {
             ]
         ], HelpTests::getJwt($user));
 
-        $this->assertEqual($newLevel, $data['users'][0]['level']);
+        $this->assertEquals($newLevel, $data['users'][0]['level']);
     }
 
     function testGoodUpdateMany() {
@@ -136,7 +136,7 @@ class UpdateUserTest extends UserTest {
 
         foreach ($data['users'] as $userToTest) {
 
-            $this->assertEqual($newLevel, $userToTest['level']);
+            $this->assertEquals($newLevel, $userToTest['level']);
         }
     }
 }

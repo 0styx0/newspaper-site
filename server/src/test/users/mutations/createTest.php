@@ -126,11 +126,11 @@ class CreateUserTest extends UserTest {
 
         $newUser = $data['users'][0];
 
-        $this->assertEqual($user['firstName'], $newUser['firstName']);
-        $this->assertEqual($user['lastName'], $newUser['lastName']);
-        $this->assertEqual($user['email'], $newUser['email']);
-        $this->assertEqual($user['username'], $newUser['username']);
-        $this->assertEqual($user['level'], $newUser['level']);
+        $this->assertEquals($user['firstName'], $newUser['firstName']);
+        $this->assertEquals($user['lastName'], $newUser['lastName']);
+        $this->assertEquals($user['email'], $newUser['email']);
+        $this->assertEquals($user['username'], $newUser['username']);
+        $this->assertEquals($user['level'], $newUser['level']);
 
         $this->assertNotNull($db::query("SELECT id FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
     }
@@ -184,7 +184,7 @@ class CreateUserTest extends UserTest {
         $newUser = $data['users'][0];
 
         $this->assertNotNull(Db::query("SELECT 1 FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
-        $this->assertEqual($userToCreate['level'], $newUser['level']);
+        $this->assertEquals($userToCreate['level'], $newUser['level']);
     }
 
     function testDefaultLevelIsOne() {
@@ -206,7 +206,7 @@ class CreateUserTest extends UserTest {
         $newUser = $data['users'][0];
 
         $this->assertNotNull(Db::query("SELECT 1 FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
-        $this->assertEqual(1, $newUser['level']);
+        $this->assertEquals(1, $newUser['level']);
     }
 }
 

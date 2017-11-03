@@ -48,7 +48,7 @@ class CreateTagTest extends AllTagsTest {
 
         $data = $this->helpTest($tag, $user);
 
-        $this->assertEqual($tag, $data['tag']);
+        $this->assertEquals($tag, $data['tag']);
     }
 
     function testMaliciousDataNotAccepted() {
