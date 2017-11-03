@@ -10,8 +10,8 @@ class CommentTest extends TestCase {
 
     protected function setup() {
 
-        $this->TestDatabase = new TestDatabase();
-        $this->TestDatabase->init();
+        $this->Database = new TestDatabase();
+        $this->Database->init();
     }
 
     /**
