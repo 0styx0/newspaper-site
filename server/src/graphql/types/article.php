@@ -45,8 +45,16 @@ class ArticleType extends AbstractObjectType {
                         }
                     }
 
-                    // TODO: make cookie
-                    Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
+                    function addView($article) {
+
+                        $publicIssue = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$article['issue']])->fetchColumn();
+
+                        // TODO: make cookie
+                        if ($publicIssue) {
+                            Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
+                        }
+                    }
+                    addView($article);
 
                     return $content;
                 }
