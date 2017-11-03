@@ -82,6 +82,10 @@ in php called eyeStorm if anyone is curious (which is no longer actively maintai
     <li>Done.</li>
 </ol>
 
+<ul>
+    <li>Comments must be at least 5 characters long</li>
+    <li>Can only comment on public articles </li>
+    <li>Views only increment when not logged in, and when viewing public articles</li>
 
 <h1>Build Instructions</h1>
 
