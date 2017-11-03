@@ -62,14 +62,14 @@ class Db {
      */
     static function setPlaceholders(array $args) {
 
-        $where = '';
+        $where = [];
 
         foreach (array_keys($args) as $field) {
 
-            $where .= "{$field} = :{$field}";
+            $where[] = "{$field} = :{$field}";
         }
 
-        return $where;
+        return implode(' AND ', $where);
     }
 
     /**
