@@ -34,6 +34,16 @@ class CreateCommentField extends AbstractField {
         $sanitizedContent = $this->stripDangerousTags($args['content']);
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
+        if (strlen($args['content']) < 5) {
+            throw new Exception('Comments must be longer than 5 characters');
+        }
+
+        $articleIsPublic = Db::query("SELECT ispublic FROM issues WHERE num = (SELECT issue FROM pageinfo WHERE id = ?)", [$sanitized['artId']])->fetchColumn();
+
+        if (!$articleIsPublic) {
+            throw new Exception('Cannot comment on private articles');
+        }
+
         Db::query("INSERT INTO comments (art_id, content, authorid) VALUES(?, ?, ?)",
           [$sanitized['artId'], $sanitizedContent, Jwt::getToken()->getClaim('id') ]);
 
@@ -44,9 +54,20 @@ class CreateCommentField extends AbstractField {
     private function stripDangerousTags(string $toStrip) {
 
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('URI.AllowedSchemes', ['http' => true,
+                                            'https' => true,
+                                            'mailto' => true
+                                            ]);
+        $config->set('CSS.AllowedProperties', 'href');
+        $config->set('HTML.Allowed', 'div,code,pre,p,a[href],strong,b,em,i,u,sub,sup,strike,ul,ol,li,q,blockquote,br,abbr');
+        $config->set('AutoFormat.RemoveEmpty', true); // remove empty tag pairs
+        $config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true); // remove empty, even if it contains an &nbsp;
+        $config->set('AutoFormat.AutoParagraph', true); // remove empty tag pairs
+
         $purifier = new HTMLPurifier($config);
-        $toStrip = $purifier->purify($toStrip);
-        return strip_tags($toStrip, "<code><pre><p><a><strong><b><em><i><u><sub><sup><strike><ul><ol><li><q><blockquote><br><abbr>");
+        $purified = $purifier->purify($toStrip);
+
+        return $purified;
     }
 }
 
