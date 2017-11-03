@@ -22,7 +22,7 @@ class GenerateMockRow {
     public function user() {
 
         return [
-            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1,
+            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1 . '',
             'username' => GenerateMockRow::$faker->unique()->userName(),
             'f_name' => GenerateMockRow::$faker->firstName(),
             'm_name' => GenerateMockRow::$faker->boolean() ? GenerateMockRow::$faker->suffix() : null,
@@ -57,6 +57,26 @@ class GenerateMockRow {
     private function randomHtml() {
 
         return strip_tags(GenerateMockRow::$faker->randomHtml(), "<h1><h2><h3><h4><h5><h6><pre><img><p><a><table><td><tr><th><tbody><thead><tfoot><strong><b><em><i><u><sub><sup><font><strike><ul><ol><li><q><blockquote><br><abbr><div><span>");
+    }
+
+    private function randomCommentHtml() {
+
+        $config = HTMLPurifier_Config::createDefault(); // these rules are from fields/mutations/createComment
+        $config->set('URI.AllowedSchemes', ['http' => true,
+                                            'https' => true,
+                                            'mailto' => true
+                                            ]);
+        $config->set('AutoFormat.RemoveEmpty', true); // remove empty tag pairs
+        $config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true); // remove empty, even if it contains an &nbsp;
+        $config->set('CSS.AllowedProperties', 'href');
+        $config->set('AutoFormat.AutoParagraph', true); // remove empty tag pairs
+        $config->set('HTML.Allowed', 'div,code,pre,p,a[href],strong,b,em,i,u,sub,sup,strike,ul,ol,li,q,blockquote,br,abbr');
+
+        $dbMaxContentLength = 500;
+        $content = substr($this->randomHtml(), 0, $dbMaxContentLength);
+
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($content);
     }
 
     public function pageinfo() {
@@ -107,10 +127,10 @@ class GenerateMockRow {
     public function comment() {
 
         return [
-            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1,
+            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1 . '',
             'art_id' => -1, // replaced later
             'authorid' => -1, // replaced later
-            'content' => $this->randomHtml(),
+            'content' => $this->randomCommentHtml(),
             'created' => GenerateMockRow::$faker->date()
         ];
     }
