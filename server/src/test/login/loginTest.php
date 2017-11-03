@@ -26,7 +26,7 @@ class LoginTest extends LoginTest {
     function testBadUsername() {
 
         $faker = HelpTests::faker();
-        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+        $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'] . $faker->randomWord(), $user['password']);
 
@@ -36,7 +36,7 @@ class LoginTest extends LoginTest {
     function testBadPassword() {
 
         $faker = HelpTests::faker();
-        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+        $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'], $user['password'] . $faker->randomWord());
 
@@ -46,7 +46,7 @@ class LoginTest extends LoginTest {
     function testGoodPasswordGoodUsername() {
 
         $faker = HelpTests::faker();
-        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+        $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'], $user['password']);
 
@@ -56,7 +56,7 @@ class LoginTest extends LoginTest {
     function testUnverifiedEmail() {
 
         $faker = HelpTests::faker();
-        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+        $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         Db::query("UPDATE users SET email = CONCAT('.', email) WHERE id = ?", $user['id']);
 

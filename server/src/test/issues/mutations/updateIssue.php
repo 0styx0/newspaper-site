@@ -15,7 +15,7 @@ class UpdateIssueTest extends IssueTest {
      */
     protected function helpTestArgs(array $variableTypes, array $variableValues, bool $loggedIn = true, int $userLevel = 3) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateMockRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             $currentUser['level'] == $userLevel;
         });
 
@@ -35,14 +35,14 @@ class UpdateIssueTest extends IssueTest {
     function testCannotModifyIfNotLoggedIn() {
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()], false);
-        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
+        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
 
-        $this->assertEquals($this->Database->GenerateMockRows->issues[0]['name'], $actualName);
+        $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
     }
 
     function testCannotModifyIfBadPassword() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateMockRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             $currentUser['level'] == 3;
         });
 
@@ -51,8 +51,8 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()]);
 
-        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
-        $this->assertEquals($this->Database->GenerateMockRows->issues[0]['name'], $actualName);
+        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
+        $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
 
         $user['password'] = $actualPassword;
     }
@@ -61,8 +61,8 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()], true, rand(1, 2));
 
-        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
-        $this->assertEquals($this->Database->GenerateMockRows->issues[0]['name'], $actualName);
+        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
+        $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
     }
 
     function testCanModifyName() {
@@ -71,7 +71,7 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => $newName]);
 
-        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
+        $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals($newName, $actualName);
     }
 
@@ -79,7 +79,7 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => 1]);
 
-        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
+        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals(1, $actualPublicStatus);
     }
 
@@ -87,7 +87,7 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => 0]);
 
-        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateMockRows->issues[0]['num']])->fetchColumn();
+        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals(1, $actualPublicStatus);
     }
 }

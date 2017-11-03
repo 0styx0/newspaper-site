@@ -17,9 +17,9 @@ class DeleteCommentTest extends CommentTest {
      *
      * @return result of mutation
      */
-    protected function helpTest(string $commentId, array $user, bool $loggedIn = true) {
+    protected function helpTest(array $comment, array $user, bool $loggedIn = true) {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateMockRows->users);
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
         return $this->request([
             'query' => 'mutation CommentDelete($id: ID!) {
@@ -46,7 +46,7 @@ class DeleteCommentTest extends CommentTest {
 
     function testBadNotLoggedIn() {
 
-        $commentToDelete = $this->faker()->randomElement($this->Database->GenerateRows->comments);
+        $commentToDelete = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $this->helpTest($commentToDelete, [], false);
 
@@ -55,7 +55,7 @@ class DeleteCommentTest extends CommentTest {
 
     function testBadNotAuthorNotLevelThree() {
 
-        $commentToDelete = $this->faker()->randomElement($this->Database->GenerateRows->comments);
+        $commentToDelete = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $commentToDelete) {
             return $currentUser['level'] < 3 && $currentUser['id'] !== $commentToDelete['id'];

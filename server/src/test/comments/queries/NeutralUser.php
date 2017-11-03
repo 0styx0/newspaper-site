@@ -30,7 +30,7 @@ class NeutralUserCommentTest extends CommentTest {
 
     function testCanQueryById() {
 
-        $comment = HelpTests::faker()->randomElement($this->Database->GenerateMockRows->comments);
+        $comment = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $data = $this->helpTestArgs(['$id' => 'ID'], ['id' => $comment['id']]);
 
@@ -39,7 +39,7 @@ class NeutralUserCommentTest extends CommentTest {
 
     function testCanQueryByAuthorId() {
 
-        $comment = HelpTests::faker()->randomElement($this->Database->GenerateMockRows->comments);
+        $comment = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $data = $this->helpTestArgs(['$authorid' => 'ID'], ['authorid' => $comment['authorid']]);
 
@@ -48,7 +48,7 @@ class NeutralUserCommentTest extends CommentTest {
 
     function testCanQueryByArtId() {
 
-        $comment = HelpTests::faker()->randomElement($this->Database->GenerateMockRows->comments);
+        $comment = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $data = $this->helpTestArgs(['$artId' => 'ID'], ['artId' => $comment['art_id']]);
 

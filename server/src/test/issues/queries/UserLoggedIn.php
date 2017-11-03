@@ -16,9 +16,9 @@ class LoggedInIssueTest extends IssueTest {
                             }
                         }',
             'variables' => [
-                'num' => $this->Database->GenerateMockRows->issues[0]['num'] + 1
+                'num' => $this->Database->GenerateRows->issues[0]['num'] + 1
             ]
-        ], HelpTests::getJwt($this->Database->GenerateMockRows->users[0]));
+        ], HelpTests::getJwt($this->Database->GenerateRows->users[0]));
 
         $this->assertNull($data['issues']);
     }

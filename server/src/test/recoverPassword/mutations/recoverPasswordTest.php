@@ -33,7 +33,7 @@ class RecoverTest extends RecoverPasswordTest {
     /**
      * Checks if password was changed
      *
-     * @param $user - GenerateMockRows->users element (with original password)
+     * @param $user - GenerateRows->users element (with original password)
      *
      * @return boolean if password changed or not
      */
@@ -46,15 +46,15 @@ class RecoverTest extends RecoverPasswordTest {
 
     /**
      *
-     * @param $fieldToTest - index of GenerateMockRows->user element
+     * @param $fieldToTest - index of GenerateRows->user element
      *
-     * @return ['user' => random_element_of_GenerateMockRows->users, 'fieldToTest' => incorrect_value_of_$fieldToTest]
+     * @return ['user' => random_element_of_GenerateRows->users, 'fieldToTest' => incorrect_value_of_$fieldToTest]
      */
     protected function helpGetBadData(string $fieldToTest) {
 
         $faker = HelpTests::faker();
 
-        $user = $faker->randomElement($this->Database->GenerateMockRows->users);
+        $user = $faker->randomElement($this->Database->GenerateRows->users);
         $badValue = $user[$fieldToTest] . $faker->randomWord();
 
         return ['user' => $user, 'fieldToTest' => $badValue];

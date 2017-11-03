@@ -18,7 +18,7 @@ class NotLoggedInIssueTest extends IssueTest {
 
         $expectedCount = 0;
 
-        foreach ($this->Database->GenerateMockRows->issues as $issue) {
+        foreach ($this->Database->GenerateRows->issues as $issue) {
 
             if ($issue['public']) {
                 $expectedCount++;
@@ -39,11 +39,11 @@ class NotLoggedInIssueTest extends IssueTest {
                             }
                         }',
             'variables' => [
-                'num' => $this->Database->GenerateMockRows->issues[0]['num'] + 1
+                'num' => $this->Database->GenerateRows->issues[0]['num'] + 1
             ]
         ]);
 
-        $publicIssue = HelpTests::searchArray($this->Database->GenerateMockRows->issues, function (array $issue) {
+        $publicIssue = HelpTests::searchArray($this->Database->GenerateRows->issues, function (array $issue) {
             return $issue['public'];
         });
 
