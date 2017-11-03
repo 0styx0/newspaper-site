@@ -8,14 +8,14 @@ class CreateCommentTest extends CommentTest {
     /**
      * Runs all duplicate functionality
      *
-     * @param $article - @see $this->Database->GenerateMockRows->pageinfo
+     * @param $article - @see $this->Database->GenerateRows->pageinfo
      * @param $content - body of comment
      * @param $loggedIn - bool
      *
      */
-    protected function helpTest(array $article, string $content, bool $loggedIn = true) {
+    protected function helpTest(array $article, $content, bool $loggedIn = true) {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateMockRows->users);
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->request([
             'query' => 'mutation CommentCreate($artId: ID!, $content: String!) {
@@ -29,7 +29,7 @@ class CreateCommentTest extends CommentTest {
             ]
         ], $loggedIn ? HelpTests::getJwt($user) : '');
 
-        return ['user' => $user, '$data' => $data];
+        return ['user' => $user, 'data' => $data['createComment']];
     }
 
     /**
@@ -37,14 +37,14 @@ class CreateCommentTest extends CommentTest {
      *
      * @param $public - if public article or not
      *
-     * @return article (from Database->GenerateMockRows->pageinfo)
+     * @return article (from Database->GenerateRows->pageinfo)
      */
     protected function helpGetArticle(bool $public = false) {
 
-        return HelpTests::searchArray($this->Database->GenerateMockRows->pageinfo, function (array $currentArticle, bool $public) {
+        return HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, bool $public) {
 
-            $privateIssue = $this->Database->GenerateMockRows['issue'][0]['num'];
-            $articleIsPrivate = $privateIssue !== $currentArticle['issue'];
+            $privateIssue = $this->Database->GenerateRows->issues[0]['num'];
+            $articleIsPrivate = $privateIssue == $currentArticle['issue'];
 
             return $public ? !$articleIsPrivate : $articleIsPrivate;
         }, $public);
@@ -52,57 +52,56 @@ class CreateCommentTest extends CommentTest {
 
     function testBadNotLoggedIn() {
 
-        $data = $this->helpTest($this->helpGetArticle(), HelpTests::faker()->randomHtml(), false);
+        $data = $this->helpTest($this->helpGetArticle(), $this->Database->GenerateRows->comment()['content'], false);
 
         $this->assertNull($data['data']);
     }
 
     function testContentCannotBeBlank() {
 
-        foreach (['', null, false, true, 0] as $badContent) {
+        foreach (['', null, true, 0] as $badContent) {
 
             $data = $this->helpTest($this->helpGetArticle(), $badContent);
 
-            $this->assertNull($data['data'], $badContent);
+            $this->assertNull($data['data'], '>'. $badContent . '<');
         }
     }
 
     function testCanCommentOnPublicArticles() {
 
-        $expectedContent = HelpTests::faker()->randomHtml();
-        $expectedArticle = $this->helpGetArticle();
+        $expectedContent = $this->Database->GenerateRows->comment()['content'];
+        $expectedArticle = $this->helpGetArticle(true);
         $data = $this->helpTest($expectedArticle, $expectedContent);
 
-        $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['comments'][0]['id']])->fetchColumn();
+        $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['data']['id']])->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $this->assertEqual($dbComment, [
+        $this->assertEquals([
             'art_id' => $expectedArticle['id'],
             'authorid' => $data['user']['id'],
             'content' => $expectedContent
-        ]);
+        ], $dbComment);
     }
 
     function testGoodCannotCommentOnPrivateArticles() {
 
-        $data = $this->helpTest($this->helpGetArticle(), HelpTests::faker()->randomHtml());
+        $data = $this->helpTest($this->helpGetArticle(), $this->Database->GenerateRows->comment()['content']);
 
-        $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['comments'][0]['id']])->fetchColumn();
-
-        $this->assertNull($dbComment);
-        $this->assertNull($data);
+        $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['data']['id']])->fetchColumn();
+        $this->assertFalse($dbComment);
+        $this->assertNull($data['data']);
     }
 
     function testContentCannotBeMalicious() { // bad content should be converted to nothing or escaped
 
         $articleToCommentOn = $this->helpGetArticle();
 
-        foreach (HelpTests::unsafeData as $content) {
+        foreach (HelpTests::$unsafeData as $content) {
 
             $data = $this->helpTest($articleToCommentOn, $content);
 
-            $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['comments'][0]['id']])->fetchColumn();
+            $dbComment = Db::query("SELECT authorid, content, art_id FROM comments WHERE id = ?", [$data['data']['id']])->fetchColumn();
 
-            $this->assertNull($dbComment); // still not sure what will do with bad content
+            $this->assertFalse($dbComment); // still not sure what will do with bad content
         }
     }
 }
