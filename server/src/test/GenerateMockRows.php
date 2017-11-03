@@ -36,7 +36,7 @@ class GenerateMockRows extends GenerateMockRow {
      */
     public function issues() {
 
-        $amount = rand(2, 100); // 2, so at least 1 public 1 private
+        $amount = rand(3, 100); // 2, so at least 1 public 1 private
 
         while ($amount-- > 1) {
 
