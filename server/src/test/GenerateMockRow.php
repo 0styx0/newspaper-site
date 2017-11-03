@@ -70,7 +70,7 @@ class GenerateMockRow {
         }
 
         return [
-            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1,
+            'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1 . '',
             'created' => GenerateMockRow::$faker->date(),
             'url' => $url,
             'lede' => "
