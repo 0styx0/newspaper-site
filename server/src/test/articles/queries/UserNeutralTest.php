@@ -10,12 +10,22 @@ class UserNeutralTest extends ArticleTest {
      */
     protected function helpGetPublicArticle() {
 
-        return HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
-            $currentArticle['issue'] < $this->Database->GenerateRows->issues[0]['num'];
-        });
+        return HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $privateIssue) {
+            return $currentArticle['issue'] < $privateIssue;
+        }, $this->Database->GenerateRows->issues[0]['num']);
     }
 
     function testCanQueryByIssue() {
+
+        $issueToGet = $this->Database->GenerateRows->issues[1]['num'];
+        $expected = [];
+
+        foreach ($this->Database->GenerateRows->pageinfo as $article) {
+
+            if ($article['issue'] == $issueToGet) {
+                $expected[] = $article['id'] . '';
+            }
+        }
 
         $data = $this->request([
             'query' => 'query articles($issue: Int) {
@@ -24,16 +34,24 @@ class UserNeutralTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'id' => $this->Database->GenerateRows->issues[1]['num'] // so public article so don't need to login
+                'issue' => $issueToGet // so public article so don't need to login
             ]
         ]);
 
-        $this->assertNotNull($data['articles']);
+        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByTag() {
 
-        $tagToGet = HelpTests::faker()->randomElement($this->Database->GenerateRows->tag_list)['tag'];
+        $tagToGet = HelpTests::faker()->randomElement($this->Database->GenerateRows->tags)['tag'];
+        $expected = [];
+
+        foreach ($this->Database->GenerateRows->tags as $tag) {
+
+            if ($tag['tag'] == $tagToGet) {
+                $expected[] = $tag['art_id'];
+            }
+        }
 
         $data = $this->request([
             'query' => 'query articles($tag: String) {
@@ -46,10 +64,21 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        $this->assertNotNull($data['articles']);
+        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByAuthor() {
+
+        $authorid = $this->helpGetPublicArticle()['authorid'];
+
+        $expected = [];
+
+        foreach ($this->Database->GenerateRows->pageinfo as $article) {
+
+            if ($article['authorid'] == $authorid) {
+                $expected[] = $article['id'];
+            }
+        }
 
         $data = $this->request([
             'query' => 'query articles($authorid: ID) {
@@ -58,11 +87,11 @@ class UserNeutralTest extends ArticleTest {
                             }
                         }',
             'variables' => [
-                'authorid' => $this->helpGetPublicArticle()['authorid']
+                'authorid' => $authorid
             ]
         ]);
 
-        $this->assertNotNull($data['articles']);
+        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByIssueAndUrl() {
@@ -70,7 +99,7 @@ class UserNeutralTest extends ArticleTest {
         $articleToGet = $this->helpGetPublicArticle();
 
         $data = $this->request([
-            'query' => 'query articles($issue: ID, $url: String) {
+            'query' => 'query articles($issue: Int, $url: String) {
                             articles(issue: $issue, url: $url) {
                                 id
                             }
@@ -81,11 +110,10 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertEquals($articleToGet['id'], $data['articles'][0]['id']);
     }
 
     function testViewsIncrementWhenArticleIsViewed() {
-
 
         $articleToGet = $this->helpGetPublicArticle();
 
@@ -103,11 +131,11 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        $this->assertNotNull($data['articles']);
+        $this->assertEquals($articleToGet['id'], $data['articles'][0]['id']);
 
-        $afterViews = $Db::query("SELECT views from pageinfo WHERE id = ?", [$articleToGet['id']])->fetchColumn();
+        $afterViews = Db::query("SELECT views from pageinfo WHERE id = ?", [$articleToGet['id']])->fetchColumn();
 
-        $this->assertEqual($viewsBefore + 1, $afterViews);
+        $this->assertEquals($viewsBefore + 1, $afterViews);
     }
 }
 ?>
