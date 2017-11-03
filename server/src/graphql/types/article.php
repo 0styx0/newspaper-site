@@ -31,7 +31,6 @@ class ArticleType extends AbstractObjectType {
             'article' => [
                 'type' => new NonNullType(new StringType()),
                 'resolve' => function ($article) {
-                    // TODO addView
 
                     $content = $article['lede'] . $article['body'];
 
@@ -45,6 +44,9 @@ class ArticleType extends AbstractObjectType {
                             $content = substr_replace($content, "src='{$image}'", $imagePos, strlen('data-src'));
                         }
                     }
+
+                    // TODO: make cookie
+                    Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
 
                     return $content;
                 }
