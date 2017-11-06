@@ -6,7 +6,8 @@ $filesToTest = [
     'articles/mutations/updateArticleTest.php',
     'articles/queries/UserLoggedInTest.php',
     'articles/queries/UserNeutralTest.php',
-    'comments/mutations/createComment.php'
+    'comments/mutations/createComment.php',
+    'comments/mutations/deleteComment.php'
 ];
 
 echo `clear`;
