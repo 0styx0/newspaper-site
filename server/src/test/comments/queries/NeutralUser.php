@@ -16,7 +16,7 @@ class NeutralUserCommentTest extends CommentTest {
         $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
-            'query' => "query CommentQuery({$variablesString['types']}) {
+            'query' => "query CommentQuery({$variableStrings['types']}) {
                             comments({$variableStrings['mappings']}) {
                                 id
                                 content,

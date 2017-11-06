@@ -29,9 +29,14 @@ class CommentsField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
+        if (!empty($args['artId'])) {
+            $args['art_id'] = $args['artId'];
+            unset($args['artId']);
+        }
+
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        $where = Db::setPlaceholders($args);
+        $where = Db::setPlaceholders($sanitized);
 
         return Db::query("SELECT id, art_id AS artId, authorid AS authorId, content, created AS dateCreated
           FROM comments
