@@ -35,10 +35,10 @@ class DeleteCommentTest extends CommentTest {
 
     protected function helpCheckCommentExists(array $comment, bool $assertExists = true) {
 
-        $commentExists = Db::query("SELECT id FROM comments WHERE id = ?", [$commentToDelete['id']])->fetchColumn();
+        $commentExists = Db::query("SELECT id FROM comments WHERE id = ?", [$comment['id']])->fetchColumn();
 
         if ($assertExists) {
-            $this->assertTrue($commentExists);
+            $this->assertNotNull($commentExists);
         } else {
             $this->assertFalse($commentExists);
         }
@@ -68,23 +68,28 @@ class DeleteCommentTest extends CommentTest {
 
     function testGoodAuthor() {
 
-        $commentToDelete;
+        $getUserComment = function(array $user) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+            return HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
+                return $user['id'] === $currentComment['authorid'];
+            }, $user);
+        };
+
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, callable $getUserComment) {
 
             if ($currentUser['level'] > 2) {
                 return false;
             }
 
-            $userComment = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
-                return $user['id'] === $currentComment['authorid'];
-            }, $user);
+            $userComment = $getUserComment($currentUser);
 
             $commentToDelete = $userComment;
 
             $userHasAtLeastOneComment = !!$userComment;
             return $userHasAtLeastOneComment;
-        });
+        }, $getUserComment);
+
+        $commentToDelete = $getUserComment($user);
 
         $this->helpTest($commentToDelete, $user);
 
@@ -97,16 +102,12 @@ class DeleteCommentTest extends CommentTest {
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
 
-            if ($currentUser['level'] < 2) {
-                return false;
-            }
-
-            $commentToDelete = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
-                return $user['id'] !== $currentComment['authorid'];
-            }, $user);
-
-            return true;
+            return $currentUser['level'] > 2;
         });
+
+        $commentToDelete = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
+            return $user['id'] !== $currentComment['authorid'];
+        }, $user);
 
         $this->helpTest($commentToDelete, $user);
 

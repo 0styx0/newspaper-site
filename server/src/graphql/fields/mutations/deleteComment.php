@@ -37,10 +37,12 @@ class DeleteCommentField extends AbstractField {
             Guard::userMustBeLevel(3);
         } catch (Exception $e) {
 
+            Guard::userMustBeLoggedIn();
+
             $authorid = Db::query("SELECT authorid FROM comments WHERE id = ?", [$id])->fetchColumn();
 
             if ($authorid !== Jwt::getToken()->getClaim('id')) {
-                throw new Error('Users can only delete their own comments');
+                throw new Exception('Users can only delete their own comments');
             }
         }
     }
