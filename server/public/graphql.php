@@ -72,20 +72,23 @@ function process() {
 
     $phpInput = file_get_contents('php://input');
 
+    $graphqlTesting = !empty($_POST['graphql']) && $_POST['graphql'];
+    $testing = isset($_ENV['test']) && $_ENV['test'];
+
     if (empty($_POST['graphql']) && empty($phpInput)) {
         return json_encode(['error' => 'No request']);
     }
 
-    $rawBody = $_ENV['test'] ? $_POST['graphql'] : $phpInput;
-    $decodedBody = json_decode($rawBody);
+    $rawBody = $testing ? $graphqlTesting : $phpInput;
+    $decodedBody = json_decode($rawBody, true);
 
-    $variables = isset($decodedBody->variables) ? (array) $decodedBody->variables : [];
+    $variables = isset($decodedBody['variables']) ? $decodedBody['variables'] : [];
 
-    $processor->processPayload($decodedBody->query, (array) $variables);
+    $processor->processPayload($decodedBody['query'], $variables);
 
     $result = json_encode($processor->getResponseData()) . "\n";
 
-    if ($_ENV['test']) {
+    if ($testing) {
         return $result;
     }
 
