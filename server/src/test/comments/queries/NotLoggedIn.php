@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class NotLoggedInCommentTest extends IssueTest {
+class NotLoggedInCommentTest extends CommentTest {
 
     /**
      * Sends graphql query
@@ -16,12 +16,13 @@ class NotLoggedInCommentTest extends IssueTest {
         $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
-            'query' => "query CommentQuery({$variablesString['types']}) {
+            'query' => "query CommentQuery({$variableStrings['types']}) {
                             comments({$variableStrings['mappings']}) {
                                 id
                                 content,
                                 dateCreated,
                                 canDelete
+                                artId
                             }
                         }",
             'variables' => $variableValues
@@ -33,17 +34,17 @@ class NotLoggedInCommentTest extends IssueTest {
      *
      * @param $public - if comment should come from a public article or not
      *
-     * @return a private comment (from Database->GenerateMockRows)
+     * @return a private comment (from Database->GenerateRows)
      */
     protected function helpGetComment(bool $public = false) {
 
-        return HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentComment, bool $public) {
+        return HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, bool $public) {
 
-            $articleOfComment = HelpTests::searchArray($this->Database->GenerateMockRows, function (array $currentArticle, array $currentComment) {
+            $articleOfComment = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, array $currentComment) {
                 return $currentComment['art_id'] == $currentArticle['id'];
             }, $currentComment);
 
-            $privateIssue = $this->Database->GenerateMockRows['issue'][0]['num'];
+            $privateIssue = $this->Database->GenerateRows->issues[0]['num'];
 
             return ($public) ? $articleOfComment['issue'] != $privateIssue : $articleOfComment['issue'] == $privateIssue;
         }, $public);
@@ -55,16 +56,19 @@ class NotLoggedInCommentTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$id' => 'ID'], ['id' => $privateCommentId]);
 
-        $this->assertNull($data['comments']);
+        $this->assertEmpty($data['comments'], $data);
     }
 
     function testCannotGetCommentsOfPrivateArticlesByAuthor() {
 
-        $privateCommentAuthorId = $this->helpGetComment()['authorid'];
+        $privateComment = $this->helpGetComment();
 
-        $data = $this->helpTestArgs(['$authorid' => 'ID'], ['authorid' => $privateCommentAuthorId]);
+        $data = $this->helpTestArgs(['$authorid' => 'ID'], ['authorid' => $privateComment['authorid']]);
 
-        $this->assertNull($data['comments']);
+        foreach ($data['comments'] as $comment) {
+
+            $this->assertNotEquals($comment['artId'], $privateComment['art_id']);
+        }
     }
 
     function testCannotGetCommentsOfPrivateArticlesByArticle() {
@@ -73,7 +77,7 @@ class NotLoggedInCommentTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$artId' => 'ID'], ['artId' => $privateCommentArticleId]);
 
-        $this->assertNull($data['comments']);
+        $this->assertEmpty($data['comments']);
     }
 
     function testCanDeleteIsFalse() {
