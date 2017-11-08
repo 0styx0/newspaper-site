@@ -25,7 +25,7 @@ class CommentType extends AbstractObjectType {
             'artId' => new NonNullType(new IdType()),
             'authorId' => new NonNullType(new IdType()),
             'content' => new NonNullType(new StringType()),
-            'dateCreated' => new TimestampType(),
+            'dateCreated' => new StringType(),
             'author' => [
                 'type' => new UserType(),
                 'resolve' => function ($comment) {
@@ -36,8 +36,8 @@ class CommentType extends AbstractObjectType {
             ],
             'canDelete' => [
                 'type' => new NonNullType(new BooleanType()),
-                'resolve' => function ($article) {
-                    return false;
+                'resolve' => function ($comment) {
+                    return !!$comment['canDelete'];
                 }
             ]
         ]);
