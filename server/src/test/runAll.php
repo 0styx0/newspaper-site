@@ -8,7 +8,8 @@ $filesToTest = [
     'articles/queries/UserNeutralTest.php',
     'comments/mutations/createComment.php',
     'comments/mutations/deleteComment.php',
-    'comments/queries/NeutralUser.php'
+    'comments/queries/NeutralUser.php',
+    'comments/queries/NotLoggedIn.php',
 ];
 
 echo `clear`;
