@@ -72,7 +72,8 @@ function process() {
 
     $phpInput = file_get_contents('php://input');
 
-    $graphqlTesting = !empty($_POST['graphql']) && $_POST['graphql'];
+    $graphqlTesting = empty($_POST['graphql']) ? [] : $_POST['graphql'];
+
     $testing = isset($_ENV['test']) && $_ENV['test'];
 
     if (empty($_POST['graphql']) && empty($phpInput)) {
