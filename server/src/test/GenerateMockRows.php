@@ -148,9 +148,15 @@ class GenerateMockRows extends GenerateMockRow {
 
         $faker = Faker\Factory::create();
 
-        foreach ($faker->randomElements($this->pageinfo) as $article) {
+        foreach ($this->pageinfo as $article) {
 
-            $numberOfComments = rand(1, 100);
+            $ispublic = $article['issue'] !== $this->issues[0]['num'];
+
+            if (rand(0, 1) && $ispublic) {
+                continue;
+            }
+
+            $numberOfComments = rand(1, 5); // random numbers
 
             while ($numberOfComments-- > 0) {
 
