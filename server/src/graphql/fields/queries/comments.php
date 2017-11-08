@@ -29,18 +29,42 @@ class CommentsField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        if (!empty($args['artId'])) {
+        if (isset($args['artId'])) {
             $args['art_id'] = $args['artId'];
             unset($args['artId']);
+        }
+        if (isset($args['id'])) {
+            $args['commentsId'] = $args['id'];
+            unset($args['id']);
+        }
+        if (isset($args['authorid'])) {
+            $args['authorId'] = $args['authorid'];
+            unset($args['authorid']);
         }
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $where = Db::setPlaceholders($sanitized);
+        $where = str_replace('commentsId =', 'comments.id =', $where);
+        $where = str_replace('authorId =', 'comments.authorid =', $where);
 
-        return Db::query("SELECT id, art_id AS artId, authorid AS authorId, content, created AS dateCreated
+
+        $jwt = Jwt::getToken();
+        $canDelete = $jwt && ($jwt->getClaim('level') > 2 || $jwt->getClaim('id') == $comment['authorid']);
+
+        $result = Db::query("SELECT comments.id, art_id AS artId, comments.authorid AS authorId,
+           content, comments.created AS dateCreated, (:userIsAdmin OR :userId = comments.authorid) AS canDelete
           FROM comments
-          WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
+          JOIN pageinfo ON art_id = pageinfo.id
+          JOIN issues ON num = pageinfo.issue
+          WHERE {$where} AND (ispublic != :userLoggedIn OR :userLoggedIn)",
+          array_merge($args, [
+              'userLoggedIn' => +!!$jwt,
+              'userIsAdmin' => $jwt && $jwt->getClaim('level') > 2,
+              'userId' => $jwt ? $jwt->getClaim('id') : ''
+          ]))->fetchAll(PDO::FETCH_ASSOC);
+
+          return $result;
     }
 }
 
