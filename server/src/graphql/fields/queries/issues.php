@@ -35,12 +35,57 @@ class IssuesField extends AbstractField {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        $where = Db::setPlaceholders($args);
+        $where = '';
+
+        if (isset($sanitized['limit'])) {
+            $where .= " LIMIT {$sanitized['limit']} ";
+            unset($sanitized['limit']);
+        }
+        if (isset($sanitized['public'])) {
+            $sanitized['ispublic'] = $sanitized['public'];
+            unset($sanitized['public']);
+        }
+
+
+        $where = Db::setPlaceholders($sanitized) . $where;
+
+        $maxIssue = Db::query("SELECT num, ispublic from issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
+
+        $issueRequestedDoesNotExist = !empty($sanitized['num']) && $sanitized['num'] > $maxIssue['num'];
+
+        if ($issueRequestedDoesNotExist) {
+            $sanitized['num'] = $maxIssue['num'];
+        }
+
+        $sanitized = $this->restrictAccessToPrivateIssues($sanitized);
 
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
            (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views
           FROM issues
-          WHERE {$where}", $args)->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function restrictAccessToPrivateIssues(array $sanitized) {
+
+        try {
+            Guard::userMustBeLoggedIn();
+        } catch (Exception $e) {
+
+            $attemptingAccessToPrivateIssue = (
+                isset($sanitized['num']) && $maxIssue['num'] == $sanitized['num'] &&
+                $maxIssue['ispublic'] == 0
+             ) ||
+             (isset($sanitized['ispublic']) && !$sanitized['ispublic']);
+
+            if (isset($sanitized['num']) && $attemptingAccessToPrivateIssue) {
+                $sanitized['num']--;
+            }
+            if (isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) {
+                $sanitized['ispublic'] = 1;
+            }
+        }
+
+        return $sanitized;
     }
 }
 
