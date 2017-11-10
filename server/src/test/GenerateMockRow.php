@@ -49,7 +49,7 @@ class GenerateMockRow {
         return [
             'num' => GenerateMockRow::$faker->unique()->randomNumber(),
             'ispublic' => 1,
-            'name' => GenerateMockRow::$faker->unique()->name(),
+            'name' => substr(GenerateMockRow::$faker->unique()->name(), 0, 20), // db varchar(20)
             'madepub' => GenerateMockRow::$faker->date()
         ];
     }
