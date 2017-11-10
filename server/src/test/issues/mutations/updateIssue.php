@@ -13,13 +13,18 @@ class UpdateIssueTest extends IssueTest {
      * @param $loggedIn - if user is logged in or not
      * @param $userLevel - what level user should be
      */
-    protected function helpTestArgs(array $variableTypes, array $variableValues, bool $loggedIn = true, int $userLevel = 3) {
+    protected function helpTestArgs(array $variableTypes, array $variableValues, bool $loggedIn = true,
+      int $userLevel = 3, bool $correctPassword = true) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            $currentUser['level'] == $userLevel;
-        });
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $userLevel) {
+            return $currentUser['level'] == $userLevel;
+        }, $userLevel);
 
-        $variablesStrings = HelpTests::convertVariableArrayToGraphql(array_merge($variableTypes, ['$password' => 'String']));
+        $variablesStrings = HelpTests::convertVariableArrayToGraphql(array_merge($variableTypes, ['$password' => 'String!']));
+
+        if (!$correctPassword) {
+            $user['password'] .= '.'; // the dot is random char to invalidate password
+        }
 
         return $this->request([
             'query' => "mutation updateIssue({$variablesStrings['types']}) {
@@ -28,7 +33,7 @@ class UpdateIssueTest extends IssueTest {
                                 public
                             }
                         }",
-            'variables' => $variableValues
+            'variables' => array_merge($variableValues, ['password' => $user['password']])
         ], $loggedIn ? HelpTests::getJwt($user) : '');
     }
 
@@ -42,19 +47,11 @@ class UpdateIssueTest extends IssueTest {
 
     function testCannotModifyIfBadPassword() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            $currentUser['level'] == 3;
-        });
-
-        $actualPassword = $user['password'];
-        $user['password'] = HelpTests::faker()->word();
-
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()]);
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()],
+          true, 3, false);
 
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
-
-        $user['password'] = $actualPassword;
     }
 
     function testCannotModifyIfLevelLessThanThree() {
@@ -77,18 +74,22 @@ class UpdateIssueTest extends IssueTest {
 
     function testCanMakeIssuePublic() {
 
-        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => 1]);
+        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => true]);
 
-        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
+        $actualPublicStatus = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals(1, $actualPublicStatus);
     }
 
     function testCannotMakeIssuePrivate() {
 
-        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => 0]);
+        Db::query("UPDATE issues SET ispublic = 1");
 
-        $actualPublicStatus = Db::query("SELECT public FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
+        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => false]);
+
+        $actualPublicStatus = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
+
         $this->assertEquals(1, $actualPublicStatus);
+        Db::query("UPDATE issues SET ispublic = 0");
     }
 }
 ?>
