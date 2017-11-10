@@ -37,9 +37,9 @@ class UpdateIssueField extends AbstractField {
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $maxIssueNumber = Db::query("SELECT MAX(num) FROM issues")->fetchColumn();
-        $issue = Db::query("SELECT name, ispublic FROM issues WHERE num = ?", [$maxIssueNumber])->fetchAll(PDO::FETCH_ASSOC)[0];
+        $issue = Db::query("SELECT name, ispublic AS public FROM issues WHERE num = ?", [$maxIssueNumber])->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        if ($issue['ispublic']) {
+        if ($issue['public']) {
             throw new Exception('Cannot change public issues');
         }
 
@@ -47,11 +47,11 @@ class UpdateIssueField extends AbstractField {
 
         if (isset($args['public'])) {
 
-            if (!$args['name'] && !$issue['name']) {
+            if (empty($args['name']) && !$issue['name']) {
                 throw new Error('Issue must have a name');
             }
 
-            $fieldsToUpdate['ispublic'] = $sanitized['public'] ? 1 : 0;
+            $fieldsToUpdate['ispublic'] = $sanitized['public'];
         }
 
         if (isset($args['name'])) {
@@ -62,7 +62,8 @@ class UpdateIssueField extends AbstractField {
         $fieldValues = array_values($fieldsToUpdate);
 
         Db::query("UPDATE issues SET {$fieldKeys} WHERE num = ?", array_merge($fieldValues, [$maxIssueNumber]));
-        return $sanitized;
+        
+        return array_merge($sanitized, $issue);
     }
 }
 
