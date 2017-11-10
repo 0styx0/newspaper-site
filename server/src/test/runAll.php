@@ -11,7 +11,8 @@ $filesToTest = [
     'comments/queries/NeutralUser.php',
     'comments/queries/NotLoggedIn.php',
     'issues/mutations/updateIssue.php',
-    'issues/queries/UserNeutral.php'
+    'issues/queries/UserNeutral.php',
+    'issues/queries/UserNotLoggedIn.php'
 ];
 
 echo `clear`;
