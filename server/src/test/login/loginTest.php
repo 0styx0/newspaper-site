@@ -1,12 +1,12 @@
 <?php
 
-require_once(__DIR__ . '/../../../../vendor/autoload.php');
-require_once(__DIR__ . '/../helpers.php');
+require_once(__DIR__ . '/../../../vendor/autoload.php');
+require_once(__DIR__ . '/helpers.php');
 
 /**
  * Goal: Only users who exist, with proper email and password should be able to sign in
  */
-class LoginTest extends LoginTest {
+class LoginTest extends LoginHelperTest {
 
     protected function helpLogin(string $username, string $password) {
 
