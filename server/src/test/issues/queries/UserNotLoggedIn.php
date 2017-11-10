@@ -12,6 +12,7 @@ class NotLoggedInIssueTest extends IssueTest {
                             issues {
                                 num
                                 name
+                                public
                             }
                         }"
         ]);
@@ -20,7 +21,7 @@ class NotLoggedInIssueTest extends IssueTest {
 
         foreach ($this->Database->GenerateRows->issues as $issue) {
 
-            if ($issue['public']) {
+            if ($issue['ispublic']) {
                 $expectedCount++;
             }
         }
@@ -44,7 +45,7 @@ class NotLoggedInIssueTest extends IssueTest {
         ]);
 
         $publicIssue = HelpTests::searchArray($this->Database->GenerateRows->issues, function (array $issue) {
-            return $issue['public'];
+            return $issue['ispublic'];
         });
 
         $this->assertEquals($publicIssue['num'], $data['issues'][0]['num']);

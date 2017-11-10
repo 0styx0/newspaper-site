@@ -45,6 +45,14 @@ class IssuesField extends AbstractField {
             $sanitized['ispublic'] = $sanitized['public'];
             unset($sanitized['public']);
         }
+        if (empty($sanitized)) {
+
+            try {
+                Guard::userMustBeLoggedIn();
+            } catch (Exception $e) {
+                $where = ' AND ispublic = :ispublic';
+            }
+        }
 
 
         $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 1) . $where;
@@ -80,7 +88,7 @@ class IssuesField extends AbstractField {
             if (isset($sanitized['num']) && $attemptingAccessToPrivateIssue) {
                 $sanitized['num']--;
             }
-            if (isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) {
+            if (empty($sanitized) || isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) {
                 $sanitized['ispublic'] = 1;
             }
         }
