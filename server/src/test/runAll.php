@@ -10,6 +10,7 @@ $filesToTest = [
     'comments/mutations/deleteComment.php',
     'comments/queries/NeutralUser.php',
     'comments/queries/NotLoggedIn.php',
+    'issues/mutations/updateIssue.php'
 ];
 
 echo `clear`;
