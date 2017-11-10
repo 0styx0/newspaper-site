@@ -7,6 +7,8 @@ class LoggedInIssueTest extends IssueTest {
 
     function testGetMostRecentIssueIfInvalidNumPassed() {
 
+        $maxIssue = $this->Database->GenerateRows->issues[0]['num'];
+
         $data = $this->request([
             'query' => 'query IssueInfo($num: ID) {
                             issues(num: $num, limit: 1) {
@@ -16,10 +18,10 @@ class LoggedInIssueTest extends IssueTest {
                             }
                         }',
             'variables' => [
-                'num' => $this->Database->GenerateRows->issues[0]['num'] + 1
+                'num' => $maxIssue + 1
             ]
         ], HelpTests::getJwt($this->Database->GenerateRows->users[0]));
-
-        $this->assertNull($data['issues']);
+        
+        $this->assertEquals($maxIssue, $data['issues'][0]['num']);
     }
 }
