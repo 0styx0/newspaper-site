@@ -45,8 +45,15 @@ class IssueType extends AbstractObjectType {
                 'type' => new NonNullType(new IntType()),
                 'resolve' => function ($issue) {
 
-                    // TODO `false` should be userLoggedIn
-                    return Db::Query("SELECT MAX(num) FROM issues WHERE public = ? OR ?", [1, false])->fetchColumn();
+                    try {
+                        Guard::userMustBeLoggedIn();
+
+                        return +Db::Query("SELECT MAX(num) FROM issues")->fetchColumn();
+
+                    } catch (Exception $e) {
+
+                        return +Db::Query("SELECT MAX(num) FROM issues WHERE ispublic = 1")->fetchColumn();
+                    }
                 }
             ],
             'canEdit' => [
