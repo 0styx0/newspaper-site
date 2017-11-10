@@ -42,7 +42,7 @@ class VerifyTest extends VerifyEmailTest {
     function testBadAuthCode() {
 
         $user = $this->helpGetUser(true);
-        $user['auth_code'] = $user['auth_code'] . HelpTests::faker()->randomWord();
+        $user['auth_code'] = $user['auth_code'] . HelpTests::faker()->word();
 
         $data = $this->helpSendQuery($user);
 

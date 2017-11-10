@@ -28,7 +28,7 @@ class LoginTest extends LoginTest {
         $faker = HelpTests::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
-        $jwt = $this->helpLogin($user['username'] . $faker->randomWord(), $user['password']);
+        $jwt = $this->helpLogin($user['username'] . $faker->word(), $user['password']);
 
         $this->assertNull($jwt);
     }
@@ -38,7 +38,7 @@ class LoginTest extends LoginTest {
         $faker = HelpTests::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
-        $jwt = $this->helpLogin($user['username'], $user['password'] . $faker->randomWord());
+        $jwt = $this->helpLogin($user['username'], $user['password'] . $faker->word());
 
         $this->assertNull($jwt);
     }

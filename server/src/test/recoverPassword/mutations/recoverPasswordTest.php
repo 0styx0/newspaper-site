@@ -55,7 +55,7 @@ class RecoverTest extends RecoverPasswordTest {
         $faker = HelpTests::faker();
 
         $user = $faker->randomElement($this->Database->GenerateRows->users);
-        $badValue = $user[$fieldToTest] . $faker->randomWord();
+        $badValue = $user[$fieldToTest] . $faker->word();
 
         return ['user' => $user, 'fieldToTest' => $badValue];
     }

@@ -31,7 +31,7 @@ class CreateTagTest extends AllTagsTest {
             return $currentUser['level'] < 3;
         });
 
-        $tag = HelpTests::faker()->randomWord();
+        $tag = HelpTests::faker()->word();
 
         $data = $this->helpTest($tag, $user);
 
@@ -44,7 +44,7 @@ class CreateTagTest extends AllTagsTest {
             return $currentUser['level'] > 2;
         });
 
-        $tag = HelpTests::faker()->randomWord();
+        $tag = HelpTests::faker()->word();
 
         $data = $this->helpTest($tag, $user);
 

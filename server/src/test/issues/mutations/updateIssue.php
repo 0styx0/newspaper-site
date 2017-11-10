@@ -34,7 +34,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCannotModifyIfNotLoggedIn() {
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()], false);
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->name()], false);
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
 
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
@@ -47,9 +47,9 @@ class UpdateIssueTest extends IssueTest {
         });
 
         $actualPassword = $user['password'];
-        $user['password'] = HelpTests::faker()->randomWord();
+        $user['password'] = HelpTests::faker()->word();
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()]);
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()]);
 
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
@@ -59,7 +59,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCannotModifyIfLevelLessThanThree() {
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->randomWord()], true, rand(1, 2));
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()], true, rand(1, 2));
 
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
@@ -67,7 +67,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCanModifyName() {
 
-        $newName = HelpTests::faker()->randomWord();
+        $newName = HelpTests::faker()->word();
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => $newName]);
 
