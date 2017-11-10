@@ -47,7 +47,7 @@ class IssuesField extends AbstractField {
         }
 
 
-        $where = Db::setPlaceholders($sanitized) . $where;
+        $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 1) . $where;
 
         $maxIssue = Db::query("SELECT num, ispublic from issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
 
@@ -57,7 +57,7 @@ class IssuesField extends AbstractField {
             $sanitized['num'] = $maxIssue['num'];
         }
 
-        $sanitized = $this->restrictAccessToPrivateIssues($sanitized);
+        $sanitized = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue);
 
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
            (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views
@@ -65,7 +65,7 @@ class IssuesField extends AbstractField {
           WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function restrictAccessToPrivateIssues(array $sanitized) {
+    private function restrictAccessToPrivateIssues(array $sanitized, array $maxIssue) {
 
         try {
             Guard::userMustBeLoggedIn();
