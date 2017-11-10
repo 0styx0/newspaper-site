@@ -23,7 +23,12 @@ class IssueType extends AbstractObjectType {
         $config->addFields([
             'num' => new NonNullType(new IdType()),
             'name' => new NonNullType(new StringType()),
-            'public' => new NonNullType(new BooleanType()),
+            'public' => [
+                'type' => new NonNullType(new BooleanType()),
+                'resolve' => function (array $issue) {
+                    return !!$issue['public'];
+                }
+            ],
             'datePublished' => new TimestampType(),
             'articles' => [
                 'type' => new NonNullType(new ListType(new ArticleType())),
