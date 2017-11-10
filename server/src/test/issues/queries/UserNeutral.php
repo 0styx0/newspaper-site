@@ -16,7 +16,7 @@ class NeutralIssueTest extends IssueTest {
         $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
-            'query' => "query IssueInfo({$variablesStrings['types']}) {
+            'query' => "query IssueInfo({$variableStrings['types']}) {
                             issues({$variableStrings['mappings']}) {
                                 num
                                 name
@@ -34,7 +34,7 @@ class NeutralIssueTest extends IssueTest {
 
     function testCanQueryByPublicStatus() {
 
-        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => 1]);
+        $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => true]);
         $this->assertNotNull($data['issues']);
     }
 
