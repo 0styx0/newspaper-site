@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class LoginTest extends TestCase {
+class LoginHelperTest extends HelpTests {
 
     protected $TestDatabase;
 
