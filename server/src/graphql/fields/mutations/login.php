@@ -41,7 +41,7 @@ class LoginField extends AbstractField {
           [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC);
 
         if (!$userRows || !password_verify($args['password'], $userRows[0]['password'])) {
-            throw new Error('Invalid Password');
+            throw new Exception('Invalid Password');
         }
 
         $user = $userRows[0];
