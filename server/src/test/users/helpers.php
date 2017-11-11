@@ -6,12 +6,12 @@ require_once(__DIR__ . '/../../../vendor/autoload.php');
 
 class UserTest extends TestCase {
 
-    protected $TestDatabase;
+    protected $Database;
 
     protected function setup() {
 
-        $this->TestDatabase = new TestDatabase();
-        $this->TestDatabase->init();
+        $this->Database = new TestDatabase();
+        $this->Database->init();
     }
 
     protected function helpGetRandomUser() {

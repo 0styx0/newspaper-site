@@ -6,12 +6,12 @@ require_once(__DIR__ . '/../../../vendor/autoload.php');
 
 class LoginHelperTest extends HelpTests {
 
-    protected $TestDatabase;
+    protected $Database;
 
     protected function setup() {
 
-        $this->TestDatabase = new TestDatabase();
-        $this->TestDatabase->init();
+        $this->Database = new TestDatabase();
+        $this->Database->init();
     }
 
     /**

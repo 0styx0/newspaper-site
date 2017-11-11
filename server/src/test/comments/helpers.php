@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../../../vendor/autoload.php');
 
 class CommentTest extends HelpTests {
 
-    protected $TestDatabase;
+    protected $Database;
 
     protected function setup() {
 
