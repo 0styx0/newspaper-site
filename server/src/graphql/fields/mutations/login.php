@@ -34,15 +34,17 @@ class LoginField extends AbstractField {
      */
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $user = Db::query("SELECT id, level, password, TRIM(TRAILING ? FROM email) AS profileLink, email
+        $userRows = Db::query("SELECT id, level, password, TRIM(TRAILING ? FROM email) AS profileLink, email
           FROM users
           WHERE username = ? OR email = ? OR email = CONCAT('.', ?)
           LIMIT 1",
-          [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC)[0];
+          [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!password_verify($args['password'], $user['password'])) {
+        if (!$userRows || !password_verify($args['password'], $userRows[0]['password'])) {
             throw new Error('Invalid Password');
         }
+
+        $user = $userRows[0];
 
         $token = Jwt::setToken($user);
 
