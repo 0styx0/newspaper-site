@@ -40,7 +40,7 @@ class NeutralIssueTest extends IssueTest {
 
     function testCanUseLimitArg() {
 
-        $limit = rand(0, count($this->Database->GenerateRows->issues) - 1);
+        $limit = rand(0, count($this->Database->GenerateRows->issues) - 2); // not including private issue
 
         $data = $this->helpTestArgs(['$limit' => 'Int'], ['limit' => $limit]);
         $this->assertEquals($limit, count($data['issues']));
