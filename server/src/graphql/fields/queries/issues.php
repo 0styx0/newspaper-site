@@ -37,14 +37,6 @@ class IssuesField extends AbstractField {
 
         $where = '';
 
-        if (isset($sanitized['limit'])) {
-            $where .= " LIMIT {$sanitized['limit']} ";
-            unset($sanitized['limit']);
-        }
-        if (isset($sanitized['public'])) {
-            $sanitized['ispublic'] = $sanitized['public'];
-            unset($sanitized['public']);
-        }
         if (empty($sanitized)) {
 
             try {
@@ -53,7 +45,14 @@ class IssuesField extends AbstractField {
                 $where = ' AND ispublic = :ispublic';
             }
         }
-
+        if (isset($sanitized['limit'])) {
+            $where .= " LIMIT {$sanitized['limit']} ";
+            unset($sanitized['limit']);
+        }
+        if (isset($sanitized['public'])) {
+            $sanitized['ispublic'] = $sanitized['public'];
+            unset($sanitized['public']);
+        }
 
         $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 1) . $where;
 
@@ -88,7 +87,10 @@ class IssuesField extends AbstractField {
             if (isset($sanitized['num']) && $attemptingAccessToPrivateIssue) {
                 $sanitized['num']--;
             }
-            if (empty($sanitized) || isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) {
+            if (empty($sanitized) ||
+                (isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) ||
+                (count($sanitized) === 1 && isset($sanitized['limit']))
+               ) {
                 $sanitized['ispublic'] = 1;
             }
         }
