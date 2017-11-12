@@ -22,7 +22,7 @@ class CreateTagTest extends AllTagsTest {
             'variables' => [
                 'tag' => $tag
             ]
-        ], HelpTests::getJwt($user));
+        ], HelpTests::getJwt($user))['createTag'];
     }
 
     function testNotLevelThreeCannotAddTag() {
@@ -31,7 +31,7 @@ class CreateTagTest extends AllTagsTest {
             return $currentUser['level'] < 3;
         });
 
-        $tag = HelpTests::faker()->word();
+        $tag = $this->Database->GenerateRows->tag_list()['tag'];;
 
         $data = $this->helpTest($tag, $user);
 
@@ -44,8 +44,8 @@ class CreateTagTest extends AllTagsTest {
             return $currentUser['level'] > 2;
         });
 
-        $tag = HelpTests::faker()->word();
-
+        $tag = $this->Database->GenerateRows->tag_list()['tag'];
+        
         $data = $this->helpTest($tag, $user);
 
         $this->assertEquals($tag, $data['tag']);
@@ -57,14 +57,14 @@ class CreateTagTest extends AllTagsTest {
             return $currentUser['level'] > 2;
         });
 
-        foreach (HelpTests::unsafeData as $tag) {
+        foreach (HelpTests::$unsafeData as $tag) {
 
             $data = $this->helpTest($tag, $user);
 
-            $this->assertNull($data['tag']);
+            $this->assertTrue(!$data['tag']);
             $dbTag = Db::query("SELECT tag FROM tag_list WHERE tag = ?", [$tag])->fetchColumn();
 
-            $this->assertNull($dbTag);
+            $this->assertFalse($dbTag);
         }
     }
 }
