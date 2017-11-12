@@ -12,7 +12,11 @@ $filesToTest = [
     'comments/queries/NotLoggedIn.php',
     'issues/mutations/updateIssue.php',
     'issues/queries/UserNeutral.php',
-    'issues/queries/UserNotLoggedIn.php'
+    'issues/queries/UserNotLoggedIn.php',
+    'login/loginTest.php',
+    'mission/mutation/missionEditTest.php',
+    'mission/query/missionTest.php',
+    'recoverPassword/mutations/recoverPasswordTest.php'
 ];
 
 echo `clear`;
