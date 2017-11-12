@@ -5,9 +5,10 @@ require_once(__DIR__ . '/../helpers.php');
 
 class CreateUserTest extends UserTest {
 
+
     protected function helpGenerateRequiredUserFields() {
 
-        $exampleUserRow = (new GenerateMockRow())->user(HelpTests::faker());
+        $exampleUserRow = $this->Database->GenerateRows->user();
 
         return [
             'username' => $exampleUserRow['username'],
@@ -30,7 +31,7 @@ class CreateUserTest extends UserTest {
     protected function helpGenerateKeyMappings(array $fields) {
 
         $mappings = array_map(function ($elt) {
-            return "{$elt}: ${$elt}";
+            return "{$elt}: \${$elt}";
         }, array_keys($fields));
 
         return implode(',', $mappings);
@@ -49,7 +50,7 @@ class CreateUserTest extends UserTest {
         $fieldsWithTypesArr = array_map(function ($elt) {
 
             $type = ($elt === 'level') ? 'Int' : 'String';
-            return "${$elt}: {$type}";
+            return "\${$elt}: {$type}";
 
         }, array_keys($fields));
 
@@ -61,13 +62,12 @@ class CreateUserTest extends UserTest {
 
         $requiredFields = $this->helpGenerateRequiredUserFields();
 
-        foreach ($requiredFields as $field) {
+        foreach ($requiredFields as $key => $field) {
 
-            $fieldsMinusOne = array_filter($requiredFields, function ($elt) {
-                return $elt !== $field;
-            });
+            $fieldsMinusOne = $requiredFields;
+            unset($fieldsMinusOne[$key]);
 
-            $variables = helpGetGraphqlTypes($fieldsMinusOne);
+            $variables = $this->helpGetGraphqlTypes($fieldsMinusOne);
 
             $variableMapping = $this->helpGenerateKeyMappings($fieldsMinusOne);
 
@@ -78,15 +78,17 @@ class CreateUserTest extends UserTest {
                                 }
                             }",
                 'variables' => $fieldsMinusOne
-            ]);
+            ])['createUser'];
 
             $fieldsPassed = array_keys($fieldsMinusOne);
-            $this->assertFalse($data['users'][0]['id'], 'Missing ' . array_diff(array_keys($requiredFields), $fieldsPassed)[0]);
+            $this->assertEmpty($data, ['Missing ', array_diff(array_keys($requiredFields), $fieldsPassed)]);
         }
     }
 
     // emails must end with domain specified in .env USER_EMAIL_HOST
     function testEmailMustBeSameAsEnvUserEmailHost() {
+
+        $_ENV['USER_EMAIL_HOST'] = $this->emailHost;
 
         $user = $this->helpGenerateRequiredUserFields();
         $types = $this->helpGetGraphqlTypes($user);
@@ -103,7 +105,8 @@ class CreateUserTest extends UserTest {
             'variables' => $user
         ]);
 
-        $this->assertNull($data['users'][0]['id']);
+        $_ENV['USER_EMAIL_HOST'] = '*';
+        $this->assertNull($data['createUser']['id']);
     }
 
     function testCorrectCreation() {
@@ -119,32 +122,35 @@ class CreateUserTest extends UserTest {
                                 lastName
                                 email
                                 id
+                                username
+                                level
                             }
                         }",
             'variables' => $user
         ]);
 
-        $newUser = $data['users'][0];
+        $newUser = $data['createUser'];
 
         $this->assertEquals($user['firstName'], $newUser['firstName']);
         $this->assertEquals($user['lastName'], $newUser['lastName']);
         $this->assertEquals($user['email'], $newUser['email']);
         $this->assertEquals($user['username'], $newUser['username']);
-        $this->assertEquals($user['level'], $newUser['level']);
+        $this->assertEquals(1, $newUser['level']);
 
-        $this->assertNotNull($db::query("SELECT id FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
+        $this->assertNotNull(Db::query("SELECT id FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
     }
 
     function testLowerLevelCannotCreateHigherLevel() {
 
         $userToCreate = $this->helpGenerateRequiredUserFields();
+        $userToCreate['level'] = rand(2, 3);
+
         $types = $this->helpGetGraphqlTypes($userToCreate);
         $mappings = $this->helpGenerateKeyMappings($userToCreate);
 
-        $userToCreate['level'] = rand(2, 3);
 
-        $user = HelpTests::searchArray($this->GenerateRows->users, function ($currentUser, $userToCreate) {
-           $currentUser['level'] < $userToCreate['level'];
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $userToCreate) {
+           return $currentUser['level'] < $userToCreate['level'];
         }, $userToCreate);
 
         $data = $this->request([
@@ -156,19 +162,19 @@ class CreateUserTest extends UserTest {
             'variables' => $userToCreate
         ], HelpTests::getJwt($user));
 
-        $this->assertNull($data['users'][0]['id']);
+        $this->assertNull($data['createUser']['id']);
     }
 
     function testHigherLevelCanCreateLowerOrSameLevel() {
 
         $userToCreate = $this->helpGenerateRequiredUserFields();
+        $userToCreate['level'] = rand(1, 2);
+
         $types = $this->helpGetGraphqlTypes($userToCreate);
         $mappings = $this->helpGenerateKeyMappings($userToCreate);
 
-        $userToCreate['level'] = rand(1, 2);
-
-        $user = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $userToCreate) {
-           $currentUser['level'] >= $userToCreate['level'];
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userToCreate) {
+           return $currentUser['level'] >= $userToCreate['level'];
         }, $userToCreate);
 
         $data = $this->request([
@@ -181,7 +187,7 @@ class CreateUserTest extends UserTest {
             'variables' => $userToCreate
         ], HelpTests::getJwt($user));
 
-        $newUser = $data['users'][0];
+        $newUser = $data['createUser'];
 
         $this->assertNotNull(Db::query("SELECT 1 FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
         $this->assertEquals($userToCreate['level'], $newUser['level']);
@@ -203,7 +209,7 @@ class CreateUserTest extends UserTest {
             'variables' => $userToCreate
         ]);
 
-        $newUser = $data['users'][0];
+        $newUser = $data['createUser'];
 
         $this->assertNotNull(Db::query("SELECT 1 FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
         $this->assertEquals(1, $newUser['level']);
