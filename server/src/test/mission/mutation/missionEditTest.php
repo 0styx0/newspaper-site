@@ -55,7 +55,7 @@ class MissionEditTest extends MissionTest {
 
         $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
-        foreach (HelpTests::unsafeData as $mission) {
+        foreach (HelpTests::$unsafeData as $mission) {
 
             $newMission = $this->helpEdit($mission, $user);
 
