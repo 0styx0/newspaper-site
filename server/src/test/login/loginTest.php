@@ -20,7 +20,7 @@ class LoginTest extends LoginHelperTest {
                 'username' => $username,
                 'password' => $password
             ]
-        ])['jwt'];
+        ])['login'];
     }
 
     function testBadUsername() {
@@ -53,18 +53,22 @@ class LoginTest extends LoginHelperTest {
         $this->assertNotNull($jwt);
     }
 
-    function testUnverifiedEmail() {
+    function testBadUnverifiedEmail() {
 
         $faker = HelpTests::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
-        Db::query("UPDATE users SET email = CONCAT('.', email) WHERE id = ?", $user['id']);
+        Db::query("UPDATE users SET email = CONCAT('.', email) WHERE id = ?", [$user['id']]);
 
         $jwt = $this->helpLogin($user['username'], $user['password']);
 
-        $this->assertNotNull($jwt);
+        $unwantedKeys = ['level', 'profileLink'];
 
-        throw new Error('See how to test that cannot fully log in until verify email');
+        $decodedJwt = (array) HelpTests::decodeJwt($jwt['jwt'])->getClaims();
+
+        $jwtDif = array_diff(array_merge(['id'], $unwantedKeys), array_keys($decodedJwt));
+
+        HelpTests::compareArrayContents($unwantedKeys, $jwtDif);
     }
 }
 ?>
