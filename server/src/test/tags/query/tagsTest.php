@@ -15,7 +15,7 @@ class AllTagsQueryTest extends AllTagsTest {
 
         $expectedTags = array_column($this->Database->GenerateRows->tag_list, 'tag');
 
-        HelpTests::compareArrayContents($expectedTags, $data['allTags']);
+        $this->compareArrayContents($expectedTags, $data['allTags']);
     }
 }
 ?>
