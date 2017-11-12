@@ -13,8 +13,8 @@ class CreateUserTest extends UserTest {
             'username' => $exampleUserRow['username'],
             'email' => $exampleUserRow['email'],
             'password' => $exampleUserRow['password'],
-            'firstName' => $exampleUserRow['firstName'],
-            'lastName' => $exampleUserRow['lastName']
+            'firstName' => $exampleUserRow['f_name'],
+            'lastName' => $exampleUserRow['l_name']
         ];
     }
 
