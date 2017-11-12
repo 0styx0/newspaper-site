@@ -27,7 +27,7 @@ class RecoverTest extends RecoverPasswordTest {
                 'authCode' => $authCode,
                 'username' => $username
             ]
-        ]);
+        ])['recoverPassword'];
     }
 
     /**
@@ -64,7 +64,7 @@ class RecoverTest extends RecoverPasswordTest {
 
         $randomUser = $this->helpGetBadData('username');
 
-        $data = $this->helpQuery($randomUser['user']['email'], $randomUser['user']['auth_code'], $randomUser['fieldToTest']);
+        $data = $this->helpQuery($randomUser['user']['email'], $randomUser['user']['auth'], $randomUser['fieldToTest']);
 
         $this->assertNull($data); // response subject to change
 
@@ -75,7 +75,7 @@ class RecoverTest extends RecoverPasswordTest {
 
         $randomUser = $this->helpGetBadData('email');
 
-        $data = $this->helpQuery($randomUser['fieldToTest'], $randomUser['user']['auth_code'], $randomUser['user']['username']);
+        $data = $this->helpQuery($randomUser['fieldToTest'], $randomUser['user']['auth'], $randomUser['user']['username']);
 
         $this->assertNull($data); // response subject to change
 
@@ -84,7 +84,7 @@ class RecoverTest extends RecoverPasswordTest {
 
     function testBadIncorrectAuthCode() {
 
-        $randomUser = $this->helpGetBadData('auth_code');
+        $randomUser = $this->helpGetBadData('auth');
 
         $data = $this->helpQuery($randomUser['user']['email'], $randomUser['fieldToTest'], $randomUser['user']['username']);
 
@@ -95,13 +95,13 @@ class RecoverTest extends RecoverPasswordTest {
 
     function testGood() {
 
-        $randomUser = $this->helpGetBadData('auth_code')['user']; // auth_code is not relevant to this test, but need to pass a param
+        $randomUser = $this->helpGetBadData('auth')['user']; // auth is not relevant to this test, but need to pass a param
 
-        $data = $this->helpQuery($randomUser['email'], $randomUser['auth_code'], $randomUser['username']);
+        $data = $this->helpQuery($randomUser['email'], $randomUser['auth'], $randomUser['username']);
 
         $this->assertNotNull($data);
 
-        $this->assertTrue($this->helpCheckPasswordChanged($randomUser['user']));
+        $this->assertTrue($this->helpCheckPasswordChanged($randomUser));
     }
 }
 ?>
