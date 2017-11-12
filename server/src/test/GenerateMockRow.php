@@ -24,7 +24,7 @@ class GenerateMockRow {
         return [
             'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1 . '',
             'username' => GenerateMockRow::$faker->unique()->userName(),
-            'f_name' => GenerateMockRow::$faker->firstName(),
+            'f_name' => GenerateMockRow::$faker->unique()->firstName(),
             'm_name' => GenerateMockRow::$faker->boolean() ? GenerateMockRow::$faker->suffix() : null,
             'l_name' => GenerateMockRow::$faker->lastName(),
             'password' => GenerateMockRow::$faker->password(),
