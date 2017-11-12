@@ -37,7 +37,10 @@ class EditMissionField extends AbstractField {
         $ArticleHelper = new ArticleHelper();
         $safeMission = $ArticleHelper->stripTags($args['mission']);
 
-        file_put_contents(__DIR__ . '/../../../../public/missionView.html', $safeMission);
+        if (empty($_ENV['test']) || !$_ENV['test']) {
+
+            file_put_contents(__DIR__ . '/../../../../public/missionView.html', $safeMission);
+        }
 
         return ['mission' => $safeMission];
     }
