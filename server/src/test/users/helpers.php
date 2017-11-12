@@ -4,11 +4,14 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class UserTest extends TestCase {
+class UserTest extends HelpTests {
 
-    protected $Database;
+    protected $Database, $emailHost;
 
     protected function setup() {
+
+        $this->emailHost = $_ENV['USER_EMAIL_HOST'];
+        $_ENV['USER_EMAIL_HOST'] = '*';
 
         $this->Database = new TestDatabase();
         $this->Database->init();
