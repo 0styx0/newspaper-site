@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-
+use Lcobucci\JWT\Parser;
 use Faker\Provider\Base;
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
@@ -63,6 +63,13 @@ class HelpTests extends TestCase {
                                 ->set('id', $user['id'])
                                 ->sign($signer, $_ENV['JWT_SECRET'])
                                 ->getToken(); // Retrieves the generated token
+    }
+
+    public static function decodeJwt(string $jwt) {
+
+        $parsedToken = (new Parser())->parse($jwt);
+
+        return $parsedToken; // Retrieves the token claims
     }
 
     /**
