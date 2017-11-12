@@ -23,7 +23,7 @@ class CreateUserField extends AbstractField {
             'username' => new NonNullType(new StringType()),
             'email' => new NonNullType(new StringType()),
             'password' => new NonNullType(new StringType()),
-            'level' => new NonNullType(new IntType()),
+            'level' => new IntType(),
             'firstName' => new NonNullType(new StringType()),
             'middleName' => new StringType(),
             'lastName' => new NonNullType(new StringType())
@@ -38,7 +38,9 @@ class CreateUserField extends AbstractField {
 
         Validate::email($args['email']);
         Validate::password($args['password']);
-        Validate::level($args['level']);
+
+        $args['level'] = isset($args['level']) ? $args['level'] : 1;
+        $args['level'] = Validate::level($args['level']);
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
@@ -48,10 +50,10 @@ class CreateUserField extends AbstractField {
         $params = [
             $sanitized['username'],
             $unverifiedEmail,
-            password_hash($sanitized['password'], PASSWORD_DEFAULT),
+            password_hash($args['password'], PASSWORD_DEFAULT),
             $sanitized['level'],
             $sanitized['firstName'],
-            $sanitized['middleName'],
+            isset($sanitized['middleName']) ? $sanitized['middleName'] : null,
             $sanitized['lastName'],
             $authCode
         ];
@@ -61,7 +63,9 @@ class CreateUserField extends AbstractField {
 
         SendMail::emailVerification($sanitized['email'], $authCode);
 
-        return $sanitized;
+        unset($sanitized['password']);
+
+        return array_merge($sanitized, ['id' => Db::$lastInsertId, 'level' => +$params[3]]);
     }
 }
 
