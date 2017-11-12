@@ -35,7 +35,7 @@ class MissionEditTest extends MissionTest {
             return $currentUser['level'] < 3;
         });
 
-        $newMission = $this->HelpEdit(HelpTests::faker()->randomHtml(), $user);
+        $newMission = $this->helpEdit(HelpTests::faker()->randomHtml(), $user);
 
         $this->assertNull($newMission);
     }
@@ -46,7 +46,7 @@ class MissionEditTest extends MissionTest {
             return $currentUser['level'] > 2;
         });
 
-        $newMission = $this->HelpEdit(HelpTests::faker()->randomHtml(), $user);
+        $newMission = $this->helpEdit(HelpTests::faker()->randomHtml(), $user);
 
         $this->assertNonNull($newMission);
     }
@@ -57,7 +57,7 @@ class MissionEditTest extends MissionTest {
 
         foreach (HelpTests::unsafeData as $mission) {
 
-            $newMission = $this->HelpEdit($mission, $user);
+            $newMission = $this->helpEdit($mission, $user);
 
             $this->assertNull($newMission); // might change when implement to just strip bad stuff
         }
