@@ -40,7 +40,7 @@ class GenerateMockRow {
     public function tag_list() {
 
         return [
-          'tag' => GenerateMockRow::$faker->unique()->word().substr(0, 20) // varchar(20)
+          'tag' => substr(GenerateMockRow::$faker->unique()->word(), 0, 20) // varchar(20)
         ];
     }
 
