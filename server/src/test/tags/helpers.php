@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class AllTagsTest extends TestCase {
+class AllTagsTest extends HelpTests {
 
     protected $Database;
 
