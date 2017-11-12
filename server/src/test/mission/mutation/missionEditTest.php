@@ -26,7 +26,7 @@ class MissionEditTest extends MissionTest {
             'variables' => [
                 'mission' => $mission
             ]
-        ], HelpTests::getJwt($user));
+        ], HelpTests::getJwt($user))['editMission'];
     }
 
     function testNotLevelThreeCannotEdit() {
@@ -48,7 +48,7 @@ class MissionEditTest extends MissionTest {
 
         $newMission = $this->helpEdit(HelpTests::faker()->randomHtml(), $user);
 
-        $this->assertNonNull($newMission);
+        $this->assertNotNull($newMission);
     }
 
     function testMissionIsSanitized() {

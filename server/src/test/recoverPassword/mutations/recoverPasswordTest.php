@@ -99,7 +99,7 @@ class RecoverTest extends RecoverPasswordTest {
 
         $data = $this->helpQuery($randomUser['email'], $randomUser['auth_code'], $randomUser['username']);
 
-        $this->assertNonNull($data);
+        $this->assertNotNull($data);
 
         $this->assertTrue($this->helpCheckPasswordChanged($randomUser['user']));
     }
