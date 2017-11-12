@@ -53,7 +53,7 @@ class Jwt {
     /**
      * Creates jwt
      *
-     * @param $user - assoc array with keys that include id, level, profileLink
+     * @param $user - assoc array with keys that include id, (level, profileLink if verified email)
      *
      * @return jwt with that user's info
      */
