@@ -18,7 +18,8 @@ $filesToTest = [
     'mission/query/missionTest.php',
     'recoverPassword/mutations/recoverPasswordTest.php',
     'tags/mutations/createTagTest.php',
-    'tags/query/tagsTest.php'
+    'tags/query/tagsTest.php',
+    'users/mutations/deleteTest.php'
 ];
 
 echo `clear`;
