@@ -12,14 +12,22 @@ class DeleteUserTest extends UserTest {
      * @param $useCorrectPassword - whether to use correct password
      * @param $loggedIn - if current user is logged in while trying to delete someone
      */
-    protected function helpMutate(callable $canDeleteUser, bool $useCorrectPassword = true, bool $loggedIn = true) {
+    protected function helpMutate(callable $canDeleteUser, bool $useCorrectPassword = true, bool $loggedIn = true, int $userLevel = null) {
 
-        $user = $this->getRandomUser();
+        if (!$userLevel) {
+
+            $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        } else {
+            $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userLevel) {
+                return $currentUser['level'] == $userLevel;
+            }, $userLevel);
+        }
+
         $userToDelete = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
             return $outsideVars['canDeleteUser']($currentUser, $outsideVars['user']);
         }, ['canDeleteUser' => $canDeleteUser, 'user' => $user]);
 
-        return $this->request([
+        $data = $this->request([
            'query' => 'mutation deleteUsers($ids: [ID], $password: String) {
                            deleteUsers(ids: $ids, password: $password) {
                                id
@@ -27,9 +35,11 @@ class DeleteUserTest extends UserTest {
                        }',
             'variables' => [
                 'ids' => [$userToDelete['id']],
-                'password' => $useCorrectPassword ? $userToDelete['password'] : $userToDelete['password'] . rand()
+                'password' => $useCorrectPassword ? $user['password'] : $user['password'] . rand()
             ]
-        ]);
+        ], $loggedIn ? HelpTests::getJwt($user) : '')['deleteUsers'];
+
+        return ['data' => $data, 'userToDelete' => $userToDelete];
     }
 
     /**
@@ -37,9 +47,9 @@ class DeleteUserTest extends UserTest {
      *
      * @param $user - result of graphql deleteUsers mutation
      */
-    protected function assertUserDoesNotExist(array $user) {
+    protected function assertUserDoesNotExist(array $data) {
 
-        $userExists = $Db::query("SELECT 1 FROM users WHERE id = ?", [$data['users'][0]['id']])->fetchColumn();
+        $userExists = !!Db::query("SELECT 1 FROM users WHERE id = ?", [$data['id']])->fetchColumn();
 
         $this->assertFalse($userExists);
     }
@@ -47,9 +57,9 @@ class DeleteUserTest extends UserTest {
     /**
      * Same param as #assertUserDoesNotExist, but asserts opposite
      */
-    protected function assertUserExists(array $user) {
+    protected function assertUserExists(array $data) {
 
-        $userExists = $Db::query("SELECT 1 FROM users WHERE id = ?", [$data['users'][0]['id']])->fetchColumn();
+        $userExists = !!Db::query("SELECT 1 FROM users WHERE id = ?", [$data['id']])->fetchColumn();
 
         $this->assertTrue($userExists);
     }
@@ -60,25 +70,25 @@ class DeleteUserTest extends UserTest {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] >= $user['level'];
         });
 
-        $this->assertUserDoesNotExist($data);
+        $this->assertUserExists($data['userToDelete']);
     }
 
     function testBadDeleteNotLoggedIn() {
 
         $data = $this->helpMutate(function (array $currentUser, array $user) {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level'];
-        }, true, false);
+        }, true, false, rand(2, 3));
 
-        $this->assertUserExists($data);
+        $this->assertUserExists($data['userToDelete']);
     }
 
     function testBadDeleteIncorrectPassword() {
 
         $data = $this->helpMutate(function (array $currentUser, array $user) {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level'];
-        }, false);
+        }, false, true, rand(2, 3));
 
-        $this->assertUserExists($data);
+        $this->assertUserExists($data['userToDelete']);
     }
 
     function testCanDeleteOwnAccount() {
@@ -87,16 +97,16 @@ class DeleteUserTest extends UserTest {
             return $currentUser['id'] == $user['id'];
         });
 
-        $this->assertUserDoesNotExist($data);
+        $this->assertUserDoesNotExist($data['userToDelete']);
     }
 
     function testCanDeleteLowerLevels() {
 
         $data = $this->helpMutate(function (array $currentUser, array $user) {
             return $currentUser['level'] < $user['level'];
-        }, false);
+        }, true, true, rand(2, 3));
 
-        $this->assertUserDoesNotExist($data);
+        $this->assertUserDoesNotExist($data['userToDelete']);
     }
 }
 
