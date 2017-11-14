@@ -10,96 +10,71 @@ class ProfileTest extends UserTest {
     /**
      * Checks if can mutate fields
      *
-     * @param $user - a user (@see TestDatabase->users[0])
-     * @param $data - assoc array [field => value];
+     * @param $user - a user (@see TestDatabase->users)
+     * @param $variableTypes - assoc array [$field => type]
+     * @param $variableValues - assoc array [field => value]
      * @param $runAssertions - {function (string $field, array $data)}, called on each field
      *  after attempted mutation. Run assertions here
      */
-    function helpTestMutation($user, array $data, callable $runAssertions) {
+    function helpTestMutation($user, array $variableTypes, array $variableValues) {
 
-        $typeInfo = '';
-        $actualValuesArr = [];
+        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
 
-        foreach ($data as $field => $value) {
+        $fields = str_replace('password', '', implode('', array_keys($variableValues)));
+        $fields = str_replace('newPassword', 'id', $fields); // id is given so not an empty return stuff
 
-            $type = gettype($value);
-            $typeInfo .= "\${$field}: {$type}"; // $notifications: String
-
-            $actualValuesArr[] = "{$field}: \${$field}"; // notifications: $notifications
-        }
-
-        $fieldsArr = array_column($data, 'field');
-        $fields = str_replace('password,\n', '', implode(",\n", array_keys($data))); // password isn't a queryable field
-        $actualValues = implode(',', $actualValuesArr);
-
-        $data = $this->request([
-            'query' => "mutation updateProfile({$typeInfo}) {
-                            updateProfile({$actualValues}) {
+        return $this->request([
+            'query' => "mutation updateProfile({$variableStrings['types']}) {
+                            updateProfile({$variableStrings['mappings']}) {
                                 {$fields}
                             }
                         }",
-            'variables' => $data
-        ], HelpTests::getJwt($user));
-
-        $runAssertions($data['users'][0]);
-    }
-
-    /**
-     * Checks if mutation can happen without a password given
-     *
-     * @param $gQlField - graphql field name
-     * @param $dbField - name in database corresponding
-     */
-    function helpTestWithoutPassword(string $gQlField, string $dbField) {
-
-        $user = $this->getRandomUser();
-        $toChange = [
-            $gQlField => !$user[$dbField]
-        ];
-
-        $this->helpTestMutation($user, $toChange, function (array $data) {
-            $this->assertArrayNotHasKey($gQlField, $data);
-        });
-
-        return $user;
-    }
-
-    // can't use this for passwords since can't query password with graphql
-    function helpTestCorrectInfo(string $gQlField, string $dbField, $value = null) {
-
-        $user = $this->getRandomUser();
-        $newValue = $value || !$user[$dbField];
-
-        $toChange = [
-            $gQlField => $newValue,
-            'password' => $user['password']
-        ];
-
-        $this->helpTestMutation($user, $toChange, function (array $data) {
-
-            $this->assertEquals($newValue, $data[$gQlField]);
-        });
-
-        return $user;
+            'variables' => $variableValues
+        ], HelpTests::getJwt($user))['updateProfile'];
     }
 
     function testCannotModifyNotificationsWithoutPassword() {
-        $this->helpTestWithoutPassword('notificationStatus', 'notifications');
+
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $data = $this->helpTestMutation($user, ['$notifications' => 'Boolean'],
+          ['notifications' => !$user['notifications']]);
+
+          $this->assertNull($data);
     }
 
     function testCanModifyOwnNotification() {
 
-        $this->helpTestCorrectInfo('notificationStatus', 'notifications');
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $changedSetting = !$user['notifications'];
+
+        $data = $this->helpTestMutation($user, ['$notifications' => 'Boolean', '$password' => 'String'],
+          ['notifications' => $changedSetting, 'password' => $user['password']]);
+
+          $this->assertEquals($changedSetting, $data['notifications']);
     }
 
     function testCannotModifyTwoFactorWithoutPassword() {
 
-        $this->helpTestWithoutPassword('twoFactor', 'two_fa_enabled');
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $data = $this->helpTestMutation($user, ['$twoFactor' => 'Boolean'],
+          ['twoFactor' => $user['two_fa_enabled']]);
+
+          $this->assertNull($data);
     }
 
     function testCanModifyOwnTwoFactor() {
 
-        $this->helpTestCorrectInfo('twoFactor', 'two_fa_enabled');
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $changedSetting = !$user['two_fa_enabled'];
+
+        $data = $this->helpTestMutation($user, ['$twoFactor' => 'Boolean', '$password' => 'String'],
+        ['twoFactor' => $changedSetting, 'password' => $user['password']]);
+
+        $this->assertEquals($changedSetting, $data['twoFactor']);
     }
 
     /**
@@ -109,49 +84,64 @@ class ProfileTest extends UserTest {
      *
      * @return boolean
      */
-    function helpTestPassword(array $user, string $expectedPassword) {
+    function helpTestPassword(array $user, string $expectedPassword, bool $assertTrue = true) {
 
         $actualPassword = Db::query("SELECT password FROM users WHERE id = ?", [$user['id']])->fetchAll(PDO::FETCH_ASSOC)[0]['password'];
 
-        $this->assertTrue(password_verify($expectedPassword, $actualPassword));
+        $correct = password_verify($expectedPassword, $actualPassword);
+
+        if ($assertTrue) {
+
+            $this->assertTrue($correct);
+        } else {
+            $this->assertFalse($correct);
+        }
     }
 
     function testCanModifyOwnPassword() {
 
-        $newPassword = $this->generateRandomString(rand(7));
+        $newPassword = $this->generateRandomString(7); // 7 = random
 
-        $user = $this->helpTestCorrectInfo('newPassword', 'password', $newPassword);
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $this->helpTestMutation($user, ['$newPassword' => 'String', '$password' => 'String'],
+        ['newPassword' => $newPassword, 'password' => $user['password']]);
+
         $this->helpTestPassword($user, $newPassword);
     }
 
     function testCannotModifyPasswordWithoutPassword() {
 
-        $newPassword = $this->generateRandomString(rand(7));
+        $newPassword = $this->generateRandomString(7);
 
-        $user = $this->helpTestWithoutPassword('newPassword', 'password', $newPassword);
-        $this->helpTestPassword($user, $newPassword);
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        $this->helpTestMutation($user, ['$newPassword' => 'String'],
+        ['newPassword' => $newPassword]);
+
+        $this->helpTestPassword($user, $newPassword, false);
     }
 
     function testCanModifyMultipleAtOnce() {
 
-        $user = $this->getRandomUser();
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
         $params = [
-            'notificationStatus' => !$user['notifications'],
-            'twoFactor' => !$user['twoFactor'],
+            'notifications' => !$user['notifications'],
+            'twoFactor' => !$user['two_fa_enabled'],
             'newPassword' => 'random sdfsasadf',
             'password' => $user['password']
         ];
 
         $data = $this->request([
-            'query' => 'mutation updateProfile($notificationStatus: Boolean, $twoFactor: Boolean, $newPassword: String) {
-                            updateProfile(notificationStatus: $notificationStatus, twoFactor: $twoFactor, newPassword: $newPassword) {
+            'query' => 'mutation updateProfile($password: String, $notifications: Boolean, $twoFactor: Boolean, $newPassword: String) {
+                            updateProfile(password: $password, notifications: $notifications, twoFactor: $twoFactor, newPassword: $newPassword) {
                                 notifications,
                                 twoFactor
                             }
                         }',
             'variables' => $params
-        ], HelpTests::getJwt($user))['users'][0];
+        ], HelpTests::getJwt($user))['updateProfile'];
 
         $this->assertEquals($params['notifications'], $data['notifications']);
         $this->assertEquals($params['twoFactor'], $data['twoFactor']);
