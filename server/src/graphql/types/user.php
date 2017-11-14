@@ -25,11 +25,49 @@ class UserType extends AbstractObjectType {
             'lastName' => new NonNullType(new StringType()),
             'fullName' => new NonNullType(new StringType()),
             'email' => new NonNullType(new StringType()),
-            'level' => new IntType(),
-            'notifications' => new BooleanType(),
-            'twoFactor' => new BooleanType(),
+            'level' => [
+                'type' => new IntType(),
+                'resolve' => function($user) {
+                    return +$user['level'];
+                }
+            ],
+            'notifications' => [
+                'type' => new BooleanType(),
+                'resolve' => function ($user) {
+
+                    if (Jwt::getToken() && $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                        return null;
+                    }
+                    return !!$user['notifications'];
+                }
+            ],
+            'twoFactor' => [
+                'type' => new BooleanType(),
+                'resolve' => function ($user) {
+
+                    if (Jwt::getToken() && $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                        return null;
+                    }
+                    return !!$user['twoFactor'];
+                }
+            ],
             'views' => new NonNullType(new IntType()),
-            'articleCount' => new NonNullType(new IntType()),
+            'articleCount' => [
+                'type' => new NonNullType(new IntType()),
+                'resolve' => function (array $user) {
+
+                    try {
+                        Guard::userMustBeLoggedIn();
+
+                        return +Db::query("SELECT COUNT(id) FROM pageinfo WHERE authorid = ?", [$user['id']])->fetchColumn();
+                    } catch(Exception $e) {
+
+                        return +Db::query("SELECT COUNT(id) FROM pageinfo
+                            JOIN issues ON num = issue
+                            WHERE authorid = ? AND ispublic = 1", [$user['id']])->fetchColumn();
+                    }
+                }
+            ],
             'profileLink' => [
                 'type' => new NonNullType(new StringType()),
                 'resolve' => function($user) {
@@ -37,7 +75,21 @@ class UserType extends AbstractObjectType {
                 }
             ],
             'articles' => new NonNullType(new ListType('')), // ArticleType
-            'canEdit' => new NonNullType(new BooleanType())
+            'canEdit' => [
+                'type' => new NonNullType(new BooleanType()),
+                'resolve' => function ($user) {
+
+                    try {
+                       Guard::userMustBeLoggedIn();
+                    } catch (Exception $e) {
+                        return false;
+                    }
+
+                    $jwt = Jwt::getToken();
+
+                    return $jwt->getClaim('id') == $user['id'] || $jwt->getClaim('level') > $user['level'];
+                }
+            ]
         ]);
     }
 }
