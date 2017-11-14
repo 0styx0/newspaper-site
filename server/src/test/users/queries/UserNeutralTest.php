@@ -9,7 +9,7 @@ class UserNeutralTest extends UserTest {
 
     function testProfileLinkArg() {
 
-        $user = $this->TestDatabase->getRandomUser();
+        $user = $this->Database->getRandomUser();
 
         $data = $this->request([
             'query' => 'query users($profileLink: String) {
@@ -28,7 +28,7 @@ class UserNeutralTest extends UserTest {
 
     function testIdArg() {
 
-        $user = $this->TestDatabase->getRandomUser();
+        $user = $this->Database->getRandomUser();
 
         $data = $this->request([
             'query' => 'query users($id: ID) {
@@ -55,7 +55,7 @@ class UserNeutralTest extends UserTest {
                         }'
         ]);
 
-        $expected = array_column($this->TestDatabase->GenerateRows->users, 'id');
+        $expected = array_column($this->Database->GenerateRows->users, 'id');
         $actual = array_column($data['users'], 'id');
 
         $HelpTests = new HelpTests();
