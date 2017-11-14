@@ -5,6 +5,7 @@
 class Db {
 
     public static $lastInsertId;
+    private static $DBH;
 
     /**
      * <p>
@@ -21,9 +22,14 @@ class Db {
 
         try {
 
-            $DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'] .";dbname=" . $_ENV['DB_NAME'] ."", $_ENV['DB_USER'], $_ENV['DB_PASS']);
+            if (!Db::$DBH) {
 
-            $DBH->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                Db::$DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'] .";dbname=" . $_ENV['DB_NAME'] ."", $_ENV['DB_USER'], $_ENV['DB_PASS']);
+
+                Db::$DBH->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            }
+
+            $DBH = Db::$DBH;
 
             $DBH->beginTransaction();
 
