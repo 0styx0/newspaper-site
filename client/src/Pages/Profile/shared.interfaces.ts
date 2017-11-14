@@ -19,7 +19,7 @@ interface PublicUserInfo {
 interface ModifiableUserInfo {
     email: string;
     twoFactor: boolean;
-    notificationStatus: boolean;
+    notifications: boolean;
     id: string;
 }
 

@@ -10,22 +10,22 @@ import { ModifiableUserInfo } from '../shared.interfaces';
 
 import userData from './__snapshots__/user.examples';
 
-casual.define('user', (twoFactor: boolean, notificationStatus: boolean): ModifiableUserInfo => {
+casual.define('user', (twoFactor: boolean, notifications: boolean): ModifiableUserInfo => {
 
     return {
         email: casual.email,
         twoFactor,
-        notificationStatus,
+        notifications,
         id: casual.word
     };
 });
 
-type CustomCasualData = typeof casual & {user: (twoFactor: boolean, notificationStatus: boolean) => ModifiableUserInfo};
+type CustomCasualData = typeof casual & {user: (twoFactor: boolean, notifications: boolean) => ModifiableUserInfo};
 
 const customCasual = casual as CustomCasualData;
 
 function setup(
-    userOptions = {notificationStatus: false, twoFactor: false},
+    userOptions = {notifications: false, twoFactor: false},
     mockGraphql: {updateUser?: Function, deleteUser?: Function} = {}
 ) {
 
@@ -36,7 +36,7 @@ function setup(
             updateUser={mockGraphql.updateUser || mockFunc}
             deleteUser={mockGraphql.deleteUser || mockFunc}
             privateUserData={{
-            users: [customCasual.user(userOptions.twoFactor, userOptions.notificationStatus)] // always length = 1
+            users: [customCasual.user(userOptions.twoFactor, userOptions.notifications)] // always length = 1
             }}
         />
     );
@@ -61,7 +61,7 @@ describe('<ModifiableUserInfoContainer>', () => {
             expect(tree).toMatchSnapshot();
         }
 
-        it('should have notifications checked if notificationStatus is true',
+        it('should have notifications checked if notifications is true',
            () => testSnap(userData.onlyNotifications));
 
         it('should have twoFactor checked if twoFactor is true', () => testSnap(userData.only2fa));
@@ -88,7 +88,7 @@ describe('<ModifiableUserInfoContainer>', () => {
              */
             function toggleAndCheckState(shouldCheck: boolean) {
 
-                const userOptions = {notificationStatus: false, twoFactor: false};
+                const userOptions = {notifications: false, twoFactor: false};
                 userOptions[name] = !shouldCheck; // make sure that initial state is not what is expected
 
                 const wrapper = setup(userOptions);
@@ -115,7 +115,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
         describe('twoFactor', () => toggleChecker('twoFactor'));
 
-        describe('notificationStatus', () => toggleChecker('notificationStatus'));
+        describe('notifications', () => toggleChecker('notifications'));
 
         describe('input [name=delAcc]', () => {
 
@@ -160,7 +160,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                 [
                     ['twoFactor', 'twoFactor'],
-                    ['notificationStatus', 'notificationStatus'],
+                    ['notifications', 'notifications'],
                 ].forEach(elt =>
 
                     test(`${elt[0]} has changed`, () => {
@@ -169,8 +169,8 @@ describe('<ModifiableUserInfoContainer>', () => {
                         let password = '';
 
                         const wrapper = setup(
-                            {notificationStatus: false, twoFactor: false},
-                            {updateUser: (data: {variables: {twoFactor?: boolean, notificationStatus?: boolean}}) => {
+                            {notifications: false, twoFactor: false},
+                            {updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                                 const expected = {
                                     password
@@ -192,7 +192,7 @@ describe('<ModifiableUserInfoContainer>', () => {
                     const expectedValue: any = [];
 
                     const wrapper = setup(
-                        { notificationStatus: false, twoFactor: false },
+                        { notifications: false, twoFactor: false },
                         {deleteUser: (data: {variables: {ids: [string]}}) => {
 
                             expect(data.variables).toEqual({
@@ -216,7 +216,7 @@ describe('<ModifiableUserInfoContainer>', () => {
             const fieldToUpdate = casual.coin_flip ? 'noticationStatus' : 'twoFactor';
 
             const wrapper = setup(
-                {notificationStatus: false, twoFactor: false},
+                {notifications: false, twoFactor: false},
                 {
                     deleteUser: (data: {variables: {ids: [string]}}) => {
 
@@ -224,7 +224,7 @@ describe('<ModifiableUserInfoContainer>', () => {
                             id: expectedDeleteValue
                         });
                     },
-                    updateUser: (data: {variables: {twoFactor?: boolean, notificationStatus?: boolean}}) => {
+                    updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                         const expected = {};
                         expected[fieldToUpdate] = expectedUpdateValue;
@@ -246,11 +246,11 @@ describe('<ModifiableUserInfoContainer>', () => {
             let password = '';
 
             const wrapper = setup(
-                {notificationStatus: false, twoFactor: false},
-                {updateUser: (data: {variables: {twoFactor?: boolean, notificationStatus?: boolean}}) => {
+                {notifications: false, twoFactor: false},
+                {updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                 const expected = {
-                    notificationStatus: expectedValue,
+                    notifications: expectedValue,
                     twoFactor: expectedValue,
                     password
                 };
@@ -259,7 +259,7 @@ describe('<ModifiableUserInfoContainer>', () => {
             }});
 
             (wrapper.find(ModifiableUserInfoContainer) as any).node.state.updates = {
-                notificationStatus: expectedValue,
+                notifications: expectedValue,
                 twoFactor: expectedValue
             };
 
@@ -273,7 +273,7 @@ describe('<ModifiableUserInfoContainer>', () => {
             const spy = sinon.spy();
 
             const wrapper = setup(
-                {notificationStatus: false, twoFactor: false},
+                {notifications: false, twoFactor: false},
                 {
                     updateUser: spy,
                     deleteUser: spy

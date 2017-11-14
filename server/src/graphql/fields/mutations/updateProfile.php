@@ -22,7 +22,7 @@ class UpdateProfileField extends AbstractField {
     public function build(FieldConfig $config) {
 
         $config->addArguments([
-            'notificationStatus' => new BooleanType(),
+            'notifications' => new BooleanType(),
             'twoFactor' => new BooleanType(),
             'newPassword' => new StringType(),
             'password' => new NonNullType(new StringType())
@@ -50,7 +50,8 @@ class UpdateProfileField extends AbstractField {
 
         $placeholderString = implode($placeholders, ',');
         $userId = Jwt::getToken()->getClaim('id');
-
+print_r(["UPDATE users SET {$placeholderString} WHERE id = ?",
+          array_merge(array_values($sanitized), [$userId])]);
         Db::query("UPDATE users SET {$placeholderString} WHERE id = ?",
           array_merge(array_values($sanitized), [$userId]));
 
@@ -69,7 +70,7 @@ class UpdateProfileField extends AbstractField {
         $fieldsToUpdate = [];
 
         $argsToDbMap = [
-            'notificationStatus' => 'notifications',
+            'notifications' => 'notifications',
             'twoFactor' => 'two_fa_enabled',
             'newPassword' => 'password'
         ];

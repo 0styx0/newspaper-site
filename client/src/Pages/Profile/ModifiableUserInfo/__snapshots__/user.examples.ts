@@ -6,21 +6,21 @@
 export default {
     onlyNotifications: { email: 'Kassulke.Glen@yahoo.com',
       twoFactor: false,
-      notificationStatus: true,
+      notifications: true,
       id: 'dolor' },
 
       only2fa: { email: 'Bailey.Elnora@Lehner.us',
       twoFactor: true,
-      notificationStatus: false,
+      notifications: false,
       id: 'optio' },
 
       bothFalse: { email: 'Fadel.Ephraim@gmail.com',
       twoFactor: false,
-      notificationStatus: false,
+      notifications: false,
       id: 'dolorem' },
 
       bothTrue: { email: 'Lockman_Quincy@gmail.com',
       twoFactor: true,
-      notificationStatus: true,
+      notifications: true,
       id: 'totam' }
 };

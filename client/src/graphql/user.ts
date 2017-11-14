@@ -36,10 +36,10 @@ const PrivateUserQuery = gql`
 
 const UserUpdate = gql`
     mutation updateProfile(
-        $notificationStatus: Boolean, $twoFactor: Boolean, $newPassword: String, $password: String!
+        $notifications: Boolean, $twoFactor: Boolean, $newPassword: String, $password: String!
     ) {
         updateProfile(
-            notificationStatus: $notificationStatus, twoFactor: $twoFactor,
+            notifications: $notifications, twoFactor: $twoFactor,
             newPassword: $newPassword, password: $password
         ) {
             id

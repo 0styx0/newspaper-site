@@ -16,7 +16,7 @@ interface Props {
 interface State {
     updates: {
         twoFactor?: boolean;
-        notificationStatus?: boolean;
+        notifications?: boolean;
     };
     delete?: boolean;
 }

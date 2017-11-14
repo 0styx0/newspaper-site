@@ -14,19 +14,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       <thead>
         <tr>
           <th>
-             
+
             Email
           </th>
           <th>
-             
+
             2FA
           </th>
           <th>
-             
+
             Notifications
           </th>
           <th>
-             
+
             <span
               className="danger"
             >
@@ -51,7 +51,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
           <td>
             <input
               defaultChecked={true}
-              name="notificationStatus"
+              name="notifications"
               onChange={[Function]}
               type="checkbox"
             />
@@ -68,7 +68,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       </tbody>
     </table>
     <label>
-      Password: 
+      Password:
       <input
         name="password"
         required={true}
@@ -101,19 +101,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       <thead>
         <tr>
           <th>
-             
+
             Email
           </th>
           <th>
-             
+
             2FA
           </th>
           <th>
-             
+
             Notifications
           </th>
           <th>
-             
+
             <span
               className="danger"
             >
@@ -138,7 +138,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
           <td>
             <input
               defaultChecked={false}
-              name="notificationStatus"
+              name="notifications"
               onChange={[Function]}
               type="checkbox"
             />
@@ -155,7 +155,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       </tbody>
     </table>
     <label>
-      Password: 
+      Password:
       <input
         name="password"
         required={true}
@@ -174,7 +174,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
 </section>
 `;
 
-exports[`<ModifiableUserInfoContainer> snapshots should have notifications checked if notificationStatus is true 1`] = `
+exports[`<ModifiableUserInfoContainer> snapshots should have notifications checked if notifications is true 1`] = `
 <section
   className="container tableContainer"
 >
@@ -188,19 +188,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       <thead>
         <tr>
           <th>
-             
+
             Email
           </th>
           <th>
-             
+
             2FA
           </th>
           <th>
-             
+
             Notifications
           </th>
           <th>
-             
+
             <span
               className="danger"
             >
@@ -225,7 +225,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
           <td>
             <input
               defaultChecked={true}
-              name="notificationStatus"
+              name="notifications"
               onChange={[Function]}
               type="checkbox"
             />
@@ -242,7 +242,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       </tbody>
     </table>
     <label>
-      Password: 
+      Password:
       <input
         name="password"
         required={true}
@@ -275,19 +275,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       <thead>
         <tr>
           <th>
-             
+
             Email
           </th>
           <th>
-             
+
             2FA
           </th>
           <th>
-             
+
             Notifications
           </th>
           <th>
-             
+
             <span
               className="danger"
             >
@@ -312,7 +312,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
           <td>
             <input
               defaultChecked={false}
-              name="notificationStatus"
+              name="notifications"
               onChange={[Function]}
               type="checkbox"
             />
@@ -329,7 +329,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       </tbody>
     </table>
     <label>
-      Password: 
+      Password:
       <input
         name="password"
         required={true}

@@ -437,7 +437,7 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(Users),
             description: 'Modify your own settings',
             args: {
-                notificationStatus: {type: GraphQLBoolean},
+                notifications: {type: GraphQLBoolean},
                 twoFactor: {type: GraphQLBoolean},
                 newPassword: {type: GraphQLString},
                 password: {type: new GraphQLNonNull(GraphQLString)}
