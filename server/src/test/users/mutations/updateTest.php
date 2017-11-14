@@ -5,12 +5,19 @@ require_once(__DIR__ . '/../helpers.php');
 
 class UpdateUserTest extends UserTest {
 
-    private $mutation = 'mutation updateUsers($password: String, $idLevelList: idLevelList) {
-                            updateUsers(password: $password, idLevelList: $idLevelList) {
+    private $mutation = 'mutation updateUsers($password: String, $data: idLevelList) {
+                            updateUsers(password: $password, data: $data) {
                                 id
                                 level
                             }
                         }';
+
+    protected function getUserOfLevel(int $level) {
+
+        return HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $level) {
+            return $currentUser['level'] > $level;
+        }, $level);
+    }
 
     /**
      * Does all generic things needed in tests
@@ -22,13 +29,13 @@ class UpdateUserTest extends UserTest {
      *
      * @return data from graphql query
      */
-    protected function helpMutate(boolean $includeJwt, callable $getUserBy, int $newLevel = 1, string $password = '') {
+    protected function helpMutate(bool $includeJwt, callable $getUserBy, int $newLevel = 1, string $password = '') {
 
-        $user = $this->getRandomUser();
+        $user = $this->getUserOfLevel(1);
 
-        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $outsideVars) {
+        $userToUpdate = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
 
-            $result = $outsideVars['getUserBy']($currentUser);
+            $result = $outsideVars['getUserBy']($currentUser, $outsideVars['user']);
             return $result && $currentUser['id'] != $outsideVars['user']['id'];
         }, ['getUserBy' => $getUserBy, 'user' => $user]);
 
@@ -36,7 +43,7 @@ class UpdateUserTest extends UserTest {
             'query' => $this->mutation,
             'variables' => [
                 'password' => $password || $user['password'],
-                'idLevelList' => [
+                'data' => [
                     [
                         'ids' => [$userToUpdate['id']],
                         'level' => $newLevel
@@ -48,43 +55,45 @@ class UpdateUserTest extends UserTest {
 
     function testBadInvalidPassword() {
 
-        $data = $this->helpMutate(true, function (array $currentUser) {
-            return $currentUser['id'] != $user['id'];
+        $data = $this->helpMutate(true, function (array $currentUser, array $user) {
+            return $currentUser['id'] < $user['id'];
         }, 1, '');
 
-        $this->assertFalse($data['users'][0]);
+        $this->assertEmpty($data['updateUsers'][0]);
     }
 
     function testBadNotLoggedIn() {
 
-        $data = $this->helpMutate(false);
+        $data = $this->helpMutate(false, function ($currentUser, $user) {
+            return $currentUser['id'] < $user['id'];
+        });
 
-        $this->assertFalse($data['users'][0]);
+        $this->assertEmpty($data['updateUsers'][0]);
     }
 
     function testBadNotHigherLevel() {
 
-        $data = $this->helpMutate(true, function (array $currentUser) {
+        $data = $this->helpMutate(true, function (array $currentUser, array $user) {
             return $user['level'] <= $currentUser['level'];
         });
 
-        $this->assertFalse($data['users'][0]);
+        $this->assertEmpty($data['updateUsers'][0]);
     }
 
     function testBadInvalidLevel() {
 
-        $this->helpMutate(true, function () {
-            return true;
-        }, rand(4));
+        $data = $this->helpMutate(true, function (array $currentUser, array $user) {
+            return $currentUser['id'] < $user['id'];
+        }, 7); // 7 = random
 
-       $this->assertFalse($data['users'][0]);
+       $this->assertEmpty($data['updateUsers'][0]);
     }
 
     function testGoodUpdateOne() { // can't fit into $this->helpMutate since level change is dynamic
 
-        $user = $this->getRandomUser();
+        $user = $this->getUserOfLevel(1);
 
-        $userToUpdate = HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, $user) {
+        $userToUpdate = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level'];
         }, $user);
 
@@ -94,7 +103,7 @@ class UpdateUserTest extends UserTest {
             'query' => $this->mutation,
             'variables' => [
                 'password' => $user['password'],
-                'idLevelList' => [
+                'data' => [
                     [
                         'ids' => [$userToUpdate['id']],
                         'level' => $newLevel
@@ -103,16 +112,16 @@ class UpdateUserTest extends UserTest {
             ]
         ], HelpTests::getJwt($user));
 
-        $this->assertEquals($newLevel, $data['users'][0]['level']);
+        $this->assertEquals($newLevel, $data['updateUsers'][0]['level']);
     }
 
     function testGoodUpdateMany() {
 
-        $user = $this->getRandomUser();
+        $user = $this->getUserOfLevel(1);
 
         $usersToUpdate = [];
 
-        foreach ($this->GenerateRows->users as $currentUser) {
+        foreach ($this->Database->GenerateRows->users as $currentUser) {
 
             if ($currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level']) {
                 $usersToUpdate[] = $currentUser['id'] && $currentUser['level'] < $user['level'];
@@ -125,7 +134,7 @@ class UpdateUserTest extends UserTest {
             'query' => $this->mutation,
             'variables' => [
                 'password' => $user['password'],
-                'idLevelList' => [
+                'data' => [
                     [
                         'ids' => $usersToUpdate,
                         'level' => $newLevel
@@ -134,7 +143,7 @@ class UpdateUserTest extends UserTest {
             ]
         ], HelpTests::getJwt($user));
 
-        foreach ($data['users'] as $userToTest) {
+        foreach ($data['updateUsers'] as $userToTest) {
 
             $this->assertEquals($newLevel, $userToTest['level']);
         }
