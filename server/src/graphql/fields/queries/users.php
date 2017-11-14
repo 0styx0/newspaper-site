@@ -40,10 +40,11 @@ class UsersField extends AbstractField {
             $sanitized['email'] = $sanitized['profileLink'];
             unset($sanitized['profileLink']);
         }
-        
+
         // basic fields, no authentication or filtering needed
         return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-          email, level FROM users {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
+          email, level, notifications, two_fa_enabled AS twoFactor FROM users {$where}",
+          $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
