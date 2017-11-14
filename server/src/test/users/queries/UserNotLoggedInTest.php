@@ -14,7 +14,7 @@ class UserNotLoggedInTest extends UserTest {
      */
     private function helperTest(string $attribute) {
 
-        $user = HelpTests::searchArray($this->TestDatabase->GenerateRows->users, function (array $user) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $user) {
             return $user['level'] == 3;
         });
 
@@ -61,14 +61,14 @@ class UserNotLoggedInTest extends UserTest {
      */
     protected function helpCheckArticleIsPublic(array $article): boolean {
 
-        return $articleIsPublic = $article['issue'] < $this->TestDatabase->issues[0]['num'] || $this->TestDatabase->issues[0]['public'] == true;
+        return $articleIsPublic = $article['issue'] < $this->Database->issues[0]['num'] || $this->Database->issues[0]['public'] == true;
     }
 
     function testGetOnlyPublicArticleCount() {
 
         $user = $this->helpGetRandomUser();
 
-        $actualPublicArticleCount = array_reduce($this->TestDatabase->pageinfo, function (int $count, array $article) {
+        $actualPublicArticleCount = array_reduce($this->Database->pageinfo, function (int $count, array $article) {
 
             if ($article['authorid'] == $user['id'] && $this->helpCheckArticleIsPublic($article)) {
                 $accum++;
