@@ -19,7 +19,7 @@ class UserTest extends HelpTests {
 
     protected function helpGetRandomUser() {
 
-        return $this->TestDatabase->users[ rand(0, count($this->TestDatabase->users)) - 1 ];
+        return $this->Database->users[ rand(0, count($this->Database->users)) - 1 ];
     }
 
     /**
