@@ -21,7 +21,8 @@ $filesToTest = [
     'tags/query/tagsTest.php',
     'users/mutations/deleteTest.php',
     'users/mutations/updateProfileTest.php',
-    'users/mutations/updateTest.php'
+    'users/mutations/updateTest.php',
+    'users/queries/UserLoggedInTest.php'
 ];
 
 echo `clear`;
