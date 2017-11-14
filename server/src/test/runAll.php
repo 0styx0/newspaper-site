@@ -20,7 +20,8 @@ $filesToTest = [
     'tags/mutations/createTagTest.php',
     'tags/query/tagsTest.php',
     'users/mutations/deleteTest.php',
-    'users/mutations/updateProfileTest.php'
+    'users/mutations/updateProfileTest.php',
+    'users/mutations/updateTest.php'
 ];
 
 echo `clear`;
