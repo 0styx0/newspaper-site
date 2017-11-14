@@ -8,26 +8,36 @@ class UserLoggedInTest extends UserTest {
 
     function testCanSeeFullArticleCount() { // both public and private
 
-        $user = $this->TestDatabase->getRandomUser();
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
-        $expected = count($this->TestDatabase->pageinfo);
+        $expectedArticleCount = 0;
+
+        foreach ($this->Database->GenerateRows->pageinfo as $article) {
+
+            if ($article['authorid'] === $user['id']) {
+                $expectedArticleCount++;
+            }
+        }
 
         $data = $this->request([
-           'query' => 'query users {
-                           users {
+           'query' => 'query users($id: ID) {
+                           users(id: $id) {
                                articleCount
                            }
-                       }'
+                       }',
+            'variables' => [
+                'id' => $user['id']
+            ]
         ], HelpTests::getJwt($user));
 
-        $this->assertEquals($expected, $data['users'][0]['articleCount']);
+        $this->assertEquals($expectedArticleCount, $data['users'][0]['articleCount']);
     }
 
     function testLevelHigherThanOtherUserCanEdit() {
 
         $higherLevel = rand(2, 3);
 
-        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser, int $higherLevel) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $higherLevel) {
             return $currentUser['level'] == $higherLevel;
         }, $higherLevel);
 
@@ -35,6 +45,7 @@ class UserLoggedInTest extends UserTest {
             'query' => 'query users {
                             users {
                                 canEdit
+                                level
                             }
                         }'
         ], HelpTests::getJwt($user));
@@ -51,7 +62,7 @@ class UserLoggedInTest extends UserTest {
 
         $level = rand(1, 3);
 
-        $user = HelpTests::searchArray($this->TestDatabase->users, function (array $currentUser, int $level) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $level) {
             return $currentUser['level'] == $level;
         }, $level);
 
@@ -61,26 +72,28 @@ class UserLoggedInTest extends UserTest {
                                 canEdit,
                                 notifications,
                                 twoFactor
+                                level
+                                id
                             }
                         }'
         ], HelpTests::getJwt($user));
 
-        $users = HelpTests::searchArray($data['users'], function (array $currentUser, $outsideVars) {
-            return $currentUser['level'] >= $outsideVars['level'] && $outsideVars['user']['id'];
-        }, ['user' => $user, 'level' => $level]);
+        $users = [];
 
-        HelpTests::searchArray($users, function (array $currentUser) {
+        foreach ($data['users'] as $currentUser) {
 
-            $this->assertFalse($currentUser['canEdit']);
-            $this->assertNull($currentUser['notifications']);
-            $this->assertNull($currentUser['twoFactor']);
-        });
+            if ($currentUser['level'] >= $user['level'] && $user['id'] !== $currentUser['id']) {
+                $this->assertFalse($currentUser['canEdit']);
+                $this->assertFalse($currentUser['notifications']);
+                $this->assertFalse($currentUser['twoFactor']);
+            }
+        }
     }
 
     // opposite expectations of #testLevelSameOrLowerThanOtherUserCannotEdit
     function testCanSeeOwnSettings() {
 
-        $user = $this->getRandomUser();
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->request([
             'query' => 'query users($id: ID) {
@@ -88,12 +101,13 @@ class UserLoggedInTest extends UserTest {
                                 notifications
                                 twoFactor
                                 canEdit
+                                id
                             }
                         }',
             'variables' => [
                 'id' => $user['id']
             ]
-        ]);
+        ], HelpTests::getJwt($user));
 
         $actualUser = $data['users'][0];
 
