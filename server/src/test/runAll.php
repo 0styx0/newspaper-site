@@ -19,7 +19,8 @@ $filesToTest = [
     'recoverPassword/mutations/recoverPasswordTest.php',
     'tags/mutations/createTagTest.php',
     'tags/query/tagsTest.php',
-    'users/mutations/deleteTest.php'
+    'users/mutations/deleteTest.php',
+    'users/mutations/updateProfileTest.php'
 ];
 
 echo `clear`;
