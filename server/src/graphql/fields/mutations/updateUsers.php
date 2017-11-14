@@ -17,7 +17,7 @@ use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\InputType;
 
-class IdLevelListType extends AbstractInputObjectType {
+class idLevelListType extends AbstractInputObjectType {
 
     public function build($config) {
         $config
@@ -32,7 +32,7 @@ class UpdateUsersField extends AbstractField {
 
         $config->addArguments([
             'password' => new NonNullType(new StringType()),
-            'data' => new NonNullType(new ListType(new IdLevelListType()))
+            'data' => new NonNullType(new ListType(new idLevelListType()))
         ]);
     }
 
