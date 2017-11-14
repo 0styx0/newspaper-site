@@ -42,6 +42,11 @@ class UpdateProfileField extends AbstractField {
         unset($sanitized['password']); // don't want to update password, unless we do, in which case newPassword is used
 
         $sqlParams = $this->mapArgsToDbCols($sanitized);
+
+        if (isset($sqlParams['password'])) {
+            $sqlParams['password'] = password_hash($args['newPassword'], PASSWORD_DEFAULT);
+        }
+
         $placeholderArr = [];
 
         foreach ($sqlParams as $key => $value) {
@@ -50,12 +55,11 @@ class UpdateProfileField extends AbstractField {
 
         $placeholderString = implode($placeholders, ',');
         $userId = Jwt::getToken()->getClaim('id');
-print_r(["UPDATE users SET {$placeholderString} WHERE id = ?",
-          array_merge(array_values($sanitized), [$userId])]);
-        Db::query("UPDATE users SET {$placeholderString} WHERE id = ?",
-          array_merge(array_values($sanitized), [$userId]));
 
-        return ['id' => $userId];
+        Db::query("UPDATE users SET {$placeholderString} WHERE id = ?",
+          array_merge(array_values($sqlParams), [$userId]));
+
+        return array_merge(['id' => $userId], $args);
     }
 
     /**
@@ -81,10 +85,6 @@ print_r(["UPDATE users SET {$placeholderString} WHERE id = ?",
 
                 $fieldsToUpdate[$dbCol] = $argsToDbMap[$arg];
             }
-        }
-
-        if (isset($fieldsToUpdate['password'])) {
-            $fieldsToUpdate['password'] = password_hash($fieldsToUpdate['password'], PASSWORD_DEFAULT);
         }
 
         return $fieldsToUpdate;
