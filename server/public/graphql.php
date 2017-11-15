@@ -30,6 +30,7 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/updateArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/editMission.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/createTag.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/verifyEmail.php');
 
 function process() {
 
@@ -62,6 +63,7 @@ function process() {
             new DeleteArticlesField(),
             new EditMissionField(),
             new CreateTagField(),
+            new VerifyEmailField()
         ]
     ]);
 
