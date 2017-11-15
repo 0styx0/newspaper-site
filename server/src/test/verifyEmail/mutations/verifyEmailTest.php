@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../helpers.php');
 
 class VerifyTest extends VerifyEmailTest {
 
-    protected function helpSendQuery(array $user) {
+    protected function helpSendQuery(array $user, bool $validCode = true) {
 
         return $this->request([
             'query' => 'mutation verifyEmail($authCode: String!) {
@@ -14,9 +14,9 @@ class VerifyTest extends VerifyEmailTest {
                             }
                         }',
             'variables' => [
-                'authCode' => $user['authCode']
+                'authCode' => $validCode ? $user['auth'] : $user['auth'] . HelpTests::faker()->word()
             ]
-        ], HelpTest::getJwt($user));
+        ], HelpTests::getJwt($user))['verifyEmail'];
     }
 
     /**
@@ -27,26 +27,41 @@ class VerifyTest extends VerifyEmailTest {
      */
     protected function helpGetUser(bool $emailIsVerified = false) {
 
-        return HelpTest::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            return $emailIsVerified ? $currentUser['email'][0] !== '.' : $currentUser['email'][0] == '.';
-        });
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+
+        if (!$emailIsVerified) {
+
+            $date = new DateTime();
+            $date->modify('+1 day');
+            $dateString = $date->format('Y-m-d');
+
+            Db::query("UPDATE users SET email = CONCAT('.', email), auth_time = ? WHERE id = ?",
+              [$dateString, $user['id']]);
+            $user['email'] = '.' . $user['email'];
+            $user['auth_time'] = $dateString;
+        }
+
+        return $user;
     }
 
     protected function helpCheckIfEmailWasVerified(array $user) {
 
         $dbEmail = Db::query("SELECT email FROM users WHERE id = ?", [$user['id']])->fetchColumn();
 
-        return $dbEmail == substr($user['email'], 1);
+        if ($user['email'][0] === '.') {
+            return $dbEmail === substr($user['email'], 1);
+        }
+
+        return $dbEmail == $user['email']; // would be false if not verified b/c of @see #helpGetUser
     }
 
     function testBadAuthCode() {
 
-        $user = $this->helpGetUser(true);
-        $user['auth_code'] = $user['auth_code'] . HelpTests::faker()->word();
+        $user = $this->helpGetUser();
 
-        $data = $this->helpSendQuery($user);
+        $data = $this->helpSendQuery($user, false);
 
-        $this->assertNull($data); // subject to change
+        $this->assertEmpty($data);
 
         $emailWasVerified = $this->helpCheckIfEmailWasVerified($user);
 
@@ -55,7 +70,7 @@ class VerifyTest extends VerifyEmailTest {
 
     function testVerifyingOnceRemovesDotBeforeEmail() {
 
-        $user = $this->helpGetUser();
+        $user = $this->helpGetUser(true);
 
         $data = $this->helpSendQuery($user);
 
@@ -71,10 +86,13 @@ class VerifyTest extends VerifyEmailTest {
         $user = $this->helpGetUser();
 
         $this->helpSendQuery($user);
+
+        $emailWasVerified = $this->helpCheckIfEmailWasVerified($user);
+        $this->assertTrue($emailWasVerified);
+
         $this->helpSendQuery($user);
 
         $emailWasVerified = $this->helpCheckIfEmailWasVerified($user);
-
         $this->assertTrue($emailWasVerified);
     }
 }

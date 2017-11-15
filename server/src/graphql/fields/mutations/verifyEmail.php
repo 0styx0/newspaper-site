@@ -17,7 +17,7 @@ use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\InputType;
 
-class DeleteArticlesField extends AbstractField {
+class VerifyEmailField extends AbstractField {
 
     public function build(FieldConfig $config) {
 
@@ -39,13 +39,13 @@ class DeleteArticlesField extends AbstractField {
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $user = Db::query("SELECT auth_time, auth, level, id, TRIM(TRAILING ? FROM email) AS profileLink FROM users WHERE id = ?",
-          [$_ENV['USER_EMAIL_HOST'], $sanitized['id']]);
+          [$_ENV['USER_EMAIL_HOST'], Jwt::getToken()->getClaim('id')])->fetchAll(PDO::FETCH_ASSOC)[0];
 
         if ($user['profileLink'][0] !== '.') {
             return ['jwt' => Jwt::setToken($user)];
         }
 
-        $correctAuthInfo = password_verify($args['authCode'], $user['auth_code']) &&
+        $correctAuthInfo = password_verify($args['authCode'], $user['auth']) &&
           (strtotime($user['auth_time']) - time() > 0);
 
         if (!$correctAuthInfo) {
