@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once(__DIR__ . '/article.php');
+require_once(__DIR__ . '/../fields/queries/articles.php');
 
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Field\AbstractField;
@@ -35,7 +37,7 @@ class UserType extends AbstractObjectType {
                 'type' => new BooleanType(),
                 'resolve' => function ($user) {
 
-                    if (Jwt::getToken() && $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                    if (!Jwt::getToken() || $user['id'] !== Jwt::getToken()->getClaim('id')) {
                         return null;
                     }
                     return !!$user['notifications'];
@@ -45,7 +47,7 @@ class UserType extends AbstractObjectType {
                 'type' => new BooleanType(),
                 'resolve' => function ($user) {
 
-                    if (Jwt::getToken() && $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                    if (!Jwt::getToken() || $user['id'] !== Jwt::getToken()->getClaim('id')) {
                         return null;
                     }
                     return !!$user['twoFactor'];
@@ -74,7 +76,14 @@ class UserType extends AbstractObjectType {
                     return explode('@', $user['email'])[0];
                 }
             ],
-            'articles' => new NonNullType(new ListType('')), // ArticleType
+            'articles' => [
+                'type' => new NonNullType(new ListType(new ArticleType())),
+                'resolve' => function ($user) {
+
+                    $ArticlesField = new ArticlesField();
+                    return $ArticlesField->getArticles(['authorid' => $user['id']]);
+                }
+            ],
             'canEdit' => [
                 'type' => new NonNullType(new BooleanType()),
                 'resolve' => function ($user) {
