@@ -24,7 +24,8 @@ $filesToTest = [
     'users/mutations/updateTest.php',
     'users/queries/UserLoggedInTest.php',
     'users/queries/UserNeutralTest.php',
-    'users/queries/UserNotLoggedInTest.php'
+    'users/queries/UserNotLoggedInTest.php',
+    'verifyEmail/mutations/verifyEmailTest.php'
 ];
 
 echo `clear`;
