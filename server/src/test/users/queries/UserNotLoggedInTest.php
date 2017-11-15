@@ -29,7 +29,7 @@ class UserNotLoggedInTest extends UserTest {
             ]
         ]);
 
-        $this->assertNull($data['users'][0][$attribute]);
+        $this->assertFalse(!!$data['users'][0][$attribute]);
     }
 
     function testCannotGetPassword() {
@@ -59,23 +59,24 @@ class UserNotLoggedInTest extends UserTest {
      *
      * @return boolean if article is public or not
      */
-    protected function helpCheckArticleIsPublic(array $article): boolean {
+    protected function helpCheckArticleIsPublic(array $article) {
 
-        return $articleIsPublic = $article['issue'] < $this->Database->issues[0]['num'] || $this->Database->issues[0]['public'] == true;
+        return $articleIsPublic = $article['issue'] < $this->Database->GenerateRows->issues[0]['num'] ||
+          $this->Database->GenerateRows->issues[0]['ispublic'] == true;
     }
 
     function testGetOnlyPublicArticleCount() {
 
-        $user = $this->helpGetRandomUser();
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
-        $actualPublicArticleCount = array_reduce($this->Database->pageinfo, function (int $count, array $article) {
+        $actualPublicArticleCount = 0;
+
+        foreach ($this->Database->GenerateRows->pageinfo as $article) {
 
             if ($article['authorid'] == $user['id'] && $this->helpCheckArticleIsPublic($article)) {
-                $accum++;
+                $actualPublicArticleCount++;
             }
-
-            return $accum;
-        }, 0);
+        }
 
         $data = $this->request([
             'query' => 'query users($id: ID) {
@@ -93,11 +94,10 @@ class UserNotLoggedInTest extends UserTest {
 
     function helpGetPublicArticles() {
 
+        return array_reduce($this->Database->GenerateRows->pageinfo, function (array $publicArticles, array $currentArticle) {
 
-        array_reduce($this->Database->pageinfo, function (array $publicArticles, array $currentArticle) {
-
-            if ($this->helpCheckArticleIsPublic($article)) {
-                array_push($publicArticles, $article);
+            if ($this->helpCheckArticleIsPublic($currentArticle)) {
+                array_push($publicArticles, $currentArticle);
             }
 
             return $publicArticles;
@@ -106,16 +106,16 @@ class UserNotLoggedInTest extends UserTest {
 
     function testCanOnlyViewPublicArticles() {
 
-        $user = $this->helpGetRandomUser();
+        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
 
-        $expectedIds = array_reduce($this->helpGetPublicArticles(), function (array $articleIds, array $article) {
+        $expectedIds = [];
+
+        foreach ($this->helpGetPublicArticles() as $article) {
 
             if ($article['authorid'] == $user['id']) {
-                $articleIds[] = $article['id'];
+                array_push($expectedIds, $article['id']);
             }
-
-            return $articleIds;
-        }, []);
+        }
 
         $articles = $this->request([
            'query' => 'query users($id: ID) {
@@ -130,13 +130,13 @@ class UserNotLoggedInTest extends UserTest {
             ]
         ]);
 
-        $this->assertEquals($expectedIds, array_column($articles['users']['articles'], 'id'));
+        HelpTests::compareArrayContents($expectedIds, array_column($articles['users'][0]['articles'], 'id'));
     }
 
     function testCannotEditUsers() {
 
         $data = $this->request([
-            'query' => 'query users($id: ID) {
+            'query' => 'query users {
                             users {
                                 canEdit
                             }
