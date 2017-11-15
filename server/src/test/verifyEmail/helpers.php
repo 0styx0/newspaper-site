@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class VerifyEmailTest extends TestCase {
+class VerifyEmailTest extends HelpTests {
 
     protected $Database;
 
