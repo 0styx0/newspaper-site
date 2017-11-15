@@ -33,6 +33,11 @@ class ArticlesField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
+        return $this->getArticles($args);
+    }
+
+    // this is separate from resolve so can call it from types/user.php
+    public function getArticles($args) {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
         $sanitized = $this->transformArgs($sanitized);
@@ -40,7 +45,7 @@ class ArticlesField extends AbstractField {
         $where = Db::setPlaceholders($sanitized);
         $where = str_replace('pageinfoId =', 'pageinfo.id =', $where); // sql: can't have a dot in placeholder
         $where = str_replace('tag = :tag', 'pageinfo.id IN (SELECT art_id FROM tags WHERE tag = :tag)', $where);
-        
+
         if (empty($args)) {
 
             try {
