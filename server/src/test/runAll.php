@@ -23,7 +23,8 @@ $filesToTest = [
     'users/mutations/updateProfileTest.php',
     'users/mutations/updateTest.php',
     'users/queries/UserLoggedInTest.php',
-    'users/queries/UserNeutralTest.php'
+    'users/queries/UserNeutralTest.php',
+    'users/queries/UserNotLoggedInTest.php'
 ];
 
 echo `clear`;
