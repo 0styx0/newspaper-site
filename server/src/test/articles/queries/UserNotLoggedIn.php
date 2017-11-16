@@ -10,7 +10,7 @@ class UserNotLoggedInTest extends ArticleTest {
         $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
             return $currentArticle['issue'] == $this->Database->GenerateRows->issues[0]['num'];
         });
-
+        
         $data = $this->request([
             'query' => 'query articles($id: ID) {
                             articles(id: $id) {
@@ -22,7 +22,7 @@ class UserNotLoggedInTest extends ArticleTest {
             ]
         ]);
 
-        $this->assertNull($data['articles'][0]);
+        $this->assertEmpty($data['articles']);
     }
 
     function testCannotEditAnyArticles() {
