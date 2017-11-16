@@ -49,7 +49,14 @@ class UserNeutralTest extends ArticleTest {
         foreach ($this->Database->GenerateRows->tags as $tag) {
 
             if ($tag['tag'] == $tagToGet) {
-                $expected[] = $tag['art_id'];
+
+                $articleIsPublic = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $idToFind) {
+                    return $currentArticle['id'] == $idToFind && $currentArticle['issue'] < $this->Database->GenerateRows->issues[0]['num'];
+                }, $tag['art_id']);
+
+                if ($articleIsPublic) {
+                    $expected[] = $tag['art_id'];
+                }
             }
         }
 
