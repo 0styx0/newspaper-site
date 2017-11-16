@@ -69,7 +69,7 @@ class ArticlesField extends AbstractField {
           FROM pageinfo
           JOIN users AS author ON author.id = authorid
           JOIN issues ON num = pageinfo.issue
-          WHERE {$where}",
+          WHERE ({$where}) AND (ispublic OR :admin)",
           array_merge($sanitized, ['userId' => $userId, 'level' => $userLevel, 'admin' => $userLevel > 2]))->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
