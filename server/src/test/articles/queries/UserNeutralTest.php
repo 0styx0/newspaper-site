@@ -82,7 +82,9 @@ class UserNeutralTest extends ArticleTest {
 
         foreach ($this->Database->GenerateRows->pageinfo as $article) {
 
-            if ($article['authorid'] == $authorid) {
+            if ($article['authorid'] == $authorid &&
+                $article['issue'] < $this->Database->GenerateRows->issues[0]['num']) {
+
                 $expected[] = $article['id'];
             }
         }
