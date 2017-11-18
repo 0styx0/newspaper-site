@@ -158,9 +158,8 @@ class UserLoggedInTest extends ArticleTest {
         $articleToTest = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
 
             $issues = $this->Database->GenerateRows->issues;
-            $publicIssueIndex = rand(1, count($issues) - 1);
 
-            $articleIsPrivate = $currentArticle['issue'] == $issues[$publicIssueIndex]['num'];
+            $articleIsPrivate = $currentArticle['issue'] === $issues[0]['num'];
 
             if ($articleIsPrivate) {
                 return false;
