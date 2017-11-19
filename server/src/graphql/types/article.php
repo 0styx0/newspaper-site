@@ -71,7 +71,12 @@ class ArticleType extends AbstractObjectType {
                     return +$article['views'];
                 }
             ],
-            'displayOrder' => new NonNullType(new IntType()),
+            'displayOrder' => [
+                'type' => new NonNullType(new IntType()),
+                'resolve' => function (array $article) {
+                    return +$article['displayOrder'];
+                }
+            ],
             'tags' => [
                 'type' => new NonNullType(new ListType(new StringType())),
                 'resolve' => function ($article) {
