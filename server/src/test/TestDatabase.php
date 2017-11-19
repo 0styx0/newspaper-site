@@ -10,6 +10,8 @@ $dotenv->load();
 class TestDatabase {
 
     public $GenerateRows;
+
+    // leaving this and #loadDatabase in, but don't use. For some reason before #loadDatabase finished, tests run and that causes bad password errors
     private static $generateNewDatabase = true; // NOTE: passwords and auth codes will still be changed if true
 
     public function __construct() {
@@ -58,6 +60,7 @@ class TestDatabase {
 
             $hashed[] = $user['id'];
             $hashed[] = password_hash($this->GenerateRows->users[$i]['password'], PASSWORD_DEFAULT);
+            print_r([$this->GenerateRows->users[$i]['password'], $hashed[count($hashed) - 1]]);
             $hashed[] = password_hash($this->GenerateRows->users[$i]['auth'], PASSWORD_DEFAULT);
         }
 
@@ -65,22 +68,15 @@ class TestDatabase {
 
         $placeholders = implode(',', array_fill(0, count($this->GenerateRows->users), '(?, ?, ?)'));
 
-        Db::query("INSERT INTO users (id, password, auth) VALUES {$placeholders} ON DUPLICATE KEY UPDATE password = password, auth = auth", $hashed);
+        return Db::query("INSERT INTO users (id, password, auth) VALUES {$placeholders} ON DUPLICATE KEY UPDATE password = password, auth = auth", $hashed);
     }
 
-    private function insertMockData() {
-
-        $this->GenerateRows->all();
-
-        $tables = [
-            'users' => $this->GenerateRows->users,
-            'issues' => $this->GenerateRows->issues,
-            'pageinfo' => $this->GenerateRows->pageinfo,
-            'tag_list' => $this->GenerateRows->tag_list,
-            'tags' => $this->GenerateRows->tags,
-            'comments' => $this->GenerateRows->comments,
-            'images' => $this->GenerateRows->images
-        ];
+    /**
+     * Inserts data into db
+     *
+     * @param $tables - ['table_name' => rows], where rows is an assoc array of columnName => value
+     */
+    public function insertMockData(array $tables) {
 
         foreach ($tables as $tableName => $table) {
 
@@ -126,7 +122,19 @@ class TestDatabase {
         } catch(PDOException $e) { /* do nothing since db *shouldn't* exist */ }
 
         $this->create();
-        $this->insertMockData();
+
+        $this->GenerateRows->all();
+        $tables = [
+            'users' => $this->GenerateRows->users,
+            'issues' => $this->GenerateRows->issues,
+            'pageinfo' => $this->GenerateRows->pageinfo,
+            'tag_list' => $this->GenerateRows->tag_list,
+            'tags' => $this->GenerateRows->tags,
+            'comments' => $this->GenerateRows->comments,
+            'images' => $this->GenerateRows->images
+        ];
+
+        $this->insertMockData($tables);
     }
 
     /**
