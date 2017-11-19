@@ -24,7 +24,7 @@ class ArticleType extends AbstractObjectType {
 
         $config->addFields([
             'id' => new NonNullType(new IdType()),
-            'dateCreated' => new TimestampType(),
+            'dateCreated' => new StringType(),
             'lede' => new NonNullType(new StringType()),
             'body' => new StringType(),
             'url' => new NonNullType(new StringType()),
@@ -65,7 +65,12 @@ class ArticleType extends AbstractObjectType {
                     return +$article['issue'];
                 }
             ],
-            'views' => new NonNullType(new IntType()),
+            'views' => [
+                'type' => new NonNullType(new IntType()),
+                'resolve' => function (array $article) {
+                    return +$article['views'];
+                }
+            ],
             'displayOrder' => new NonNullType(new IntType()),
             'tags' => [
                 'type' => new NonNullType(new ListType(new StringType())),
