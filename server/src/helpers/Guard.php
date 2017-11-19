@@ -4,6 +4,10 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Guard {
 
+    public static function userIsLoggedIn() {
+        return Jwt::getToken();
+    }
+
     /**
      * Makes sure user is logged in
      *
@@ -13,7 +17,7 @@ class Guard {
      */
     public static function userMustBeLoggedIn() {
 
-        if (!Jwt::getToken()) {
+        if (!Guard::userIsLoggedIn()) {
             throw new Exception('User not logged in');
         }
 
