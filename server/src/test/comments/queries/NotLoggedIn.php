@@ -65,6 +65,13 @@ class NotLoggedInCommentTest extends CommentTest {
 
         $data = $this->helpTestArgs(['$authorid' => 'ID'], ['authorid' => $privateComment['authorid']]);
 
+        // so no risky test if all comments by $privateComment['authorid'] are private
+        if (empty($data['comments'])) {
+
+            $this->assertEmpty($data['comments'], $data);
+        }
+
+        // if the author did make public comments, $data won't be empty
         foreach ($data['comments'] as $comment) {
 
             $this->assertNotEquals($comment['artId'], $privateComment['art_id']);

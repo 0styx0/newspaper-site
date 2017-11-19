@@ -59,7 +59,7 @@ class MissionEditTest extends MissionTest {
 
             $newMission = $this->helpEdit($mission, $user);
 
-            $this->assertFalse(!!isset($newMission['mission']) || !!$newMission['mission']); // might change when implement to just strip bad stuff
+            $this->assertFalse(!!empty($newMission['mission']) && !!$newMission['mission']); // might change when implement to just strip bad stuff
         }
     }
 }
