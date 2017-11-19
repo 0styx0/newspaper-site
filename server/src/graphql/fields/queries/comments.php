@@ -55,7 +55,6 @@ class CommentsField extends AbstractField {
 
 
         $jwt = Jwt::getToken();
-        $canDelete = $jwt && ($jwt->getClaim('level') > 2 || $jwt->getClaim('id') == $comment['authorid']);
 
         $result = Db::query("SELECT comments.id, art_id AS artId, comments.authorid AS authorId,
            content, comments.created AS dateCreated, (:userIsAdmin OR :userId = comments.authorid) AS canDelete
