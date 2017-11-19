@@ -14,7 +14,7 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\Scalar\IdType;
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\Scalar\IntType;
-use Youshido\GraphQL\Type\Scalar\TimestampType;
+
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\ListType\ListType;
 
