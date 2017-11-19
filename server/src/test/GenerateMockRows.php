@@ -107,7 +107,7 @@ class GenerateMockRows extends GenerateMockRow {
 
            if ($levelWasNotYetFound !== false) {
                $usersOfAllLevels[] = $user['id'];
-               array_splice($allLevels, $levelWasNotYetFound - 1, 1);
+               array_splice($allLevels, $levelWasNotYetFound, 1);
            }
         }
 
@@ -128,6 +128,7 @@ class GenerateMockRows extends GenerateMockRow {
 
     private function ensureAllLevelsHavePublicArticle() {
 
+        $usersOfAllLevels = $this->getIdsOfAllLevels();
         $publicIssue = array_fill(0, count($usersOfAllLevels), $this->issues[1]['num']);
 
         $differentSettings = [
@@ -142,7 +143,7 @@ class GenerateMockRows extends GenerateMockRow {
 
         $this->pageinfo = array_merge($this->ensureAllIssuesHaveArticle(),
          $this->ensureAllLevelsHavePrivateArticle(),
-         $this->ensureAllLevelsHavePrivateArticle()
+         $this->ensureAllLevelsHavePublicArticle()
         );
     }
 
