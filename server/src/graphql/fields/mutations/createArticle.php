@@ -51,6 +51,10 @@ class CreateArticleField extends AbstractField {
         $ArticleHelper = new ArticleHelper();
         $safeArticle = $ArticleHelper->stripTags($args['article']);
 
+        if (!strpos($safeArticle, '<p>') || !preg_match("/^<h1>([\s\S]+)<\/h1>[\s\S]*<h4>.+/", $safeArticle)) {
+            throw new Exception('Articles must have heading, author, and at least 1 paragraph');
+        }
+
         list($lede, $body, $imageInfo) = $ArticleHelper->breakDownArticle($safeArticle);
 
         $issue = $this->getPrivateIssue();
