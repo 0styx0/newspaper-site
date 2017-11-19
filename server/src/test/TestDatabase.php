@@ -16,6 +16,10 @@ class TestDatabase {
 
     public function __construct() {
 
+        if (!$_ENV['test']) {
+            throw new Error('DO NOT DELETE DATABASE IF NOT IN TEST MODE!!!!!'); // no story behind this :-)
+        }
+
         $this->GenerateRows = new GenerateMockRows();
     }
 
