@@ -16,8 +16,8 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 RewriteCond %{HTTP:X-Forwarded-Proto} =http
 # RewriteRule ^(.*) https://tabceots.com/ [L,R=301]
 
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
-
-
+Header set Access-Control-Allow-Origin "http://localhost:3000"
+Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+Header set Access-Control-Allow-Methods "OPTIONS, POST, GET, PUT"
+Header set Access-Control-Allow-Credentials "true"
 
