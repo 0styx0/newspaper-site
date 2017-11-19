@@ -35,9 +35,9 @@ class Jwt {
 
         $jwt = [];
 
-        if (key_exists('Authorization', $clientHeaders)) {
+        if (key_exists('authorization', $clientHeaders)) {
 
-            $aHeader = filter_var($clientHeaders['Authorization'], FILTER_SANITIZE_STRING);
+            $aHeader = filter_var($clientHeaders['authorization'], FILTER_SANITIZE_STRING);
 
             $encodedToken = substr($aHeader, strlen('Bearer '));
 
