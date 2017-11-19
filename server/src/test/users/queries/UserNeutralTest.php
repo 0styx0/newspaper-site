@@ -61,4 +61,34 @@ class UserNeutralTest extends UserTest {
         $HelpTests = new HelpTests();
         $HelpTests->compareArrayContents($expected, $actual);
     }
+
+    function testCanGetViews() {
+
+        $data = $this->request([
+           'query' => 'query users {
+                                users {
+                                    views
+                            }
+                        }'
+        ]);
+
+        $userViewsExpected = [];
+
+
+        foreach ($this->Database->GenerateRows->users as $user) {
+            $userViewsExpected[$user['id']] = 0;
+        }
+
+        // makes $userViewsExpected into assoc array where userId => total_views
+        foreach ($this->Database->GenerateRows->pageinfo as $article) {
+
+            $userViewsExpected[$article['authorid']] += $article['views'];
+        }
+
+
+        $actual = array_column($data['users'], 'views');
+
+        $HelpTests = new HelpTests();
+        $HelpTests->compareArrayContents($userViewsExpected, $actual);
+    }
 }
