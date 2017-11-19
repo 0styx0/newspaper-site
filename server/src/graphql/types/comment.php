@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once(__DIR__ . '/user.php');
+require_once(__DIR__ . '/../fields/queries/users.php');
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -30,8 +31,7 @@ class CommentType extends AbstractObjectType {
                 'type' => new UserType(),
                 'resolve' => function ($comment) {
 
-                    return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-                        email, level FROM users WHERE id = ?", [$comment['authorId']])->fetchAll(PDO::FETCH_ASSOC)[0];
+                    return (new UsersField())->getUsers(['id' => $comment['authorId']])[0];
                 }
             ],
             'canDelete' => [

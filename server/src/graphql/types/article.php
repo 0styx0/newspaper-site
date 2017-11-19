@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once(__DIR__ . '/user.php');
 require_once(__DIR__ . '/image.php');
 require_once(__DIR__ . '/comment.php');
+require_once(__DIR__ . '/../fields/queries/users.php');
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -88,21 +89,18 @@ class ArticleType extends AbstractObjectType {
                 'type' => new NonNullType(new UserType()),
                 'resolve' => function ($article) {
 
-                    return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-                        email, level FROM users WHERE id = ?", [$article['authorId']])->fetchAll(PDO::FETCH_ASSOC)[0];
+                    return (new UsersField())->getUsers(['id' => $comment['authorId']])[0];
                 }
             ],
             'comments' => [
                 'type' => new NonNullType(new ListType(new CommentType)), // CommentType
                 'resolve' => function ($article) {
 
-                    return Db::query("SELECT id, art_id AS artId, authorid AS authorId, content, created AS dateCreated
-                        FROM comments
-                        WHERE art_id = ?", [$article['id']])->fetchAll(PDO::FETCH_ASSOC);
+                    return (new CommentsField())->getComments(['artId' => $article['id'] ]);
                 }
             ],
             'images' => [
-                'type' => new NonNullType(new ListType(new ImageType())), // ImageType
+                'type' => new NonNullType(new ListType(new ImageType())),
                 'args' => [
                     'slide' => new BooleanType()
                 ],

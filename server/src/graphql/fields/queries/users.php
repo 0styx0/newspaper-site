@@ -28,6 +28,11 @@ class UsersField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
+        return $this->getUsers($args);
+    }
+
+    public function getUsers(array $args) {
+
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $where = Db::setArgs($args);

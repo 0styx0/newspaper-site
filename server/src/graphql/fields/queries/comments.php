@@ -29,6 +29,11 @@ class CommentsField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
+        return $this->getComments($args);
+    }
+
+    public function getComments(array $args) { // separate than resolve so can call from types/article
+
         if (isset($args['artId'])) {
             $args['art_id'] = $args['artId'];
             unset($args['artId']);
