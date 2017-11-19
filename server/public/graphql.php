@@ -76,13 +76,14 @@ function process() {
 
     $graphqlTesting = empty($_POST['graphql']) ? [] : $_POST['graphql'];
 
-    $testing = isset($_ENV['test']) && $_ENV['test'];
+    $testing = $_ENV['test'];
 
     if (empty($_POST['graphql']) && empty($phpInput)) {
         return json_encode(['error' => 'No request']);
     }
 
-    $rawBody = $testing ? $graphqlTesting : $phpInput;
+    $rawBody = ($testing) ? $graphqlTesting : $phpInput;
+
     $decodedBody = json_decode($rawBody, true);
 
     $variables = isset($decodedBody['variables']) ? $decodedBody['variables'] : [];
