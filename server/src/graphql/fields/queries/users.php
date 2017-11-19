@@ -26,7 +26,6 @@ class UsersField extends AbstractField {
         return new ListType(new UserType());
     }
 
-    // TODO: deal with jwt
     public function resolve($root, array $args, ResolveInfo $info) {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
@@ -41,9 +40,17 @@ class UsersField extends AbstractField {
             unset($sanitized['profileLink']);
         }
 
+        if (isset($sanitized['id'])) {
+             $where = str_replace('id =', "users.id =", $where); // prevent ambigious column names
+        }
+
         // basic fields, no authentication or filtering needed
-        return Db::query("SELECT id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-          email, level, notifications, two_fa_enabled AS twoFactor FROM users {$where}",
+        return Db::query("SELECT users.id AS id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
+          email, level, notifications, two_fa_enabled AS twoFactor, IFNULL(SUM(views), 0) AS views
+          FROM users
+          LEFT JOIN pageinfo ON authorid = users.id
+          {$where}
+          GROUP BY users.id",
           $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 }

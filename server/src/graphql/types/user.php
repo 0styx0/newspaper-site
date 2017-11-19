@@ -53,7 +53,12 @@ class UserType extends AbstractObjectType {
                     return !!$user['twoFactor'];
                 }
             ],
-            'views' => new NonNullType(new IntType()),
+            'views' => [
+                'type' => new NonNullType(new IntType()),
+                'resolve' => function (array $user) {
+                    return +$user['views'];
+                }
+            ],
             'articleCount' => [
                 'type' => new NonNullType(new IntType()),
                 'resolve' => function (array $user) {
