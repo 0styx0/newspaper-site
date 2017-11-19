@@ -10,6 +10,7 @@ $dotenv->load();
 class TestDatabase {
 
     public $GenerateRows;
+    private static $generateNewDatabase = true; // NOTE: passwords and auth codes will still be changed if true
 
     public function __construct() {
 
@@ -30,6 +31,41 @@ class TestDatabase {
         $this->DBH->query("CREATE DATABASE IF NOT EXISTS {$_ENV['DB_NAME']}");
         $this->DBH->query("USE {$_ENV['DB_NAME']}");
         $this->DBH->query($schema);
+    }
+
+    private function loadDatabase() {
+
+        $tables = [
+            'users',
+            'issues',
+            'pageinfo',
+            'tag_list',
+            'tags',
+            'comments',
+            'images'
+        ];
+
+        foreach ($tables as $table) {
+
+            $this->GenerateRows->{$table} = Db::query("SELECT * FROM {$table}")->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $hashed = [];
+        foreach ($this->GenerateRows->users as $i => $user) {
+
+            $this->GenerateRows->users[$i]['password'] = HelpTests::faker()->unique()->password();
+            $this->GenerateRows->users[$i]['auth'] = HelpTests::faker()->unique()->password();
+
+            $hashed[] = $user['id'];
+            $hashed[] = password_hash($this->GenerateRows->users[$i]['password'], PASSWORD_DEFAULT);
+            $hashed[] = password_hash($this->GenerateRows->users[$i]['auth'], PASSWORD_DEFAULT);
+        }
+
+        $this->GenerateRows->issues = array_reverse($this->GenerateRows->issues);
+
+        $placeholders = implode(',', array_fill(0, count($this->GenerateRows->users), '(?, ?, ?)'));
+
+        Db::query("INSERT INTO users (id, password, auth) VALUES {$placeholders} ON DUPLICATE KEY UPDATE password = password, auth = auth", $hashed);
     }
 
     private function insertMockData() {
@@ -78,6 +114,10 @@ class TestDatabase {
     }
 
     public function init() {
+
+        if (!TestDatabase::$generateNewDatabase) {
+            return $this->loadDatabase();
+        }
 
         $this->connect();
 
