@@ -92,7 +92,18 @@ class GenerateMockRows extends GenerateMockRow {
             ['issue' => array_column($this->issues, 'num'), 'authorid' => $randomIds]
         ];
 
-        return $this->ensureAllSettingVariations($differentSettings, 'pageinfo');
+        $rows = $this->ensureAllSettingVariations($differentSettings, 'pageinfo');
+
+        foreach ($rows as $i => $row) {
+
+            $privateIssue = $row['issue'] == $this->issues[0]['num'];
+
+            if ($privateIssue) {
+                $rows[$i]['views'] = 0;
+            }
+        }
+
+        return $rows;
     }
 
     private function getIdsOfAllLevels() {
@@ -118,9 +129,10 @@ class GenerateMockRows extends GenerateMockRow {
 
         $usersOfAllLevels = $this->getIdsOfAllLevels();
         $privateIssue = array_fill(0, count($usersOfAllLevels), $this->issues[0]['num']);
+        $views = array_fill(0, count($usersOfAllLevels), 0); // private articles can't have views
 
         $differentSettings = [
-            ['authorid' => $usersOfAllLevels, 'issue' => $privateIssue]
+            ['authorid' => $usersOfAllLevels, 'issue' => $privateIssue, 'views' => $views]
         ];
 
         return $this->ensureAllSettingVariations($differentSettings, 'pageinfo');
