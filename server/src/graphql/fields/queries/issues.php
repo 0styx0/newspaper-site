@@ -58,7 +58,8 @@ class IssuesField extends AbstractField {
 
         $maxIssue = Db::query("SELECT num, ispublic from issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $issueRequestedDoesNotExist = !empty($sanitized['num']) && $sanitized['num'] > $maxIssue['num'];
+        $issueRequestedDoesNotExist = isset($sanitized['num']) &&
+          ($sanitized['num'] > $maxIssue['num'] || $sanitized['num'] == 0);
 
         if ($issueRequestedDoesNotExist) {
             $sanitized['num'] = $maxIssue['num'];
