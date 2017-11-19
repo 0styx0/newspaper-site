@@ -58,7 +58,7 @@ class GenerateMockRows extends GenerateMockRow {
     public function users() {
 
         $differentSettings = [
-            ['level' => [1, 2, 3]],
+            ['level' => [1, 2, 3, 1, 2, 3]], // all levels, double so can test if user is modifying same level user
             ['notifications' => [1, 0]],
             ['two_fa_enabled' => [1, 0]]
         ];
