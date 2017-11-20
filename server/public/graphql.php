@@ -27,6 +27,7 @@ require_once(__DIR__ . '/../src/graphql/fields/mutations/updateProfile.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/recoverPassword.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/createArticle.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/updateArticles.php');
+require_once(__DIR__ . '/../src/graphql/fields/mutations/editArticle.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/deleteArticles.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/editMission.php');
 require_once(__DIR__ . '/../src/graphql/fields/mutations/createTag.php');
@@ -60,6 +61,7 @@ function process() {
             new RecoverPasswordField(),
             new CreateArticleField(),
             new UpdateArticlesField(),
+            new EditArticleField(),
             new DeleteArticlesField(),
             new EditMissionField(),
             new CreateTagField(),
