@@ -48,7 +48,7 @@ class LoginField extends AbstractField {
 
         $token = Jwt::setToken($user);
 
-        $emailIsVerified = $user['email'][0] === '.';
+        $emailIsVerified = $user['email'][0] !== '.';
         if (!$emailIsVerified) {
             $this->sendEmailVerification($user['id'], substr($user['email'], 1));
         }
