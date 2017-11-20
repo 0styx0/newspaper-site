@@ -93,10 +93,7 @@ class GenerateMockRow {
             'id' => GenerateMockRow::$faker->unique()->randomNumber() + 1 . '',
             'created' => GenerateMockRow::$faker->date(),
             'url' => $url,
-            'lede' => "
-                <h1>{$faker->word()}</h1>
-                <h4>{$faker->name()}</h4>
-                <p>{$faker->paragraph()}</p>",
+            'lede' => "<h1>{$faker->word()}</h1><h4>{$faker->name()}</h4><p>{$faker->paragraph()}</p>",
             'body' => $this->randomHtml(),
             'issue' => GenerateMockRow::$faker->randomNumber(), // todo: replace, foreign key
             'authorid' => GenerateMockRow::$faker->randomNumber(), // ditto
