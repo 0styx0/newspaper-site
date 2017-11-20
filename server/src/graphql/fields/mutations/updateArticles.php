@@ -35,14 +35,12 @@ class UpdateArticlesField extends AbstractField {
     public function resolve($root, array $args, ResolveInfo $info) {
 
         Guard::userMustBeLoggedIn();
-        Guard::withPassword($args['password']);
 
         // convert from obj to arr since sanitizer removes objects
         /** @author https://stackoverflow.com/a/18106696/6140527 **/
         $args['data'] = json_decode(json_encode($args['data']), true);
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
-        $ArticleHelper = new ArticleHelper();
 
         $authorIds = $this->getAuthorIds($sanitized['data']);
 
@@ -56,38 +54,14 @@ class UpdateArticlesField extends AbstractField {
                 $this->replaceTags($article['id'], $article['tags']);
             }
 
-            if (!empty($article['article'])) {
+            if (!empty($article['displayOrder'])) {
+                Guard::userMustBeLevel(3); // user can't make own article more visible
 
-                $safeArticle = $ArticleHelper->stripTags($args['data'][$i]['article']);
-
-                list($lede, $body, $images) = $ArticleHelper->breakDownArticle($safeArticle);
-                Db::query("UPDATE pageinfo SET lede = ?, body = ? WHERE id = ?", [$lede, $body, $article['id']]);
-
-                Db::query("DELETE FROM images WHERE art_id = ?", [$article['id']]);
-                $ArticleHelper->addImages($article['id'], $images);
+                Db::query("UPDATE pageinfo SET displayOrder = :displayOrder WHERE id = :id", [$article]);
             }
 
             return $args['data'];
         }
-    }
-
-    /**
-     * @return max private issue, and if there is none, creates one
-     */
-    private function getPrivateIssue() {
-
-        $maxIssue;
-        $maxIssueInfo = Db::query("SELECT num, ispublic FROM issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
-
-        if ($maxIssueInfo['ispublic']) {
-
-            $maxIssue = $maxIssue['num'] + 1;
-            Db::query("INSERT INTO issues (num) VALUES(?)", [$maxIssue]);
-        } else {
-            $maxIssue = $maxIssueInfo['num'];
-        }
-
-        return $maxIssue;
     }
 
     /**
