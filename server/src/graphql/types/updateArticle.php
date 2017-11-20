@@ -20,8 +20,7 @@ class UpdateArticleType extends AbstractObjectType {
             ->addFields([
                 'id' => new NonNullType(new IdType()),
                 'tags' => new ListType(new StringType()),
-                'displayOrder' => new IntType(),
-                'article' => new StringType()
+                'displayOrder' => new IntType()
             ]);
     }
 }
