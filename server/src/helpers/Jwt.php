@@ -29,7 +29,7 @@ class Jwt {
         } catch (Error $e) {
 
             if ($_ENV['test'] && isset($_POST['jwt'])) {
-                $clientHeaders = ['Authorization' => $_POST['jwt']];
+                $clientHeaders = ['authorization' => $_POST['jwt']];
             }
         }
 
