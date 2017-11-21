@@ -45,17 +45,7 @@ class ArticleType extends AbstractObjectType {
                             $content = substr_replace($content, "src='{$image}'", $imagePos, strlen('data-src'));
                         }
                     }
-
-                    function addView($article) {
-
-                        $publicIssue = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$article['issue']])->fetchColumn();
-
-                        // TODO: make cookie
-                        if ($publicIssue) {
-                            Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
-                        }
-                    }
-                    addView($article);
+                    (new ArticleHelper())->addView($article);
 
                     return $content;
                 }

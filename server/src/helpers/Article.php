@@ -132,6 +132,17 @@ class ArticleHelper {
 
         Db::query("INSERT INTO images (art_id, url, slide) VALUES ({$placeholders})", $imageInfo);
     }
+    
+    function addView($article) {
+
+        $publicIssue = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$article['issue']])->fetchColumn();
+
+        // TODO: make cookie
+        if ($publicIssue) {
+            Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
+        }
+    }
+
 }
 
 ?>
