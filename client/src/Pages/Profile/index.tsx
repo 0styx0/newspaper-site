@@ -18,8 +18,8 @@ function Profile(props: Props) {
         return null;
     }
 
-    const viewingOwnProfile = props.user.profileLink === getJWT().profileLink;
-
+    const viewingOwnProfile = props.user.id === getJWT().id;
+    
     return (
         <div>
             <PublicUserInfoComponent

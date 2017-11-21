@@ -14,6 +14,7 @@ interface PublicUserInfo {
     fullName: string;
     profileLink: string;
     canEdit: boolean;
+    id: string;
 }
 
 interface ModifiableUserInfo {
