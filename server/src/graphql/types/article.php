@@ -79,7 +79,7 @@ class ArticleType extends AbstractObjectType {
                 'type' => new NonNullType(new UserType()),
                 'resolve' => function ($article) {
 
-                    return (new UsersField())->getUsers(['id' => $comment['authorId']])[0];
+                    return (new UsersField())->getUsers(['id' => $article['authorId']])[0];
                 }
             ],
             'comments' => [
