@@ -24,7 +24,7 @@ class UpdateArticlesField extends AbstractField {
 
         $config->addArguments([
             'password' => new NonNullType(new StringType()),
-            'data' => new ListType(new UpdateArticleType())
+            'data' => new NonNullType(new ListType(new UpdateArticleType()))
         ]);
     }
 
@@ -60,9 +60,34 @@ class UpdateArticlesField extends AbstractField {
 
                 Db::query("UPDATE pageinfo SET display_order = ? WHERE id = ?", [$article['displayOrder'], $article['id']]);
             }
-
-            return $args['data'];
         }
+
+        $articleIds = array_column($sanitized['data'], 'id');
+        $placeholders = Db::generatePlaceholders($articleIds);
+
+        $articleInfo = Db::query("SELECT id, display_order AS displayOrder
+            FROM pageinfo
+            WHERE id IN ({$placeholders})
+            ORDER BY id", $articleIds)->fetchAll(PDO::FETCH_ASSOC);
+        $tags = Db::query("SELECT art_id, tag FROM tags
+            WHERE art_id IN ({$placeholders})
+            ORDER BY art_id", $articleIds)->fetchAll(PDO::FETCH_ASSOC);
+
+        $articleIndex = 0;
+        foreach ($tags as $i => $tag) {
+
+            if ($i !== 0 && $tag['art_id'] !== $tags[$i - 1]['art_id']) {
+                $articleIndex++;
+            }
+
+            if (!isset($articleInfo['tags'])) {
+                $articleInfo['tags'] = [];
+            }
+
+            array_push($articleInfo[$i]['tags'], $tag['tag']);
+        }
+
+        return $articleInfo;
     }
 
     /**
