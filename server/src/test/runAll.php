@@ -4,6 +4,7 @@ $filesToTest = [
     './articles/mutations/createArticleTest.php',
     './articles/mutations/deleteArticleTest.php',
     './articles/mutations/updateArticleTest.php',
+    'articles/mutations/editArticleTest.php',
     './articles/queries/UserLoggedInTest.php',
     './articles/queries/UserNeutralTest.php',
     './articles/queries/UserNotLoggedIn.php',
