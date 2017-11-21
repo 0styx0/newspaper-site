@@ -78,8 +78,8 @@ const EditArticle = gql`
 
 const ArticleDelete = gql`
 
-    mutation deleteArticles($ids: [ID]) {
-        deleteArticles(ids: $ids) {
+    mutation deleteArticles($ids: [ID], $password: String!) {
+        deleteArticles(ids: $ids, password: $password) {
             id
         }
     }
