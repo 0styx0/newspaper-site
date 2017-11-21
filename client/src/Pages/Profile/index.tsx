@@ -5,6 +5,7 @@ import UserArticleTable from './ArticleTable/container';
 import ChangePassword from './ChangePassword/container';
 
 import { Article, PublicUserInfo } from './shared.interfaces';
+import { getJWT } from '../../helpers/jwt/index';
 
 interface Props {
     articles: Article[];
@@ -17,6 +18,8 @@ function Profile(props: Props) {
         return null;
     }
 
+    const viewingOwnProfile = props.user.profileLink === getJWT().profileLink;
+
     return (
         <div>
             <PublicUserInfoComponent
@@ -25,8 +28,8 @@ function Profile(props: Props) {
                 views={props.user.views}
                 articles={props.articles.length}
             />
-            {props.user.canEdit ? <ModifiableUserInfo /> : ''}
-            {props.user.canEdit ? <ChangePassword /> : ''}
+            {viewingOwnProfile ? <ModifiableUserInfo /> : ''}
+            {viewingOwnProfile ? <ChangePassword /> : ''}
             <UserArticleTable
                 articles={props.articles}
             />
