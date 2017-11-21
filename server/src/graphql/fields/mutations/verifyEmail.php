@@ -38,8 +38,8 @@ class VerifyEmailField extends AbstractField {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        $user = Db::query("SELECT auth_time, auth, level, id, TRIM(TRAILING ? FROM email) AS profileLink FROM users WHERE id = ?",
-          [$_ENV['USER_EMAIL_HOST'], Jwt::getToken()->getClaim('id')])->fetchAll(PDO::FETCH_ASSOC)[0];
+        $user = Db::query("SELECT auth_time, auth, level, id, SUBSTRING_INDEX(email, '@', 1) AS profileLink FROM users WHERE id = ?",
+          [Jwt::getToken()->getClaim('id')])->fetchAll(PDO::FETCH_ASSOC)[0];
 
         if ($user['profileLink'][0] !== '.') {
             return ['jwt' => Jwt::setToken($user)];

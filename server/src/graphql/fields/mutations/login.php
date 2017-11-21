@@ -34,11 +34,12 @@ class LoginField extends AbstractField {
      */
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $userRows = Db::query("SELECT id, level, password, TRIM(TRAILING ? FROM email) AS profileLink, email
+        /** credit to https://stackoverflow.com/a/17421516 for substring_index */
+        $userRows = Db::query("SELECT id, level, password, SUBSTRING_INDEX(email, '@', 1) AS profileLink, email
           FROM users
           WHERE username = ? OR email = ? OR email = CONCAT('.', ?)
           LIMIT 1",
-          [$_ENV['USER_EMAIL_HOST'], $args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC);
+          [$args['username'], $args['username'], $args['username']])->fetchAll(PDO::FETCH_ASSOC);
 
         if (!$userRows || !password_verify($args['password'], $userRows[0]['password'])) {
             throw new Exception('Invalid Password');
