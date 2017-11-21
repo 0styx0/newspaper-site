@@ -115,7 +115,7 @@ const ModifiableUserInfoContainerWithData = compose(
         name: 'privateUserData',
         options: {
             variables: {
-                profileLink: 'meiselesd2018'
+                profileLink: window.location.pathname.split('/')[2]
             }
         }
     }),
