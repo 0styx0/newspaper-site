@@ -3,7 +3,7 @@ import httpNotification from '../../helpers/Notification';
 
 import { compose, graphql, withApollo } from 'react-apollo';
 import { ArticleQuery } from '../../graphql/article';
-import { ArticleUpdate } from '../../graphql/articles';
+import { EditArticle } from '../../graphql/articles';
 
 import { ArticleInfo, Story } from './shared.interfaces';
 import StoryComponent from './';
@@ -15,12 +15,10 @@ interface Props {
             query: typeof ArticleQuery, variables: { issue: number; url: string }
         } ) => Promise<{data: { articles: Story[] } }>;
     };
-    updateArticle: ( params: {
+    editArticle: ( params: {
         variables: {
-            data: {
-                id: string;
-                article: string;
-            }
+            id: string;
+            article: string;
         }
     }) => void; // not really void
 }
@@ -87,12 +85,10 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
      */
     onSubmit() {
 
-        this.props.updateArticle({
+        this.props.editArticle({
             variables: {
-                data: {
-                    id: this.state.id,
-                    article: this.state.heading + this.state.body
-                }
+                id: this.state.id,
+                article: this.state.heading + this.state.body
             }
         });
 
@@ -126,7 +122,7 @@ const StoryContainerWithData = compose(
             }
         }
     }),
-    graphql(ArticleUpdate, {name: 'updateArticle'}),
+    graphql(EditArticle, {name: 'editArticle'}),
 )(StoryContainer as any);
 
 export default withApollo(StoryContainerWithData);

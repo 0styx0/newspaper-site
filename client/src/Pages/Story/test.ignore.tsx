@@ -90,7 +90,7 @@ describe('<StoryContainer>', () => {
                                     }
                                 } as any)
                             }}
-                            updateArticle={() => true as any}
+                            editArticle={() => true as any}
                         />
                     </MemoryRouter>
                 </ApolloProvider>

@@ -57,9 +57,18 @@ const ArticlePreviewTagQuery = gql`
 `;
 
 const ArticleUpdate = gql`
+    mutation ArticleUpdate($data: [UpdateArticle], $password: String) {
+        updateArticles(data: $data, password: $password) {
+            id
+            tags
+            displayOrder
+        }
+    }
+`;
 
-    mutation ArticleUpdate($data: [Fields]) {
-        updateArticles(data: $data) {
+const EditArticle = gql`
+    mutation EditArticle($id: ID, $article: String) {
+        editArticle(id: $id, article: $article) {
             id
             tags
             displayOrder
@@ -82,5 +91,6 @@ export {
     ArticlePreviewIssueQuery,
     ArticlePreviewTagQuery,
     ArticleUpdate,
+    EditArticle,
     ArticleDelete
 };
