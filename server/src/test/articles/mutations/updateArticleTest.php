@@ -16,15 +16,15 @@ class UpdateArticleTest extends ArticleTest {
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
 
-           if ($scopedVars['author']) {
-               return $currentUser['id'] == $scopedVars['articleToUpdate']['authorid'];
+            $good = true;
 
-           } else if ($currentUser['level'] == $scopedVars['level']) {
+            $userIsAuthor = $currentUser['id'] == $scopedVars['articleToUpdate']['authorid'];
 
-               return true;
-           }
+            $good = $good && (!$scopedVars['author'] || $userIsAuthor);
 
-           return false;
+            $good = $good && ($currentUser['level'] == $scopedVars['level']);
+
+            return $good;
         }, ['author' => $author, 'articleToUpdate' => $articleToUpdate, 'level' => $level]);
 
 
@@ -39,13 +39,12 @@ class UpdateArticleTest extends ArticleTest {
         $newData = [
                     'id' => $articleToUpdate['id'],
                     'tags' => $articleToUpdate['tags'],
-                    'displayOrder' => $articleToUpdate['display_order'],
-                    'article' => $articleToUpdate['lede'] . $articleToUpdate['body']
+                    'displayOrder' => $articleToUpdate['display_order']
                     ];
 
         $newData[$fieldToChange] = $newValue;
 
-        return $this->request([
+        $data = $this->request([
             'query' => 'mutation ArticleUpdate($data: [UpdateArticle], $password: String) {
                             updateArticles(data: $data, password: $password) {
                                 id
@@ -55,20 +54,11 @@ class UpdateArticleTest extends ArticleTest {
                         }',
             'variables' => [
                 'data' => [$newData],
-                'password' => $user['password']
+                'password' => $correctPassword ? $user['password'] : ''
             ]
         ], $loggedIn ? HelpTests::getJwt($user) : null);
-    }
 
-    function testNotLoggedInCannotEditAnyText() {
-
-        $newArticle = $this->Database->GenerateRows->pageinfo();
-
-        $data = $this->helpTestUpdate(function () {
-            return true;
-        }, 'article', $newArticle['lede'] . $newArticle['body'], false);
-
-        $this->assertNull($data['updateArticles']);
+        return ['data' => $data, 'articleToUpdate' => $articleToUpdate];
     }
 
     function testNotLoggedInCannotEditDisplayOrder() {
@@ -77,7 +67,7 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'displayOrder', $newArticle['display_order'], false);
+        }, 'displayOrder', $newArticle['display_order'], false)['data'];
 
         $this->assertNull($data['updateArticles']);
     }
@@ -88,31 +78,9 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'tags', $newTags, false);
+        }, 'tags', $newTags, false)['data'];
 
         $this->assertNull($data['updateArticles']);
-    }
-
-    function testCanEditOwnArticleText() {
-
-        $newArticle = $this->Database->GenerateRows->pageinfo();
-
-        $data = $this->helpTestUpdate(function () {
-            return true;
-        }, 'article', $newArticle['lede'] . $newArticle['body'], true, true);
-
-        $this->assertNotNull($data['updateArticles']);
-    }
-
-    function testCanEditAnyArticleTextIfLevelGreaterThanTwo() {
-
-        $newArticle = $this->Database->GenerateRows->pageinfo();
-
-        $data = $this->helpTestUpdate(function () {
-            return true;
-        }, 'article', $newArticle['lede'] . $newArticle['body'], true, false, 3);
-
-        $this->assertNotNull($data['updateArticles']);
     }
 
     function testCannotEditIfWrongPassword() {
@@ -121,20 +89,38 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'article', $newArticle['lede'] . $newArticle['body'], true, false, 3, false);
+        }, 'displayOrder', $newArticle['display_order'] + 1, true, false, 3, false)['data'];
 
-        $this->assertNotNull($data['updateArticles']);
+        $this->assertNull($data['updateArticles']);
+    }
+
+    function testNonLevelThreeCannotModifyOwnDisplayOrder() {
+
+        $newOrder = rand(1, 100);
+
+        $data = $this->helpTestUpdate(function (array $currentArticle) {
+
+            return HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $article) {
+                return $currentUser['id'] == $article['authorid'] &&
+                 $currentUser['level'] == 2; // this number must be same as level param of helpTestUpdate
+            }, $currentArticle);
+        }, 'displayOrder', $newOrder, true, true, 2);
+
+        $actualOrder = Db::query("SELECT display_order FROM pageinfo WHERE id = ?", [$data['articleToUpdate']['id']])->fetchColumn();
+
+        $this->assertEquals($data['articleToUpdate']['display_order'], $actualOrder);
     }
 
     function testLevelThreeCanModifyDisplayOrder() {
 
-        $newArticle = $this->Database->GenerateRows->pageinfo();
+        $newOrder = rand(1, 100);
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'displayOrder', $newArticle['display_order'], true, false, 3);
+        }, 'displayOrder', $newOrder, true, false, 3);
 
-        $this->assertNotNull($data['updateArticles']);
+        $actualOrder = Db::query("SELECT display_order FROM pageinfo WHERE id = ?", [$data['articleToUpdate']['id']])->fetchColumn();
+        $this->assertEquals($newOrder, $actualOrder);
     }
 
     function testLevelThreeCanModifyTags() {
@@ -143,7 +129,7 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function () {
             return true;
-        }, 'tags', array_column($newTags, 'tag'), true, false, 3);
+        }, 'tags', array_column($newTags, 'tag'), true, false, 3)['data'];
 
         $this->assertNotNull($data['updateArticles']);
     }
