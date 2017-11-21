@@ -36,7 +36,7 @@ class EditArticleField extends AbstractField {
 
         $articleIsPrivate = $maxIssueInfo['num'] == $articleInfo['issue'] && !$maxIssueInfo['ispublic'];
 
-        if ($articleInfo['authorid'] !== Jwt::getToken()->getClaim('id') || $articleIsPrivate) {
+        if ($articleInfo['authorid'] !== Jwt::getToken()->getClaim('id') || !$articleIsPrivate) {
             Guard::userMustBeLevel(3);
         }
 
@@ -50,7 +50,7 @@ class EditArticleField extends AbstractField {
         Db::query("DELETE FROM images WHERE art_id = ?", [$articleInfo['id']]);
         $ArticleHelper->addImages($articleInfo['id'], $images);
 
-        return ['article' => $safeArticle];
+        return (new ArticlesField())->getArticles(['id' => $articleInfo['id']])[0];
     }
 }
 
