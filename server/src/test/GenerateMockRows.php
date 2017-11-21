@@ -80,6 +80,7 @@ class GenerateMockRows extends GenerateMockRow {
         $this->issues = $this->ensureAllSettingVariations($differentSettings, 'issue');
 
         $this->issues[0]['ispublic'] = 0;
+        $this->issues[0]['madepub'] = null;
     }
 
     private function ensureAllIssuesHaveArticle() {
