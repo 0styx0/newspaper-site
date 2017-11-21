@@ -35,6 +35,7 @@ class UpdateArticlesField extends AbstractField {
     public function resolve($root, array $args, ResolveInfo $info) {
 
         Guard::userMustBeLoggedIn();
+        Guard::withPassword($args['password']);
 
         // convert from obj to arr since sanitizer removes objects
         /** @author https://stackoverflow.com/a/18106696/6140527 **/
@@ -57,7 +58,7 @@ class UpdateArticlesField extends AbstractField {
             if (!empty($article['displayOrder'])) {
                 Guard::userMustBeLevel(3); // user can't make own article more visible
 
-                Db::query("UPDATE pageinfo SET displayOrder = :displayOrder WHERE id = :id", [$article]);
+                Db::query("UPDATE pageinfo SET display_order = ? WHERE id = ?", [$article['displayOrder'], $article['id']]);
             }
 
             return $args['data'];
