@@ -54,7 +54,7 @@ class IssuesField extends AbstractField {
             unset($sanitized['public']);
         }
 
-        $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 1) . $where;
+        $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 'ispublic = :ispublic') . $where;
 
         $maxIssue = Db::query("SELECT num, ispublic from issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
 
@@ -67,8 +67,10 @@ class IssuesField extends AbstractField {
 
         $sanitized = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue);
 
+        $sanitized['admin'] = Jwt::getField('level') > 2;
+
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
-           (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views
+           (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views, (:admin AND ispublic != 1) canEdit
           FROM issues
           WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
