@@ -29,27 +29,6 @@ class NotLoggedInCommentTest extends CommentTest {
         ]);
     }
 
-    /**
-     * Gets a comment
-     *
-     * @param $public - if comment should come from a public article or not
-     *
-     * @return a private comment (from Database->GenerateRows)
-     */
-    protected function helpGetComment(bool $public = false) {
-
-        return HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, bool $public) {
-
-            $articleOfComment = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, array $currentComment) {
-                return $currentComment['art_id'] == $currentArticle['id'];
-            }, $currentComment);
-
-            $privateIssue = $this->Database->GenerateRows->issues[0]['num'];
-
-            return ($public) ? $articleOfComment['issue'] != $privateIssue : $articleOfComment['issue'] == $privateIssue;
-        }, $public);
-    }
-
     function testCannotGetCommentsOfPrivateArticlesById() {
 
         $privateCommentId = $this->helpGetComment()['id'];
