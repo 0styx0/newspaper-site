@@ -58,14 +58,14 @@ class CreateUserField extends AbstractField {
             $authCode
         ];
 
+
         Db::query("INSERT INTO users (username, email, password, level, f_name, m_name, l_name, auth)
           VALUES(?, ?, ?, ?, ?, ?, ?, ?)", $params);
 
         SendMail::emailVerification($sanitized['email'], $authCode);
 
-        unset($sanitized['password']);
-
-        return array_merge($sanitized, ['id' => Db::$lastInsertId, 'level' => +$params[3]]);
+        $result = (new UsersField())->getUsers(['id' => Db::$lastInsertId])[0];
+        return $result;
     }
 }
 
