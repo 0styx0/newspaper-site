@@ -80,8 +80,8 @@ class UpdateArticlesField extends AbstractField {
                 $articleIndex++;
             }
 
-            if (!isset($articleInfo['tags'])) {
-                $articleInfo['tags'] = [];
+            if (!isset($articleInfo[$i]['tags'])) {
+                $articleInfo[$i]['tags'] = [];
             }
 
             array_push($articleInfo[$i]['tags'], $tag['tag']);
