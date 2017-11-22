@@ -122,7 +122,6 @@ class CreateUserTest extends UserTest {
                                 lastName
                                 email
                                 id
-                                username
                                 level
                             }
                         }",
@@ -134,7 +133,6 @@ class CreateUserTest extends UserTest {
         $this->assertEquals($user['firstName'], $newUser['firstName']);
         $this->assertEquals($user['lastName'], $newUser['lastName']);
         $this->assertEquals($user['email'], $newUser['email']);
-        $this->assertEquals($user['username'], $newUser['username']);
         $this->assertEquals(1, $newUser['level']);
 
         $this->assertNotNull(Db::query("SELECT id FROM users WHERE id = ?", [$newUser['id']])->fetchColumn());
@@ -168,7 +166,7 @@ class CreateUserTest extends UserTest {
     function testHigherLevelCanCreateLowerOrSameLevel() {
 
         $userToCreate = $this->helpGenerateRequiredUserFields();
-        $userToCreate['level'] = rand(1, 2);
+        $userToCreate['level'] = rand(1, 3);
 
         $types = $this->helpGetGraphqlTypes($userToCreate);
         $mappings = $this->helpGenerateKeyMappings($userToCreate);
