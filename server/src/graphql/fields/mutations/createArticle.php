@@ -60,7 +60,7 @@ class CreateArticleField extends AbstractField {
         $issue = $this->getPrivateIssue();
 
         Db::query("INSERT INTO pageinfo (lede, body, issue, authorid, url, created) VALUES(?, ?, ?, ?, ?, CURDATE())",
-         [$lede, $body, $issue, Jwt::getToken()->getClaim('id'), $modifiedUrl]);
+         [$lede, $body, $issue, Jwt::getField('id'), $modifiedUrl]);
 
         $articleId = Db::query("SELECT id FROM pageinfo WHERE issue = ? and url = ?", [$issue, $modifiedUrl])->fetchColumn();
 

@@ -54,7 +54,7 @@ class UpdateProfileField extends AbstractField {
         }
 
         $placeholderString = implode($placeholders, ',');
-        $userId = Jwt::getToken()->getClaim('id');
+        $userId = Jwt::getField('id');
 
         Db::query("UPDATE users SET {$placeholderString} WHERE id = ?",
           array_merge(array_values($sqlParams), [$userId]));

@@ -45,7 +45,7 @@ class CreateCommentField extends AbstractField {
         }
 
         Db::query("INSERT INTO comments (art_id, content, authorid) VALUES(?, ?, ?)",
-          [$sanitized['artId'], $sanitizedContent, Jwt::getToken()->getClaim('id') ]);
+          [$sanitized['artId'], $sanitizedContent, Jwt::getField('id') ]);
 
 
         return array_merge($sanitized, ['content' => $sanitizedContent, 'id' => Db::$lastInsertId]);

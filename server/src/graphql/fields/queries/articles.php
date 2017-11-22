@@ -59,9 +59,9 @@ class ArticlesField extends AbstractField {
             }
         }
 
-        $userId = Jwt::getToken() ? Jwt::getToken()->getClaim('id') : null;
-        $userLevel = Jwt::getToken() ? Jwt::getToken()->getClaim('level') : 0;
-
+        $userId = Jwt::getField('id');
+        $userLevel = +Jwt::getField('level');
+        
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,

@@ -32,14 +32,14 @@ class VerifyEmailField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        if (!Jwt::getToken()) { // not using Guard since ONLY id should be in jwt, not level or profileLink etc
+        if (!Jwt::getField('id')) { // not using Guard since ONLY id should be in jwt, not level or profileLink etc
             throw new Exception('User must be logged in');
         }
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $user = Db::query("SELECT auth_time, auth, level, id, SUBSTRING_INDEX(email, '@', 1) AS profileLink FROM users WHERE id = ?",
-          [Jwt::getToken()->getClaim('id')])->fetchAll(PDO::FETCH_ASSOC)[0];
+          [Jwt::getField('id')])->fetchAll(PDO::FETCH_ASSOC)[0];
 
         if ($user['profileLink'][0] !== '.') {
             return ['jwt' => Jwt::setToken($user)];
@@ -52,7 +52,7 @@ class VerifyEmailField extends AbstractField {
             throw new Exception('Incorrect auth code');
         }
 
-        Db::query("UPDATE users SET email = TRIM(LEADING '.' FROM email) WHERE id = ?", [Jwt::getToken()->getClaim('id')]);
+        Db::query("UPDATE users SET email = TRIM(LEADING '.' FROM email) WHERE id = ?", [Jwt::getField('id')]);
 
         $verifiedProfileLink = substr($user['profileLink'], 1);
 

@@ -53,9 +53,6 @@ class CommentsField extends AbstractField {
         $where = str_replace('commentsId =', 'comments.id =', $where);
         $where = str_replace('authorId =', 'comments.authorid =', $where);
 
-
-        $jwt = Jwt::getToken();
-
         $result = Db::query("SELECT comments.id, art_id AS artId, comments.authorid AS authorId,
            content, comments.created AS dateCreated, (:userIsAdmin OR :userId = comments.authorid) AS canDelete
           FROM comments
@@ -63,9 +60,9 @@ class CommentsField extends AbstractField {
           JOIN issues ON num = pageinfo.issue
           WHERE {$where} AND (ispublic != :userLoggedIn OR :userLoggedIn)",
           array_merge($args, [
-              'userLoggedIn' => +!!$jwt,
-              'userIsAdmin' => $jwt && $jwt->getClaim('level') > 2,
-              'userId' => $jwt ? $jwt->getClaim('id') : ''
+              'userLoggedIn' => Guard::userIsLoggedIn(),
+              'userIsAdmin' => Jwt::getField('level') > 2,
+              'userId' => Jwt::getField('id') ? Jwt::getField('id') : ''
           ]))->fetchAll(PDO::FETCH_ASSOC);
 
           return $result;

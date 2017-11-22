@@ -41,7 +41,7 @@ class DeleteCommentField extends AbstractField {
 
             $authorid = Db::query("SELECT authorid FROM comments WHERE id = ?", [$id])->fetchColumn();
 
-            if ($authorid !== Jwt::getToken()->getClaim('id')) {
+            if ($authorid !== Jwt::getField('id')) {
                 throw new Exception('Users can only delete their own comments');
             }
         }

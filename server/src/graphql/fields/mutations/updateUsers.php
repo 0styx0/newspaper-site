@@ -53,7 +53,7 @@ class UpdateUsersField extends AbstractField {
 
             $maxUserLevel = Db::query("SELECT MAX(level) FROM users WHERE id IN ({$placeholders})", $level['ids'])->fetchColumn();
 
-            $currentUserLevel = Jwt::getToken()->getClaim('level');
+            $currentUserLevel = Jwt::getField('level');
 
             if ($maxUserLevel >= $currentUserLevel || $currentUserLevel < $level['level']) {
                 continue;

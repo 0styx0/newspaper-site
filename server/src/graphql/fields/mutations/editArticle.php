@@ -36,7 +36,7 @@ class EditArticleField extends AbstractField {
 
         $articleIsPrivate = $maxIssueInfo['num'] == $articleInfo['issue'] && !$maxIssueInfo['ispublic'];
 
-        if ($articleInfo['authorid'] !== Jwt::getToken()->getClaim('id') || !$articleIsPrivate) {
+        if ($articleInfo['authorid'] !== Jwt::getField('id') || !$articleIsPrivate) {
             Guard::userMustBeLevel(3);
         }
 

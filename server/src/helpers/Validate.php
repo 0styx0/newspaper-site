@@ -46,10 +46,9 @@ class Validate {
      */
     public static function level(int $level) {
 
-        $jwt = Jwt::getToken();
-        $userLevel = $jwt ? $jwt->getClaim('level') : 1;
+        $userLevel = Jwt::getField('level') ? Jwt::getField('level') : 1;
 
-        if ($userLevel && $userLevel < $level) {
+        if ($userLevel < $level) {
             throw new Exception('Cannot have a level greater than the one signing you up');
         }
 

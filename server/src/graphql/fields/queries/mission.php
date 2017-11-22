@@ -20,11 +20,9 @@ class MissionField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        $jwt = Jwt::getToken();
-
         return [
             'mission' => file_get_contents(__DIR__ . '/../../../../public/missionView.html'),
-            'canEdit' => $jwt && $jwt->getClaim('level') > 2
+            'canEdit' => Jwt::getField('level') > 2
         ];
     }
 }

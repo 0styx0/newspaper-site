@@ -12,13 +12,18 @@ class Jwt {
 
     public static $token = '';
 
+    public static function hasClaim(string $fieldToGet) {
+
+        return Jwt::$token ? Jwt::$token->hasClaim($fieldToGet) : null;
+    }
+
     /**
     * Gets jwt from http Authorization header
     */
-    public static function getToken() {
+    public static function getField(string $fieldToGet) {
 
         if (Jwt::$token && !$_ENV['test']) {
-            return Jwt::$token;
+            return Jwt::$token ? Jwt::$token->getClaim($fieldToGet) : null;
         }
 
         $clientHeaders = [];
@@ -41,13 +46,18 @@ class Jwt {
 
             $encodedToken = substr($aHeader, strlen('Bearer '));
 
-            $parsedToken = (new Parser())->parse($encodedToken);
+            try {
+                $parsedToken = (new Parser())->parse($encodedToken);
+            } catch (Exception $e) {
+                $parsedToken = null;
+            }
 
             Jwt::$token = $parsedToken; // Retrieves the token claims
-            return Jwt::$token;
+
+            return $parsedToken ? Jwt::$token->getClaim($fieldToGet) : null;
         }
 
-        return false;
+        return null;
     }
 
     /**

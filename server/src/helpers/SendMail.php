@@ -128,9 +128,7 @@ class SendMail {
       */
     private static function phpMail(array $to, string $subject, string $message) {
 
-        $jwt = Jwt::getToken();
-
-        if ($jwt && $jwt->hasClaim('test') && $jwt->getClaim('test')) {
+        if (Jwt::hasClaim('test') && Jwt::getField('test')) {
             return true;
         }
 

@@ -42,7 +42,7 @@ class DeleteArticlesField extends AbstractField {
         $authorIds = Db::query("SELECT DISTINCT authorid FROM pageinfo WHERE id IN ({$placeholders})", $sanitized['ids'])->fetchAll(PDO::FETCH_COLUMN, 0);
 
 
-        $userIsAuthor = count($authorIds) === 1 && Jwt::getToken()->getClaim('id') == $authorIds[0];
+        $userIsAuthor = count($authorIds) === 1 && Jwt::getField('id') == $authorIds[0];
 
         if (!$userIsAuthor) {
             Guard::userMustBeLevel(3);

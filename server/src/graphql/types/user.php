@@ -37,7 +37,7 @@ class UserType extends AbstractObjectType {
                 'type' => new BooleanType(),
                 'resolve' => function ($user) {
 
-                    if (!Jwt::getToken() || $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                    if ($user['id'] !== Jwt::getField('id')) {
                         return null;
                     }
                     return !!$user['notifications'];
@@ -47,7 +47,7 @@ class UserType extends AbstractObjectType {
                 'type' => new BooleanType(),
                 'resolve' => function ($user) {
 
-                    if (!Jwt::getToken() || $user['id'] !== Jwt::getToken()->getClaim('id')) {
+                    if ($user['id'] !== Jwt::getField('id')) {
                         return null;
                     }
                     return !!$user['twoFactor'];
@@ -99,9 +99,7 @@ class UserType extends AbstractObjectType {
                         return false;
                     }
 
-                    $jwt = Jwt::getToken();
-
-                    return $jwt->getClaim('id') == $user['id'] || $jwt->getClaim('level') > $user['level'];
+                    return Jwt::getField('id') == $user['id'] || Jwt::getField('level') > $user['level'];
                 }
             ]
         ]);
