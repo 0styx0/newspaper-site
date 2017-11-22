@@ -63,8 +63,8 @@ class IssueType extends AbstractObjectType {
             ],
             'canEdit' => [
                 'type' => new NonNullType(new BooleanType()),
-                'resolve' => function ($article) {
-                    return false;
+                'resolve' => function ($issue) {
+                    return !!$issue['canEdit'];
                 }
             ]
         ]);
