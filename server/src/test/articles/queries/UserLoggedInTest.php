@@ -70,60 +70,15 @@ class UserLoggedInTest extends ArticleTest {
         }
     }
 
-    function testCanEditLowerLevelArticles() {
+    function testCannotEditHigherOrEqualLevelArticles() { // and not admin
 
-        $user = $this->Database->getUserOfLevel(rand(2, 3));
-
-        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
-
-            if ($currentUser['level'] >= $user['level']) {
-                return false;
-            }
-
-            $userIsAnAuthor = !!HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $userId) {
-
-                $articleIsPrivate = $currentArticle['issue'] == $this->Database->GenerateRows->issues[0]['num'];
-
-                return $userId == $currentArticle['authorid'] && $articleIsPrivate;
-            }, $currentUser['id']);
-
-            return $userIsAnAuthor;
-
-        }, $user);
-
-        $data = $this->request([
-
-            'query' => 'query ArticleQuery($authorid: ID) {
-                        articles(authorid: $authorid) {
-                            canEdit
-                            issue
-                        }
-                    }',
-            'variables' => [
-                'authorid' => $authorOfArticleToCheck['id']
-            ]
-        ], HelpTests::getJwt($user));
-
-        foreach ($data['articles'] as $article) {
-
-            $articleIsPublic = $article['issue'] < $this->Database->GenerateRows->issues[0]['num'];
-            $canEditPublicArticles = $user['level'] == 3;
-
-            if (($articleIsPublic && $canEditPublicArticles) || !$articleIsPublic) {
-                $this->assertTrue($article['canEdit']);
-            } else {
-                $this->assertFalse($article['canEdit']);
-            }
-        }
-    }
-
-    function testCannotEditHigherOrEqualLevelArticles() {
+        $levelOfUser = 2;
 
         // get user with at least 1 article
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $levelOfUser) {
 
-            return $currentUser['level'] == rand(1, 2);
-        });
+            return $currentUser['level'] == $levelOfUser;
+        }, $levelOfUser);
 
         $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
 
