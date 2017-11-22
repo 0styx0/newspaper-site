@@ -51,8 +51,8 @@ class UsersField extends AbstractField {
 
         // basic fields, no authentication or filtering needed
         return Db::query("SELECT users.id AS id, f_name AS firstName, m_name AS middleName, l_name AS lastName,
-          email, level, notifications, two_fa_enabled AS twoFactor,
-          CONCAT( f_name, ' ', IFNULL(m_name, ''), ' ', l_name ) AS fullName,
+          TRIM(LEADING '.' FROM email) AS email, level, notifications, two_fa_enabled AS twoFactor,
+          CONCAT( f_name, ' ', IFNULL(m_name, ''), ' ', l_name ) AS fullName, level,
           IFNULL(SUM(views), 0) AS views
           FROM users
           LEFT JOIN pageinfo ON authorid = users.id
