@@ -26,7 +26,7 @@ class GenerateMockRow {
             'username' => GenerateMockRow::$faker->unique()->userName(),
             'f_name' => GenerateMockRow::$faker->unique()->firstName(),
             'm_name' => GenerateMockRow::$faker->boolean() ? GenerateMockRow::$faker->suffix() : null,
-            'l_name' => GenerateMockRow::$faker->lastName(),
+            'l_name' => filter_var(GenerateMockRow::$faker->lastName(), FILTER_SANITIZE_STRING), // prevents O'Reilly
             'password' => GenerateMockRow::$faker->password(),
             'email' => GenerateMockRow::$faker->email(),
             'level' => rand(1, 3),
