@@ -36,6 +36,11 @@ class DeleteArticlesField extends AbstractField {
         Guard::userMustBeLoggedIn();
         Guard::withPassword($args['password']);
 
+        return $this->deleteArticles($args);
+    }
+
+    function deleteArticles($args) {
+
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
         $placeholders = Db::generatePlaceholders($sanitized['ids']);
