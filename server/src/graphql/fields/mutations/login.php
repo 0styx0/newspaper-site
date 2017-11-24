@@ -35,7 +35,8 @@ class LoginField extends AbstractField {
     public function resolve($root, array $args, ResolveInfo $info) {
 
         /** credit to https://stackoverflow.com/a/17421516 for substring_index */
-        $userRows = Db::query("SELECT id, level, password, SUBSTRING_INDEX(email, '@', 1) AS profileLink, email
+        $userRows = Db::query("SELECT id, level, password, SUBSTRING_INDEX(email, '@', 1) AS profileLink,
+          email, auth_time
           FROM users
           WHERE username = ? OR email = ? OR email = CONCAT('.', ?)
           LIMIT 1",
@@ -50,7 +51,7 @@ class LoginField extends AbstractField {
         $token = Jwt::setToken($user);
 
         $emailIsVerified = $user['email'][0] !== '.';
-        if (!$emailIsVerified) {
+        if (!$emailIsVerified && strtotime($user['auth_time']) - time() < 0) {
             $this->sendEmailVerification($user['id'], substr($user['email'], 1));
         }
 
