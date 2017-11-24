@@ -35,27 +35,6 @@ class IssuesField extends AbstractField {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        $where = '';
-
-        if (empty($sanitized)) {
-
-            try {
-                Guard::userMustBeLoggedIn();
-            } catch (Exception $e) {
-                $where = ' AND ispublic = :ispublic';
-            }
-        }
-        if (isset($sanitized['limit'])) {
-            $where .= " LIMIT {$sanitized['limit']} ";
-            unset($sanitized['limit']);
-        }
-        if (isset($sanitized['public'])) {
-            $sanitized['ispublic'] = $sanitized['public'];
-            unset($sanitized['public']);
-        }
-
-        $where = (count($sanitized) > 0 ? Db::setPlaceholders($sanitized) : 'ispublic = :ispublic') . $where;
-
         $maxIssue = Db::query("SELECT num, ispublic from issues ORDER BY num DESC LIMIT 1")->fetchAll(PDO::FETCH_ASSOC)[0];
 
         $issueRequestedDoesNotExist = isset($sanitized['num']) &&
@@ -65,9 +44,15 @@ class IssuesField extends AbstractField {
             $sanitized['num'] = $maxIssue['num'];
         }
 
-        $sanitized = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue);
+        $where = Db::setPlaceholders($sanitized);
+        list($sanitized, $where) = $this->convertArgsToSqlParamNames($sanitized, $where);
+        list($sanitized, $where) = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue, $where);
 
         $sanitized['admin'] = Jwt::getField('level') > 2;
+
+        if (!$where) {
+            $where = ':admin';
+        }
 
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
            (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views, (:admin AND ispublic != 1) canEdit
@@ -75,30 +60,48 @@ class IssuesField extends AbstractField {
           WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function restrictAccessToPrivateIssues(array $sanitized, array $maxIssue) {
+    private function convertArgsToSqlParamNames(array $sanitized, string $where) {
 
-        try {
-            Guard::userMustBeLoggedIn();
-        } catch (Exception $e) {
+        if (isset($sanitized['public'])) {
+            $sanitized['ispublic'] = $sanitized['public'];
+            $where = str_replace('public', 'ispublic', $where);
+            unset($sanitized['public']);
+        }
 
-            $attemptingAccessToPrivateIssue = (
-                isset($sanitized['num']) && $maxIssue['num'] == $sanitized['num'] &&
-                $maxIssue['ispublic'] == 0
-             ) ||
-             (isset($sanitized['ispublic']) && !$sanitized['ispublic']);
+        if (isset($sanitized['limit'])) {
+            $where .= " LIMIT {$sanitized['limit']} ";
+            $where = str_replace('AND limit = :limit', '', $where);
+            $where = str_replace('limit = :limit', '', $where);
+            unset($sanitized['limit']);
+        }
 
-            if (isset($sanitized['num']) && $attemptingAccessToPrivateIssue) {
+        return [$sanitized, $where];
+    }
+
+    private function restrictAccessToPrivateIssues(array $sanitized, array $maxIssue, string $where) {
+
+        if (!Guard::userIsLoggedIn() && $maxIssue['ispublic'] == 0) {
+
+            $tryingToAccessPrivateNum = isset($sanitized['num']) && $maxIssue['num'] == $sanitized['num'];
+            $tryingToAccessPrivateStatus = isset($sanitized['ispublic']) && !$sanitized['ispublic'];
+            $onlyHaveLimitArg = (count($sanitized) === 1 && isset($sanitized['limit']));
+
+            if ($tryingToAccessPrivateNum) {
                 $sanitized['num']--;
             }
+
             if (empty($sanitized) ||
-                (isset($sanitized['ispublic']) && $attemptingAccessToPrivateIssue) ||
-                (count($sanitized) === 1 && isset($sanitized['limit']))
+                $tryingToAccessPrivateStatus ||
+                $onlyHaveLimitArg
                ) {
+
+                $and = (empty($sanitized)) ? '' : 'AND';
                 $sanitized['ispublic'] = 1;
+                $where = " {$and} ispublic = :ispublic " . $where;
             }
         }
 
-        return $sanitized;
+        return [$sanitized, $where];
     }
 }
 
