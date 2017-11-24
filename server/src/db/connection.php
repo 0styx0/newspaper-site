@@ -56,6 +56,7 @@ class Db {
             }
 
             $DBH->rollback();
+            throw new Exception('Error saving data');
         }
     }
 
