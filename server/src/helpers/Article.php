@@ -96,7 +96,7 @@ class ArticleHelper {
     public function addTags(string $articleId, array $tags) {
 
         if (empty($tags)) {
-            return;
+            throw new Exception('No tags');
         }
 
         $placeholders = implode(',', array_fill(0, count($tags), '(?, ?)'));
@@ -132,7 +132,7 @@ class ArticleHelper {
 
         Db::query("INSERT INTO images (art_id, url, slide) VALUES ({$placeholders})", $imageInfo);
     }
-    
+
     function addView($article) {
 
         $publicIssue = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$article['issue']])->fetchColumn();
