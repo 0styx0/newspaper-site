@@ -62,7 +62,7 @@ class UserNeutralTest extends ArticleTest {
 
         $data = $this->request([
             'query' => 'query articles($tag: String) {
-                            articles(tag: $tag) {
+                            articles(tag: $tag, issue: 0) {
                                 id
                             }
                         }',
