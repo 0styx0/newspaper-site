@@ -61,7 +61,7 @@ class ArticlesField extends AbstractField {
 
         $userId = Jwt::getField('id');
         $userLevel = +Jwt::getField('level');
-        
+
         // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
           views, display_order AS displayOrder, authorid AS authorId,
@@ -83,6 +83,10 @@ class ArticlesField extends AbstractField {
         if (array_search('id', array_keys($args)) !== false) { // stops ambigious id in sql
             $args['pageinfoId'] = $args['id'];
             unset($args['id']);
+        }
+
+        if (isset($args['issue']) && $args['issue'] < 1) {
+            unset($args['issue']);
         }
 
         return $args;
