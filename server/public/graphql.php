@@ -89,8 +89,9 @@ function process() {
     $decodedBody = json_decode($rawBody, true);
 
     $variables = isset($decodedBody['variables']) ? $decodedBody['variables'] : [];
+    $query = removeUnusedFields($decodedBody['query'], $variables);
 
-    $processor->processPayload($decodedBody['query'], $variables);
+    $processor->processPayload($query, $variables);
 
     $result = json_encode($processor->getResponseData()) . "\n";
 
@@ -99,6 +100,39 @@ function process() {
     }
 
     echo $result;
+}
+
+/**
+ * Removed unused fields (fields that don't have a variable associated with them) from $query
+ *
+ * @param $query - graphql query, ($variableName: type)
+ * @param $variables - assoc array where keys are variableName
+ *
+ * @return $query, but with arguments that weren't used removed
+ */
+function removeUnusedFields(string $query, array $variables) {
+
+    $modifiedQuery = $query;
+
+    preg_match_all("/\\$.+?:\s?[\\[\w].+?(?=[,)])/", $query, $variableTypings); // separates params into [$variable: type]
+
+    $variableKeys = array_keys($variables);
+
+    foreach ($variableTypings[0] as $variableTyping) {
+
+        preg_match('/(?<=\\$).+?(?=:.+?)/', $variableTyping, $keyToSearchFor);
+
+        $keyToSearchFor = $keyToSearchFor[0];
+        $indexOfVariable = array_search($keyToSearchFor, $variableKeys);
+
+        if ($indexOfVariable === false) {
+            $modifiedQuery = str_replace($variableTyping . ',', '', $modifiedQuery);
+            $modifiedQuery = str_replace("{$keyToSearchFor}: \${$keyToSearchFor}", '', $modifiedQuery);
+            $modifiedQuery = str_replace(', ,', ',', $modifiedQuery);
+        }
+    }
+
+    return $modifiedQuery;
 }
 
 process();
