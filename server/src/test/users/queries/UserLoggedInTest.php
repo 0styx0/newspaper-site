@@ -115,6 +115,34 @@ class UserLoggedInTest extends UserTest {
         $this->assertEquals($user['notifications'], $actualUser['notifications']);
         $this->assertEquals($user['two_fa_enabled'], $actualUser['twoFactor']);
     }
+
+    function testAdminCanEditLowerLevels() {
+
+
+        $loggedInUser = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+            return $currentUser['level'] > 1;
+        });
+
+        $data = $this->request([
+            'query' => 'query users {
+                            users {
+                                canEdit
+                                level
+                                id
+                            }
+                        }',
+            'variables' => []
+        ], HelpTests::getJwt($loggedInUser));
+
+        foreach ($data['users'] as $user) {
+
+            if ($user['level'] < $loggedInUser['level'] || $user['id'] == $loggedInUser['id']) {
+                $this->assertTrue($user['canEdit']);
+            } else {
+                $this->assertFalse($user['canEdit']);
+            }
+        }
+    }
 }
 
 
