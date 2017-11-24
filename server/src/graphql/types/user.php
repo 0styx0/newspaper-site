@@ -93,13 +93,8 @@ class UserType extends AbstractObjectType {
                 'type' => new NonNullType(new BooleanType()),
                 'resolve' => function ($user) {
 
-                    try {
-                       Guard::userMustBeLoggedIn();
-                    } catch (Exception $e) {
-                        return false;
-                    }
-
-                    return Jwt::getField('id') == $user['id'] || Jwt::getField('level') > $user['level'];
+                    return !!(Guard::userIsLoggedIn() &&
+                        (Jwt::getField('id') == $user['id'] || Jwt::getField('level') > $user['level']));
                 }
             ]
         ]);
