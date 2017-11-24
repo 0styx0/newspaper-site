@@ -70,6 +70,8 @@ class CreateArticleField extends AbstractField {
 
         $ArticleHelper->addTags($articleId, $sanitized['tags']);
 
+        SendMail::articlePublished(implode(', ', $sanitized['tags']), $issue, $modifiedUrl);
+
         return [
             'url' => $modifiedUrl,
             'issue' => +$issue
