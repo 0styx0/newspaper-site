@@ -23,7 +23,7 @@ class Jwt {
     public static function getField(string $fieldToGet) {
 
         if (Jwt::$token && !$_ENV['test']) {
-            return Jwt::$token ? Jwt::$token->getClaim($fieldToGet) : null;
+            return Jwt::hasClaim($fieldToGet) ? Jwt::$token->getClaim($fieldToGet) : null;
         }
 
         $clientHeaders = [];
@@ -54,7 +54,7 @@ class Jwt {
 
             Jwt::$token = $parsedToken; // Retrieves the token claims
 
-            return $parsedToken ? Jwt::$token->getClaim($fieldToGet) : null;
+            return ($parsedToken && Jwt::hasClaim($fieldToGet)) ? Jwt::$token->getClaim($fieldToGet) : null;
         }
 
         return null;
