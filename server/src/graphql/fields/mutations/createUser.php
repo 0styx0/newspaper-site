@@ -55,12 +55,12 @@ class CreateUserField extends AbstractField {
             $sanitized['firstName'],
             isset($sanitized['middleName']) ? $sanitized['middleName'] : null,
             $sanitized['lastName'],
-            $authCode
+            password_hash($authCode, PASSWORD_DEFAULT),
+            date('Y-m-d H:i:s', strtotime("+1 day"))
         ];
 
-
-        Db::query("INSERT INTO users (username, email, password, level, f_name, m_name, l_name, auth)
-          VALUES(?, ?, ?, ?, ?, ?, ?, ?)", $params);
+        Db::query("INSERT INTO users (username, email, password, level, f_name, m_name, l_name, auth, auth_time)
+          VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", $params);
 
         SendMail::emailVerification($sanitized['email'], $authCode);
 

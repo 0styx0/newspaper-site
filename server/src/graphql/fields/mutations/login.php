@@ -59,13 +59,13 @@ class LoginField extends AbstractField {
 
     private function sendEmailVerification(string $id, string $email) {
 
-            $fifteenMinutesFromNow = date('Y-m-d H:i:s', strtotime("+15 minutes"));
-            $authCode = bin2hex(random_bytes(7));
+        $fifteenMinutesFromNow = date('Y-m-d H:i:s', strtotime("+15 minutes"));
+        $authCode = bin2hex(random_bytes(7));
 
-            Db::query("UPDATE users SET auth_time = ?, auth = ? WHERE id = ?",
-              [$fifteenMinutesFromNow, $authCode, $id]);
+        Db::query("UPDATE users SET auth_time = ?, auth = ? WHERE id = ?",
+            [$fifteenMinutesFromNow, password_hash($authCode, PASSWORD_DEFAULT), $id]);
 
-            SendMail::emailVerification($email, $authCode);
+        SendMail::emailVerification($email, $authCode);
     }
 }
 
