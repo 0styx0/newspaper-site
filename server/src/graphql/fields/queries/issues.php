@@ -44,8 +44,8 @@ class IssuesField extends AbstractField {
             $sanitized['num'] = $maxIssue['num'];
         }
 
-        $where = Db::setPlaceholders($sanitized);
-        list($sanitized, $where) = $this->convertArgsToSqlParamNames($sanitized, $where);
+        list($sanitized, $where) = $this->convertArgsToSqlParamNames($sanitized, '');
+        $where = Db::setPlaceholders($sanitized) . $where;
         list($sanitized, $where) = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue, $where);
 
         $sanitized['admin'] = Jwt::getField('level') > 2;
@@ -64,14 +64,11 @@ class IssuesField extends AbstractField {
 
         if (isset($sanitized['public'])) {
             $sanitized['ispublic'] = $sanitized['public'];
-            $where = str_replace('public', 'ispublic', $where);
             unset($sanitized['public']);
         }
 
         if (isset($sanitized['limit'])) {
             $where .= " LIMIT {$sanitized['limit']} ";
-            $where = str_replace('AND limit = :limit', '', $where);
-            $where = str_replace('limit = :limit', '', $where);
             unset($sanitized['limit']);
         }
 
@@ -95,7 +92,7 @@ class IssuesField extends AbstractField {
                 $onlyHaveLimitArg
                ) {
 
-                $and = (empty($sanitized)) ? '' : 'AND';
+                $and = (!!trim($where)) ? 'AND' : '';
                 $sanitized['ispublic'] = 1;
                 $where = " {$and} ispublic = :ispublic " . $where;
             }
