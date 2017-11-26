@@ -57,20 +57,20 @@ describe('<ModifiableUserInfoContainer>', () => {
 
         function testSnap(data: ModifiableUserInfo) {
 
-            const component = new (
+            const component = new ((
                 <ModifiableUserInfoContainer
                     updateUser={() => true}
                     deleteUser={() => true}
                     fetchPrivateUserData={{ refetch: () => ({ data: { users: [data] } }) }}
-                />
-            ).type();
+                /> as any
+            )).type();
 
-            component.state = {
+            component.state = ( {
                 privateUserData: {
                     users: [data]
                 }
-            };
-
+            });
+            
             const tree = renderer.create(component.render());
 
             expect(tree.toJSON()).toMatchSnapshot();
