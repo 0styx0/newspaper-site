@@ -14,19 +14,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       <thead>
         <tr>
           <th>
-
+             
             Email
           </th>
           <th>
-
+             
             2FA
           </th>
           <th>
-
+             
             Notifications
           </th>
           <th>
-
+             
             <span
               className="danger"
             >
@@ -68,7 +68,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       </tbody>
     </table>
     <label>
-      Password:
+      Password: 
       <input
         name="password"
         required={true}
@@ -101,19 +101,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       <thead>
         <tr>
           <th>
-
+             
             Email
           </th>
           <th>
-
+             
             2FA
           </th>
           <th>
-
+             
             Notifications
           </th>
           <th>
-
+             
             <span
               className="danger"
             >
@@ -155,7 +155,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       </tbody>
     </table>
     <label>
-      Password:
+      Password: 
       <input
         name="password"
         required={true}
@@ -188,19 +188,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       <thead>
         <tr>
           <th>
-
+             
             Email
           </th>
           <th>
-
+             
             2FA
           </th>
           <th>
-
+             
             Notifications
           </th>
           <th>
-
+             
             <span
               className="danger"
             >
@@ -242,7 +242,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       </tbody>
     </table>
     <label>
-      Password:
+      Password: 
       <input
         name="password"
         required={true}
@@ -275,19 +275,19 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       <thead>
         <tr>
           <th>
-
+             
             Email
           </th>
           <th>
-
+             
             2FA
           </th>
           <th>
-
+             
             Notifications
           </th>
           <th>
-
+             
             <span
               className="danger"
             >
@@ -329,7 +329,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       </tbody>
     </table>
     <label>
-      Password:
+      Password: 
       <input
         name="password"
         required={true}

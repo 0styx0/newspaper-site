@@ -25,21 +25,30 @@ type CustomCasualData = typeof casual & {user: (twoFactor: boolean, notification
 const customCasual = casual as CustomCasualData;
 
 function setup(
-    userOptions = {notifications: false, twoFactor: false},
-    mockGraphql: {updateUser?: Function, deleteUser?: Function} = {}
+    userOptions = { notifications: false, twoFactor: false },
+    mockGraphql: { updateUser?: Function, deleteUser?: Function } = {}
 ) {
 
     const mockFunc = () => true;
 
-    return mount(
+    const wrapper = mount(
         <ModifiableUserInfoContainer
             updateUser={mockGraphql.updateUser || mockFunc}
             deleteUser={mockGraphql.deleteUser || mockFunc}
-            privateUserData={{
-            users: [customCasual.user(userOptions.twoFactor, userOptions.notifications)] // always length = 1
+            fetchPrivateUserData={{
+                refetch: async () =>
+                    ({ data: { users: [customCasual.user(userOptions.twoFactor, userOptions.notifications)] } })
             }}
         />
     );
+
+    wrapper.setState({
+        privateUserData: {
+            users: [customCasual.user(userOptions.twoFactor, userOptions.notifications)]
+        }
+    });
+
+    return wrapper;
 }
 
 describe('<ModifiableUserInfoContainer>', () => {
@@ -48,17 +57,23 @@ describe('<ModifiableUserInfoContainer>', () => {
 
         function testSnap(data: ModifiableUserInfo) {
 
-            const tree = renderer.create(
+            const component = new (
                 <ModifiableUserInfoContainer
                     updateUser={() => true}
                     deleteUser={() => true}
-                    privateUserData={{
-                        users: [data]
-                    }}
+                    fetchPrivateUserData={{ refetch: () => ({ data: { users: [data] } }) }}
                 />
-            ).toJSON();
+            ).type();
 
-            expect(tree).toMatchSnapshot();
+            component.state = {
+                privateUserData: {
+                    users: [data]
+                }
+            };
+
+            const tree = renderer.create(component.render());
+
+            expect(tree.toJSON()).toMatchSnapshot();
         }
 
         it('should have notifications checked if notifications is true',
