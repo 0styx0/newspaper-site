@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { UserQuery, UserUpdate, UserDelete } from '../../graphql/users';
 import { User } from './interface.shared';
 import JournalistTable from './';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import './index.css';
 
@@ -167,12 +168,12 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         if (data.length > 0) {
 
-            this.props.userUpdate({
+            graphqlErrorNotifier(this.props.userUpdate, {
                 variables: {
                     data,
                     password
                 }
-            });
+            },                   'Users have been updated');
         }
 
         if (this.state.usersToDelete.size > 0) {
