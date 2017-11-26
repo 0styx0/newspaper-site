@@ -3,6 +3,7 @@ import { setJWT, getJWT } from '../../helpers/jwt';
 import LoginForm from './';
 import { UserLogin } from '../../graphql/user';
 import { graphql, withApollo } from 'react-apollo';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import './index.css';
 
@@ -14,7 +15,7 @@ interface Props {
             username: string,
             password: string
         }
-    } ) => Promise<{ data: { login: { jwt: string } } }>;
+    } ) => Promise<{ data: { login: { jwt: string } }, errors?: {message: string}[] }>;
 }
 
 export class LoginFormContainer extends React.Component<Props, {}> {
@@ -35,7 +36,7 @@ export class LoginFormContainer extends React.Component<Props, {}> {
         const username = (target.querySelector('[name=username]') as HTMLInputElement).value;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
 
-        const { data } = await this.props.loginUser({
+        const { data } = await graphqlErrorNotifier(this.props.loginUser, {
             variables: {
                 username,
                 password
