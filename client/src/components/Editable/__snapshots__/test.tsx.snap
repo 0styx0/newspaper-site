@@ -133,7 +133,7 @@ exports[`<EditableContainer> snapshots render buttons correctly when set to all 
     </button>
     <br />
     <button
-      onClick={undefined}
+      onClick={[Function]}
       type="button"
     >
       Submit
@@ -189,7 +189,7 @@ exports[`<EditableContainer> snapshots render buttons correctly when set to basi
     </button>
     <br />
     <button
-      onClick={undefined}
+      onClick={[Function]}
       type="button"
     >
       Submit
@@ -352,7 +352,7 @@ exports[`<EditableContainer> snapshots render correctly when canEdit is set to t
     </button>
     <br />
     <button
-      onClick={undefined}
+      onClick={[Function]}
       type="button"
     >
       Submit
