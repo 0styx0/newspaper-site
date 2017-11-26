@@ -43,7 +43,7 @@
 
 }
 
-.content {
+.previewContent {
     overflow: hidden;
     text-align: left;
     height: 270px;
@@ -55,7 +55,7 @@
 }
 
 /* creates fade */
-.content:after {
+.previewContent:after {
   position: absolute;
   bottom: 37px;
   height: 40%;
@@ -68,7 +68,7 @@
 
 }
 
-.content {
+.previewContent {
     margin-top: 10px
 }
 

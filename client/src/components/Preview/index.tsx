@@ -14,7 +14,7 @@ export default function Preview(props: Props) {
 
     return (
         <div className="preview">
-            <div className="content" dangerouslySetInnerHTML={{__html: props.lede}} />
+            <div className="previewContent" dangerouslySetInnerHTML={{__html: props.lede}} />
 
             <Link
               className="small"
