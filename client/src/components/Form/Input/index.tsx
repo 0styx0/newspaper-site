@@ -18,7 +18,12 @@ interface Props {
  */
 export default function Input(props: Props) {
 
-    const input = React.cloneElement(<input />, props.props);
+    const input = React.cloneElement((
+        <input
+            onBlur={(e) =>
+                (e.target as HTMLInputElement).classList.add('touched')}
+        />),
+                                     props.props);
 
     return (
         <Label
