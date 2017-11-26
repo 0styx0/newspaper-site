@@ -20,7 +20,6 @@ const UserUpdate = gql`
     mutation updateUsers($data: [idLevelList], $password: String!) {
         updateUsers(data: $data, password: $password) {
             id
-            profileLink
             level
         }
     }
