@@ -149,14 +149,14 @@ function formatDataForTable(userData: User[], onLevelChange: Function, onDelete:
                     value={person.id}
                 />
             );
-
+            
             level = (
                 <select
                     name="lvl"
                     onChange={((e: Event) => onLevelChange(e, person.id)) as any}
                     defaultValue={person.level.toString()}
                 >
-                    {Array(jwt.level).fill(null).map((val, idx) =>
+                    {Array(+jwt.level).fill(null).map((val, idx) =>
                         // fill with levels until and including current user's level
                         <option key={idx} value={idx + 1}>{idx + 1}</option>
                     )}
