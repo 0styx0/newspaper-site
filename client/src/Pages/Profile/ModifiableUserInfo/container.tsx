@@ -8,9 +8,7 @@ import ModifiableUserInfoComponent from './';
 interface Props {
     updateUser: Function;
     deleteUser: Function;
-    privateUserData: {
-        users: [ModifiableUserInfo] // always length = 1
-    };
+    fetchPrivateUserData: { refetch: Function };
 }
 
 interface State {
@@ -19,6 +17,7 @@ interface State {
         notifications?: boolean;
     };
     delete?: boolean;
+    privateUserData?: { users: [ModifiableUserInfo] };
 }
 
 /**
@@ -88,14 +87,27 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
         this.props.deleteUser({
             variables: {
-                ids: [this.props.privateUserData.users[0].id]
+                ids: [this.state.privateUserData && this.state.privateUserData.users[0].id]
             }
         });
     }
 
+    async componentWillMount() {
+
+        const { data } = await this.props.fetchPrivateUserData.refetch({
+            profileLink: window.location.pathname.substr('/u/'.length)
+        });
+
+        if (data) {
+            this.setState({
+                privateUserData: data
+            });
+        }
+    }
+
     render() {
 
-        if (!this.props.privateUserData || !this.props.privateUserData.users) {
+        if (!this.state.privateUserData || !this.state.privateUserData.users) {
            return null;
         }
 
@@ -104,21 +116,14 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
               onSubmit={this.onSubmit}
               onChange={this.onChange}
               onDelete={this.onDelete}
-              {...this.props.privateUserData.users[0]}
+              {...this.state.privateUserData.users[0]}
             />
         );
     }
 }
 
 const ModifiableUserInfoContainerWithData = compose(
-    graphql(PrivateUserQuery, {
-        name: 'privateUserData',
-        options: {
-            variables: {
-                profileLink: window.location.pathname.substr('/u/'.length)
-            }
-        }
-    }),
+    graphql(PrivateUserQuery, { name: 'fetchPrivateUserData' }),
     graphql(UserUpdate, {name: 'updateUser'}),
     graphql(UserDelete, {name: 'deleteUser'})
 )(ModifiableUserInfoContainer as any);
