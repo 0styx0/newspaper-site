@@ -44,38 +44,47 @@ class IssuesField extends AbstractField {
             $sanitized['num'] = $maxIssue['num'];
         }
 
-        list($sanitized, $where) = $this->convertArgsToSqlParamNames($sanitized, '');
-        $where = Db::setPlaceholders($sanitized) . $where;
-        list($sanitized, $where) = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue, $where);
+
+        $sanitized = $this->convertArgsToSqlParamNames($sanitized);
+        $sanitized = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue);
+        list($sanitized, $limit) = $this->addLimitClause($sanitized);
+        $where = Db::setPlaceholders($sanitized);
+        $where = (!!trim($where) ? '' : ' :admin ') . $where;
 
         $sanitized['admin'] = Jwt::getField('level') > 2;
-
-        if (!$where) {
-            $where = ':admin';
-        }
 
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
            (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views, (:admin AND ispublic != 1) canEdit
           FROM issues
-          WHERE {$where}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where} {$limit}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function convertArgsToSqlParamNames(array $sanitized, string $where) {
+    /**
+     * Switches graphql params to their mysql names, adds LIMIT to $where if applicable
+     */
+    private function convertArgsToSqlParamNames(array $sanitized) {
 
         if (isset($sanitized['public'])) {
             $sanitized['ispublic'] = $sanitized['public'];
             unset($sanitized['public']);
         }
 
-        if (isset($sanitized['limit'])) {
-            $where .= " LIMIT {$sanitized['limit']} ";
-            unset($sanitized['limit']);
-        }
-
-        return [$sanitized, $where];
+        return $sanitized;
     }
 
-    private function restrictAccessToPrivateIssues(array $sanitized, array $maxIssue, string $where) {
+    private function addLimitClause(array $sanitized) {
+
+        if (isset($sanitized['limit'])) {
+            $limit = " LIMIT {$sanitized['limit']} ";
+            unset($sanitized['limit']);
+        } else {
+            $limit = '';
+        }
+
+        return [$sanitized, $limit];
+    }
+
+    private function restrictAccessToPrivateIssues(array $sanitized, array $maxIssue) {
 
         if (!Guard::userIsLoggedIn() && $maxIssue['ispublic'] == 0) {
 
@@ -91,14 +100,11 @@ class IssuesField extends AbstractField {
                 $tryingToAccessPrivateStatus ||
                 $onlyHaveLimitArg
                ) {
-
-                $and = (!!trim($where)) ? 'AND' : '';
                 $sanitized['ispublic'] = 1;
-                $where = " {$and} ispublic = :ispublic " . $where;
             }
         }
 
-        return [$sanitized, $where];
+        return $sanitized;
     }
 }
 
