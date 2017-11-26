@@ -4,13 +4,12 @@ interface Window {
 
 declare const window: Window;
 
-
 function Notification(options: {icon?: string, body: string}) {
 
     window.Notification.requestPermission().then(() => {
 
-        options.icon = "/images/favicons/favicon.ico";
-        new window.Notification("TABC Eye of the Storm", options);
+        options.icon = '/images/favicons/favicon.ico';
+        new window.Notification('TABC Eye of the Storm', options);
     });
 }
 
