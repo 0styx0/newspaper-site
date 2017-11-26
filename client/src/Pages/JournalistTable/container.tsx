@@ -160,7 +160,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
     /**
      * Sends data to server, if there's data to be sent from this.state usersToDelete and/or idLevelMap
      */
-    onSubmit(target: HTMLFormElement) {
+    async onSubmit(target: HTMLFormElement) {
 
         const data = this.convertMapToArrayOfJSON(this.state.idLevelMap);
 
@@ -174,15 +174,37 @@ export class JournalistTableContainer extends React.Component<Props, State> {
                     password
                 }
             },                   'Users have been updated');
+
+            // this line will only fire if sucess since graphqlErrorNotifier throws error otherwise
+            const updatedUsers = [...this.state.users].map(user => {
+
+                const updatedLevel = this.state.idLevelMap.get(user.id);
+                return Object.assign(JSON.parse(JSON.stringify(user)), {
+                    level: updatedLevel || user.level
+                });
+            });
+
+            this.setState({
+                users: updatedUsers,
+                idLevelMap: new Map()
+            });
         }
 
         if (this.state.usersToDelete.size > 0) {
 
-            this.props.userDelete({
+            await graphqlErrorNotifier(this.props.userDelete, {
                 variables: {
                     ids: [...this.state.usersToDelete],
                     password
                 }
+            },                         'Users have been deleted');
+
+            // this line will only fire if sucess since graphqlErrorNotifier throws error otherwise
+            const existingUsers = this.state.users.filter(user => !this.state.usersToDelete.has(user.id));
+
+            this.setState({
+                users: existingUsers,
+                usersToDelete: new Set()
             });
         }
     }
