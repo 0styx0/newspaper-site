@@ -40,9 +40,9 @@ describe('<Slideshow>', () => {
 
             const optionToChange = wrapper.find('option').at(0) as any;
 
-            optionToChange.simulate('change');
+            optionToChange.simulate('input');
 
-            expect(component.state.redirect).toBe(`/tag/${optionToChange.node.value}`);
+            expect(component.state.redirect).toBe(optionToChange.node.value);
         });
     });
 });
