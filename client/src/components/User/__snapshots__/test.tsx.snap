@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Link> snapshots renders correctly 1`] = `
+<a
+  href="/u/hello"
+  onClick={[Function]}
+>
+  Bob Smith
+</a>
+`;
