@@ -111,17 +111,17 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
     }
 }
 
-const location = window.location.pathname.split('/');
+// const location = window.location.pathname.split('/');
 
 const StoryContainerWithData = compose(
-    graphql(ArticleQuery, {
+    /*graphql(ArticleQuery, { name: 'queryArticle' }/*, {
         options: {
             variables: {
                 issue: +location[2],
                 url: location[4],
-            }
+            }y
         }
-    }),
+    }),*/
     graphql(EditArticle, {name: 'editArticle'}),
 )(StoryContainer as any);
 
