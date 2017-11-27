@@ -50,6 +50,7 @@ exports[`<PublishContainer> snapshots renders correctly 1`] = `
         autoFocus={true}
         maxLength={75}
         name="name"
+        onBlur={[Function]}
         pattern="^[\\\\sa-zA-Z0-9_-]+$"
         placeholder="mystory"
         required={true}

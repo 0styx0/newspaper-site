@@ -13,6 +13,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
       defaultValue={12}
       max={57}
       min={1}
+      onBlur={[Function]}
       onChange={[Function]}
       type="number"
     />
@@ -14860,6 +14861,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
       Password: 
       <input
         name="password"
+        onBlur={[Function]}
         required={true}
         type="password"
       />
