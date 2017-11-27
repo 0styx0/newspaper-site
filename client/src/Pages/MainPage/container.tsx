@@ -62,8 +62,11 @@ export class MainPageContainer extends React.Component<Props, State> {
 
         const issue = Number.isNaN(+requested) ? 0 : +requested;
 
-        this.fetchArticles(issue, requested);
-        this.fetchIssue(issue);
+        // fixes bug where call setState when component is unmounted (due to history.listen)
+        if (/^\/($)|(tag\/)|(issue\/\d+?$)/i.test(window.location.pathname)) {
+            this.fetchArticles(issue, requested);
+            this.fetchIssue(issue);
+        }
     }
 
     /**
