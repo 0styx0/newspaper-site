@@ -15,7 +15,7 @@ export default function Hint(props: Props) {
     return React.cloneElement(props.children, {
         children: props.children.props.children.concat([
             (
-                <span>
+                <span key="spanContainer">
                   <abbr onClick={props.onClick as any} title={props.title}>?</abbr>
                   {props.revealHint ? <div className="abbrMessage">{props.title}</div> : <span />}
                 </span>

@@ -29,8 +29,8 @@ interface Props {
  */
 export class IssueTableContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onChangeIssueInfo = this.onChangeIssueInfo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -48,7 +48,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
      * If current user is an admin, enables editing of most recent, unpublished issue @see this.allowEditsOfLastIssue
      */
     componentWillReceiveProps(props: Props) {
-
+        
         if (!props.data.issues || this.props.data.issues) {
             return;
         }

@@ -5,7 +5,7 @@ exports[`<Preview> snapshots should render correctly 1`] = `
   className="preview"
 >
   <div
-    className="content"
+    className="previewContent"
     dangerouslySetInnerHTML={
       Object {
         "__html": "<p>This is a lede</p>",

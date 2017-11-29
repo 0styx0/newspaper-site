@@ -14,6 +14,7 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       Username: 
       <input
         name="username"
+        onBlur={[Function]}
         required={true}
         type="text"
       />
@@ -27,6 +28,7 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       Email: 
       <input
         name="email"
+        onBlur={[Function]}
         required={true}
         type="email"
       />
@@ -40,6 +42,7 @@ exports[`<ForgotPasswordContainer> snapshots renders correctly 1`] = `
       Last Auth Code: 
       <input
         name="lastAuth"
+        onBlur={[Function]}
         required={true}
         type="password"
       />

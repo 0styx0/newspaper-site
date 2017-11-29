@@ -3,12 +3,14 @@ import { TwoFactorContainer } from './container';
 import * as renderer from 'react-test-renderer';
 import casual from '../../tests/casual.data';
 import { encodeJwt } from '../../tests/jwt.helper';
-import localStorageMock from '../../tests/localstorage.mock';
-import { mount } from 'enzyme';
+import * as mocks from '../../tests/setup.mocks';
 import * as sinon from 'sinon';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 
 
-localStorageMock.clear();
+
+mocks.localStorage.clear();
 
 const fakeVerifyEmail = async (params: { query: Function, variables: { authCode: string } }) =>
   ({data: { verifyEmail: { jwt: encodeJwt({id: Math.random() }) } } });
@@ -47,7 +49,7 @@ describe('<TwoFactorContainer>', () => {
         const authCode = casual.password;
 
         const form = wrapper.find('form').first();
-        wrapper.find('input[name="authCode"]').node.value = authCode;
+        wrapper.find('input[name="authCode"]').instance().value = authCode;
 
         return {
             authCode,

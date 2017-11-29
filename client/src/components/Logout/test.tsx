@@ -1,10 +1,15 @@
 import * as React from 'react';
 import Logout from './';
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 
 import setFakeJwt from '../../tests/jwt.helper';
+
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
+
 
 setFakeJwt({level: 3});
 

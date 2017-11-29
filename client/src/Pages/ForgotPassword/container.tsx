@@ -14,8 +14,8 @@ interface Props {
 
 export class ForgotPasswordContainer extends React.Component<Props, {}> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
 

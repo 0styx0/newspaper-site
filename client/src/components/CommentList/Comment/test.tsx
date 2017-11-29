@@ -4,10 +4,13 @@ import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
 import { CommentContainer, Props } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
-import localStorageMock from '../../../tests/localstorage.mock';
+import * as mocks from '../../../tests/setup.mocks';
 import snapData from './__snapshots__/props.example';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 import * as sinon from 'sinon';
+
+
 
 const deleteCommentMock = (params: {variables: {id: string}}) => { return; };
 
@@ -29,7 +32,7 @@ describe('<CommentContainer>', () => {
 
         it(`renders correctly when can't delete`, () => {
 
-            localStorageMock.removeItem('jwt');
+            mocks.localStorage.removeItem('jwt');
 
             const tree = renderer.create(
                 <MemoryRouter>

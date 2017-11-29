@@ -25,8 +25,8 @@ interface Props {
 
 export class StoryContainer extends React.Component<Props, ArticleInfo> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.state = {} as ArticleInfo;
 

@@ -289,6 +289,7 @@ exports[`<JournalistTableContainer> snapshots lets modify users' level and delet
         Password: 
         <input
           name="password"
+          onBlur={[Function]}
           required={true}
           type="password"
         />

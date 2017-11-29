@@ -21,8 +21,8 @@ interface Props {
  */
 export class EditableContainer extends React.Component<Props, {}> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.handleEdits = this.handleEdits.bind(this);
     }

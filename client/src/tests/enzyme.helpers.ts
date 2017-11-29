@@ -1,4 +1,5 @@
 import casual from './casual.data';
+import { ReactWrapper } from 'enzyme';
 
 /**
  * checks a random checkbox
@@ -8,7 +9,7 @@ export function randomCheckboxToggle(checkboxList: any, indexToToggle?: number) 
     const checkboxIndex = (indexToToggle === undefined) ? casual.integer(0, checkboxList.length - 1) : indexToToggle;
 
     const oneCheckbox = checkboxList.at(checkboxIndex);
-    oneCheckbox.nodes[0].checked = !oneCheckbox.nodes[0].checked;
+    oneCheckbox.instance().checked = !oneCheckbox.instance().checked;
     oneCheckbox.simulate('change');
 
     return {
@@ -17,7 +18,7 @@ export function randomCheckboxToggle(checkboxList: any, indexToToggle?: number) 
     };
 }
 
-export function submitForm(wrapper: any) {
+export function submitForm(wrapper: ReactWrapper<any, any>) {
     wrapper.find('form').first().simulate('submit');
 }
 
@@ -30,8 +31,20 @@ export function submitForm(wrapper: any) {
  */
 export function setInput(wrapper: any, value: string = casual.password, name = 'password') {
 
-    (wrapper.find(`input[name="${name}"]`) as any).node.value = value;
+    wrapper.find(`input[name="${name}"]`).instance().value = value;
 
     return value;
 }
 
+export function setupComponent(wrapper: ReactWrapper<any, any>, componentToFind: any): React.Component<any, any> {
+
+    const component = wrapper.find(componentToFind).instance();
+
+    if (component.componentWillReceiveProps) {
+        component.componentWillReceiveProps(component.props, null);
+    }
+
+    wrapper.mount();
+
+    return component;
+}

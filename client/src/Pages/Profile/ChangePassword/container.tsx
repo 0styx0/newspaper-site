@@ -9,8 +9,8 @@ interface Props {
 
 export class ChangePasswordContainer extends React.Component<Props, {}> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
     }

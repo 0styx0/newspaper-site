@@ -7,7 +7,7 @@ interface Props {
     // and any html attributes for html form element
 }
 
-export default function Form(props: Props) {
+export default function Form(props: Props & any) {
 
     if (!props.children) { // not strictly needed, but gets rid of ts warning
         return null;

@@ -149,7 +149,7 @@ function formatDataForTable(userData: User[], onLevelChange: Function, onDelete:
                     value={person.id}
                 />
             );
-            
+
             level = (
                 <select
                     name="lvl"

@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { ForgotPasswordContainer } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 
 import casual from '../../tests/casual.data';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+import { setupComponent, submitForm } from '../../tests/enzyme.helpers';
+
+
 
 type formValues = {authCode: string, email: string, username: string};
 
@@ -50,11 +54,11 @@ describe('<ForgotPasswordContainer>', () => {
 
             const { username, email, password } = casual;
 
-            const component = wrapper.find(ForgotPasswordContainer);
+            const component = setupComponent(wrapper, ForgotPasswordContainer);
 
-            wrapper.find('input[name="lastAuth"]').node.value = password;
-            wrapper.find('input[name="username"]').node.value = username;
-            wrapper.find('input[name="email"]').node.value = email;
+            wrapper.find('input[name="lastAuth"]').instance().value = password;
+            wrapper.find('input[name="username"]').instance().value = username;
+            wrapper.find('input[name="email"]').instance().value = email;
 
             return {
                 component,
@@ -71,9 +75,9 @@ describe('<ForgotPasswordContainer>', () => {
 
             const values = setValues(wrapper);
 
-            values.component.node.onSubmit = spy;
+            values.component.onSubmit = spy;
 
-            values.component.find('form').first().simulate('submit');
+            submitForm(wrapper);
 
             expect(spy.called).toBeTruthy();
         });
@@ -99,7 +103,8 @@ describe('<ForgotPasswordContainer>', () => {
             );
 
             values = setValues(wrapper);
-            values.component.find('form').first().simulate('submit');
+
+            submitForm(wrapper);
         });
     });
 });

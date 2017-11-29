@@ -20,8 +20,8 @@ interface Props {
 
 export class LoginFormContainer extends React.Component<Props, {}> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.setJWT = this.setJWT.bind(this);
     }
@@ -35,7 +35,7 @@ export class LoginFormContainer extends React.Component<Props, {}> {
 
         const username = (target.querySelector('[name=username]') as HTMLInputElement).value;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
-
+        
         const { data } = await graphqlErrorNotifier(this.props.loginUser, {
             variables: {
                 username,

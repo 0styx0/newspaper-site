@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { UserArticleTableContainer } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../casual.data';
@@ -9,6 +8,10 @@ import { randomCheckboxToggle, setInput, submitForm } from '../../../tests/enzym
 import toggler from '../../../helpers/toggler';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as sinon from 'sinon';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 setFakeJwt({level: 3});
 
@@ -68,7 +71,7 @@ describe('<UserArticleTableContainer>', () => {
             wrapper = setup();
 
             deleteBoxes = wrapper.find('[name="delArt"]');
-            component = wrapper.find(UserArticleTableContainer).node;
+            component = wrapper.find(UserArticleTableContainer).instance();
         });
 
         it('adds article id to state.idsToDelete when checkbox is clicked', () => {
@@ -95,7 +98,7 @@ describe('<UserArticleTableContainer>', () => {
             for (let i = 0; expectedIds.size < articlesToTest; i++) {
 
                 const result = randomCheckboxToggle(deleteBoxes);
-                const id = result.input.nodes[0].value;
+                const id = result.input.instance().value;
 
                 toggler(expectedIds, id);
                 toggler(indices, result.index);
@@ -108,7 +111,7 @@ describe('<UserArticleTableContainer>', () => {
                 const result = randomCheckboxToggle(deleteBoxes, indexToRemove);
                 indices.delete(indexToRemove);
 
-                expectedIds.delete(result.input.nodes[0].value);
+                expectedIds.delete(result.input.instance().value);
             }
 
             expect([...component.state.idsToDelete].sort()).toEqual([...expectedIds].sort());
@@ -131,7 +134,7 @@ describe('<UserArticleTableContainer>', () => {
                 }
             });
 
-            component = wrapper.find(UserArticleTableContainer).node;
+            component = wrapper.find(UserArticleTableContainer).instance();
             component.state.idsToDelete = expected.ids;
             expected.password = setInput(wrapper);
 

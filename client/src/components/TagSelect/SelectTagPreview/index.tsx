@@ -9,8 +9,8 @@ interface State {
 
 export default class SelectTagPreview extends React.Component<{}, State> {
 
-    constructor() {
-        super();
+    constructor(props: {}) {
+        super(props);
 
         this.state = {
             redirect: ''

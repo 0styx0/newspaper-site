@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { ArticleTableContainer, Article, Issue } from './container';
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
-import { randomCheckboxToggle, submitForm, setInput } from '../../tests/enzyme.helpers';
+import { randomCheckboxToggle, submitForm, setInput, setupComponent } from '../../tests/enzyme.helpers';
 
 import setFakeJwt from '../../tests/jwt.helper';
 
@@ -27,8 +30,10 @@ casual.define('articles', function(amount: number, issue: number) {
 
     while (amount-- > 0) {
 
+        const tags = casual.tags;
+
         articles[0].articles.push({
-            tags: casual.tags,
+            tags,
             url: casual.articleUrl,
             id: casual.word + '--' + amount,
             displayOrder: casual.integer(0, 100),
@@ -82,16 +87,13 @@ describe('<ArticleTableContainer>', () => {
     function setupWithProps(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
         const wrapper = setup(mockGraphql);
-        const component = (wrapper.find(ArticleTableContainer) as any).node;
 
-        const data = (casual as any).data();
-
-        component.componentWillReceiveProps({ data });
+        const component = setupComponent(wrapper, ArticleTableContainer);
 
         return {
             wrapper,
             component,
-            data
+            data: component.props.data
         };
     }
 
@@ -127,7 +129,8 @@ describe('<ArticleTableContainer>', () => {
         function changeOneInput(wrapper: any, inputIndex?: number) {
 
             const displayOrderInputs = wrapper.find('input[name="displayOrder"]');
-            const component = wrapper.find(ArticleTableContainer).node;
+
+            const component = wrapper.find(ArticleTableContainer).instance();
 
             const indexOfInput = (inputIndex === undefined) ?
                 casual.integer(0, displayOrderInputs.length - 1) :
@@ -136,10 +139,10 @@ describe('<ArticleTableContainer>', () => {
             const oneInput = displayOrderInputs.at(indexOfInput);
             const newValue = casual.integer(0, 100);
 
-            oneInput.node.value = newValue;
-            oneInput.simulate('change');
+            oneInput.instance().value = newValue;
+            oneInput.simulate('change', { target: { value: newValue, name: 'displayOrder'} });
 
-            expect(+oneInput.node.value).toBe(newValue);
+            expect(+oneInput.instance().value).toBe(newValue);
 
             return {
                 input: oneInput,
@@ -156,7 +159,7 @@ describe('<ArticleTableContainer>', () => {
             for (let i = 0; i < casual.integer(0, 100); i++) {
                 const result = changeOneInput(wrapper);
 
-                expected.push([result.id, +result.input.node.value]);
+                expected.push([result.id, +result.input.instance().value]);
             }
 
             // If there are duplicate ids, only get the last one
@@ -193,10 +196,10 @@ describe('<ArticleTableContainer>', () => {
                 inputIndex;
 
             const oneInput = tagSelects.at(indexOfInput);
-            const component = wrapper.find(ArticleTableContainer).node;
+            const component = wrapper.find(ArticleTableContainer).instance();
             const newValueSet = new Set<string>();
 
-            for (let i = 0; newValueSet.size < (numberOfTags || casual.integer(1, 3)); i++) {
+            for (let i = 0; newValueSet.size < casual.integer(1, numberOfTags); i++) {
 
                 newValueSet.add(casual.random_element([...allTags]));
             }
@@ -204,8 +207,12 @@ describe('<ArticleTableContainer>', () => {
             const newValueArr = [...newValueSet].sort();
 
             // there must be a better way to select multiple options, but haven't found it
-            const selectedOptions = [...oneInput.node.options]
-                                    .filter(option => option.selected = newValueArr.indexOf(option.value) !== -1);
+            const selectedOptions = oneInput.find('option')
+                .reduce((accum, option) => {
+
+                    option.instance().selected = newValueArr.indexOf(option.instance().value) !== -1;
+                    return option.instance().selected ? accum.concat([option.instance()]) : accum;
+                }, []);
 
             oneInput.simulate('change', {target: {name: 'tags', value: newValueArr, selectedOptions}});
 
@@ -229,25 +236,6 @@ describe('<ArticleTableContainer>', () => {
             expect([...component.state.updates.tags]).toEqual([[result.id, result.value]]);
         });
 
-        it('saves the 3 most recently selected tags if user selects more than 3', () => {
-
-            const { wrapper, component } = setupWithProps();
-            const result = changeOneSelect(wrapper);
-            const expectedValues: string[] = [];
-
-            const selectedOptions = [...result.input.node.options].map((option: HTMLOptionElement) => {
-
-                expectedValues.push(option.value);
-                return option;
-            });
-
-            result.input.simulate('change', {target: {name: 'tags', value: expectedValues, selectedOptions}});
-
-            expect([...component.state.updates.tags]).toEqual(
-                [[result.id, expectedValues.slice(-3).sort()]]
-            );
-        });
-
         it('removes tags from array if user de-selects', () => {
 
             const { wrapper } = setupWithProps();
@@ -264,7 +252,7 @@ describe('<ArticleTableContainer>', () => {
          */
         function changeOneCheckbox(wrapper: any) {
 
-            const component = wrapper.find(ArticleTableContainer).node;
+            const component = wrapper.find(ArticleTableContainer).instance();
             const deleteCheckbox = wrapper.find('input[name="delete"]');
             const boxInfo = randomCheckboxToggle(deleteCheckbox);
 
@@ -288,7 +276,7 @@ describe('<ArticleTableContainer>', () => {
 
             const { wrapper, component } = setupWithProps();
             const result = changeOneCheckbox(wrapper);
-            result.input.nodes[0].checked = false;
+            result.input.instance().checked = false;
             result.input.simulate('change');
 
             expect(component.state.updates.idsToDelete.size).toBe(0);

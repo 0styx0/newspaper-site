@@ -36,8 +36,8 @@ interface Props {
  */
 export class JournalistTableContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.sortInfo = this.sortInfo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -168,12 +168,12 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         if (data.length > 0) {
 
-            graphqlErrorNotifier(this.props.userUpdate, {
+            await graphqlErrorNotifier(this.props.userUpdate, {
                 variables: {
                     data,
                     password
                 }
-            },                   'Users have been updated');
+            },                         'Users have been updated');
 
             // this line will only fire if sucess since graphqlErrorNotifier throws error otherwise
             const updatedUsers = [...this.state.users].map(user => {
@@ -211,7 +211,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
     render() {
 
-        if (!this.state.users) {
+        if (!this.state.users.length) {
             return null;
         }
 

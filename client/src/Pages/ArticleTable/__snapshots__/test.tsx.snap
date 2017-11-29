@@ -13,6 +13,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
       defaultValue={12}
       max={57}
       min={1}
+      name="issueNumber"
       onBlur={[Function]}
       onChange={[Function]}
       type="number"

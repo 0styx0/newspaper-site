@@ -9,8 +9,8 @@ interface Props {
 
 export class SignupContainer extends React.Component<Props, {}> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onSignup = this.onSignup.bind(this);
     }

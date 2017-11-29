@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { ChangePasswordContainer } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
 import * as sinon from 'sinon';
+
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 function setup(mockGraphql: {updatePassword?: Function} = {}) {
 
@@ -38,9 +42,9 @@ describe('<ChangePasswordContainer>', () => {
          */
         function setValues(oldPassword: string, newPassword: string, newPasswordConfirmation: string) {
 
-            wrapper.find('input[name="password"]').node.value = oldPassword;
-            wrapper.find('input[name="newPassword"]').node.value = newPassword;
-            wrapper.find('input[name="newPasswordConfirmation"]').node.value = newPasswordConfirmation;
+            wrapper.find('input[name="password"]').instance().value = oldPassword;
+            wrapper.find('input[name="newPassword"]').instance().value = newPassword;
+            wrapper.find('input[name="newPasswordConfirmation"]').instance().value = newPasswordConfirmation;
 
             wrapper.find('form').first().simulate('submit');
         }

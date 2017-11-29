@@ -1052,6 +1052,7 @@ exports[`<UserArticleTableContainer> snapshots renders correctly when canEdit is
         Password: 
         <input
           name="password"
+          onBlur={[Function]}
           required={true}
           type="password"
         />

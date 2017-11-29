@@ -26,8 +26,8 @@ export class MainPageContainer extends React.Component<Props, State> {
 
     unlisten: Function;
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.state = {
            articles: [] as Article[],

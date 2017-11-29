@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { JournalistTableContainer } from './container';
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../tests/localstorage.mock';
+import * as mocks from '../../tests/setup.mocks';
 import * as casual from 'casual';
 import snapData from './__snapshots__/users.example';
 import renderWithProps from '../../tests/snapshot.helper';
 import { User } from './interface.shared';
 import setFakeJwt from '../../tests/jwt.helper';
-import { setInput } from '../../tests/enzyme.helpers';
+import { setInput, submitForm, setupComponent } from '../../tests/enzyme.helpers';
 import * as sinon from 'sinon';
+
+import { configure, mount, ReactWrapper } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+import { getJWT } from '../../helpers/jwt/index';
+
+
 
 /**
  * @param amount - how many users to return
@@ -53,8 +58,8 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
         <MemoryRouter>
             <JournalistTableContainer
                 data={data}
-                userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : (test: any) => true}
-                userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : (test: any) => false}
+                userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : async (test: any) => true}
+                userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : async (test: any) => false}
             />
         </MemoryRouter>
     );
@@ -127,10 +132,9 @@ describe('<JournalistTableContainer>', () => {
         function setupSelect() {
             wrapper = setup();
 
-            sortingSelect = wrapper.find('#sortingContainer select');
-            component = wrapper.find(JournalistTableContainer).node;
+            component = setupComponent(wrapper, JournalistTableContainer);
 
-            component.componentWillReceiveProps({data});
+            sortingSelect = wrapper.find('#sortingContainer select');
         }
 
         /**
@@ -138,10 +142,10 @@ describe('<JournalistTableContainer>', () => {
          */
         function setSelectValue(value: string) {
 
-            sortingSelect.node.value = value;
+            sortingSelect.instance().value = value;
             sortingSelect.simulate('change');
 
-            expect(sortingSelect.node.value).toEqual(value);
+            expect(sortingSelect.instance().value).toEqual(value);
         }
 
         /**
@@ -220,7 +224,7 @@ describe('<JournalistTableContainer>', () => {
 
         describe('when not logged in (and no access to level)', () => {
 
-            beforeAll(() => localStorageMock.removeItem('jwt'));
+            beforeAll(() => mocks.localStorage.removeItem('jwt'));
 
             testSortByNameArticlesViews();
         });
@@ -230,7 +234,7 @@ describe('<JournalistTableContainer>', () => {
 
         describe('level `select`', () => {
 
-            let wrapper: any;
+            let wrapper;
             let component: any;
             const userLevel = 3;
             let levelSelect: any;
@@ -240,9 +244,7 @@ describe('<JournalistTableContainer>', () => {
                 setFakeJwt({level: userLevel});
 
                 wrapper = setup();
-                component = wrapper.find(JournalistTableContainer).node;
-
-                component.componentWillReceiveProps({data});
+                component = setupComponent(wrapper, JournalistTableContainer);
 
                 levelSelect = wrapper.find('select[name="lvl"]');
             });
@@ -300,14 +302,23 @@ describe('<JournalistTableContainer>', () => {
 
         describe('when sending level data to server', () => {
 
+            function getComponent(wrapper: ReactWrapper<any, any>): React.Component<any, any> {
+
+                setFakeJwt({ level: 3 });
+
+                const component = setupComponent(wrapper, JournalistTableContainer);
+
+                return component!;
+            }
+
             it('formats data correctly when multiple ids, 1 level', () => {
 
                 const expectedLevel = 2;
                 const password = casual.password;
 
-                const wrapper: any = setup({
+                const wrapper = setup({
                     // this will execute after everything else
-                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
+                    userUpdate: async (mapping: {variables: {data: {level: number, ids: string[]}[]}}) => {
 
                         const expectedIds = data.users.reduce(
                                                 (accumulator: string[], user: User) => accumulator.concat(user.id), []
@@ -323,7 +334,8 @@ describe('<JournalistTableContainer>', () => {
                     }
                 });
 
-                const component = wrapper.find(JournalistTableContainer).node;
+                const component = getComponent(wrapper);
+
                 setInput(wrapper, password);
 
                 // using data.users since already there. No difference if would generate another array of random users
@@ -331,7 +343,7 @@ describe('<JournalistTableContainer>', () => {
 
                 component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
 
-                wrapper.find('form').first().simulate('submit');
+                submitForm(wrapper);
             });
 
             it('formats data correctly when multiple ids, multiple levels', () => {
@@ -340,9 +352,12 @@ describe('<JournalistTableContainer>', () => {
                 let password = '';
                 let idLevelMap: Array<string | number>[];
 
-                const wrapper: any = setup({
+                const wrapper = setup({
                     // this will execute after everything else
-                    userUpdate: (params: {variables: {data: {level: number, ids: string[]}[]}, password: string}) => {
+                    userUpdate:
+                        async (
+                            params: { variables: { data: { level: number, ids: string[] }[] }, password: string }
+                        ) => {
 
                         const expectedFormat = [] as {level: number, ids: string[]}[];
 
@@ -381,15 +396,18 @@ describe('<JournalistTableContainer>', () => {
                     }
                 });
 
-                const component = wrapper.find(JournalistTableContainer).node;
+                const component = getComponent(wrapper);
 
                 // using data.users since already there. No difference if would generate another array of random users
                 idLevelMap = data.users.map((user: User) => [user.id, casual.random_element(expectedLevels)]);
 
-                component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
+                component.setState({
+                    idLevelMap: new Map<string, number>(idLevelMap as any)
+                });
+
                 password = setInput(wrapper);
 
-                wrapper.find('form').first().simulate('submit');
+                submitForm(wrapper);
             });
 
             // integration between toggling `select` and that same data being sent to server
@@ -400,11 +418,17 @@ describe('<JournalistTableContainer>', () => {
 
                 const wrapper = setup({
                     // this will execute after everything else
-                    userUpdate: (mapping: {variables: {data: {level: number, ids: string[]}[]}, password: string}) => {
+                    userUpdate: async (
+                        mapping: { variables: { data: { level: number, ids: string[] }[] }, password: string }
+                    ) => {
 
-                        const expectedIds = data.users.reduce(
-                                                (accumulator: string[], user: User) => accumulator.concat(user.id), []
-                                            );
+                        const expectedIds = data.users.reduce((accumulator: string[], user: User) => {
+
+                            if (user.level < getJWT().level) {
+                                return accumulator.concat(user.id);
+                            }
+                            return accumulator;
+                        }, []);
 
                         expect(mapping.variables).toEqual({
                             data: [{level: expectedLevel, ids: expectedIds}],
@@ -413,36 +437,35 @@ describe('<JournalistTableContainer>', () => {
                     }
                 });
 
+                getComponent(wrapper);
                 const levelSelect = wrapper.find('select[name="lvl"]');
-                setInput(wrapper);
+                password = setInput(wrapper);
 
                 for (let i = 0; i < levelSelect.length; i++) {
-
                     levelSelect.at(i).simulate('change', {target: { value: expectedLevel }});
                 }
 
-                wrapper.find('form').first().simulate('submit');
+                submitForm(wrapper);
             });
         });
     });
 
     describe('deleting users', () => {
 
-        let wrapper: any;
+        let wrapper: ReactWrapper<any, any>;
         let component: any;
 
         describe('delete `checkbox`', () => {
 
-            let deleteCheckbox: any;
+            let deleteCheckbox;
 
             beforeEach(() => {
 
                 setFakeJwt({level: 3});
 
                 wrapper = setup();
-                component = wrapper.find(JournalistTableContainer).node;
 
-                component.componentWillReceiveProps({data});
+                component = setupComponent(wrapper, JournalistTableContainer);
 
                 deleteCheckbox = wrapper.find('input[name="delAcc"]');
             });
@@ -455,7 +478,7 @@ describe('<JournalistTableContainer>', () => {
             function toggleTheBox() {
 
                 const firstCheckbox = deleteCheckbox.first();
-                firstCheckbox.nodes[0].checked = !firstCheckbox.nodes[0].checked;
+                firstCheckbox.instance().checked = !firstCheckbox.instance().checked;
                 firstCheckbox.simulate('change');
 
                 return firstCheckbox;
@@ -489,17 +512,16 @@ describe('<JournalistTableContainer>', () => {
             it('deleteUser is called when form is submitted', () => {
 
                 const spy = sinon.spy();
-                wrapper = setup({userDelete: spy});
+                wrapper = setup({userDelete: async () => spy()});
 
-                component = (wrapper.find(JournalistTableContainer) as any).node;
-                component.componentWillReceiveProps({data});
+                component = setupComponent(wrapper, JournalistTableContainer);
 
                 wrapper
                  .find('input[name="delAcc"]')
                  .first()
                  .simulate('change', { target: { checked: true, value: casual.word } });
 
-                wrapper.find('form').first().simulate('submit');
+                submitForm(wrapper);
 
                 expect(spy.called).toBeTruthy();
             });
@@ -509,7 +531,7 @@ describe('<JournalistTableContainer>', () => {
                 let password = '';
                 wrapper = setup({
                         // this will execute after everything else
-                        userDelete: (mapping: {variables: {ids: string[]}, password: string}) => {
+                        userDelete: async (mapping: {variables: {ids: string[]}, password: string}) => {
                             const expectedIds = data
                                                 .users
                                                 .reduce(
@@ -522,18 +544,17 @@ describe('<JournalistTableContainer>', () => {
                         }
                     });
 
-                component = (wrapper.find(JournalistTableContainer) as any).node;
-                component.componentWillReceiveProps({data});
+                component = setupComponent(wrapper, JournalistTableContainer);
 
                 const deleteCheckboxes: any = wrapper.find('input[name="delAcc"]');
                 password = setInput(wrapper);
 
                 for (let i = 0; i < deleteCheckboxes.length; i++) {
                     const box = deleteCheckboxes.at(i);
-                    box.simulate('change', { target: { checked: true, value: box.node.value } });
+                    box.simulate('change', { target: { checked: true, value: box.instance().value } });
                 }
 
-                wrapper.find('form').first().simulate('submit');
+                submitForm(wrapper);
             });
         });
     });

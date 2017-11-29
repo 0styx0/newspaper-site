@@ -2,8 +2,12 @@ import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import casual from '../../tests/casual.data';
 import EditableContainer from './container';
-import { mount } from 'enzyme';
 import * as sinon from 'sinon';
+
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 document.queryCommandSupported = () => true;
 

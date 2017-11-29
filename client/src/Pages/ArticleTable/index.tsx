@@ -52,7 +52,8 @@ export default function ArticleTable(props: Props) {
                 min: 1,
                 defaultValue: props.issue.num || '',
                 max: props.issue.max,
-                onChange: props.onUpdate
+                onChange: props.onUpdate,
+                name: 'issueNumber'
                 }}
             />
             <FormContainer onSubmit={props.onSubmit as any}>

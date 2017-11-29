@@ -4,9 +4,13 @@ import * as renderer from 'react-test-renderer';
 // import { MemoryRouter } from 'react-router';
 import casual from '../../tests/casual.data';
 import setFakeJwt from '../../tests/jwt.helper';
-import localStorageMock from '../../tests/localstorage.mock';
-import { mount } from 'enzyme';
+import * as mocks from '../../tests/setup.mocks';
 import * as sinon from 'sinon';
+import { configure, mount, ReactWrapper } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+import { submitForm } from '../../tests/enzyme.helpers';
+
+
 
 casual.define('formData', () => {
 
@@ -20,7 +24,7 @@ casual.define('formData', () => {
         firstName: casual.first_name,
         middleName: (casual.coin_flip) ? casual.letter : null,
         lastName: casual.last_name,
-        level: localStorageMock.getItem('jwt') ? casual.integer(1, 3).toString() : undefined
+        level: mocks.localStorage.getItem('jwt') ? casual.integer(1, 3).toString() : undefined
     };
 });
 
@@ -60,7 +64,7 @@ describe('<SignupContainer>', () => {
 
         it('renders correctly (no choice of level) when someone creates an account without being signed in', () => {
 
-            localStorageMock.removeItem('jwt');
+            mocks.localStorage.removeItem('jwt');
             snap();
         });
 
@@ -76,25 +80,25 @@ describe('<SignupContainer>', () => {
         /**
          * Fills out signup form using customCasual.formData
          */
-        function populateForm(wrapper: any) {
+        function populateForm(wrapper: ReactWrapper<any, any>) {
 
             const formData = customCasual.formData;
             const searchFor = Object.keys(formData);
-            const inputs = wrapper.find('input');
-            const select = wrapper.find('select[name="level"]');
+            const inputs = wrapper.findWhere(elt => elt.is('input') || elt.is('select[name="level"]');
 
-            inputs.nodes.concat(select.node || []).forEach((elt: any) => {
+            inputs.forEach(elt => {
 
-                if (searchFor.indexOf(elt.name) !== -1) {
+                const instance = elt.instance();
 
-                    elt.value = formData[elt.name];
+                if (searchFor.indexOf(instance.name) !== -1) {
+                    instance.value = formData[instance.name];
                 }
 
-                else if (elt.name === 'fullName') {
+                else if (instance.name === 'fullName') {
 
                     const middleName = formData.middleName ? formData.middleName + ' ' : '';
 
-                    elt.value = formData.firstName + ' ' + middleName + formData.lastName;
+                    instance.value = formData.firstName + ' ' + middleName + formData.lastName;
                 }
             });
 
@@ -118,7 +122,7 @@ describe('<SignupContainer>', () => {
 
             actualData = populateForm(wrapper).formData;
 
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
         }
 
         it('calls createUser when form is submitted', () => {
@@ -141,7 +145,7 @@ describe('<SignupContainer>', () => {
 
         it(`submits proper data even when level isn't given`, () => {
 
-            localStorageMock.removeItem('jwt');
+            mocks.localStorage.removeItem('jwt');
             testSubmitCorrectData();
         });
     });

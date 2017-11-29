@@ -1,8 +1,11 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import HintContainer from './container';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 import casual from '../../../../tests/casual.data';
+
+
 
 describe('<HintContainer>', () => {
 
@@ -44,7 +47,7 @@ describe('<HintContainer>', () => {
 
         wrapper.find('abbr').first().simulate('click');
 
-        expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
+        expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(1);
     }
 
     describe('hint is revealed when', () => {
@@ -55,7 +58,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('abbr').first().simulate('click');
 
-            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
+            expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(1);
         });
 
         test(`its props.children is invalid (after user has done some input)`, () => {
@@ -64,7 +67,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('input').first().simulate('input', {target: {checkValidity: () => false}});
 
-            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(1);
+            expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(1);
         });
     });
 
@@ -74,7 +77,7 @@ describe('<HintContainer>', () => {
 
             const wrapper = setup();
 
-            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
+            expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(0);
         });
 
         it('is clicked a second time', () => {
@@ -84,7 +87,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('abbr').first().simulate('click');
 
-            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
+            expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(0);
         });
 
         test(`its input becomes valid (after user has done some input)`, () => {
@@ -94,7 +97,7 @@ describe('<HintContainer>', () => {
 
             wrapper.find('input').first().simulate('input', {target: {checkValidity: () => true}});
 
-            expect((wrapper.find('.abbrMessage').first() as any).nodes).toHaveLength(0);
+            expect(wrapper.find('.abbrMessage').first().getElements()).toHaveLength(0);
         });
     });
 });

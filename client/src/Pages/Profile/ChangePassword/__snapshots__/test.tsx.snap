@@ -14,6 +14,7 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       New Password: 
       <input
         name="newPasswordConfirmation"
+        onBlur={[Function]}
         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
         required={true}
         type="password"
@@ -28,6 +29,7 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       Confirm Password: 
       <input
         name="newPassword"
+        onBlur={[Function]}
         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
         required={true}
         type="password"
@@ -42,6 +44,7 @@ exports[`<ChangePasswordContainer> snapshots should render correctly 1`] = `
       Old Password: 
       <input
         name="password"
+        onBlur={[Function]}
         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*).{6,}$"
         required={true}
         type="password"

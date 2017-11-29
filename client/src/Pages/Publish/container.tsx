@@ -40,9 +40,9 @@ interface State {
 
 export class PublishContainer extends React.Component<Props, State> {
 
-    constructor() {
+    constructor(props: Props) {
 
-        super();
+        super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
         this.autoFormat = this.autoFormat.bind(this);

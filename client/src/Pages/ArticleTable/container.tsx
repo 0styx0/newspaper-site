@@ -56,16 +56,14 @@ interface State {
  */
 export class ArticleTableContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.putData = this.putData.bind(this);
         this.convertPropsToState = this.convertPropsToState.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-
-
 
         this.state = {
             issue: {} as Issue,
@@ -154,7 +152,6 @@ export class ArticleTableContainer extends React.Component<Props, State> {
 
             value = Array.from((target as HTMLSelectElement).selectedOptions)
                     .map(option => option.value)
-                    .slice(-3)
                     .sort(); // using sort to make it easier to test, no actual reason besides that
         } else {
             value = +target.value;

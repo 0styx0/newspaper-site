@@ -148,6 +148,7 @@ exports[`<IssueTableContainer> snapshots if canEdit = true, get chance to name a
         Password: 
         <input
           name="password"
+          onBlur={[Function]}
           type="password"
         />
         

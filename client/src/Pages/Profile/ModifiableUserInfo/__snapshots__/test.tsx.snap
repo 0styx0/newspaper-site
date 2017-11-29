@@ -71,6 +71,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have both checked if bot
       Password: 
       <input
         name="password"
+        onBlur={[Function]}
         required={true}
         type="password"
       />
@@ -158,6 +159,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have none checked if bot
       Password: 
       <input
         name="password"
+        onBlur={[Function]}
         required={true}
         type="password"
       />
@@ -245,6 +247,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have notifications check
       Password: 
       <input
         name="password"
+        onBlur={[Function]}
         required={true}
         type="password"
       />
@@ -332,6 +335,7 @@ exports[`<ModifiableUserInfoContainer> snapshots should have twoFactor checked i
       Password: 
       <input
         name="password"
+        onBlur={[Function]}
         required={true}
         type="password"
       />

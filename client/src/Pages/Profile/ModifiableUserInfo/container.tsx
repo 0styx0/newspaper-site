@@ -25,8 +25,8 @@ interface State {
  */
 export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onDelete = this.onDelete.bind(this);
         this.onSubmit = this.onSubmit.bind(this);

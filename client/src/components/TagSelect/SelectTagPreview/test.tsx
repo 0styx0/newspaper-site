@@ -2,9 +2,14 @@ import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import SelectTagPreview from './';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+import { setupComponent } from '../../../tests/enzyme.helpers';
 
-describe('<Slideshow>', () => {
+
+
+
+describe('<SelectTagPreview>', () => {
 
     function setup() {
 
@@ -34,7 +39,7 @@ describe('<Slideshow>', () => {
         it('redirects to e.target.value', () => {
 
             const wrapper = setup();
-            const component = (wrapper.find(SelectTagPreview) as any).node;
+            const component = setupComponent(wrapper, SelectTagPreview);
 
             expect(component.state.redirect).toBe('');
 
@@ -42,7 +47,7 @@ describe('<Slideshow>', () => {
 
             optionToChange.simulate('input');
 
-            expect(component.state.redirect).toBe(optionToChange.node.value);
+            expect(component.state.redirect).toBe(optionToChange.instance().value);
         });
     });
 });

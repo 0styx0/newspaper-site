@@ -3,16 +3,19 @@ import { MainPageContainer } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../../tests/casual.data';
-import { mount } from 'enzyme';
 import { Article, Issue } from './shared.interfaces';
 import * as sinon from 'sinon';
 import createHistory from 'history/createBrowserHistory';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 const history = createHistory();
 
 Object.defineProperty(window.location, 'pathname', { // so can change path
     writable: true,
-    value: '/4'
+    value: '/issue/4'
 });
 
 const customCasual = casual as typeof casual & {
@@ -164,18 +167,18 @@ describe('<MainPageContainer>', () => {
 
             expect(stubs.tagStub.called).toBeFalsy();
 
-            changeHistory(tag);
+            changeHistory(`tag/${tag}`);
 
             expect(stubs.tagStub.called).toBeTruthy();
         });
 
         describe('calls correct method when getting articles', () => {
 
-            it('in an issue', () => {
+            it('in an tag', () => {
 
                 const stubs = getQueryStubs();
 
-                changeHistory(casual.word);
+                changeHistory(`tag/${casual.word}`);
 
                 setup(stubs.stub());
 
@@ -184,11 +187,11 @@ describe('<MainPageContainer>', () => {
                 expect(stubs.issueStub.called).toBeFalsy();
             });
 
-            it('from a tag', () => {
+            it('from a issue', () => {
 
                 const stubs = getQueryStubs();
 
-                changeHistory(casual.randomPositive.toString());
+                changeHistory(`issue/${casual.randomPositive.toString()}`);
 
                 setup(stubs.stub());
 

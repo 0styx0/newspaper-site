@@ -3,8 +3,11 @@ import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import Slideshow from './';
 import { Image } from './';
-import { mount } from 'enzyme';
 import casual from '../../tests/casual.data';
+import { setupComponent } from '../../tests/enzyme.helpers';
+
+import { mount } from 'enzyme';
+
 
 casual.define('images', () => {
 
@@ -62,8 +65,9 @@ describe('<Slideshow>', () => {
         it('switches to next image', () => {
 
             const images = customCasual.images;
+
             const wrapper = setup(images);
-            const component = (wrapper.find(Slideshow) as any).node;
+            const component = setupComponent(wrapper, Slideshow);
 
             expect(component.state.activeImg).toBe(0);
 
@@ -76,7 +80,7 @@ describe('<Slideshow>', () => {
 
             const images = customCasual.images;
             const wrapper = setup(images);
-            const component = (wrapper.find(Slideshow) as any).node;
+            const component = setupComponent(wrapper, Slideshow);
 
             component.state.activeImg = images.length - 1;
 

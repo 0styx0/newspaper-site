@@ -16,6 +16,7 @@ exports[`<TwoFactorContainer> snapshots renders correctly 1`] = `
       Auth Code: 
       <input
         name="authCode"
+        onBlur={[Function]}
         required={true}
         type="password"
       />

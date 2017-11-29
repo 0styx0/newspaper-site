@@ -22,8 +22,8 @@ interface State {
 
 class ProfileContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.state = {
             user: {} as PublicUserInfo,

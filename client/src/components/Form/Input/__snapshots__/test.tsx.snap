@@ -4,6 +4,7 @@ exports[`<Input> snapshots renders correctly when abbr is NOT given 1`] = `
 <label>
   Random: 
   <input
+    onBlur={[Function]}
     placeholder="Hi"
   />
   
@@ -16,6 +17,7 @@ exports[`<Input> snapshots renders correctly when abbr is given 1`] = `
 >
   Random: 
   <input
+    onBlur={[Function]}
     placeholder="Hi"
   />
   

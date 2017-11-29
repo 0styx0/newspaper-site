@@ -2,7 +2,10 @@ import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import FormContainer from './container';
 import * as sinon from 'sinon';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 describe('<FormContainer>', () => {
 

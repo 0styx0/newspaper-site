@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { IssueTableContainer  } from './container';
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import * as casual from 'casual';
 import renderWithProps from '../../tests/snapshot.helper';
 import snapData from './__snapshots__/issues.example';
 import setFakeJwt from '../../tests/jwt.helper';
 import { Issue } from './interface.shared';
+
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 // NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
 
@@ -95,8 +99,7 @@ describe('<IssueTableContainer>', () => {
     test(`if canEdit = true, can change most recent issue's name (state.privateIssue.name)`, () => {
 
         wrapper = setup();
-        const component = wrapper.find(IssueTableContainer).node;
-        component.componentWillReceiveProps({data});
+        const component = wrapper.find(IssueTableContainer).instance();
 
         expect(component.state.privateIssue.name).toBeFalsy();
 
@@ -112,8 +115,8 @@ describe('<IssueTableContainer>', () => {
     test(`if canEdit = true, can change most recent issue's public status (state.privateIssue.public)`, () => {
 
         wrapper = setup();
-        const component = wrapper.find(IssueTableContainer).node;
-        component.componentWillReceiveProps({data});
+
+        const component = wrapper.find(IssueTableContainer).instance();
 
         expect(component.state.privateIssue.public).toBeFalsy();
 
@@ -138,10 +141,10 @@ describe('<IssueTableContainer>', () => {
             expect(graphql.variables).toEqual(expectedData)
         });
 
-        const component = wrapper.find(IssueTableContainer).node;
+        const component = wrapper.find(IssueTableContainer).instance();
 
         component.state.privateIssue = expectedData;
-        (wrapper.find('input[type="password"]') as any).node.value = password;
+        (wrapper.find('input[type="password"]') as any).instance().value = password;
 
         wrapper.find('form').first().simulate('submit'); // this triggers wrapper's mutate function
     });

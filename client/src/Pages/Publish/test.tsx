@@ -1,10 +1,12 @@
 import * as React from 'react';
+import '../../tests/setup.mocks';
 import { PublishContainer } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
-import { submitForm } from '../../tests/enzyme.helpers';
+import { submitForm, setupComponent } from '../../tests/enzyme.helpers';
+import {  mount } from 'enzyme';
+
 // import { TagQuery } from '../../graphql/tags';
 
 // import mockGraphql from '../../tests/graphql.helper';
@@ -56,18 +58,21 @@ describe('<PublishContainer>', () => {
     /**
      * Gives PublishContainer a fake version of state.editor (that has all functionality needed)
      */
-    function setFakeEditor(wrapper: any, initialContent: string = '') {
+    function setFakeEditor(component: any, initialContent: string = '') {
 
-        wrapper.find(PublishContainer).node.state.editor = {
+        component.setState({
 
-            content: initialContent,
-            setContent(content: string) {
-                this.content = content;
-            },
-            getContent() {
-                return this.content;
+            editor: {
+
+                content: initialContent,
+                setContent(content: string) {
+                    this.content = content;
+                },
+                getContent() {
+                    return this.content;
+                }
             }
-        };
+        });
     }
 
 
@@ -99,9 +104,8 @@ describe('<PublishContainer>', () => {
         function testAutoFormat(content: string, expected: string) {
 
             const wrapper = setup();
-            setFakeEditor(wrapper, content);
-
-            const component = (wrapper.find(PublishContainer) as any).node;
+            const component = setupComponent(wrapper, PublishContainer);
+            setFakeEditor(component, content);
 
             component.autoFormat();
             const newEditorContents = component.state.editor.getContent();
@@ -150,12 +154,13 @@ describe('<PublishContainer>', () => {
         it(`toggles addTag input when 'other' is selected`, () => {
 
             const wrapper = setup();
+            setupComponent(wrapper, PublishContainer);
 
-            expect((wrapper.find('input[name="addTag"]') as any).node).toBeFalsy();
+            expect(wrapper.find('input[name="addTag"]').length).toBe(0);
 
             wrapper.find('option[value="other"]').simulate('change');
 
-            expect((wrapper.find('input[name="addTag"]') as any).node).toBeTruthy();
+            expect(wrapper.find('input[name="addTag"]').length).toBe(1);
         });
 
         it('submits new tag to createTag', () => {
@@ -169,10 +174,11 @@ describe('<PublishContainer>', () => {
                 return;
             });
 
+            setupComponent(wrapper, PublishContainer);
             setFakeEditor(wrapper, '');
 
             wrapper.find('option[value="other"]').simulate('change');
-            (wrapper.find('input[name="addTag"]') as any).node.value = newTag;
+            wrapper.find('input[name="addTag"]').instance().value = newTag;
 
             submitForm(wrapper);
 
@@ -191,12 +197,13 @@ describe('<PublishContainer>', () => {
             const tags = new Set<HTMLOptionElement>();
             const content: string = casual.sentences(casual.randomPositive);
 
-            setFakeEditor(wrapper, content);
+            const component = setupComponent(wrapper, PublishContainer);
+            setFakeEditor(component, content);
 
-            wrapper.find('input[name="name"]').node.value = url;
+            wrapper.find('input[name="name"]').instance().value = url;
 
             const tagSelect = wrapper.find('select[name="tags"]');
-            const tagOptions = [...tagSelect.node.options];
+            const tagOptions = [...tagSelect.instance().options];
 
             while (tags.size < casual.integer(1, 3)) {
 
@@ -208,7 +215,7 @@ describe('<PublishContainer>', () => {
                 tags.add(tagOptions[indexOfTag]);
             }
 
-            wrapper.find('select[name="tags"]').node.selectedOptions = [...tags];
+            wrapper.find('select[name="tags"]').instance().selectedOptions = [...tags];
 
             return {
                 tags: [...tags].map(option => option.value),
@@ -244,7 +251,7 @@ describe('<PublishContainer>', () => {
 
             expected = fillOutForm(wrapper);
 
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
         });
     });
 });

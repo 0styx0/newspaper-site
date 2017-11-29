@@ -2,15 +2,18 @@ import * as React from 'react';
 import { LoginFormContainer } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
-import { mount } from 'enzyme';
 import * as casual from 'casual';
 import * as sinon from 'sinon';
 import { encodeJwt } from '../../tests/jwt.helper';
-import localStorageMock from '../../tests/localstorage.mock';
+import * as mocks from '../../tests/setup.mocks';
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 // using it here even though appears do to nothing to get rid of unused import warning.
 // Using it really for side effect of defining localstorage
-localStorageMock.clear();
+mocks.localStorage.clear();
 
 
 casual.define('jwt', () =>
@@ -78,8 +81,8 @@ describe('<LoginFormContainer>', () => {
 
             const { username, password } = casual;
 
-            wrapper.find('input[name="username"]').node.value = username;
-            wrapper.find('input[name="password"]').node.value = password;
+            wrapper.find('input[name="username"]').instance().value = username;
+            wrapper.find('input[name="password"]').instance().value = password;
 
             return {
                 username,
@@ -116,7 +119,7 @@ describe('<LoginFormContainer>', () => {
             wrapper.find('form').first().simulate('submit');
 
             // checks if jwt was written to localstorage
-            localStorageMock.setItem = (field, value) => {
+            mocks.localStorage.setItem = (field, value) => {
 
                 expect(value).toEqual(jwt);
 

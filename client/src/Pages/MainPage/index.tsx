@@ -3,6 +3,7 @@ import NumberlineContainer from '../../components/Numberline/container';
 import { Slideshow, Image } from '../../components/Slideshow';
 import Preview from '../../components/Preview';
 import { Article, Issue } from './shared.interfaces';
+// import { Helmet } from 'react-helmet';
 
 import './index.css';
 
@@ -25,6 +26,10 @@ function MainPage(props: Props) {
       , [] as Image[]);
 
     return (
+        // <Helmet>
+        //     <title>My Title</title>
+        //     <meta name="description" content="Helmet application" />
+        // </Helmet>
         <div key={props.issue.num}>
             <header>
                 <h1>

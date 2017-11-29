@@ -15,8 +15,8 @@ interface State {
 
 export class EditableCommentContainer extends React.Component<Props, State> {
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.onSave = this.onSave.bind(this);
 

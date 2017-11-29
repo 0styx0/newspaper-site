@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { MissionContainer, Props } from './container';
-import { mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import * as casual from 'casual';
+
+import { mount } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
+
+
 
 document.queryCommandSupported = () => true; // used in Editable component
 
@@ -72,7 +76,7 @@ describe('<MissionContainer>', () => {
             />
         );
 
-        (wrapper as any).node.componentWillReceiveProps({data: {mission: {
+        (wrapper as any).setProps({data: {mission: {
                       mission: casual.sentences(),
                       canEdit: true
                   }}});
@@ -111,8 +115,7 @@ describe('<MissionContainer>', () => {
             });
 
             const content = wrapper.find('[contentEditable]').first();
-
-            (content as any).node.innerHTML = newMission;
+            (content.instance() as any as HTMLDivElement).innerHTML = newMission;
             content.simulate('blur'); // so container can save to state
 
             wrapper.find('button').last().simulate('click');

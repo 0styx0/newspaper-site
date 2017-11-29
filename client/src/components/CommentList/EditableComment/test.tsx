@@ -4,9 +4,12 @@ import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
 import { EditableCommentContainer } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
-import localStorageMock from '../../../tests/localstorage.mock';
-import { mount } from 'enzyme';
+import * as mocks from '../../../tests/setup.mocks';
+import { mount, configure } from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 import * as sinon from 'sinon';
+
+
 
 document.queryCommandSupported = () => true; // used in Editable component
 
@@ -52,7 +55,7 @@ describe('<EditableCommentContainer>', () => {
 
         it('renders correctly when cannot edit', () => {
 
-            localStorageMock.removeItem('jwt');
+            mocks.localStorage.removeItem('jwt');
             snap();
         });
     });
@@ -67,11 +70,9 @@ describe('<EditableCommentContainer>', () => {
 
             const content = casual.sentence;
 
-            const contentEditable = wrapper.find('[contentEditable]').first() as any as {
-                node: { innerHTML: string }, simulate: Function
-            };
+            const contentEditable = wrapper.find('[contentEditable]').first();
 
-            contentEditable.node.innerHTML = content;
+            (contentEditable.instance() as any as HTMLDivElement).innerHTML = content;
             contentEditable.simulate('blur');
             expect(wrapper.state().content).toBe(content);
         });
