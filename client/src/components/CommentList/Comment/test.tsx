@@ -6,10 +6,8 @@ import { CommentContainer, Props } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as mocks from '../../../tests/setup.mocks';
 import snapData from './__snapshots__/props.example';
-import { mount, configure } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-
 
 
 const deleteCommentMock = (params: {variables: {id: string}}) => { return; };

@@ -36,7 +36,7 @@ export function setInput(wrapper: any, value: string = casual.password, name = '
     return value;
 }
 
-export function setupComponent(wrapper: ReactWrapper<any, any>, componentToFind: any): React.Component<any, any> {
+export function setupComponent(wrapper: ReactWrapper<any, any>, componentToFind: any): typeof componentToFind {
 
     const component = wrapper.find(componentToFind).instance();
 

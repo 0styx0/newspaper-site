@@ -5,7 +5,7 @@ import * as casual from 'casual';
 import { randomCheckboxToggle, setInput } from '../../../tests/enzyme.helpers';
 import * as sinon from 'sinon';
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 
 
 

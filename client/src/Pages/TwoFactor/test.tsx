@@ -6,7 +6,7 @@ import { encodeJwt } from '../../tests/jwt.helper';
 import * as mocks from '../../tests/setup.mocks';
 import * as sinon from 'sinon';
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 
 
 

@@ -5,9 +5,6 @@ import EditableContainer from './container';
 import * as sinon from 'sinon';
 
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
-
-
 
 document.queryCommandSupported = () => true;
 

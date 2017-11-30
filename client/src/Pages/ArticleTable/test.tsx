@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ArticleTableContainer, Article, Issue } from './container';
 import { MemoryRouter } from 'react-router';
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 
 
 

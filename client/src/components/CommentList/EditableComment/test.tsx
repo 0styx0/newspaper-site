@@ -5,10 +5,8 @@ import * as casual from 'casual';
 import { EditableCommentContainer } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as mocks from '../../../tests/setup.mocks';
-import { mount, configure } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-
 
 
 document.queryCommandSupported = () => true; // used in Editable component

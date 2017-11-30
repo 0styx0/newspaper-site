@@ -8,7 +8,7 @@ import setFakeJwt from '../../tests/jwt.helper';
 import { Issue } from './interface.shared';
 
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 
 
 

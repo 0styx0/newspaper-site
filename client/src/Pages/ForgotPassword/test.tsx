@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 
 import casual from '../../tests/casual.data';
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 import { setupComponent, submitForm } from '../../tests/enzyme.helpers';
 
 

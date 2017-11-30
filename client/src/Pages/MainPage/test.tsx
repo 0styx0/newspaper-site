@@ -7,7 +7,7 @@ import { Article, Issue } from './shared.interfaces';
 import * as sinon from 'sinon';
 import createHistory from 'history/createBrowserHistory';
 import { mount } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+
 
 
 

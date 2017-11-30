@@ -9,11 +9,8 @@ import { User } from './interface.shared';
 import setFakeJwt from '../../tests/jwt.helper';
 import { setInput, submitForm, setupComponent } from '../../tests/enzyme.helpers';
 import * as sinon from 'sinon';
-
-import { configure, mount, ReactWrapper } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+import {  mount, ReactWrapper } from 'enzyme';
 import { getJWT } from '../../helpers/jwt/index';
-
 
 
 /**

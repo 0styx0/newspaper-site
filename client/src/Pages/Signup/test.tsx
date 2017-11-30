@@ -6,8 +6,8 @@ import casual from '../../tests/casual.data';
 import setFakeJwt from '../../tests/jwt.helper';
 import * as mocks from '../../tests/setup.mocks';
 import * as sinon from 'sinon';
-import { configure, mount, ReactWrapper } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+import {  mount, ReactWrapper } from 'enzyme';
+
 import { submitForm } from '../../tests/enzyme.helpers';
 
 
@@ -84,11 +84,11 @@ describe('<SignupContainer>', () => {
 
             const formData = customCasual.formData;
             const searchFor = Object.keys(formData);
-            const inputs = wrapper.findWhere(elt => elt.is('input') || elt.is('select[name="level"]');
+            const inputs = wrapper.findWhere(elt => elt.is('input') || elt.is('select[name="level"]'));
 
             inputs.forEach(elt => {
 
-                const instance = elt.instance();
+                const instance: HTMLInputElement = elt.instance() as any;
 
                 if (searchFor.indexOf(instance.name) !== -1) {
                     instance.value = formData[instance.name];

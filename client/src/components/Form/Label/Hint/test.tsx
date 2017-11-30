@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import HintContainer from './container';
-import { mount, configure } from 'enzyme';
-import * as Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
+
 import casual from '../../../../tests/casual.data';
 
 

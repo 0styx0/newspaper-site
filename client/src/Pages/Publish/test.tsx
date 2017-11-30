@@ -75,7 +75,6 @@ describe('<PublishContainer>', () => {
         });
     }
 
-
     describe('snapshots', () => {
 
         it('renders correctly', () => {
@@ -104,11 +103,11 @@ describe('<PublishContainer>', () => {
         function testAutoFormat(content: string, expected: string) {
 
             const wrapper = setup();
-            const component = setupComponent(wrapper, PublishContainer);
+            const component = setupComponent(wrapper, PublishContainer) as PublishContainer;
             setFakeEditor(component, content);
 
             component.autoFormat();
-            const newEditorContents = component.state.editor.getContent();
+            const newEditorContents = component.state.editor!.getContent();
 
             expect(newEditorContents).toBe(expected);
         }
@@ -178,7 +177,7 @@ describe('<PublishContainer>', () => {
             setFakeEditor(wrapper, '');
 
             wrapper.find('option[value="other"]').simulate('change');
-            wrapper.find('input[name="addTag"]').instance().value = newTag;
+            (wrapper.find('input[name="addTag"]').instance() as {} as HTMLInputElement).value = newTag;
 
             submitForm(wrapper);
 
