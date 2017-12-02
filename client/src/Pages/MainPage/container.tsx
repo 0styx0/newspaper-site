@@ -53,6 +53,24 @@ export class MainPageContainer extends React.Component<Props, State> {
         this.unlisten();
     }
 
+    searchingByIssue(searchParam: string | number) {
+
+        const issue = this.getIssue(searchParam);
+
+        return searchParam === 'Current%20Issue' || !searchParam || (issue !== 0 && !isNaN(+issue));
+    }
+
+    /**
+     *
+     * @param possibleIssue - thing to check
+     *
+     * @return issue if `possibleIssue` is a number, otherwise returns 0
+     */
+    getIssue(possibleIssue: string | number) {
+
+        return isNaN(+possibleIssue) ? 0 : +possibleIssue;
+    }
+
     /**
      * calls #fetchIssue and #fetchArticles
      */
@@ -60,41 +78,44 @@ export class MainPageContainer extends React.Component<Props, State> {
 
         const requested = this.getRequested();
 
-        const issue = Number.isNaN(+requested) ? 0 : +requested;
-
         // fixes bug where call setState when component is unmounted (due to history.listen)
         if (/^\/($)|(tag\/)|(issue\/\d+?$)/i.test(window.location.pathname)) {
-            this.fetchArticles(issue, requested);
-            this.fetchIssue(issue);
+            this.fetchArticles(requested);
+            this.fetchIssue(this.getIssue(requested));
         }
+    }
+
+    fetchArticlesFromIssue(issue: number) {
+
+        return this.props.client.query({
+            query: ArticlePreviewIssueQuery,
+            variables: {
+                issue
+            }
+        }).then(({ data }: { data: { issues: [Article[]] } }) => ({data: data.issues[0] }));
+    }
+
+    fetchArticlesByTag(issue: number, tag: string) {
+
+        return this.props.client.query({
+            query: ArticlePreviewTagQuery,
+            variables: {
+                issue,
+                tag
+            }
+        });
     }
 
     /**
      * Get articles from server with issue or tag given by params
      */
-    fetchArticles(issue: number, tag: string) {
+    fetchArticles(searchBy: string | number) {
 
         let articleQuery: Promise<{ data: { articles: Article[] } }>;
 
-        if (tag === 'Current%20Issue' || !tag || (issue !== 0 && !isNaN(+issue))) {
-
-            articleQuery = this.props.client.query({
-                query: ArticlePreviewIssueQuery,
-                variables: {
-                    issue
-                }
-            }).then(({ data }: { data: { issues: [Article[]] } }) => ({data: data.issues[0] }));
-
-        } else {
-
-            articleQuery = this.props.client.query({
-                query: ArticlePreviewTagQuery,
-                variables: {
-                    issue,
-                    tag
-                }
-            });
-        }
+        articleQuery = this.searchingByIssue(searchBy) ?
+            this.fetchArticlesFromIssue(searchBy as number) :
+            this.fetchArticlesByTag(isNaN(+searchBy) ? 0 : +searchBy, searchBy as string);
 
         articleQuery.then(({ data }: { data: { articles: Article[] } }) => {
 
