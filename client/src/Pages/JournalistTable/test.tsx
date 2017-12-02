@@ -338,7 +338,9 @@ describe('<JournalistTableContainer>', () => {
                 // using data.users since already there. No difference if would generate another array of random users
                 const idLevelMap = data.users.map((user: User) => [user.id, expectedLevel]);
 
-                component.state.idLevelMap = new Map<string, number>(idLevelMap as any);
+                component.setState({
+                    idLevelMap: new Map<string, number>(idLevelMap as any)
+                });
 
                 submitForm(wrapper);
             });
