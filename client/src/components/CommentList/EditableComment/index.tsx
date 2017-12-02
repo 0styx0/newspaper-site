@@ -1,13 +1,13 @@
 import * as React from 'react';
 import EditableContainer from '../../Editable/container';
 import { getJWT } from '../../../helpers/jwt';
-
+import { MouseEvent, FocusEvent } from 'react';
 import '../Comment/index.css';
 import './index.css';
 
 interface Props {
-    onSubmit: Function;
-    onBlur: Function;
+    onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
+    onBlur: (e: FocusEvent<HTMLDivElement>) => void;
 }
 
 export default function EditableComment(props: Props) {
@@ -19,10 +19,10 @@ export default function EditableComment(props: Props) {
             <EditableContainer
                 buttons="basic"
                 canEdit={!!jwt.id}
-                onSubmit={props.onSubmit as any}
+                onSubmit={props.onSubmit}
                 children={
                     <div
-                        onBlur={props.onBlur as any}
+                        onBlur={props.onBlur}
                         className="content"
                     />
                 }

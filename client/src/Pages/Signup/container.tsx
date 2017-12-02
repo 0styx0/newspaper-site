@@ -27,7 +27,7 @@ export class SignupContainer extends React.Component<Props, {}> {
 
         const inputs = target.querySelectorAll('input, select');
 
-        for (const input of inputs as any as HTMLInputElement[]) {
+        for (const input of inputs as {} as HTMLInputElement[]) {
 
            if (namesToSearchFor.indexOf(input.name) !== -1) {
                values[input.name] = input.value;
@@ -59,6 +59,7 @@ export class SignupContainer extends React.Component<Props, {}> {
     }
 }
 
+// tslint:disable-next-line:no-any
 const SignupContainerWithData = graphql(UserCreate, { name: 'createUser' })(SignupContainer as any);
 
 export default withApollo(SignupContainerWithData);

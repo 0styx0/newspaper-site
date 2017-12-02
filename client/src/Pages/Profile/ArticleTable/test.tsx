@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { UserArticleTableContainer } from './container';
+import { UserArticleTableContainer, Props, State } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../casual.data';
@@ -8,10 +8,7 @@ import { randomCheckboxToggle, setInput, submitForm } from '../../../tests/enzym
 import toggler from '../../../helpers/toggler';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as sinon from 'sinon';
-import { mount } from 'enzyme';
-
-
-
+import { mount, ReactWrapper } from 'enzyme';
 
 setFakeJwt({level: 3});
 
@@ -62,16 +59,16 @@ describe('<UserArticleTableContainer>', () => {
 
     describe('onDelete', () => {
 
-        let wrapper: any;
-        let component: any;
-        let deleteBoxes: any;
+        let wrapper: ReactWrapper<Props, State>;
+        let component: UserArticleTableContainer;
+        let deleteBoxes: ReactWrapper<HTMLInputElement, {}>; // not sure if correct type
 
         beforeEach(() => {
 
             wrapper = setup();
 
-            deleteBoxes = wrapper.find('[name="delArt"]');
-            component = wrapper.find(UserArticleTableContainer).instance();
+            deleteBoxes = wrapper.find('input[name="delArt"]') as {} as ReactWrapper<HTMLInputElement, {}>;
+            component = wrapper.find(UserArticleTableContainer).instance() as UserArticleTableContainer;
         });
 
         it('adds article id to state.idsToDelete when checkbox is clicked', () => {
@@ -98,7 +95,7 @@ describe('<UserArticleTableContainer>', () => {
             for (let i = 0; expectedIds.size < articlesToTest; i++) {
 
                 const result = randomCheckboxToggle(deleteBoxes);
-                const id = result.input.instance().value;
+                const id = (result.input.instance() as {} as HTMLInputElement).value;
 
                 toggler(expectedIds, id);
                 toggler(indices, result.index);
@@ -111,7 +108,7 @@ describe('<UserArticleTableContainer>', () => {
                 const result = randomCheckboxToggle(deleteBoxes, indexToRemove);
                 indices.delete(indexToRemove);
 
-                expectedIds.delete(result.input.instance().value);
+                expectedIds.delete((result.input.instance() as {} as HTMLInputElement).value);
             }
 
             expect([...component.state.idsToDelete].sort()).toEqual([...expectedIds].sort());
@@ -121,7 +118,7 @@ describe('<UserArticleTableContainer>', () => {
 
             const expected = {
                 password: '',
-                ids: casual.array_of_words()
+                ids: [...new Set(casual.array_of_words())]
             };
 
             const spy = sinon.spy();
@@ -134,8 +131,11 @@ describe('<UserArticleTableContainer>', () => {
                 }
             });
 
-            component = wrapper.find(UserArticleTableContainer).instance();
-            component.state.idsToDelete = expected.ids;
+            component = wrapper.find(UserArticleTableContainer).instance() as UserArticleTableContainer;
+            component.setState({
+                idsToDelete: new Set(expected.ids)
+            });
+
             expected.password = setInput(wrapper);
 
             submitForm(wrapper);

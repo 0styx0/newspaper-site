@@ -21,9 +21,9 @@ function MainPage(props: Props) {
             imgUrls.concat([{
                 img: img.url,
                 url: `/issue/${props.issue.num}/story/${elt.url}`
-            }]), [] as Image[]))
+            }]),                       [] as Image[]))
 
-      , [] as Image[]);
+      ,                                  [] as Image[]);
 
     return (
         // <Helmet>

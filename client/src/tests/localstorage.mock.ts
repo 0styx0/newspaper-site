@@ -1,5 +1,4 @@
 
-
 /**
  * Mocks window.localStorage for testing
  *

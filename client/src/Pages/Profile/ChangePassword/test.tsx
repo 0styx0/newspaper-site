@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { ChangePasswordContainer } from './container';
+import { ChangePasswordContainer, Props } from './container';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
 import * as sinon from 'sinon';
-
-import { mount } from 'enzyme';
-
-
-
+import { mount, ReactWrapper } from 'enzyme';
+import { submitForm } from '../../../tests/enzyme.helpers';
 
 function setup(mockGraphql: {updatePassword?: Function} = {}) {
 
@@ -35,18 +32,21 @@ describe('<ChangePasswordContainer>', () => {
 
     describe('submitting password', () => {
 
-        let wrapper: any;
+        let wrapper: ReactWrapper<Props, {}>;
 
         /**
          * Set value of inputs and submits the form
          */
         function setValues(oldPassword: string, newPassword: string, newPasswordConfirmation: string) {
 
-            wrapper.find('input[name="password"]').instance().value = oldPassword;
-            wrapper.find('input[name="newPassword"]').instance().value = newPassword;
-            wrapper.find('input[name="newPasswordConfirmation"]').instance().value = newPasswordConfirmation;
+            (wrapper.find('input[name="password"]').instance() as {} as HTMLInputElement)
+                .value = oldPassword;
+            (wrapper.find('input[name="newPassword"]').instance() as {} as HTMLInputElement)
+                .value = newPassword;
+            (wrapper.find('input[name="newPasswordConfirmation"]').instance() as {} as HTMLInputElement)
+                .value = newPasswordConfirmation;
 
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
         }
 
         it('submits all data needed if valid', () => {

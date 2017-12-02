@@ -1,7 +1,5 @@
 import * as React from 'react';
-
 import twoDimensionalSorter from '../../helpers/twoDimensionalSorter';
-
 import { compose, graphql } from 'react-apollo';
 import { UserQuery, UserUpdate, UserDelete } from '../../graphql/users';
 import { User } from './interface.shared';
@@ -9,14 +7,15 @@ import JournalistTable from './';
 import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import './index.css';
+import { ChangeEvent } from 'react';
 
-interface State {
+export interface State {
     users: User[];
     usersToDelete: Set<string | undefined>;
     idLevelMap: Map<string, number>;
 }
 
-interface Props {
+export interface Props {
     data: {
         loading: boolean;
         users: User[];
@@ -44,7 +43,6 @@ export class JournalistTableContainer extends React.Component<Props, State> {
         this.onDelete = this.onDelete.bind(this);
         this.onIdLevelMap = this.onIdLevelMap.bind(this);
 
-
         this.state = {
             users: [],
             usersToDelete: new Set(),
@@ -69,7 +67,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
     /**
      * Sorts by target.value
      */
-    sortInfo(event: Event) {
+    sortInfo(event: ChangeEvent<HTMLSelectElement>) {
 
         const sortBy = (event.target as HTMLSelectElement).value;
         const sortedData = twoDimensionalSorter(this.props.data.users.slice(), sortBy) as User[];
@@ -85,7 +83,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
      *
      * Adds an mapping of id -> e.target.value to this.state.idLevelMap
      */
-    onIdLevelMap(e: Event, id: string) {
+    onIdLevelMap(e: ChangeEvent<HTMLSelectElement>, id: string) {
 
         const target = e.target as HTMLSelectElement;
         const mapCopy = new Map(this.state.idLevelMap);
@@ -102,7 +100,7 @@ export class JournalistTableContainer extends React.Component<Props, State> {
      *
      * @param {htmlInputEvent} - event from html checkbox
      */
-    onDelete(e: Event) {
+    onDelete(e: ChangeEvent<HTMLInputElement>) {
 
         const target = e.target as HTMLInputElement;
 
@@ -232,7 +230,6 @@ const JournalistTableContainerWithData = compose(
     graphql(UserQuery),
     graphql(UserUpdate, {name: 'userUpdate'}),
     graphql(UserDelete, {name: 'userDelete'})
-)(JournalistTableContainer as any);
-
+)(JournalistTableContainer);
 
 export default JournalistTableContainerWithData;

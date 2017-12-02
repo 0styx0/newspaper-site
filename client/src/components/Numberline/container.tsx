@@ -35,7 +35,6 @@ export default class NumberlineContainer extends React.Component<Props, State> {
         const plainNumberline = this.addPlainNumbers();
         const numberlineWithEllipses = this.addEllipses(plainNumberline);
 
-
         const issueNumberLinks: Array<JSX.Element | string> = numberlineWithEllipses.map(issue => (
 
             typeof issue === 'string' ?

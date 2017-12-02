@@ -3,11 +3,8 @@ import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import SelectTagPreview from './';
 import { mount } from 'enzyme';
-
 import { setupComponent } from '../../../tests/enzyme.helpers';
-
-
-
+import casual from '../../../tests/casual.data';
 
 describe('<SelectTagPreview>', () => {
 
@@ -43,11 +40,15 @@ describe('<SelectTagPreview>', () => {
 
             expect(component.state.redirect).toBe('');
 
-            const optionToChange = wrapper.find('option').at(0) as any;
+            const options = wrapper.find('option');
+
+            const optionToChange = options.at(casual.integer(0, options.length));
 
             optionToChange.simulate('input');
 
-            expect(component.state.redirect).toBe(optionToChange.instance().value);
+            expect(component.state.redirect).toBe(
+                (optionToChange.instance() as {} as HTMLOptionElement).value
+            );
         });
     });
 });

@@ -4,6 +4,7 @@ import { graphql, withApollo, compose } from 'react-apollo';
 import { MissionEdit, MissionQuery } from '../../graphql/mission';
 
 import Mission from './';
+import { FocusEvent } from 'react';
 
 export interface Props {
     editMission: (params: { query: typeof MissionEdit, variables: { mission: string } }) => Promise<{
@@ -73,7 +74,8 @@ export class MissionContainer extends React.Component<Props, State> {
             <Mission
                 content={this.state.content}
                 onSubmit={this.onSubmit}
-                onSave={(e: Event) => this.setState({content: (e.target as HTMLElement).innerHTML}) as any}
+                onSave={(e: FocusEvent<HTMLDivElement>) =>
+                    this.setState({ content: (e.target as HTMLElement).innerHTML })}
                 canEdit={this.props.data.mission.canEdit}
             />
         );
@@ -83,6 +85,6 @@ export class MissionContainer extends React.Component<Props, State> {
 const MissionContainerWithData = compose(
     graphql(MissionEdit, {name: 'editMission'}),
     graphql(MissionQuery),
-)(MissionContainer as any);
+)(MissionContainer);
 
 export default withApollo(MissionContainerWithData);

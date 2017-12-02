@@ -1,19 +1,12 @@
 import * as React from 'react';
-import { IssueTableContainer  } from './container';
+import { IssueTableContainer, Props, State  } from './container';
 import { MemoryRouter } from 'react-router';
 import * as casual from 'casual';
 import renderWithProps from '../../tests/snapshot.helper';
 import snapData from './__snapshots__/issues.example';
 import setFakeJwt from '../../tests/jwt.helper';
 import { Issue } from './interface.shared';
-
-import { mount } from 'enzyme';
-
-
-
-
-// NOTE: unless explicitly said, all numbers except jwt.level are completely random (although all must be positive)
-
+import { mount, ReactWrapper } from 'enzyme';
 
 setFakeJwt({level: 1});
 
@@ -45,10 +38,10 @@ casual.define('issues', function generateIssues(amount: number) {
 
 const data = {
     loading: false,
-    issues: (casual as any).issues(5) as Issue[]
+    issues: (casual as {} as { issues: (amount: number) => Issue[] }).issues(5)
 };
 
-function setup(mockGraphql: {mutate?: Function} = {}) {
+function setup(mockGraphql: {mutate?: Function} = {}): ReactWrapper<Props, State> {
 
     return mount(
         <MemoryRouter>
@@ -62,7 +55,7 @@ function setup(mockGraphql: {mutate?: Function} = {}) {
 
 describe('<IssueTableContainer>', () => {
 
-    let wrapper: any;
+    let wrapper: ReactWrapper<Props, {}>;
 
     beforeEach(() => {
         wrapper = setup();
@@ -84,7 +77,7 @@ describe('<IssueTableContainer>', () => {
                         loading: false,
                         issues: snapData
                     }}
-                    mutate={(test: any) => false}
+                    mutate={(test: {}) => false}
                 />
             );
 
@@ -141,10 +134,13 @@ describe('<IssueTableContainer>', () => {
             expect(graphql.variables).toEqual(expectedData)
         });
 
-        const component = wrapper.find(IssueTableContainer).instance();
+        const component = wrapper.find(IssueTableContainer).instance() as IssueTableContainer;
 
-        component.state.privateIssue = expectedData;
-        (wrapper.find('input[type="password"]') as any).instance().value = password;
+        component.setState({
+            privateIssue: expectedData
+        });
+
+        (wrapper.find('input[type="password"]').instance() as {} as HTMLInputElement).value = password;
 
         wrapper.find('form').first().simulate('submit'); // this triggers wrapper's mutate function
     });

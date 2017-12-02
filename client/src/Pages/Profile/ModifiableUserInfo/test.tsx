@@ -1,18 +1,12 @@
 import * as React from 'react';
-import { ModifiableUserInfoContainer } from './container';
+import { ModifiableUserInfoContainer, Props, State } from './container';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
-import { randomCheckboxToggle, setInput } from '../../../tests/enzyme.helpers';
+import { randomCheckboxToggle, setInput, submitForm } from '../../../tests/enzyme.helpers';
 import * as sinon from 'sinon';
-import { mount } from 'enzyme';
-
-
-
-
+import { mount, ReactWrapper } from 'enzyme';
 import { ModifiableUserInfo } from '../shared.interfaces';
-
 import userData from './__snapshots__/user.examples';
-
 
 casual.define('user', (twoFactor: boolean, notifications: boolean): ModifiableUserInfo => {
 
@@ -29,7 +23,7 @@ type CustomCasualData = typeof casual & {user: (twoFactor: boolean, notification
 const customCasual = casual as CustomCasualData;
 
 function setup(
-    userOptions = { notifications: false, twoFactor: false },
+    userOptions: {notifications: boolean, twoFactor: boolean} = { notifications: false, twoFactor: false },
     mockGraphql: { updateUser?: Function, deleteUser?: Function } = {}
 ) {
 
@@ -61,21 +55,15 @@ describe('<ModifiableUserInfoContainer>', () => {
 
         function testSnap(data: ModifiableUserInfo) {
 
-            const component = new ((
+            const component = (
                 <ModifiableUserInfoContainer
                     updateUser={() => true}
                     deleteUser={() => true}
                     fetchPrivateUserData={{ refetch: () => ({ data: { users: [data] } }) }}
-                /> as any
-            )).type();
+                />
+            );
 
-            component.state = ( {
-                privateUserData: {
-                    users: [data]
-                }
-            });
-
-            const tree = renderer.create(component.render());
+            const tree = renderer.create(component);
 
             expect(tree.toJSON()).toMatchSnapshot();
         }
@@ -114,7 +102,8 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                 randomCheckboxToggle(wrapper.find(`input[name="${name}"]`)); // not random in this case since only 1
 
-                const plainState = (wrapper.find(ModifiableUserInfoContainer) as any).instance().state;
+                const plainState = (wrapper.find(ModifiableUserInfoContainer)
+                    .instance() as {} as ModifiableUserInfoContainer).state;
 
                 // adds pathToState to `component.state`
                 const stateToUpdate = pathToState.reduce((accum, elt) => accum[elt], plainState);
@@ -138,8 +127,8 @@ describe('<ModifiableUserInfoContainer>', () => {
 
         describe('input [name=delAcc]', () => {
 
-            let wrapper: any;
-            let deleteBox: any;
+            let wrapper: ReactWrapper<Props, State>;
+            let deleteBox: ReactWrapper<HTMLInputElement, {}>; // don't know if this is correct type
 
             /**
              * Sets `wrapper`and `deleteBox` and toggles the deleteBox once
@@ -147,14 +136,19 @@ describe('<ModifiableUserInfoContainer>', () => {
             beforeEach(() => {
 
                 wrapper = setup();
-                deleteBox = wrapper.find(`input[name="delAcc"]`);
+                deleteBox = wrapper
+                    .find(`input[name="delAcc"]`) as {} as ReactWrapper<HTMLInputElement, {}>;
 
                 randomCheckboxToggle(deleteBox); // not random in this case since only 1
             });
 
             it('makes `state.delete` true if toggled on', () => {
 
-                const deleteState = (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.delete;
+                const deleteState = (wrapper
+                    .find(ModifiableUserInfoContainer)
+                    .instance() as {} as ModifiableUserInfoContainer)
+                    .state
+                    .delete;
 
                 expect(deleteState).toBeTruthy();
             });
@@ -164,7 +158,11 @@ describe('<ModifiableUserInfoContainer>', () => {
                 // toggle off
                 randomCheckboxToggle(deleteBox);
 
-                const deleteState = (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.delete;
+                const deleteState = (wrapper
+                    .find(ModifiableUserInfoContainer)
+                    .instance() as {} as ModifiableUserInfoContainer)
+                    .state
+                    .delete;
 
                 expect(deleteState).toBeFalsy();
             });
@@ -199,7 +197,12 @@ describe('<ModifiableUserInfoContainer>', () => {
                                 expect(data.variables).toEqual(expected);
                         }});
 
-                        (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.updates[elt[1]] = expectedValue;
+                        (wrapper
+                            .find(ModifiableUserInfoContainer)
+                            .instance() as {} as ModifiableUserInfoContainer)
+                            .state
+                            .updates[elt[1]] = expectedValue;
+
                         password = setInput(wrapper);
 
                         wrapper.find('form').first().simulate('submit');
@@ -208,7 +211,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                 test('when deleteAcc has changed', () => {
 
-                    const expectedValue: any = [];
+                    const expectedValue: string[] = [];
 
                     const wrapper = setup(
                         { notifications: false, twoFactor: false },
@@ -219,18 +222,26 @@ describe('<ModifiableUserInfoContainer>', () => {
                             });
                     }});
 
-                    expectedValue.push((wrapper.find('input[name="delAcc"]') as any).instance().value);
+                    expectedValue.push((wrapper
+                        .find('input[name="delAcc"]')
+                        .instance() as {} as HTMLInputElement)
+                        .value);
 
-                    (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.delete = expectedValue;
+                    (wrapper
+                        .find(ModifiableUserInfoContainer)
+                        .instance() as ModifiableUserInfoContainer)
+                        .setState({
+                            delete: true
+                        });
 
-                    wrapper.find('form').first().simulate('submit');
+                    submitForm(wrapper);
                 });
             });
         });
 
         test('delete and an update has changed', () => {
 
-            const expectedDeleteValue: any[] = [];
+            const expectedDeleteValue: string[] = [];
             const expectedUpdateValue = true;
             const fieldToUpdate = casual.coin_flip ? 'noticationStatus' : 'twoFactor';
 
@@ -253,10 +264,24 @@ describe('<ModifiableUserInfoContainer>', () => {
                 }
             );
 
-            expectedDeleteValue.push((wrapper.find('input[name="delAcc"]') as any).instance().value);
+            expectedDeleteValue.push(
+                (wrapper
+                    .find('input[name="delAcc"]')
+                    .instance() as {} as HTMLInputElement
+                ).value
+            );
 
-            (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.delete = expectedDeleteValue;
-            (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.updates[fieldToUpdate] = expectedUpdateValue;
+            (wrapper
+                .find(ModifiableUserInfoContainer)
+                .instance() as ModifiableUserInfoContainer)
+                .setState({
+                    delete: true
+                });
+
+            (wrapper
+                .find(ModifiableUserInfoContainer)
+                .instance() as {} as ModifiableUserInfoContainer)
+                .state.updates[fieldToUpdate] = expectedUpdateValue;
         });
 
         test('2 updates have changed', () => {
@@ -277,10 +302,15 @@ describe('<ModifiableUserInfoContainer>', () => {
                 expect(data.variables).toEqual(expected);
             }});
 
-            (wrapper.find(ModifiableUserInfoContainer) as any).instance().state.updates = {
-                notifications: expectedValue,
-                twoFactor: expectedValue
-            };
+            (wrapper
+                .find(ModifiableUserInfoContainer)
+                .instance() as {} as ModifiableUserInfoContainer)
+                .setState({
+                    updates: {
+                        notifications: expectedValue,
+                        twoFactor: expectedValue
+                    }
+                });
 
             password = setInput(wrapper);
 

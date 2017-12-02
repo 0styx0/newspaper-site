@@ -7,7 +7,7 @@ import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import './index.css';
 
-interface Props {
+export interface Props {
     history: string[];
     loginUser: ( params:
     {
@@ -35,7 +35,7 @@ export class LoginFormContainer extends React.Component<Props, {}> {
 
         const username = (target.querySelector('[name=username]') as HTMLInputElement).value;
         const password = (target.querySelector('[name=password]') as HTMLInputElement).value;
-        
+
         const { data } = await graphqlErrorNotifier(this.props.loginUser, {
             variables: {
                 username,
@@ -64,6 +64,7 @@ export class LoginFormContainer extends React.Component<Props, {}> {
     }
 }
 
+// tslint:disable-next-line:no-any
 const LoginFormContainerWithData = graphql(UserLogin, { name: 'loginUser' })(LoginFormContainer as any);
 
 export default withApollo(LoginFormContainerWithData);

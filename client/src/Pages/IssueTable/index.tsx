@@ -5,11 +5,12 @@ import Input from '../../components/Form/Input';
 import { Link } from 'react-router-dom';
 import { Issue } from './interface.shared';
 import FormContainer from '../../components/Form/container';
+import { ChangeEvent } from 'react';
 
 interface Props {
     issues: Issue[];
     onSubmit: Function;
-    onChangeIssueInfo: Function;
+    onChangeIssueInfo: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 /**
@@ -20,7 +21,6 @@ interface Props {
  * In that case, @see IssueTable.allowEditsOfLastIssue for difference in UI
  */
 function IssueTable(props: Props) {
-
 
     let issueArr = props.issues.map((issue: Issue) => [
             issue.num,
@@ -36,13 +36,13 @@ function IssueTable(props: Props) {
               type="text"
               key="name"
               name="name"
-              onChange={props.onChangeIssueInfo as any}
+              onChange={props.onChangeIssueInfo}
               defaultValue={props.issues[0].name}
             />
         );
 
         issueArr[0][3] = (
-            <select key="public" name="public" onChange={props.onChangeIssueInfo as any}>
+            <select key="public" name="public" onChange={props.onChangeIssueInfo}>
               <option value={0}>No</option>
               <option value={1}>Yes</option>
             </select>
@@ -53,7 +53,7 @@ function IssueTable(props: Props) {
 
     return (
         <Container heading="Issues">
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
                 <Table key="table" headings={headings} rows={issueArr} />
                 {props.issues[0].canEdit ?
                     <div key="passwordDiv">

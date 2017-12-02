@@ -4,9 +4,9 @@ import './index.css';
 
 interface Props {
     headings: Array<Element | JSX.Element | string>;
-    rows: any[][];
+    // tslint:disable-next-line:no-any
+    rows: (Text | Element | string | any)[][];
 }
-
 
 /**
  * @prop headings - array
@@ -26,7 +26,7 @@ function Table(props: Props) {
             <tbody>
                 {props.rows.map((row, idx) =>
                     <tr key={idx}>
-                        {row.map((cellText: Text | Element, tdIdx: number) => <td key={tdIdx}>{cellText}</td>)}
+                        {row.map((cellText, tdIdx) => <td key={tdIdx}>{cellText}</td>)}
                     </tr>)}
             </tbody>
         </table>

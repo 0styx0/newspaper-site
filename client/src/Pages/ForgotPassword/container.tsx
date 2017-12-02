@@ -3,7 +3,7 @@ import { graphql, withApollo } from 'react-apollo';
 import { RecoverPassword } from '../../graphql/user';
 import ForgotPassword from './';
 
-interface Props {
+export interface Props {
     recoverPassword:
       (params: {
           query: typeof RecoverPassword,
@@ -42,6 +42,7 @@ export class ForgotPasswordContainer extends React.Component<Props, {}> {
 }
 
 const ForgotPasswordContainerWithData =
+    // tslint:disable-next-line:no-any
     graphql(RecoverPassword, {name: 'recoverPassword'})(ForgotPasswordContainer as any);
 
 export default withApollo(ForgotPasswordContainerWithData);

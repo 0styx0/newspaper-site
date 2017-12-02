@@ -9,15 +9,15 @@ import { User } from './interface.shared';
 import FormContainer from '../../components/Form/container';
 
 import './index.css';
+import { ChangeEvent } from 'react';
 
 interface Props {
     users: User[];
-    onSortInfo: Function;
-    onSubmit: Function;
-    onLevelChange: Function;
-    onDelete: Function;
+    onSortInfo: (e: ChangeEvent<HTMLSelectElement>) => void;
+    onSubmit: (target: HTMLFormElement) => void;
+    onLevelChange: (e: ChangeEvent<HTMLSelectElement>, id: string) => void;
+    onDelete: (e: ChangeEvent<HTMLInputElement>) => void;
 }
-
 
 function JournalistTable(props: Props) {
 
@@ -57,7 +57,7 @@ function JournalistTable(props: Props) {
                 />
             </div>
 
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
                 <div key="table">
                     <Table
                         headings={getTableHeadings(jwt)}
@@ -127,7 +127,9 @@ function getSortingOptions(jwt: Jwt) {
  *
  * @return 2d array of [profileLink, level, articles, views]
  */
-function formatDataForTable(userData: User[], onLevelChange: Function, onDelete: Function, jwt: Jwt) {
+function formatDataForTable(
+    userData: User[], onLevelChange: Props['onLevelChange'], onDelete: Props['onDelete'], jwt: Jwt
+) {
 
     return userData.map((person: User) => {
 
@@ -142,7 +144,7 @@ function formatDataForTable(userData: User[], onLevelChange: Function, onDelete:
 
             deleteBox = (
                 <input
-                    onChange={onDelete as any}
+                    onChange={onDelete}
                     key={person.id}
                     type="checkbox"
                     name="delAcc"
@@ -153,7 +155,7 @@ function formatDataForTable(userData: User[], onLevelChange: Function, onDelete:
             level = (
                 <select
                     name="lvl"
-                    onChange={((e: Event) => onLevelChange(e, person.id)) as any}
+                    onChange={((e: ChangeEvent<HTMLSelectElement>) => onLevelChange(e, person.id))}
                     defaultValue={person.level.toString()}
                 >
                     {Array(+jwt.level).fill(null).map((val, idx) =>
@@ -181,7 +183,5 @@ function formatDataForTable(userData: User[], onLevelChange: Function, onDelete:
         return info;
     });
 }
-
-
 
 export default JournalistTable;

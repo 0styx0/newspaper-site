@@ -4,7 +4,7 @@ import Input from '../../../components/Form/Input';
 import FormContainer from '../../../components/Form/container';
 
 interface Props {
-    onSubmit: (e: Event) => void;
+    onSubmit: (target: HTMLFormElement) => void;
 }
 
 function ChangePassword(props: Props) {
@@ -13,7 +13,7 @@ function ChangePassword(props: Props) {
         <Container
             heading="Change Password"
             children={
-                <FormContainer onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit}>
                     <Input
                         key="new"
                         label="New Password"

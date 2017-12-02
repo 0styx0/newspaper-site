@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
 
-
 const IssueQuery = gql`
     query IssueQuery {
         issues {
@@ -32,8 +31,6 @@ const IssueInfoQuery = gql`
       }
     }
 `;
-
-
 
 export {
     IssueQuery,

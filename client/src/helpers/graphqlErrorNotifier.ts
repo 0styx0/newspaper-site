@@ -1,9 +1,9 @@
 import Notification from './Notification/Notification';
 
-export default async function (query: Function, params: Object, successMessage?: string): Promise<any> {
+export default async function (query: Function, params: Object, successMessage?: string) {
 
     return await query(params)
-        .then((result: any) => {
+        .then(result => {
 
             if (successMessage) {
                 Notification({
@@ -14,11 +14,11 @@ export default async function (query: Function, params: Object, successMessage?:
             return result;
         })
         .catch((e: Error) => {
-            console.log(e);
+
             Notification({
                 body: e.message.split(': ')[1]
             });
 
-            // throw new Error(e.message);
+            throw new Error(e.message);
         });
 }

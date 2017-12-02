@@ -1,11 +1,11 @@
 import * as React from 'react';
 import '../../tests/setup.mocks';
-import { PublishContainer } from './container';
+import { PublishContainer, Props, State } from './container';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
 import { submitForm, setupComponent } from '../../tests/enzyme.helpers';
-import {  mount } from 'enzyme';
+import {  mount, ReactWrapper } from 'enzyme';
 
 // import { TagQuery } from '../../graphql/tags';
 
@@ -49,27 +49,26 @@ describe('<PublishContainer>', () => {
         return mount(
             <PublishContainer
               history={[]}
-              createArticle={createArticle}
-              createTag={createTag}
+              createArticle={createArticle as Props['createArticle']}
+              createTag={createTag as Props['createTag']}
             />
-        );
+        ) as ReactWrapper<Props, State>;
     }
 
     /**
      * Gives PublishContainer a fake version of state.editor (that has all functionality needed)
      */
-    function setFakeEditor(component: any, initialContent: string = '') {
+    function setFakeEditor(component: PublishContainer, initialContent: string = '') {
 
         component.setState({
 
             editor: {
-
                 content: initialContent,
                 setContent(content: string) {
                     this.content = content;
                 },
                 getContent() {
-                    return this.content;
+                    return this.content!;
                 }
             }
         });
@@ -83,8 +82,8 @@ describe('<PublishContainer>', () => {
 
                 <PublishContainer
                     history={[]}
-                    createArticle={mockCreateArticle}
-                    createTag={createTagMock}
+                    createArticle={mockCreateArticle as Props['createArticle']}
+                    createTag={createTagMock as Props['createTag']}
                 />
             ).toJSON();
 
@@ -173,8 +172,8 @@ describe('<PublishContainer>', () => {
                 return;
             });
 
-            setupComponent(wrapper, PublishContainer);
-            setFakeEditor(wrapper, '');
+            const component = setupComponent(wrapper, PublishContainer);
+            setFakeEditor(component, '');
 
             wrapper.find('option[value="other"]').simulate('change');
             (wrapper.find('input[name="addTag"]').instance() as {} as HTMLInputElement).value = newTag;
@@ -190,7 +189,7 @@ describe('<PublishContainer>', () => {
         /**
          * Fills out form with random data
          */
-        function fillOutForm(wrapper: any) {
+        function fillOutForm(wrapper: ReactWrapper<Props, State>) {
 
             const url: string = casual.url;
             const tags = new Set<HTMLOptionElement>();
@@ -199,10 +198,10 @@ describe('<PublishContainer>', () => {
             const component = setupComponent(wrapper, PublishContainer);
             setFakeEditor(component, content);
 
-            wrapper.find('input[name="name"]').instance().value = url;
+            (wrapper.find('input[name="name"]').instance() as {} as HTMLInputElement).value = url;
 
             const tagSelect = wrapper.find('select[name="tags"]');
-            const tagOptions = [...tagSelect.instance().options];
+            const tagOptions = Array.from((tagSelect.instance() as {} as HTMLSelectElement).options);
 
             while (tags.size < casual.integer(1, 3)) {
 
@@ -214,7 +213,8 @@ describe('<PublishContainer>', () => {
                 tags.add(tagOptions[indexOfTag]);
             }
 
-            wrapper.find('select[name="tags"]').instance().selectedOptions = [...tags];
+            (wrapper.find('select[name="tags"]').instance() as {} as HTMLSelectElement)
+                .selectedOptions = tags as {} as HTMLCollectionOf<HTMLOptionElement>;
 
             return {
                 tags: [...tags].map(option => option.value),

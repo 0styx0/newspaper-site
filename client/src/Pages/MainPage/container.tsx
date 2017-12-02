@@ -141,6 +141,6 @@ const MainPageContainerWithData = compose((
     graphql(ArticlePreviewTagQuery, {name: 'articleTagPreviews'}),
     graphql(ArticlePreviewIssueQuery, {name: 'articleIssuePreviews'}),
     graphql(IssueInfoQuery, {name: 'issueInfo'})
-) as any)(MainPageContainer);
+))(MainPageContainer);
 
 export default withApollo(MainPageContainerWithData);

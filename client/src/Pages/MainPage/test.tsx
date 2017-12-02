@@ -8,9 +8,6 @@ import * as sinon from 'sinon';
 import createHistory from 'history/createBrowserHistory';
 import { mount } from 'enzyme';
 
-
-
-
 const history = createHistory();
 
 Object.defineProperty(window.location, 'pathname', { // so can change path
@@ -134,7 +131,7 @@ describe('<MainPageContainer>', () => {
 
     describe('querying', () => {
 
-        function setup(query = getQueryStubs().stub()) {
+        function setup(query: Function = getQueryStubs().stub()) {
 
             return mount(
                 <MemoryRouter>

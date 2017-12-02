@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import Hint from './';
 
-interface Props {
+export interface Props {
     title: string;
     children: JSX.Element; // something wrapper around an input element (example: <label><input /></label>)
 }
 
-interface State {
+export interface State {
     reveal: boolean;
 }
 

@@ -3,8 +3,9 @@ import { compose, graphql } from 'react-apollo';
 import { IssueQuery, IssueUpdate } from '../../graphql/issues';
 import { Issue } from './interface.shared';
 import IssueTable from './';
+import { ChangeEvent } from 'react';
 
-interface State {
+export interface State {
     privateIssue: { // admins can change these (until public is true)
         public?: boolean;
         name?: string;
@@ -12,7 +13,7 @@ interface State {
     loaded: boolean;
 }
 
-interface Props {
+export interface Props {
     data: {
         loading: boolean;
         issues: Issue[]
@@ -48,7 +49,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
      * If current user is an admin, enables editing of most recent, unpublished issue @see this.allowEditsOfLastIssue
      */
     componentWillReceiveProps(props: Props) {
-        
+
         if (!props.data.issues || this.props.data.issues) {
             return;
         }
@@ -63,7 +64,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
      *
      * @example if event.target = <input name="public" value="1" />, then after this, this.state.privateIssue.public = 1
      */
-    onChangeIssueInfo(e: Event) {
+    onChangeIssueInfo(e: ChangeEvent<HTMLInputElement>) {
 
         const target = e.target as HTMLInputElement;
 
@@ -108,10 +109,9 @@ export class IssueTableContainer extends React.Component<Props, State> {
     }
 }
 
-
 const IssueTableContainerWithData = compose(
     graphql(IssueQuery),
     graphql(IssueUpdate)
-)(IssueTableContainer as any);
+)(IssueTableContainer);
 
 export default IssueTableContainerWithData;

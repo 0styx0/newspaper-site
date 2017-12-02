@@ -1,13 +1,9 @@
 import * as React from 'react';
 
 import './index.css';
+import { HTMLProps } from 'react';
 
-interface Props {
-    children: JSX.Element[];
-    // and any html attributes for html form element
-}
-
-export default function Form(props: Props & any) {
+export default function Form(props: HTMLProps<HTMLFormElement> & { children: JSX.Element[] }) {
 
     if (!props.children) { // not strictly needed, but gets rid of ts warning
         return null;

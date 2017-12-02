@@ -7,7 +7,7 @@
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
-const process = {env: {NODE_ENV:  "/", PUBLIC_URL: '/'}};
+const process = {env: {NODE_ENV:  '/', PUBLIC_URL: '/'}};
 
 export default function register() {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {

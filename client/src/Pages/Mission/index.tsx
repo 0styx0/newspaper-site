@@ -1,12 +1,12 @@
 import * as React from 'react';
 import EditableContainer from '../../components/Editable/container';
-
+import { FocusEvent, MouseEvent } from 'react';
 import './index.css';
 
 interface Props {
-    onSubmit: Function;
+    onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
     content: string;
-    onSave: Function;
+    onSave: (e: FocusEvent<HTMLDivElement>) => void;
     canEdit: boolean;
 }
 
@@ -16,12 +16,12 @@ export default function Mission(props: Props) {
         <EditableContainer
             key={props.content}
             canEdit={props.canEdit}
-            onSubmit={props.onSubmit as any}
+            onSubmit={props.onSubmit}
         >
             <div
               className="mission"
               dangerouslySetInnerHTML={{__html: props.content}}
-              onBlur={props.onSave as any}
+              onBlur={props.onSave}
             />
         </EditableContainer>
     );

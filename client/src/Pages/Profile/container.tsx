@@ -67,9 +67,6 @@ class ProfileContainer extends React.Component<Props, State> {
     }
 }
 
-
-
-
 const ProfileContainerWithData = compose(
     graphql(UserQuery, {
         options: {
@@ -77,7 +74,7 @@ const ProfileContainerWithData = compose(
                 profileLink: window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
             }
         }
-    } as any) as any
+    })
 )(ProfileContainer);
 
 export default withApollo(ProfileContainerWithData);

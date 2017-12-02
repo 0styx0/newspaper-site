@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { ForgotPasswordContainer } from './container';
+import { ForgotPasswordContainer, Props } from './container';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
-
 import casual from '../../tests/casual.data';
-import { mount } from 'enzyme';
-
+import { mount, ReactWrapper } from 'enzyme';
 import { setupComponent, submitForm } from '../../tests/enzyme.helpers';
-
-
 
 type formValues = {authCode: string, email: string, username: string};
 
@@ -50,15 +46,15 @@ describe('<ForgotPasswordContainer>', () => {
          *
          * @return new values of the inputs + ForgotPasswordContainer as component
          */
-        function setValues(wrapper: any): formValues & {component: any} {
+        function setValues(wrapper: ReactWrapper<Props, {}>): formValues & {component: ForgotPasswordContainer} {
 
             const { username, email, password } = casual;
 
             const component = setupComponent(wrapper, ForgotPasswordContainer);
 
-            wrapper.find('input[name="lastAuth"]').instance().value = password;
-            wrapper.find('input[name="username"]').instance().value = username;
-            wrapper.find('input[name="email"]').instance().value = email;
+            (wrapper.find('input[name="lastAuth"]').instance() as {} as HTMLInputElement).value = password;
+            (wrapper.find('input[name="username"]').instance() as {} as HTMLInputElement).value = username;
+            (wrapper.find('input[name="email"]').instance() as {} as HTMLInputElement).value = email;
 
             return {
                 component,
@@ -84,7 +80,7 @@ describe('<ForgotPasswordContainer>', () => {
 
         it('gets correct data', () => {
 
-            let values: formValues & { component: any };
+            let values: formValues & { component: ForgotPasswordContainer };
 
             const wrapper = setup(
                 async (params:

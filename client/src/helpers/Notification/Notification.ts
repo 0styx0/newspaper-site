@@ -1,4 +1,6 @@
+
 interface Window {
+    // tslint:disable-next-line:no-any
     Notification?: any;
 }
 
@@ -9,7 +11,7 @@ function Notification(options: {icon?: string, body: string}) {
     window.Notification.requestPermission().then(() => {
 
         options.icon = '/images/favicons/favicon.ico';
-        new window.Notification('TABC Eye of the Storm', options);
+        return new window.Notification('TABC Eye of the Storm', options);
     });
 }
 

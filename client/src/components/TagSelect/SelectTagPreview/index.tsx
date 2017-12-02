@@ -19,6 +19,10 @@ export default class SelectTagPreview extends React.Component<{}, State> {
         this.onChange = this.onChange.bind(this);
     }
 
+    shouldComponentUpdate(nextProps: {}, nextState: State) {
+        return nextProps !== this.props || nextState.redirect !== this.state.redirect;
+    }
+
     /**
      * Redirects to /tag/tag_user_selected
      */
@@ -40,7 +44,7 @@ export default class SelectTagPreview extends React.Component<{}, State> {
                         onInput: this.onChange
                     }}
                 />
-                {this.state.redirect ? <Redirect to={`/tag/${this.state.redirect}`} /> : ''}
+                {this.state.redirect ? <Redirect key={this.state.redirect} to={`/tag/${this.state.redirect}`} /> : ''}
             </span>
         );
     }

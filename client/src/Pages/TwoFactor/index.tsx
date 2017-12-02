@@ -2,16 +2,17 @@ import * as React from 'react';
 import Container from '../../components/Container';
 import Input from '../../components/Form/Input';
 import FormContainer from '../../components/Form/container';
+import { FormEvent } from 'react';
 
 interface Props {
-    onSubmit: Function;
+    onSubmit: (target: HTMLFormElement, e: FormEvent<HTMLFormElement>) => void;
 }
 
 function TwoFactor(props: Props) {
 
     return (
         <Container heading="Authenticate">
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
                 <Input
                     key="authcode"
                     label="Auth Code"

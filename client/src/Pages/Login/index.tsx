@@ -14,7 +14,7 @@ function LoginForm(props: Props) {
 
     return (
         <Container heading="Login">
-          <FormContainer onSubmit={props.onLogin as any} >
+          <FormContainer onSubmit={props.onLogin} >
             <Input
                 key="username"
                 label="Username"
@@ -45,6 +45,5 @@ function LoginForm(props: Props) {
         </Container>
     );
 }
-
 
 export default LoginForm;

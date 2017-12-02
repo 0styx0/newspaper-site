@@ -1,28 +1,25 @@
 import * as React from 'react';
-import { ArticleTableContainer, Article, Issue } from './container';
+import { ArticleTableContainer, Article, Issue, Props, State } from './container';
 import { MemoryRouter } from 'react-router';
-import { mount } from 'enzyme';
-
-
-
-
+import { mount, ReactWrapper } from 'enzyme';
 import renderWithProps from '../../tests/snapshot.helper';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
 import { randomCheckboxToggle, submitForm, setInput, setupComponent } from '../../tests/enzyme.helpers';
-
 import setFakeJwt from '../../tests/jwt.helper';
+import { ArticleQuery } from '../../graphql/articles';
 
 type Issues = (Issue & { articles: Article[] })[];
 
 setFakeJwt({level: 3}); // only lvl 3 can access this page
 
 let allTags = new Set<string>();
-casual.define('articles', function(amount: number, issue: number) {
+
+function generateArticles(amount: number, issue: number = casual.integer(1, 20)) {
 
     let articles: Issues = [
         {
-            num: issue || casual.integer(1, 20),
+            num: issue,
             max: casual.integer(50, 100),
             articles: []
         }
@@ -50,28 +47,36 @@ casual.define('articles', function(amount: number, issue: number) {
     articles[0].articles.forEach(article => article.tags.forEach(tag => allTags.add(tag)));
 
     return articles;
-});
+}
+casual.define('articles', generateArticles);
 
-casual.define('data', (issue?: number) => ({
-    loading: false,
-    issues: (casual as any).articles(casual.integer(1, 10), issue) as Issues
-}));
+const customCasual = casual as typeof casual & { articles: typeof generateArticles, data: typeof generateData };
 
-const filler = () => (true as any) as any;
+function generateData(issue?: number) {
+
+    return {
+        loading: false,
+        issues: customCasual.articles(casual.integer(1, 10), issue) as Issues
+    };
+}
+
+casual.define('data', generateData);
+
+const filler = () => (true) as {};
 
 function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
     return mount(
         <MemoryRouter>
             <ArticleTableContainer
-                data={(casual as any).data()}
+                data={customCasual.data()}
                 client={{
-                    query: async (query: {variables: {issue: number}}) => (
+                    query: async (params: { query: typeof ArticleQuery, variables: { issue: number | null } } ) => (
                         {
-                          data: (casual as any).data(query.variables.issue)
+                          data: customCasual.data(params.query.variables.issue)
                         }
                     )
-                } as any}
+                }}
                 updateArticle={mockGraphql.updateArticle ? mockGraphql.updateArticle : filler}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : filler}
             />
@@ -112,7 +117,7 @@ describe('<ArticleTableContainer>', () => {
                     deleteArticle={filler}
                     client={{
                         query: filler
-                    }}
+                    } as {} as Props['client']}
                 />
             );
 
@@ -126,7 +131,7 @@ describe('<ArticleTableContainer>', () => {
          * @param inputIndex - if given, the displayOrder input at that index will be the one changed.
          * If not passed, a random input will be chosen
          */
-        function changeOneInput(wrapper: any, inputIndex?: number) {
+        function changeOneInput(wrapper: ReactWrapper<Props, State>, inputIndex?: number) {
 
             const displayOrderInputs = wrapper.find('input[name="displayOrder"]');
 
@@ -138,14 +143,15 @@ describe('<ArticleTableContainer>', () => {
 
             const oneInput = displayOrderInputs.at(indexOfInput);
             const newValue = casual.integer(0, 100);
+            const inputInstance = oneInput.instance() as {} as HTMLInputElement;
 
-            oneInput.instance().value = newValue;
+            inputInstance.value = newValue.toString();
             oneInput.simulate('change', { target: { value: newValue, name: 'displayOrder'} });
 
-            expect(+oneInput.instance().value).toBe(newValue);
+            expect(+inputInstance.value).toBe(newValue);
 
             return {
-                input: oneInput,
+                input: inputInstance,
                 id: component.state.articles[indexOfInput].id,
                 index: indexOfInput
             };
@@ -159,7 +165,7 @@ describe('<ArticleTableContainer>', () => {
             for (let i = 0; i < casual.integer(0, 100); i++) {
                 const result = changeOneInput(wrapper);
 
-                expected.push([result.id, +result.input.instance().value]);
+                expected.push([result.id, +result.input.value]);
             }
 
             // If there are duplicate ids, only get the last one
@@ -188,7 +194,7 @@ describe('<ArticleTableContainer>', () => {
          *
          * If either param is not passed, it will be random
          */
-        function changeOneSelect(wrapper: any, inputIndex?: number, numberOfTags?: number) {
+        function changeOneSelect(wrapper: ReactWrapper<Props, State>, inputIndex?: number, numberOfTags?: number) {
 
             const tagSelects = wrapper.find('select[name="tags"]');
             const indexOfInput = (inputIndex === undefined) ?
@@ -210,9 +216,11 @@ describe('<ArticleTableContainer>', () => {
             const selectedOptions = oneInput.find('option')
                 .reduce((accum, option) => {
 
-                    option.instance().selected = newValueArr.indexOf(option.instance().value) !== -1;
-                    return option.instance().selected ? accum.concat([option.instance()]) : accum;
-                }, []);
+                    const optionInstance = option.instance() as {} as HTMLOptionElement;
+
+                    optionInstance.selected = newValueArr.indexOf(optionInstance.value) !== -1;
+                    return optionInstance.selected ? accum.concat([optionInstance]) : accum;
+                },      [] as HTMLOptionElement[]);
 
             oneInput.simulate('change', {target: {name: 'tags', value: newValueArr, selectedOptions}});
 
@@ -250,7 +258,7 @@ describe('<ArticleTableContainer>', () => {
         /**
          * checks a random `checkbox[name=delete]`
          */
-        function changeOneCheckbox(wrapper: any) {
+        function changeOneCheckbox(wrapper: ReactWrapper<Props, State>) {
 
             const component = wrapper.find(ArticleTableContainer).instance();
             const deleteCheckbox = wrapper.find('input[name="delete"]');
@@ -276,7 +284,7 @@ describe('<ArticleTableContainer>', () => {
 
             const { wrapper, component } = setupWithProps();
             const result = changeOneCheckbox(wrapper);
-            result.input.instance().checked = false;
+            (result.input.instance() as {} as HTMLInputElement).checked = false;
             result.input.simulate('change');
 
             expect(component.state.updates.idsToDelete.size).toBe(0);
@@ -291,7 +299,9 @@ describe('<ArticleTableContainer>', () => {
          * @param data - casual.data
          * @param func - to be called on every unique article
          */
-        function randomArticleLoop(wrapper: any, data: {issues: Issues}, func: (article: Article) => void) {
+        function randomArticleLoop(
+            wrapper: ReactWrapper<Props, State>, data: { issues: Issues }, func: (article: Article) => void
+        ) {
 
             const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
             const usedIds: string[] = [];

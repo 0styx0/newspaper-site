@@ -2,10 +2,12 @@ import * as React from 'react';
 
 import commands from './execCommands';
 import './index.css';
+import { MouseEvent } from 'react';
 
 interface Props {
-    handleEdits: Function; // whenever a formatting button is clicked (bold, italic, etc)
-    onSubmit?: Function; // what to do when user wants to save the edit
+    // whenever a formatting button is clicked (bold, italic, etc)
+    handleEdits: (event: MouseEvent<HTMLButtonElement>) => void;
+    onSubmit?: (event: MouseEvent<HTMLButtonElement>) => void; // what to do when user wants to save the edit
     content: JSX.Element; // what element is being edited
     buttons: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
 }
@@ -26,7 +28,7 @@ function Editable(props: Props) {
 
         buttons = (
             <div id={props.buttons === 'all' ? 'buttonContainer' : ''}>
-                {(commands as any as Command[]).map((command: Command, idx: number) => {
+                {(commands as {} as Command[]).map((command: Command, idx: number) => {
 
                     if (((props.buttons === 'basic' && command.basic) || props.buttons === 'all')
                         && document.queryCommandSupported(command.cmd)) {
@@ -35,7 +37,7 @@ function Editable(props: Props) {
                             <button
                               key={idx}
                               className={command.cmd}
-                              onClick={props.handleEdits as any}
+                              onClick={props.handleEdits}
                               type="button"
                             >
                               {command.cmd}
@@ -46,7 +48,7 @@ function Editable(props: Props) {
                 })}
 
                 <br />
-                <button type="button" onClick={props.onSubmit as any}>Submit</button>
+                <button type="button" onClick={props.onSubmit}>Submit</button>
             </div>
         );
     }

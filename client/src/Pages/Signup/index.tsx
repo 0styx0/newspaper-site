@@ -17,7 +17,7 @@ function Signup(props: Props) {
 
     return (
         <Container heading="Sign Up">
-          <FormContainer onSubmit={props.onSubmit as any}>
+          <FormContainer onSubmit={props.onSubmit}>
 
             <Input
               key="username"
@@ -90,7 +90,7 @@ function Signup(props: Props) {
                     key="level"
                     props={{
                       className: 'changed',
-                      defaultValue: 1,
+                      defaultValue: 1 as {} as string,
                       name: 'level',
                       children:
                         Array(jwt.level).fill(null).map((val, idx) =>

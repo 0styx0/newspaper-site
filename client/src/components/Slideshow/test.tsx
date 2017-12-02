@@ -5,9 +5,7 @@ import Slideshow from './';
 import { Image } from './';
 import casual from '../../tests/casual.data';
 import { setupComponent } from '../../tests/enzyme.helpers';
-
 import { mount } from 'enzyme';
-
 
 casual.define('images', () => {
 

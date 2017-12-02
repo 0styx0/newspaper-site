@@ -4,10 +4,11 @@ import CommentListContainer from '../../components/CommentList/container';
 import { ArticleInfo } from './shared.interfaces';
 
 import './index.css';
+import { FocusEvent, MouseEvent } from 'react';
 
 interface Props extends ArticleInfo {
-    onSaveEdits: (indexToSave: string, e: Event) => void;
-    onSubmit: Function;
+    onSaveEdits: (indexToSave: string, e: FocusEvent<HTMLElement>) => void;
+    onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 function Story(props: Props) {
@@ -19,12 +20,12 @@ function Story(props: Props) {
 
                     <EditableContainer
                         canEdit={props.canEdit}
-                        onSubmit={props.onSubmit as any}
+                        onSubmit={props.onSubmit}
                         key={props.id}
                         children={
                                 <header
-                                  onBlur={((e: Event) =>
-                                   props.onSaveEdits('heading', e)) as any}
+                                  onBlur={(e =>
+                                   props.onSaveEdits('heading', e))}
                                   dangerouslySetInnerHTML={{__html: props.heading}}
                                 />
                         }
@@ -36,8 +37,8 @@ function Story(props: Props) {
                         buttons="none"
                         children={
                             <section
-                              onBlur={((e: Event) =>
-                                props.onSaveEdits('body', e)) as any}
+                              onBlur={(e =>
+                                props.onSaveEdits('body', e))}
                               className="storyContainer"
                               dangerouslySetInnerHTML={{__html: props.body}}
                             />

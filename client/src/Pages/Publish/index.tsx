@@ -4,13 +4,13 @@ import Input from '../../components/Form/Input';
 import TagSelect from '../../components/TagSelect';
 import Label from '../../components/Form/Label';
 import FormContainer from '../../components/Form/container';
-
+import { ChangeEvent, MouseEvent } from 'react';
 import './index.css';
 
 interface Props {
     onSubmit: Function;
-    onAutoFormat: Function;
-    onTagChange: Function;
+    onAutoFormat: (e: MouseEvent<HTMLButtonElement>) => void;
+    onTagChange: (e: ChangeEvent<HTMLSelectElement>) => void;
     showTagInput: boolean;
 }
 
@@ -18,7 +18,7 @@ function Publish(props: Props) {
 
     return (
         <Container heading="Publish Story">
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
 
                 <Label key="tags" value="Tags" >
                     <TagSelect
@@ -65,7 +65,7 @@ function Publish(props: Props) {
                     }}
                 />
 
-                <button key="autoformat" onClick={props.onAutoFormat as any} type="button">Auto Format</button>
+                <button key="autoformat" onClick={props.onAutoFormat} type="button">Auto Format</button>
                 <textarea key="txtArea" name="txtArea" className="changed" id="editor" />
 
                 <input

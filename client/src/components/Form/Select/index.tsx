@@ -1,10 +1,10 @@
 import * as React from 'react';
-
 import Label from '../Label';
+import { HTMLProps } from 'react';
 
 interface Props {
     label: string;
-    props: any; // really should be html attributes
+    props: HTMLProps<HTMLSelectElement>; // really should be html attributes
 }
 
 /**
@@ -13,7 +13,7 @@ interface Props {
  */
 export default function Select(props: Props) {
 
-    const select = React.cloneElement(<select/>, props.props);
+    const select = React.cloneElement(<select />, props.props);
 
     return (
         <Label

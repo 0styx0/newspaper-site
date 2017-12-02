@@ -7,6 +7,7 @@ import { EditArticle } from '../../graphql/articles';
 
 import { ArticleInfo, Story } from './shared.interfaces';
 import StoryComponent from './';
+import { FocusEvent } from 'react';
 
 interface Props {
 
@@ -38,7 +39,7 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
     /**
      * Saves e.target.innerHTML to this.state[indexToChange]
      */
-    onSaveEdits(indexToChange: string, e: Event) {
+    onSaveEdits(indexToChange: string, e: FocusEvent<HTMLElement>) {
 
         const newState = {};
         newState[indexToChange] = (e.target as HTMLElement).innerHTML;
@@ -111,18 +112,8 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
     }
 }
 
-// const location = window.location.pathname.split('/');
-
 const StoryContainerWithData = compose(
-    /*graphql(ArticleQuery, { name: 'queryArticle' }/*, {
-        options: {
-            variables: {
-                issue: +location[2],
-                url: location[4],
-            }y
-        }
-    }),*/
     graphql(EditArticle, {name: 'editArticle'}),
-)(StoryContainer as any);
+)(StoryContainer);
 
 export default withApollo(StoryContainerWithData);

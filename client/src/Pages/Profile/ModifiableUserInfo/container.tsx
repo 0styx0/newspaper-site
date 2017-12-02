@@ -4,14 +4,15 @@ import { UserDelete } from '../../../graphql/users';
 import { graphql, withApollo, compose } from 'react-apollo';
 import { ModifiableUserInfo } from '../shared.interfaces';
 import ModifiableUserInfoComponent from './';
+import { ChangeEvent } from 'react';
 
-interface Props {
+export interface Props {
     updateUser: Function;
     deleteUser: Function;
     fetchPrivateUserData: { refetch: Function };
 }
 
-interface State {
+export interface State {
     updates: {
         twoFactor?: boolean;
         notifications?: boolean;
@@ -37,7 +38,7 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
         };
     }
 
-    onDelete(e: Event) {
+    onDelete(e: ChangeEvent<HTMLInputElement>) {
 
         this.setState({
             delete: (e.target as HTMLInputElement).checked
@@ -49,7 +50,7 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
      *
      * @uses `e.target.name`, `e.target.value`
      */
-    onChange(e: Event) {
+    onChange(e: ChangeEvent<HTMLInputElement>) {
 
         const target = e.target as HTMLInputElement;
 
@@ -126,6 +127,6 @@ const ModifiableUserInfoContainerWithData = compose(
     graphql(PrivateUserQuery, { name: 'fetchPrivateUserData' }),
     graphql(UserUpdate, {name: 'updateUser'}),
     graphql(UserDelete, {name: 'deleteUser'})
-)(ModifiableUserInfoContainer as any);
+)(ModifiableUserInfoContainer);
 
 export default withApollo(ModifiableUserInfoContainerWithData);

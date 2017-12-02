@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { JournalistTableContainer } from './container';
+import { JournalistTableContainer, Props, State } from './container';
 import { MemoryRouter } from 'react-router';
 import * as mocks from '../../tests/setup.mocks';
 import * as casual from 'casual';
@@ -12,13 +12,12 @@ import * as sinon from 'sinon';
 import {  mount, ReactWrapper } from 'enzyme';
 import { getJWT } from '../../helpers/jwt/index';
 
-
 /**
  * @param amount - how many users to return
  *
  * @return array of randomly generated Users
  */
-casual.define('users', function(amount: number, requiredLevels: number[] = []) {
+function generateUsers(amount: number, requiredLevels: number[] = []) {
 
     let users: User[] = [];
 
@@ -41,11 +40,12 @@ casual.define('users', function(amount: number, requiredLevels: number[] = []) {
     }
 
     return users;
-});
+}
+casual.define('users', generateUsers);
 
 const data = {
     loading: false,
-    users: (casual as any).users(5) as User[]
+    users: (casual as {} as { users: typeof generateUsers }).users(5)
 };
 
 // for some reason beforeEvery doesn't work
@@ -55,8 +55,8 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
         <MemoryRouter>
             <JournalistTableContainer
                 data={data}
-                userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : async (test: any) => true}
-                userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : async (test: any) => false}
+                userUpdate={mockGraphql.userUpdate ? mockGraphql.userUpdate : async (test: {}) => true}
+                userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : async (test: {}) => false}
             />
         </MemoryRouter>
     );
@@ -78,8 +78,8 @@ describe('<JournalistTableContainer>', () => {
             const tree = renderWithProps(
                 <JournalistTableContainer
                     data={fixedData}
-                    userUpdate={(test: any) => true}
-                    userDelete={(test: any) => false}
+                    userUpdate={(test: {}) => true}
+                    userDelete={(test: {}) => false}
                 />);
 
             expect(tree).toMatchSnapshot();
@@ -92,8 +92,8 @@ describe('<JournalistTableContainer>', () => {
             const tree = renderWithProps(
                 <JournalistTableContainer
                     data={fixedData}
-                    userUpdate={(test: any) => true}
-                    userDelete={(test: any) => false}
+                    userUpdate={(test: {}) => true}
+                    userDelete={(test: {}) => false}
                 />);
 
             expect(tree).toMatchSnapshot();
@@ -107,8 +107,8 @@ describe('<JournalistTableContainer>', () => {
             const tree = renderWithProps(
                 <JournalistTableContainer
                     data={fixedData}
-                    userUpdate={(test: any) => true}
-                    userDelete={(test: any) => false}
+                    userUpdate={(test: {}) => true}
+                    userDelete={(test: {}) => false}
                 />
             );
 
@@ -118,7 +118,7 @@ describe('<JournalistTableContainer>', () => {
 
     describe('sorting `select`', () => {
 
-        let wrapper: any; // really ReactWrapper
+        let wrapper: ReactWrapper<Props, State>; // really ReactWrapper
         let sortingSelect: any;
         let component: any; // really JSX class
 

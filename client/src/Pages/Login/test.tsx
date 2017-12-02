@@ -1,20 +1,12 @@
 import * as React from 'react';
-import { LoginFormContainer } from './container';
+import { LoginFormContainer, Props } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import * as casual from 'casual';
 import * as sinon from 'sinon';
 import { encodeJwt } from '../../tests/jwt.helper';
-import * as mocks from '../../tests/setup.mocks';
-import { mount } from 'enzyme';
-
-
-
-
-// using it here even though appears do to nothing to get rid of unused import warning.
-// Using it really for side effect of defining localstorage
-mocks.localStorage.clear();
-
+import { mount, ReactWrapper } from 'enzyme';
+import localStorageMock from '../../tests/localstorage.mock';
 
 casual.define('jwt', () =>
 
@@ -36,13 +28,13 @@ casual.define('data', (jwt: string) => Promise.resolve({
 type Casual = typeof casual & { jwt: string, data: (jwt: string) => Promise<{ data: { login: { jwt: string }} }> };
 const customCasual = casual as Casual;
 
-function setup(loginUser: any) {
+function setup(loginUser: Function) {
 
     return mount(
         <MemoryRouter>
             <LoginFormContainer
                 loginUser={loginUser ?
-                    loginUser :
+                    loginUser as Props['loginUser'] :
                     (params: { variables: { username: string, password: string }}) =>
                       customCasual.data(customCasual.jwt)}
                 history={[]}
@@ -77,12 +69,12 @@ describe('<LoginFormContainer>', () => {
         /**
          * Sets username and password inputs and submits the form
          */
-        function setInputs(wrapper: any) {
+        function setInputs(wrapper: ReactWrapper<Props, {}>) {
 
             const { username, password } = casual;
 
-            wrapper.find('input[name="username"]').instance().value = username;
-            wrapper.find('input[name="password"]').instance().value = password;
+            (wrapper.find('input[name="username"]').instance() as {} as HTMLInputElement).value = username;
+            (wrapper.find('input[name="password"]').instance() as {} as HTMLInputElement).value = password;
 
             return {
                 username,
@@ -119,7 +111,7 @@ describe('<LoginFormContainer>', () => {
             wrapper.find('form').first().simulate('submit');
 
             // checks if jwt was written to localstorage
-            mocks.localStorage.setItem = (field, value) => {
+            localStorageMock.setItem = (field, value) => {
 
                 expect(value).toEqual(jwt);
 

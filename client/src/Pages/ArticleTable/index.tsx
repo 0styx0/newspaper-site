@@ -10,14 +10,15 @@ import { Article, Issue } from './container';
 
 import ArticleLink from '../../components/ArticleTable/Link';
 import AuthorLink from '../../components/User/Link';
+import { ChangeEvent } from 'react';
 
 interface Props {
     issue: Issue;
     articles: Article[];
     onUpdate: Function;
     onSubmit: Function;
-    onChange: (e: any, article: Article) => void;
-    onDelete: Function;
+    onChange: (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>, article: Article) => void;
+    onDelete: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
@@ -56,7 +57,7 @@ export default function ArticleTable(props: Props) {
                 name: 'issueNumber'
                 }}
             />
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
 
                 <Table key="table" headings={headings} rows={rows}/>
 
@@ -111,7 +112,7 @@ function createArticleTableRows(props: Props) {
                         tags={[...allTags]}
                         props={{
                             name: 'tags',
-                            onChange: (e: any) => props.onChange(e, article),
+                            onChange: (e: ChangeEvent<HTMLSelectElement>) => props.onChange(e, article),
                             multiple: true,
                             defaultValue: article.tags,
                             required: true,
@@ -123,7 +124,7 @@ function createArticleTableRows(props: Props) {
                 (
                     <input
                       type="number"
-                      onChange={(e) => props.onChange(e, article) as any}
+                      onChange={(e) => props.onChange(e, article)}
                       name="displayOrder"
                       defaultValue={`${article.displayOrder}`}
                     />
@@ -131,7 +132,7 @@ function createArticleTableRows(props: Props) {
                 (
                     <input
                       key={article.id}
-                      onChange={props.onDelete as any}
+                      onChange={props.onDelete}
                       type="checkbox"
                       name="delete"
                       value={article.id}

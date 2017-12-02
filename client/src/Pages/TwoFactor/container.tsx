@@ -4,7 +4,7 @@ import { graphql, withApollo } from 'react-apollo';
 import { UserVerifyEmail } from '../../graphql/user';
 import TwoFactor from './';
 
-interface Props {
+export interface Props {
     history: string[];
     verifyEmail: (params: { query: typeof UserVerifyEmail, variables: { authCode: string }}) =>
       Promise<{
@@ -44,6 +44,7 @@ export class TwoFactorContainer extends React.Component<Props, {}> {
     }
 }
 
+// tslint:disable-next-line:no-any
 const TwoFactorContainerWithData = graphql(UserVerifyEmail, { name: 'verifyEmail' })(TwoFactorContainer as any);
 
 export default withApollo(TwoFactorContainerWithData);

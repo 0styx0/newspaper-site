@@ -4,11 +4,12 @@ import Input from '../../../components/Form/Input';
 import Table from '../../../components/Table';
 import { ModifiableUserInfo } from '../shared.interfaces';
 import FormContainer from '../../../components/Form/container';
+import { ChangeEvent } from 'react';
 
 interface Props extends ModifiableUserInfo {
     onSubmit: Function;
-    onChange: Function;
-    onDelete: Function;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onDelete: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function ModifiableUserInfo(props: Props) {
@@ -25,7 +26,7 @@ function ModifiableUserInfo(props: Props) {
         (
             <input
               name="twoFactor"
-              onChange={props.onChange as any}
+              onChange={props.onChange}
               type="checkbox"
               defaultChecked={props.twoFactor}
             />
@@ -33,7 +34,7 @@ function ModifiableUserInfo(props: Props) {
         (
             <input
                 name="notifications"
-                onChange={props.onChange as any}
+                onChange={props.onChange}
                 type="checkbox"
                 defaultChecked={props.notifications}
             />
@@ -44,7 +45,7 @@ function ModifiableUserInfo(props: Props) {
                 type="checkbox"
                 name="delAcc"
                 value={props.id}
-                onChange={props.onDelete as any}
+                onChange={props.onDelete}
             />
         )
     ];
@@ -54,7 +55,7 @@ function ModifiableUserInfo(props: Props) {
             heading="Options"
             className="tableContainer"
             children={
-                <FormContainer onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit}>
                     <Table
                         key="table"
                         headings={headings}

@@ -3,7 +3,7 @@ import ChangePassword from './';
 import { UserUpdate } from '../../../graphql/user';
 import { graphql, compose, withApollo } from 'react-apollo';
 
-interface Props {
+export interface Props {
     updatePassword: Function;
 }
 
@@ -18,7 +18,7 @@ export class ChangePasswordContainer extends React.Component<Props, {}> {
     /**
      * Send data to server
      */
-    onSubmit(target: any) { // HTMLFormElement
+    onSubmit(target: HTMLFormElement) {
 
         const oldPassword = target.querySelector('[name=password]') as HTMLInputElement;
         const newPassword = target.querySelector('[name=newPassword]') as HTMLInputElement;
@@ -44,7 +44,7 @@ export class ChangePasswordContainer extends React.Component<Props, {}> {
 }
 
 const ChangePasswordContainerWithData = compose(
-    graphql(UserUpdate, {name: 'updatePassword'}) as any
+    graphql(UserUpdate, {name: 'updatePassword'})
 )(ChangePasswordContainer);
 
 export default withApollo(ChangePasswordContainerWithData);

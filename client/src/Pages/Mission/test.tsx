@@ -6,9 +6,6 @@ import * as casual from 'casual';
 
 import { mount } from 'enzyme';
 
-
-
-
 document.queryCommandSupported = () => true; // used in Editable component
 
 describe('<MissionContainer>', () => {
@@ -76,7 +73,7 @@ describe('<MissionContainer>', () => {
             />
         );
 
-        (wrapper as any).setProps({data: {mission: {
+        wrapper.setProps({data: {mission: {
                       mission: casual.sentences(),
                       canEdit: true
                   }}});
@@ -115,7 +112,7 @@ describe('<MissionContainer>', () => {
             });
 
             const content = wrapper.find('[contentEditable]').first();
-            (content.instance() as any as HTMLDivElement).innerHTML = newMission;
+            (content.instance() as {} as HTMLDivElement).innerHTML = newMission;
             content.simulate('blur'); // so container can save to state
 
             wrapper.find('button').last().simulate('click');

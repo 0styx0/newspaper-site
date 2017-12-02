@@ -4,12 +4,14 @@ import { ReactWrapper } from 'enzyme';
 /**
  * checks a random checkbox
  */
-export function randomCheckboxToggle(checkboxList: any, indexToToggle?: number) {
+export function randomCheckboxToggle(checkboxList: ReactWrapper<any, any>, indexToToggle?: number) {
 
     const checkboxIndex = (indexToToggle === undefined) ? casual.integer(0, checkboxList.length - 1) : indexToToggle;
 
     const oneCheckbox = checkboxList.at(checkboxIndex);
-    oneCheckbox.instance().checked = !oneCheckbox.instance().checked;
+    const checkboxInstance = oneCheckbox.instance() as {} as HTMLInputElement;
+
+    checkboxInstance.checked = !checkboxInstance.checked;
     oneCheckbox.simulate('change');
 
     return {
@@ -29,9 +31,9 @@ export function submitForm(wrapper: ReactWrapper<any, any>) {
  * @param value - what to set the input to
  * @param name - of input to set
  */
-export function setInput(wrapper: any, value: string = casual.password, name = 'password') {
+export function setInput(wrapper: ReactWrapper<any, any>, value: string = casual.password, name: string = 'password') {
 
-    wrapper.find(`input[name="${name}"]`).instance().value = value;
+    (wrapper.find(`input[name="${name}"]`).instance() as {} as HTMLInputElement).value = value;
 
     return value;
 }

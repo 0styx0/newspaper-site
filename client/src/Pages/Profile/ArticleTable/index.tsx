@@ -5,11 +5,12 @@ import Table from '../../../components/Table';
 import { Article } from '../shared.interfaces';
 import ArticleLink from '../../../components/ArticleTable/Link';
 import FormContainer from '../../../components/Form/container';
+import { FormEvent, ChangeEvent } from 'react';
 
 interface Props {
     articles: Article[];
-    onSubmit: Function;
-    onDelete: Function;
+    onSubmit: (target: HTMLFormElement, e: FormEvent<HTMLFormElement>) => void;
+    onDelete: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
@@ -20,7 +21,6 @@ interface Props {
  * @see ./container.tsx
  */
 function UserArticleTable(props: Props) {
-
 
     const headings: Array<string | JSX.Element> = [
         'Article',
@@ -53,7 +53,7 @@ function UserArticleTable(props: Props) {
                 <input
                     type="checkbox"
                     name="delArt"
-                    onChange={props.onDelete as any}
+                    onChange={props.onDelete}
                     value={article.id}
                 />
             );
@@ -65,7 +65,7 @@ function UserArticleTable(props: Props) {
         <Container
             heading="Articles"
             children={
-                <FormContainer onSubmit={props.onSubmit as any}>
+                <FormContainer onSubmit={props.onSubmit}>
                     <Table
                         key="table"
                         headings={headings}

@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import Editable from './';
+import { MouseEvent } from 'react';
 
 interface Props {
     children: Element | JSX.Element | HTMLElement | (Element | JSX.Element | string)[];
     canEdit: boolean;
     buttons?: 'all' | 'basic' | 'none'; // all buttons, or just a subset of them
-    onSubmit?: Function;
+    onSubmit?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 /**
@@ -27,7 +28,7 @@ export class EditableContainer extends React.Component<Props, {}> {
         this.handleEdits = this.handleEdits.bind(this);
     }
 
-    handleEdits(event: Event) {
+    handleEdits(event: MouseEvent<HTMLButtonElement>) {
 
         const target = event.target as HTMLElement;
 
@@ -63,7 +64,6 @@ export class EditableContainer extends React.Component<Props, {}> {
             eltToChange!.classList.toggle(className);
         }
     }
-
 
     render(): JSX.Element {
 

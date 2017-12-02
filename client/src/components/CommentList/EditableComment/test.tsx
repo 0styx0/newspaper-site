@@ -2,20 +2,23 @@ import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
-import { EditableCommentContainer } from './container';
+import { EditableCommentContainer, Props } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as mocks from '../../../tests/setup.mocks';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
 
-
 document.queryCommandSupported = () => true; // used in Editable component
 
 describe('<EditableCommentContainer>', () => {
 
-    const mockFunction = (() => { return; }) as any;
+    const mockFunction = (() => { return; });
 
-    function setup(id: string, functions = {addToList: mockFunction, createComment: mockFunction}) {
+    function setup(
+        id: string,
+        functions: { addToList: Props['addToList'], createComment: Props['createComment'] } =
+            { addToList: mockFunction, createComment: mockFunction }
+    ) {
 
         return mount(
             <EditableCommentContainer
@@ -70,7 +73,7 @@ describe('<EditableCommentContainer>', () => {
 
             const contentEditable = wrapper.find('[contentEditable]').first();
 
-            (contentEditable.instance() as any as HTMLDivElement).innerHTML = content;
+            (contentEditable.instance() as {} as HTMLDivElement).innerHTML = content;
             contentEditable.simulate('blur');
             expect(wrapper.state().content).toBe(content);
         });

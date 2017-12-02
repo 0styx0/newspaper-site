@@ -1,48 +1,49 @@
 const commands = [{
-    cmd: "bold",
+    cmd: 'bold',
     basic: true
 }, {
-    cmd: "italic",
+    cmd: 'italic',
     basic: true
 }, {
-    cmd: "underline",
+    cmd: 'underline',
     basic: true
 }, {
-    cmd: "heading",
-    val: "1-6"
+    cmd: 'heading',
+    val: '1-6'
 }, {
-    cmd: "fontSize",
-    val: "1-7"
+    cmd: 'fontSize',
+    val: '1-7'
 }, {
-    cmd: "insertOrderedList"
+    cmd: 'insertOrderedList'
 }, {
-    cmd: "insertUnorderedList"
+    cmd: 'insertUnorderedList'
 }, {
-    cmd: "justifyFull"
+    cmd: 'justifyFull'
 }, {
-    cmd: "justifyLeft"
+    cmd: 'justifyLeft'
 }, {
-    cmd: "justifyRight"
+    cmd: 'justifyRight'
 }, {
-    cmd: "justifyCenter"
+    cmd: 'justifyCenter'
 }, {
-    cmd: "strikeThrough",
+    cmd: 'strikeThrough',
     basic: true
 }, {
-    cmd: "subscript"
+    cmd: 'subscript'
 }, {
-    cmd: "superscript"
+    cmd: 'superscript'
 }, {
-    cmd: "insertImage",
-    val: "https://dummyimage.com/160x90"
+    cmd: 'insertImage',
+    val: 'https://dummyimage.com/160x90'
 }, {
-    cmd: "createLink",
-    val: "www.example.com",
+    cmd: 'createLink',
+    val: 'www.example.com',
     basic: true
 }, {
-    cmd: "unlink"
+    cmd: 'unlink'
 }, {
-    cmd: "hideFromPreview",
-    val: "Hide element from main page"
+    cmd: 'hideFromPreview',
+    val: 'Hide element from main page'
 }];
-export default commands
+
+export default commands;

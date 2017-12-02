@@ -3,6 +3,7 @@ import { ArticleQuery, ArticleUpdate, ArticleDelete } from '../../graphql/articl
 import { compose, graphql, withApollo } from 'react-apollo';
 
 import ArticleTable from './';
+import { ChangeEvent } from 'react';
 
 export interface Article {
     tags: string[];
@@ -22,7 +23,7 @@ export interface Issue {
     max: number;
 }
 
-interface Props {
+export interface Props {
     data: {
         loading: boolean;
         issues?: (
@@ -32,13 +33,14 @@ interface Props {
         )[]; // will never be more length than 1
     };
     client: {
-        query: ( params: { query: typeof ArticleQuery, variables: { issue: number | null; } } ) => Promise<Props>;
+        query: (params: { query: typeof ArticleQuery, variables: { issue: number | null; } }) =>
+            Promise<{ data: Props['data'] }>;
     };
     updateArticle: Function;
     deleteArticle: Function;
 }
 
-interface State {
+export interface State {
     issue: Issue;
     articles: Article[];
     updates: {
@@ -139,7 +141,7 @@ export class ArticleTableContainer extends React.Component<Props, State> {
      * @uses `e.target.name` as index of state.updates
      * @uses `e.target.value` as the value
      */
-    onChange(e: Event, article: Article) {
+    onChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, article: Article) {
 
         const target = e.target as HTMLInputElement | HTMLSelectElement;
 
@@ -173,7 +175,7 @@ export class ArticleTableContainer extends React.Component<Props, State> {
      *
      * @param e {HTMLCheckboxEvent}
      */
-    onDelete(e: Event) {
+    onDelete(e: ChangeEvent<HTMLInputElement>) {
 
         const stateUpdate = this.state.updates;
 
@@ -277,6 +279,6 @@ const ArticleTableContainerWithData = compose(
     }),
     graphql(ArticleUpdate, {name: 'updateArticle'}),
     graphql(ArticleDelete, {name: 'deleteArticle'})
-)(ArticleTableContainer as any);
+)(ArticleTableContainer);
 
 export default withApollo(ArticleTableContainerWithData);

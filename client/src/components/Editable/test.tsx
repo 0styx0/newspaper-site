@@ -5,12 +5,13 @@ import EditableContainer from './container';
 import * as sinon from 'sinon';
 
 import { mount } from 'enzyme';
+import { MouseEvent } from 'react';
 
 document.queryCommandSupported = () => true;
 
 describe('<EditableContainer>', () => {
 
-    function setup(onSubmit: Function) {
+    function setup(onSubmit: (e: MouseEvent<HTMLButtonElement>) => void) {
 
         return mount(
             <EditableContainer
@@ -34,7 +35,7 @@ describe('<EditableContainer>', () => {
                     children={<p>Hi, this is a test</p>}
                     canEdit={canEdit}
                     buttons={buttons}
-                    onSubmit={casual.function}
+                    onSubmit={casual.function as (e: MouseEvent<HTMLButtonElement>) => void}
                 />
             ).toJSON();
 

@@ -2,14 +2,8 @@ import * as React from 'react';
 import Logout from './';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
-
 import setFakeJwt from '../../tests/jwt.helper';
-
 import { mount } from 'enzyme';
-
-
-
-
 
 setFakeJwt({level: 3});
 
@@ -47,4 +41,3 @@ describe('<Logout>', () => {
         });
     });
 });
-

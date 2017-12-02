@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { TwoFactorContainer } from './container';
+import { TwoFactorContainer, Props } from './container';
 import * as renderer from 'react-test-renderer';
 import casual from '../../tests/casual.data';
 import { encodeJwt } from '../../tests/jwt.helper';
 import * as mocks from '../../tests/setup.mocks';
 import * as sinon from 'sinon';
-import { mount } from 'enzyme';
-
-
-
+import { mount, ReactWrapper } from 'enzyme';
 
 mocks.localStorage.clear();
 
@@ -44,12 +41,12 @@ describe('<TwoFactorContainer>', () => {
      *
      * @return authCode value and form
      */
-    function populateForm(wrapper: any) {
+    function populateForm(wrapper: ReactWrapper<Props, {}>) {
 
         const authCode = casual.password;
 
         const form = wrapper.find('form').first();
-        wrapper.find('input[name="authCode"]').instance().value = authCode;
+        (wrapper.find('input[name="authCode"]').instance() as {} as HTMLInputElement).value = authCode;
 
         return {
             authCode,

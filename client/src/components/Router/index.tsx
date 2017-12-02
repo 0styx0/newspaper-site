@@ -53,15 +53,15 @@ export default function Router() {
             <Switch>
                 <Route path="/login" component={LoginContainer}/>
                 <Route path="/signup" component={SignupContainer}/>
-                <Route exact path="/u" component={JournalistTableContainer}/>
+                <Route exact={true} path="/u" component={JournalistTableContainer}/>
                 <Route path="/mission" component={MissionContainer}/>
-                <Route exact path="/issue" component={IssueTableContainer}/>
+                <Route exact={true} path="/issue" component={IssueTableContainer}/>
                 {jwt.level ? <Route path="/modifyArticles" component={ArticleTableContainer}/> : ''}
                 {jwt.level ?  <Route path="/publish" component={PublishContainer} /> : ''}
                 <Route path="/issue/(.*)/story/(.*)" component={StoryContainer}/>
                 <Route path="/tag/(.*)" component={MainPageContainer}/>
                 <Route path="/issue/(.*)" component={MainPageContainer}/>
-                <Route exact path="/" component={MainPageContainer}/>
+                <Route exact={true} path="/" component={MainPageContainer}/>
                 <Route path="/u/(.*)" component={ProfileContainer}/>
                 <Route path="/authLogin" component={TwoFactorContainer}/>
                 <Route path="/forgotPass" component={ForgotPasswordContainer}/>

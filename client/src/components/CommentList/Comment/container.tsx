@@ -3,7 +3,7 @@ import { getJWT } from '../../../helpers/jwt';
 import { CommentDelete } from '../../../graphql/comment';
 import Comment from './';
 import { graphql, withApollo } from 'react-apollo';
-
+import { MouseEvent } from 'react';
 
 // @see Comment 's Props, which are much the same
 export interface Props {
@@ -20,7 +20,6 @@ interface State {
     content: string;
     author: string;
 }
-
 
 /**
  * @param props - @see CommentContainer Props
@@ -59,7 +58,12 @@ export class CommentContainer extends React.Component<Props, State> {
 
     render() {
 
-        const commentProps: {author: string; profileLink: string; content: string; onDelete?: Function} = {
+        const commentProps: {
+            author: string;
+            profileLink: string;
+            content: string;
+            onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
+        } = {
             author: this.state.author,
             profileLink: this.props.profileLink,
             content: this.state.content
@@ -81,6 +85,7 @@ export class CommentContainer extends React.Component<Props, State> {
     }
 }
 
+// tslint:disable-next-line:no-any
 const CommentContainerWithData = graphql(CommentDelete, {name: 'deleteComment'})(CommentContainer as any);
 
 export default withApollo(CommentContainerWithData);

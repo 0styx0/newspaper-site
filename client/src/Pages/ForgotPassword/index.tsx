@@ -11,7 +11,7 @@ function ForgotPassword(props: Props) {
 
     return (
         <Container heading="Recover Password">
-            <FormContainer onSubmit={props.onSubmit as any}>
+            <FormContainer onSubmit={props.onSubmit}>
                 <Input
                     key="username"
                     label="Username"

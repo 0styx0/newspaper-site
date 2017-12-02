@@ -16,6 +16,7 @@ import { ArticleCreate } from '../../graphql/article';
 import { TagCreate } from '../../graphql/tags';
 import { graphql, withApollo, compose } from 'react-apollo';
 import './index.css';
+import { ChangeEvent } from 'react';
 
 export interface Props { // from react router hoc
     history: string[];
@@ -27,13 +28,14 @@ export interface Props { // from react router hoc
             }
         }
     }>;
-    createTag: (params: { variables: { tag: string } }) => any;
+    createTag: (params: { variables: { tag: string } }) => {};
 }
 
-interface State {
+export interface State {
     editor?: {
-        getContent: Function;
-        setContent: Function;
+        getContent: () => string;
+        setContent: (content: string) => void;
+        content?: string;
     };
     showTagInput: boolean;
 }
@@ -69,13 +71,13 @@ export class PublishContainer extends React.Component<Props, State> {
            'td,tr,th,tbody,thead,tfoot,strong,em,u,ul,ol,li,q,blockquote,pre,br',
           content_css: '/tinymce.css',
           paste_data_images: true,
-          setup: (editor: {getContent: Function, setContent: Function}) => {
+          setup: (editor: State['editor']) => {
 
             this.setState({
                 editor
             });
           }
-        } as any);
+        });
     }
 
     /**
@@ -83,13 +85,14 @@ export class PublishContainer extends React.Component<Props, State> {
      */
     componentWillUnmount() {
 
+        // tslint:disable-next-line:no-any
         (tinymce as any).remove(this.state.editor);
     }
 
-    onTagChange(e: Event) {
+    onTagChange(e: ChangeEvent<HTMLSelectElement>) {
 
         this.setState({
-            showTagInput: (e.currentTarget as HTMLOptionElement).value === 'other'
+            showTagInput: e.currentTarget.value === 'other'
         });
     }
 
@@ -171,6 +174,6 @@ export class PublishContainer extends React.Component<Props, State> {
 const PublishContainerWithData = compose(
     graphql(ArticleCreate, {name: 'createArticle'}),
     graphql(TagCreate, {name: 'createTag'}),
-)(PublishContainer as any);
+)(PublishContainer);
 
 export default withApollo(PublishContainerWithData);
