@@ -11,6 +11,7 @@ import { Article, Issue } from './container';
 import ArticleLink from '../../components/ArticleTable/Link';
 import AuthorLink from '../../components/User/Link';
 import { ChangeEvent } from 'react';
+import { Helmet } from 'react-helmet';
 
 interface Props {
     issue: Issue;
@@ -44,7 +45,16 @@ export default function ArticleTable(props: Props) {
     const rows = createArticleTableRows(props);
 
     return (
-        <Container heading="Articles" className="tableContainer">
+       <Container heading="Articles" className="tableContainer">
+
+            <Helmet>
+                <title>{`Issue #${props.issue.num} articles`}</title>
+                <meta
+                    name="description"
+                    content={`Table of articles in issue ${props.issue.num}`}
+                />
+            </Helmet>
+
             <Input
                 label="Issue Number"
                 key="issueChooser"
