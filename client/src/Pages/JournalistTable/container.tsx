@@ -166,12 +166,15 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         if (data.length > 0) {
 
-            await graphqlErrorNotifier(this.props.userUpdate, {
-                variables: {
-                    data,
-                    password
-                }
-            },                         'Users have been updated');
+            await graphqlErrorNotifier(
+                this.props.userUpdate, {
+                    variables: {
+                        data,
+                        password
+                    }
+                },
+                'userUpdate'
+            );
 
             // this line will only fire if sucess since graphqlErrorNotifier throws error otherwise
             const updatedUsers = [...this.state.users].map(user => {
@@ -190,12 +193,15 @@ export class JournalistTableContainer extends React.Component<Props, State> {
 
         if (this.state.usersToDelete.size > 0) {
 
-            await graphqlErrorNotifier(this.props.userDelete, {
-                variables: {
-                    ids: [...this.state.usersToDelete],
-                    password
-                }
-            },                         'Users have been deleted');
+            await graphqlErrorNotifier(
+                this.props.userDelete, {
+                    variables: {
+                        ids: [...this.state.usersToDelete],
+                        password
+                    }
+                },
+                'userDeleted'
+            );
 
             // this line will only fire if sucess since graphqlErrorNotifier throws error otherwise
             const existingUsers = this.state.users.filter(user => !this.state.usersToDelete.has(user.id));
