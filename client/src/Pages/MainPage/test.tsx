@@ -7,6 +7,8 @@ import { Article, Issue } from './shared.interfaces';
 import * as sinon from 'sinon';
 import createHistory from 'history/createBrowserHistory';
 import { mount } from 'enzyme';
+import { setupComponent } from '../../tests/enzyme.helpers';
+import issueData from './__snapshots__/issue.example';
 
 const history = createHistory();
 
@@ -52,9 +54,9 @@ customCasual.define('articles', (): Article[] => {
 
 customCasual.define('previewIssueData', () => ({
     data: {
-        issues: [{
-            articles: customCasual.articles
-        }]
+        issues: [
+            Object.assign({ articles: customCasual.articles }, customCasual.issue)
+        ]
     }
 }));
 
@@ -107,49 +109,66 @@ function changeHistory(to: string) {
     history.push(`/${to}`);
 }
 
+function setup(query: Function = getQueryStubs().stub()) {
+
+    return mount(
+        <MemoryRouter>
+            <MainPageContainer
+                client={{
+                    query
+                }}
+                history={history}
+            />
+        </MemoryRouter>
+    );
+}
+
 describe('<MainPageContainer>', () => {
 
     describe('snapshots', () => {
 
-        it('renders correctly', () => {
+        it('renders correctly for issue', () => {
+
+            const wrapper = setup();
+            const component = setupComponent(wrapper, MainPageContainer);
+            component.setState({ issue: issueData });
 
             const tree = renderer.create(
-
                 <MemoryRouter>
-                    <MainPageContainer
-                        client={{
-                            query: getQueryStubs().stub()
-                        }}
-                        history={history}
-                    />
+                    {component.render()}
                 </MemoryRouter>
-            ).toJSON();
+            );
 
             expect(tree).toMatchSnapshot();
         });
+
+        it('renders correctly for tags', () => {
+
+            const wrapper = setup();
+            changeHistory('Tag');
+            const component = setupComponent(wrapper, MainPageContainer);
+            component.setState({ issue: issueData });
+
+            const tree = renderer.create(
+                <MemoryRouter>
+                    {component.render()}
+                </MemoryRouter>
+            );
+
+            expect(tree).toMatchSnapshot();
+        });
+
     });
 
     describe('querying', () => {
-
-        function setup(query: Function = getQueryStubs().stub()) {
-
-            return mount(
-                <MemoryRouter>
-                    <MainPageContainer
-                        client={{
-                            query
-                        }}
-                        history={history}
-                    />
-                </MemoryRouter>
-            );
-        }
 
         it('is called when component is mounted', () => {
 
             const stubs = getQueryStubs();
 
             setup(stubs.stub());
+
+            changeHistory('issue/4');
 
             expect(stubs.stub.called).toBeTruthy();
             expect(stubs.issueStub.called).toBeTruthy();

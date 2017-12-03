@@ -53,6 +53,17 @@ export class MainPageContainer extends React.Component<Props, State> {
         this.unlisten();
     }
 
+    createPageTitle() {
+
+        const requested = this.getRequested();
+
+        if (this.searchingByIssue(requested)) {
+            return +this.state.issue.num || 'Loading';
+        }
+
+        return requested;
+    }
+
     searchingByIssue(searchParam: string | number) {
 
         const issue = this.getIssue(searchParam);
@@ -153,7 +164,13 @@ export class MainPageContainer extends React.Component<Props, State> {
 
     render() {
 
-        return <MainPage articles={this.state.articles} issue={this.state.issue} />;
+        return (
+            <MainPage
+                title={this.createPageTitle()}
+                articles={this.state.articles}
+                issue={this.state.issue}
+            />
+        );
     }
 
 }
