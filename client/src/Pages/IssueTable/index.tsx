@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Issue } from './interface.shared';
 import FormContainer from '../../components/Form/container';
 import { ChangeEvent } from 'react';
+import { Helmet } from 'react-helmet';
 
 interface Props {
     issues: Issue[];
@@ -53,6 +54,15 @@ function IssueTable(props: Props) {
 
     return (
         <Container heading="Issues">
+
+            <Helmet>
+                <title>Back Issues</title>
+                <meta
+                    name="description"
+                    content="Past issues published"
+                />
+            </Helmet>
+
             <FormContainer onSubmit={props.onSubmit}>
                 <Table key="table" headings={headings} rows={issueArr} />
                 {props.issues[0].canEdit ?
