@@ -5,6 +5,7 @@ import { ArticleInfo } from './shared.interfaces';
 
 import './index.css';
 import { FocusEvent, MouseEvent } from 'react';
+import { Helmet } from 'react-helmet';
 
 interface Props extends ArticleInfo {
     onSaveEdits: (indexToSave: string, e: FocusEvent<HTMLElement>) => void;
@@ -15,6 +16,15 @@ function Story(props: Props) {
 
         return (
             <div>
+
+                <Helmet>
+                    <title>{`Issue #${props.issue}'s ${props.heading.match(/<h1>(.+)<\/h1>/)![1]}`}</title>
+                    <meta
+                        name="description"
+                        content="Create an account"
+                    />
+                </Helmet>
+
                 <div id="tags">Tag(s): {props.tags.join(', ')}</div>
                 <article id="story">
 

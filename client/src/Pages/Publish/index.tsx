@@ -5,6 +5,7 @@ import TagSelect from '../../components/TagSelect';
 import Label from '../../components/Form/Label';
 import FormContainer from '../../components/Form/container';
 import { ChangeEvent, MouseEvent } from 'react';
+import { Helmet } from 'react-helmet';
 import './index.css';
 
 interface Props {
@@ -18,6 +19,15 @@ function Publish(props: Props) {
 
     return (
         <Container heading="Publish Story">
+
+            <Helmet>
+                <title>Publish</title>
+                <meta
+                    name="description"
+                    content="Publish an article"
+                />
+            </Helmet>
+
             <FormContainer onSubmit={props.onSubmit}>
 
                 <Label key="tags" value="Tags" >

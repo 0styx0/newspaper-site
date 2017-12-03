@@ -4,6 +4,7 @@ import Select from '../../components/Form/Select';
 import Container from '../../components/Container';
 import { getJWT } from '../../helpers/jwt';
 import FormContainer from '../../components/Form/container';
+import { Helmet } from 'react-helmet';
 
 import './index.css';
 
@@ -17,6 +18,15 @@ function Signup(props: Props) {
 
     return (
         <Container heading="Sign Up">
+
+            <Helmet>
+                <title>Sign up</title>
+                <meta
+                    name="description"
+                    content="Create an account"
+                />
+            </Helmet>
+
           <FormContainer onSubmit={props.onSubmit}>
 
             <Input

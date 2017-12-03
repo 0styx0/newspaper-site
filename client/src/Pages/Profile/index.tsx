@@ -6,6 +6,7 @@ import ChangePassword from './ChangePassword/container';
 
 import { Article, PublicUserInfo } from './shared.interfaces';
 import { getJWT } from '../../helpers/jwt/index';
+import { Helmet } from 'react-helmet';
 
 interface Props {
     articles: Article[];
@@ -19,9 +20,18 @@ function Profile(props: Props) {
     }
 
     const viewingOwnProfile = props.user.id === getJWT().id;
-    
+
     return (
         <div>
+
+            <Helmet>
+                <title>{`${props.user.fullName}'s profile`}</title>
+                <meta
+                    name="description"
+                    content={`Profile page of ${props.user.fullName}`}
+                />
+            </Helmet>
+
             <PublicUserInfoComponent
                 name={props.user.fullName}
                 level={props.user.level}

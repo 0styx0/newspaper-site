@@ -10,6 +10,7 @@ import FormContainer from '../../components/Form/container';
 
 import './index.css';
 import { ChangeEvent } from 'react';
+import { Helmet } from 'react-helmet';
 
 interface Props {
     users: User[];
@@ -46,6 +47,15 @@ function JournalistTable(props: Props) {
 
     return (
         <Container heading="Journalists">
+
+            <Helmet>
+                <title>Journalists</title>
+                <meta
+                    name="description"
+                    content="People who have contributed to the newspaper"
+                />
+            </Helmet>
+
             <div id="sortingContainer">
                 <Select
                     label="Sort By"

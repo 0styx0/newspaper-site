@@ -3,6 +3,7 @@ import Input from '../../components/Form/Input';
 import Container from '../../components/Container';
 import { Link } from 'react-router-dom';
 import FormContainer from '../../components/Form/container';
+import { Helmet } from 'react-helmet';
 
 import './index.css';
 
@@ -14,6 +15,15 @@ function LoginForm(props: Props) {
 
     return (
         <Container heading="Login">
+
+          <Helmet>
+            <title>Login</title>
+            <meta
+                name="description"
+                content="Log in"
+            />
+          </Helmet>
+
           <FormContainer onSubmit={props.onLogin} >
             <Input
                 key="username"
