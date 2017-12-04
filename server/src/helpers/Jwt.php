@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\ValidationData;
 
 /**
 * Singleton to get json web token
@@ -48,6 +49,8 @@ class Jwt {
 
             try {
                 $parsedToken = (new Parser())->parse($encodedToken);
+                Jwt::verifyToken($parsedToken);
+
             } catch (Exception $e) {
                 $parsedToken = null;
             }
@@ -58,6 +61,15 @@ class Jwt {
         }
 
         return null;
+    }
+
+    private static function verifyToken(string $token) {
+
+        $signer = new Sha256();
+
+        if (!$token->verify($signer, $_ENV['JWT_SECRET'])) {
+            throw new Exception('User has invalid token');
+        }
     }
 
     /**
