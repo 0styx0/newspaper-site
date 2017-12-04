@@ -22,7 +22,7 @@ export default async function (query: Function, params: Object, successMessage?:
         .catch((e: Error) => {
 
             Notification({
-                body: e.message.split(': ')[1]
+                body: e.message.match(/^.+:(.+)$/)![1]
             });
 
             throw new Error(e.message);
