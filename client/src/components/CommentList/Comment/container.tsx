@@ -4,6 +4,7 @@ import { CommentDelete } from '../../../graphql/comment';
 import Comment from './';
 import { graphql, withApollo } from 'react-apollo';
 import { MouseEvent } from 'react';
+import graphqlErrorNotifier from '../../../helpers/graphqlErrorNotifier';
 
 // @see Comment 's Props, which are much the same
 export interface Props {
@@ -49,11 +50,14 @@ export class CommentContainer extends React.Component<Props, State> {
             author: 'Deleted User'
         });
 
-        this.props.deleteComment({
-            variables: {
-                id: this.props.id
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.deleteComment, {
+                variables: {
+                    id: this.props.id
+                }
+            },
+            'commentDeleted'
+        );
     }
 
     render() {

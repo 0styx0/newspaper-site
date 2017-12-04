@@ -2,6 +2,7 @@ import * as React from 'react';
 import ChangePassword from './';
 import { UserUpdate } from '../../../graphql/user';
 import { graphql, compose, withApollo } from 'react-apollo';
+import graphqlErrorNotifier from '../../../helpers/graphqlErrorNotifier';
 
 export interface Props {
     updatePassword: Function;
@@ -30,12 +31,16 @@ export class ChangePasswordContainer extends React.Component<Props, {}> {
             return;
         }
 
-        this.props.updatePassword({
-            variables: {
-                password: oldPassword.value,
-                newPassword: newPassword.value
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.updatePassword,
+            {
+                variables: {
+                    password: oldPassword.value,
+                    newPassword: newPassword.value
+                }
+            },
+            'passwordUpdated'
+        );
     }
 
     render() {

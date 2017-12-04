@@ -18,7 +18,7 @@ function setup(recoverPassword: typeof mockRecoverPassword = mockRecoverPassword
 
     return mount(
         <ForgotPasswordContainer
-            recoverPassword={recoverPassword}
+            recoverPassword={async (params) => recoverPassword(params)}
         />
     );
 }

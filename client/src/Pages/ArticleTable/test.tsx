@@ -62,7 +62,7 @@ function generateData(issue?: number) {
 
 casual.define('data', generateData);
 
-const filler = () => (true) as {};
+const filler = async () => (true) as {};
 
 function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
 
@@ -348,7 +348,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const { wrapper, component, data} = setupWithProps({
                     // called after submit event (at very bottom of this test)
-                    updateArticle: (info: {variables: {data: typeof tags} }) => {
+                    updateArticle: async (info: {variables: {data: typeof tags} }) => {
 
                          expect(info.variables).toEqual({
                              data: tags,
@@ -378,7 +378,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const { wrapper, component, data } = setupWithProps({
                     // called after submit event (at very bottom of this test)
-                    updateArticle: (info: {variables: {data: typeof orders }}) => {
+                    updateArticle: async (info: {variables: {data: typeof orders }}) => {
 
                          expect(info.variables).toEqual({
                              data: orders,
@@ -407,7 +407,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const { wrapper, component, data } = setupWithProps({
 
-                    updateArticle: (info: {variables: {data: typeof allData} }) => {
+                    updateArticle: async (info: {variables: {data: typeof allData} }) => {
 
                          expect(info.variables).toEqual({
                              data: allData,
@@ -443,7 +443,7 @@ describe('<ArticleTableContainer>', () => {
 
                 const { wrapper, component, data } = setupWithProps({
 
-                    updateArticle: (info: {variables: {data: typeof allData} }) => {
+                    updateArticle: async (info: {variables: {data: typeof allData} }) => {
 
                         const sortFunc = (a: updateData, b: updateData) => 'tags' in a ? 1 : -1;
                         info.variables.data.sort(sortFunc);
@@ -493,7 +493,7 @@ describe('<ArticleTableContainer>', () => {
 
             const { wrapper, data } = setupWithProps({
 
-                deleteArticle: (info: {variables: {data: typeof idsToDelete} }) => {
+                deleteArticle: async (info: {variables: {data: typeof idsToDelete} }) => {
 
                     expect(info.variables).toEqual({
                         data: idsToDelete,

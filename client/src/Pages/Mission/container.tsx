@@ -1,7 +1,7 @@
 import * as React from 'react';
-
 import { graphql, withApollo, compose } from 'react-apollo';
 import { MissionEdit, MissionQuery } from '../../graphql/mission';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import Mission from './';
 import { FocusEvent } from 'react';
@@ -56,12 +56,16 @@ export class MissionContainer extends React.Component<Props, State> {
      */
     onSubmit() {
 
-        this.props.editMission({
-            query: MissionEdit,
-            variables: {
-                mission: this.state.content
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.editMission,
+            {
+                query: MissionEdit,
+                variables: {
+                    mission: this.state.content
+                }
+            },
+            'missionUpdated'
+        );
     }
 
     render() {

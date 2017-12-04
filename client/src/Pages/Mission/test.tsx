@@ -5,6 +5,7 @@ import * as sinon from 'sinon';
 import * as casual from 'casual';
 
 import { mount } from 'enzyme';
+import { setupComponent } from '../../tests/enzyme.helpers';
 
 document.queryCommandSupported = () => true; // used in Editable component
 
@@ -87,7 +88,10 @@ describe('<MissionContainer>', () => {
 
             const spy = sinon.spy();
 
-            const wrapper = setup(spy);
+            const wrapper = setup(function (params) {
+                spy();
+                return fakeEditMission()(params);
+            });
 
             wrapper.find('button').last().simulate('click');
 

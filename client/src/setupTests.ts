@@ -3,6 +3,8 @@
 import './tempPolyfills';
 import * as mocks from './tests/setup.mocks';
 
+mocks.localStorage.clear(); // must use some part of mocks to get them to define their properties
+
 import { configure } from 'enzyme';
 
 import * as Adapter from 'enzyme-adapter-react-16';

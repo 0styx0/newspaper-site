@@ -3,6 +3,7 @@ import { CommentCreate } from '../../../graphql/comment';
 import EditableComment from './';
 import { withApollo, graphql } from 'react-apollo';
 import { FocusEvent } from 'react';
+import graphqlErrorNotifier from '../../../helpers/graphqlErrorNotifier';
 
 export interface Props {
     artId: string;
@@ -33,12 +34,16 @@ export class EditableCommentContainer extends React.Component<Props, State> {
 
         this.props.addToList(this.state.content);
 
-        this.props.createComment({
-            variables: {
-                artId: this.props.artId,
-                content: this.state.content
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.createComment,
+            {
+                variables: {
+                    artId: this.props.artId,
+                    content: this.state.content
+                }
+            },
+            'commentCreated'
+        );
     }
 
     render() {

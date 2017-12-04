@@ -27,7 +27,7 @@ function setup(
     mockGraphql: { updateUser?: Function, deleteUser?: Function } = {}
 ) {
 
-    const mockFunc = () => true;
+    const mockFunc = async () => true;
 
     const wrapper = mount(
         <ModifiableUserInfoContainer
@@ -187,7 +187,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                         const wrapper = setup(
                             {notifications: false, twoFactor: false},
-                            {updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
+                            {updateUser: async (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                                 const expected = {
                                     password
@@ -204,8 +204,7 @@ describe('<ModifiableUserInfoContainer>', () => {
                             .updates[elt[1]] = expectedValue;
 
                         password = setInput(wrapper);
-
-                        wrapper.find('form').first().simulate('submit');
+                        submitForm(wrapper);
                     })
                 );
 
@@ -215,7 +214,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
                     const wrapper = setup(
                         { notifications: false, twoFactor: false },
-                        {deleteUser: (data: {variables: {ids: [string]}}) => {
+                        {deleteUser: async (data: {variables: {ids: [string]}}) => {
 
                             expect(data.variables).toEqual({
                                 ids: expectedValue
@@ -248,13 +247,13 @@ describe('<ModifiableUserInfoContainer>', () => {
             const wrapper = setup(
                 {notifications: false, twoFactor: false},
                 {
-                    deleteUser: (data: {variables: {ids: [string]}}) => {
+                    deleteUser: async (data: {variables: {ids: [string]}}) => {
 
                         expect(data.variables).toEqual({
                             id: expectedDeleteValue
                         });
                     },
-                    updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
+                    updateUser: async (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                         const expected = {};
                         expected[fieldToUpdate] = expectedUpdateValue;
@@ -291,7 +290,7 @@ describe('<ModifiableUserInfoContainer>', () => {
 
             const wrapper = setup(
                 {notifications: false, twoFactor: false},
-                {updateUser: (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
+                {updateUser: async (data: {variables: {twoFactor?: boolean, notifications?: boolean}}) => {
 
                 const expected = {
                     notifications: expectedValue,
@@ -324,12 +323,12 @@ describe('<ModifiableUserInfoContainer>', () => {
             const wrapper = setup(
                 {notifications: false, twoFactor: false},
                 {
-                    updateUser: spy,
-                    deleteUser: spy
+                    updateUser: async () => spy(),
+                    deleteUser: async () => spy()
                 }
             );
 
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
 
             expect(spy.called).toBeFalsy();
         });

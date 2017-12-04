@@ -12,7 +12,7 @@ document.queryCommandSupported = () => true; // used in Editable component
 
 describe('<EditableCommentContainer>', () => {
 
-    const mockFunction = (() => { return; });
+    const mockFunction = (async () => { return; });
 
     function setup(
         id: string,
@@ -84,8 +84,8 @@ describe('<EditableCommentContainer>', () => {
             const spyList = sinon.spy();
 
             const wrapper = setup(casual.word, {
-                createComment: spyComment,
-                addToList: spyList
+                createComment: async () => spyComment(),
+                addToList: async () => spyList()
             });
 
             wrapper.find('button').last().simulate('click');
@@ -102,7 +102,7 @@ describe('<EditableCommentContainer>', () => {
             };
 
             const wrapper = setup(expected.artId, {
-                createComment: (params: {variables: {artId: string, content: string}}) => {
+                createComment: async (params: {variables: {artId: string, content: string}}) => {
 
                     expect(params.variables.artId).toBe(expected.artId);
                     expect(params.variables.content).toBe(expected.content);
@@ -120,7 +120,7 @@ describe('<EditableCommentContainer>', () => {
 
             const wrapper = setup(casual.word, {
                 createComment: mockFunction,
-                addToList: (content: string) => expect(content).toBe(expectedContent)
+                addToList: async (content: string) => expect(content).toBe(expectedContent)
             });
 
             wrapper.state().content = expectedContent;

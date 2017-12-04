@@ -14,11 +14,7 @@ interface Props {
 export default function Mission(props: Props) {
 
     return (
-        <EditableContainer
-            key={props.content}
-            canEdit={props.canEdit}
-            onSubmit={props.onSubmit}
-        >
+        <div>
             <Helmet>
                 <title>Mission</title>
                 <meta
@@ -27,11 +23,17 @@ export default function Mission(props: Props) {
                 />
             </Helmet>
 
-            <div
-              className="mission"
-              dangerouslySetInnerHTML={{__html: props.content}}
-              onBlur={props.onSave}
-            />
-        </EditableContainer>
+            <EditableContainer
+                key={props.content}
+                canEdit={props.canEdit}
+                onSubmit={props.onSubmit}
+            >
+                <div
+                className="mission"
+                dangerouslySetInnerHTML={{__html: props.content}}
+                onBlur={props.onSave}
+                />
+            </EditableContainer>
+        </div>
     );
 }

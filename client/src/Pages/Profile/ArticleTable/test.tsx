@@ -22,7 +22,7 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
         <MemoryRouter>
             <UserArticleTableContainer
                 articles={data.articles}
-                deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : (test: {}) => false}
+                deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : async (test: {}) => false}
             />
         </MemoryRouter>
     );
@@ -124,7 +124,7 @@ describe('<UserArticleTableContainer>', () => {
             const spy = sinon.spy();
 
             wrapper = setup({
-                deleteArticle: (params: {variables: { ids: string[], password: string }}) => {
+                deleteArticle: async (params: {variables: { ids: string[], password: string }}) => {
                     spy();
 
                     expect(params.variables).toEqual(expected);

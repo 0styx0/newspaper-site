@@ -9,8 +9,7 @@ import snapData from './__snapshots__/props.example';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
 
-
-const deleteCommentMock = (params: {variables: {id: string}}) => { return; };
+const deleteCommentMock = async (params: {variables: {id: string}}) => { return; };
 
 casual.define('comment', (): Props => ({
     profileLink: casual.word,
@@ -72,7 +71,7 @@ describe('<CommentContainer>', () => {
 
             const spy = sinon.spy();
             const data = customCasual.comment;
-            data.deleteComment = spy;
+            data.deleteComment = async () => spy();
 
             const wrapper = setup(data);
             wrapper.find('.deleteReply').first().simulate('click');
@@ -83,7 +82,7 @@ describe('<CommentContainer>', () => {
         test('data is formatted correctly when submitted to graphql', () => {
 
             const data = customCasual.comment;
-            data.deleteComment = (params: {variables: { id: string }}) => {
+            data.deleteComment = async (params: {variables: { id: string }}) => {
                 expect(params.variables.id).toBe(data.id);
             };
 

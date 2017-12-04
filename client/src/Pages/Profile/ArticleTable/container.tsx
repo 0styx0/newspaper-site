@@ -4,6 +4,7 @@ import { ArticleDelete } from '../../../graphql/articles';
 import { Article } from '../shared.interfaces';
 import UserArticleTable from './';
 import { ChangeEvent } from 'react';
+import graphqlErrorNotifier from '../../../helpers/graphqlErrorNotifier';
 
 export interface Props {
     articles: Article[];
@@ -56,12 +57,16 @@ export class UserArticleTableContainer extends React.Component<Props, State> {
      */
     onSubmit(target: HTMLFormElement) {
 
-        this.props.deleteArticle({
-            variables: {
-                ids: [...this.state.idsToDelete],
-                password: (target.querySelector('[name=password]') as HTMLInputElement).value
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.deleteArticle,
+            {
+                variables: {
+                    ids: [...this.state.idsToDelete],
+                    password: (target.querySelector('[name=password]') as HTMLInputElement).value
+                }
+            },
+            'articleDeleted'
+        );
     }
 
     render() {

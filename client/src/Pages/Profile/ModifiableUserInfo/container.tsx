@@ -5,6 +5,7 @@ import { graphql, withApollo, compose } from 'react-apollo';
 import { ModifiableUserInfo } from '../shared.interfaces';
 import ModifiableUserInfoComponent from './';
 import { ChangeEvent } from 'react';
+import graphqlErrorNotifier from '../../../helpers/graphqlErrorNotifier';
 
 export interface Props {
     updateUser: Function;
@@ -86,11 +87,15 @@ export class ModifiableUserInfoContainer extends React.Component<Props, State> {
      */
     deleteUser() {
 
-        this.props.deleteUser({
-            variables: {
-                ids: [this.state.privateUserData && this.state.privateUserData.users[0].id]
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.deleteUser,
+            {
+                variables: {
+                    ids: [this.state.privateUserData && this.state.privateUserData.users[0].id]
+                }
+            },
+            'userDeleted'
+        );
     }
 
     async componentWillMount() {

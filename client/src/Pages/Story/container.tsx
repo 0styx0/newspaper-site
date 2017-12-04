@@ -1,10 +1,9 @@
 import * as React from 'react';
-import httpNotification from '../../helpers/Notification';
 
 import { compose, graphql, withApollo } from 'react-apollo';
 import { ArticleQuery } from '../../graphql/article';
 import { EditArticle } from '../../graphql/articles';
-
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 import { ArticleInfo, Story } from './shared.interfaces';
 import StoryComponent from './';
 import { FocusEvent } from 'react';
@@ -86,14 +85,16 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
      */
     onSubmit() {
 
-        this.props.editArticle({
-            variables: {
-                id: this.state.id,
-                article: this.state.heading + this.state.body
-            }
-        });
-
-        httpNotification('Article Updated', 200);
+        graphqlErrorNotifier(
+            this.props.editArticle,
+            {
+                variables: {
+                    id: this.state.id,
+                    article: this.state.heading + this.state.body
+                }
+            },
+            'articleEdited'
+        );
     }
 
     render() {

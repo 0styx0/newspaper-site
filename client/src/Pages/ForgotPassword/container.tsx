@@ -2,6 +2,7 @@ import * as React from 'react';
 import { graphql, withApollo } from 'react-apollo';
 import { RecoverPassword } from '../../graphql/user';
 import ForgotPassword from './';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 export interface Props {
     recoverPassword:
@@ -26,14 +27,18 @@ export class ForgotPasswordContainer extends React.Component<Props, {}> {
      */
     onSubmit(target: HTMLFormElement) {
 
-        this.props.recoverPassword({
-            query: RecoverPassword,
-            variables: {
-                authCode: (target.querySelector('input[name=lastAuth]') as HTMLInputElement).value,
-                username: (target.querySelector('input[name=username]') as HTMLInputElement).value,
-                email: (target.querySelector('input[name=email]') as HTMLInputElement).value,
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.recoverPassword,
+            {
+                query: RecoverPassword,
+                variables: {
+                    authCode: (target.querySelector('input[name=lastAuth]') as HTMLInputElement).value,
+                    username: (target.querySelector('input[name=username]') as HTMLInputElement).value,
+                    email: (target.querySelector('input[name=email]') as HTMLInputElement).value,
+                }
+            },
+            'authEmail'
+        );
     }
 
     render() {

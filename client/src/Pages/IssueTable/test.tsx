@@ -7,6 +7,7 @@ import snapData from './__snapshots__/issues.example';
 import setFakeJwt from '../../tests/jwt.helper';
 import { Issue } from './interface.shared';
 import { mount, ReactWrapper } from 'enzyme';
+import { submitForm } from '../../tests/enzyme.helpers';
 
 setFakeJwt({level: 1});
 
@@ -47,7 +48,7 @@ function setup(mockGraphql: {mutate?: Function} = {}): ReactWrapper<Props, State
         <MemoryRouter>
             <IssueTableContainer
                 data={data}
-                mutate={mockGraphql.mutate ? mockGraphql.mutate : (test: {}) => false}
+                mutate={mockGraphql.mutate ? mockGraphql.mutate : async (test: {}) => false}
             />
         </MemoryRouter>
     );
@@ -130,7 +131,7 @@ describe('<IssueTableContainer>', () => {
             password
         };
 
-        wrapper = setup({mutate: (graphql: {variables: {public: boolean; name: string}}) =>
+        wrapper = setup({mutate: async (graphql: {variables: {public: boolean; name: string}}) =>
             expect(graphql.variables).toEqual(expectedData)
         });
 
@@ -142,6 +143,6 @@ describe('<IssueTableContainer>', () => {
 
         (wrapper.find('input[type="password"]').instance() as {} as HTMLInputElement).value = password;
 
-        wrapper.find('form').first().simulate('submit'); // this triggers wrapper's mutate function
+        submitForm(wrapper); // this triggers wrapper's mutate function
     });
 });

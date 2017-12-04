@@ -2,6 +2,8 @@ import * as React from 'react';
 import { graphql, withApollo } from 'react-apollo';
 import { UserCreate } from '../../graphql/user';
 import Signup from './';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
+import notifyUserOf from '../../helpers/Notification';
 
 interface Props {
     createUser: Function;
@@ -35,7 +37,7 @@ export class SignupContainer extends React.Component<Props, {}> {
         }
 
         if (values.password !== values.confirmation) {
-            throw new Error('Password does not match confirmation');
+            return notifyUserOf('unconfirmedPassword');
         }
 
         const name = values.fullName.split(' ');
@@ -48,10 +50,14 @@ export class SignupContainer extends React.Component<Props, {}> {
 
         delete values.fullName;
 
-        this.props.createUser({
-            query: UserCreate,
-            variables: values
-        });
+        graphqlErrorNotifier(
+            this.props.createUser,
+            {
+                query: UserCreate,
+                variables: values
+            },
+            'userCreated'
+        );
     }
 
     render() {

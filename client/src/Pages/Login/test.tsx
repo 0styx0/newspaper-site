@@ -7,6 +7,7 @@ import * as sinon from 'sinon';
 import { encodeJwt } from '../../tests/jwt.helper';
 import { mount, ReactWrapper } from 'enzyme';
 import localStorageMock from '../../tests/localstorage.mock';
+import { submitForm } from '../../tests/enzyme.helpers';
 
 casual.define('jwt', () =>
 
@@ -35,7 +36,7 @@ function setup(loginUser: Function) {
             <LoginFormContainer
                 loginUser={loginUser ?
                     loginUser as Props['loginUser'] :
-                    (params: { variables: { username: string, password: string }}) =>
+                    async (params: { variables: { username: string, password: string }}) =>
                       customCasual.data(customCasual.jwt)}
                 history={[]}
             />
@@ -86,10 +87,10 @@ describe('<LoginFormContainer>', () => {
 
             const spy = sinon.stub().returns(customCasual.data(customCasual.jwt));
 
-            const wrapper = setup(spy);
+            const wrapper = setup(async () => spy());
 
             setInputs(wrapper);
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
 
             expect(spy.called).toBeTruthy();
         });

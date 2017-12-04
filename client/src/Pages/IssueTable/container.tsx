@@ -4,6 +4,7 @@ import { IssueQuery, IssueUpdate } from '../../graphql/issues';
 import { Issue } from './interface.shared';
 import IssueTable from './';
 import { ChangeEvent } from 'react';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 export interface State {
     privateIssue: { // admins can change these (until public is true)
@@ -83,13 +84,17 @@ export class IssueTableContainer extends React.Component<Props, State> {
      */
     onSubmit(target: HTMLFormElement) {
 
-        this.props.mutate({
-            variables: {
-                name: this.state.privateIssue.name,
-                public: !!this.state.privateIssue.public,
-                password: (target.querySelector('[name=password]') as HTMLInputElement).value
-            }
-        });
+        graphqlErrorNotifier(
+            this.props.mutate,
+            {
+                variables: {
+                    name: this.state.privateIssue.name,
+                    public: !!this.state.privateIssue.public,
+                    password: (target.querySelector('[name=password]') as HTMLInputElement).value
+                }
+            },
+            'issueUpdated'
+        );
     }
 
     render() {

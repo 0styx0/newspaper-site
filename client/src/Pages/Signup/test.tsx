@@ -41,7 +41,7 @@ type user = {
 
 const customCasual = casual as typeof casual & { formData: user };
 
-function setup(createUser: Function = () => true) {
+function setup(createUser: Function = async () => true) {
 
     return mount(<SignupContainer createUser={createUser} />);
 }
@@ -115,7 +115,7 @@ describe('<SignupContainer>', () => {
 
             let actualData: Object;
 
-            const wrapper = setup((params: {variables: user}) => {
+            const wrapper = setup(async (params: {variables: user}) => {
 
                 expect(params.variables).toEqual(actualData);
             });
@@ -130,7 +130,7 @@ describe('<SignupContainer>', () => {
             const spy = sinon.spy();
 
             setFakeJwt({level: 3, id: casual.word});
-            const wrapper = setup(spy);
+            const wrapper = setup(async () => spy());
             const { form } = populateForm(wrapper);
 
             form.simulate('submit');

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ArticleQuery, ArticleUpdate, ArticleDelete } from '../../graphql/articles';
 import { compose, graphql, withApollo } from 'react-apollo';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 import ArticleTable from './';
 import { ChangeEvent } from 'react';
@@ -224,24 +225,32 @@ export class ArticleTableContainer extends React.Component<Props, State> {
                 }
             });
 
-            this.props.updateArticle({
-                variables: {
-                    data,
-                    password
-                }
-            });
+            graphqlErrorNotifier(
+                this.props.updateArticle,
+                {
+                    variables: {
+                        data,
+                        password
+                    }
+                },
+                'articleUpdated'
+            );
         };
 
         const submitDeleted = () => {
 
             if (this.state.updates.idsToDelete.size > 0) {
 
-                this.props.deleteArticle({
-                    variables: {
-                        ids: [...this.state.updates.idsToDelete],
-                        password
-                    }
-                });
+                graphqlErrorNotifier(
+                    this.props.deleteArticle,
+                    {
+                        variables: {
+                            ids: [...this.state.updates.idsToDelete],
+                            password
+                        }
+                    },
+                    'articleDeleted'
+                );
             }
         };
 

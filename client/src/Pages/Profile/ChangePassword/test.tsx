@@ -10,7 +10,7 @@ function setup(mockGraphql: {updatePassword?: Function} = {}) {
 
     return mount(
         <ChangePasswordContainer
-            updatePassword={mockGraphql.updatePassword ? mockGraphql.updatePassword : () => true}
+            updatePassword={mockGraphql.updatePassword ? mockGraphql.updatePassword : async () => true}
         />
     );
 }
@@ -54,7 +54,7 @@ describe('<ChangePasswordContainer>', () => {
             const newPassword = casual.string;
             const oldPassword = casual.string;
 
-            wrapper = setup({updatePassword: (data: {variables: { newPassword: string, password: string}}) => {
+            wrapper = setup({updatePassword: async (data: {variables: { newPassword: string, password: string}}) => {
 
                 expect(data.variables.newPassword).toBe(newPassword);
                 expect(data.variables.password).toBe(oldPassword);
@@ -67,7 +67,7 @@ describe('<ChangePasswordContainer>', () => {
 
             const spy = sinon.spy();
 
-            wrapper = setup({updatePassword: spy});
+            wrapper = setup({updatePassword: async () => spy()});
 
             setValues(casual.string, casual.string, casual.string);
 
@@ -81,7 +81,7 @@ describe('<ChangePasswordContainer>', () => {
 
             const spy = sinon.spy();
 
-            wrapper = setup({updatePassword: spy});
+            wrapper = setup({updatePassword: async () => spy()});
 
             const values = [oldPassword, newPassword, newPassword];
 
