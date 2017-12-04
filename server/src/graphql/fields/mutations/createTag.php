@@ -29,7 +29,7 @@ class CreateTagField extends AbstractField {
 
     public function resolve($root, array $args, ResolveInfo $info) {
 
-        Guard::userMustBeLevel(3);
+        Guard::userMustBeLoggedIn();
 
         $ArticleHelper = new ArticleHelper();
 
@@ -39,7 +39,7 @@ class CreateTagField extends AbstractField {
             throw new Exception('Invalid tag');
         }
 
-        Db::query("INSERT INTO tag_list (tag) VALUES(?)", [$sanitized['tag']]);
+        Db::query("INSERT INTO tag_list (tag) VALUES(?)", [strtolower($sanitized['tag'])]);
 
         return ['tag' => $sanitized['tag']];
     }
