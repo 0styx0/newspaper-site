@@ -7,6 +7,7 @@ import FormContainer from '../../components/Form/container';
 import { ChangeEvent, MouseEvent } from 'react';
 import { Helmet } from 'react-helmet';
 import './index.css';
+import { getJWT } from '../../helpers/jwt/index';
 
 interface Props {
     onSubmit: Function;
@@ -16,6 +17,8 @@ interface Props {
 }
 
 function Publish(props: Props) {
+
+    const defaultTags = getJWT().level > 1 ? ['other'] : [];
 
     return (
         <Container heading="Publish Story">
@@ -32,7 +35,7 @@ function Publish(props: Props) {
 
                 <Label key="tags" value="Tags" >
                     <TagSelect
-                        tags={['other']}
+                        tags={defaultTags}
                         props={{
                             name: 'tags',
                             multiple: true,
@@ -42,7 +45,7 @@ function Publish(props: Props) {
                     />
                 </Label>
 
-                { props.showTagInput ?
+                { props.showTagInput && getJWT().level > 1 ?
                     (
                         <Input
                           key="addTag"

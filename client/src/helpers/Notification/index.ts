@@ -14,6 +14,7 @@ const messages = {
     'missionUpdated': 'Mission has been edited',
     'passwordUpdated': 'Password has been changed',
     'unconfirmedPassword': 'Password does not match confirmation',
+    'tagCreated': 'Tag has been created'
 };
 
 function notifyUserOf(notificationType: string) {

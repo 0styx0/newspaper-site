@@ -6,6 +6,9 @@ import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
 import { submitForm, setupComponent } from '../../tests/enzyme.helpers';
 import {  mount, ReactWrapper } from 'enzyme';
+import setFakeJwt from '../../tests/jwt.helper';
+
+setFakeJwt({ level: 3 });
 
 // import { TagQuery } from '../../graphql/tags';
 
@@ -23,7 +26,7 @@ describe('<PublishContainer>', () => {
             }
         };
 
-    function mockCreateArticle(params?: createArticleParams) {
+    async function mockCreateArticle(params?: createArticleParams) {
 
         return Promise.resolve({
             data: {
@@ -76,7 +79,7 @@ describe('<PublishContainer>', () => {
 
     describe('snapshots', () => {
 
-        it('renders correctly', () => {
+        it('renders correctly when can add tag', () => {
 
             const tree = renderer.create(
 
@@ -88,6 +91,24 @@ describe('<PublishContainer>', () => {
             ).toJSON();
 
             expect(tree).toMatchSnapshot();
+        });
+
+        it('does not render option to add tag in not level 2', () => {
+
+            setFakeJwt({ level: 1 });
+
+            const tree = renderer.create(
+
+                <PublishContainer
+                    history={[]}
+                    createArticle={mockCreateArticle as Props['createArticle']}
+                    createTag={createTagMock as Props['createTag']}
+                />
+            ).toJSON();
+
+            expect(tree).toMatchSnapshot();
+
+            setFakeJwt({ level: 3 });
         });
     });
 
@@ -166,7 +187,7 @@ describe('<PublishContainer>', () => {
             let newTag = casual.word;
             const spy = sinon.spy();
 
-            const wrapper = setup(mockCreateArticle, (params: { variables: { tag: string} }) => {
+            const wrapper = setup(mockCreateArticle, async (params: { variables: { tag: string} }) => {
                 spy();
                 expect(params.variables.tag).toBe(newTag);
                 return;
@@ -228,11 +249,11 @@ describe('<PublishContainer>', () => {
             const spy = sinon.stub()
             .returns(mockCreateArticle());
 
-            const wrapper = setup(spy);
+            const wrapper = setup(async () => spy());
 
             fillOutForm(wrapper);
 
-            wrapper.find('form').first().simulate('submit');
+            submitForm(wrapper);
 
             expect(spy.called).toBeTruthy();
         });
@@ -241,7 +262,7 @@ describe('<PublishContainer>', () => {
 
             let expected = {};
 
-            const wrapper = setup((params: {variables: {url: string, tags: string[], article: string}}) => {
+            const wrapper = setup(async (params: {variables: {url: string, tags: string[], article: string}}) => {
 
                 expect(params.variables).toEqual(expected);
 

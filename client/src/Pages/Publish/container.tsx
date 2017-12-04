@@ -17,6 +17,7 @@ import { TagCreate } from '../../graphql/tags';
 import { graphql, withApollo, compose } from 'react-apollo';
 import './index.css';
 import { ChangeEvent } from 'react';
+import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
 
 export interface Props { // from react router hoc
     history: string[];
@@ -103,28 +104,36 @@ export class PublishContainer extends React.Component<Props, State> {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
         const tagList = target.querySelector('select[name=tags]') as HTMLSelectElement;
-        const tags = Array.from(tagList.selectedOptions || []).map(elt => elt.value);
+        let tags = Array.from(tagList.selectedOptions || []).map(elt => elt.value);
 
         if (this.state.showTagInput) {
 
             const newTag = (target.querySelector('[name=addTag]') as HTMLInputElement).value;
 
-            await this.props.createTag({
-                variables: {
-                    tag: newTag
-                }
-            });
+            await graphqlErrorNotifier(
+                this.props.createTag,
+                {
+                    variables: {
+                        tag: newTag
+                    }
+                },
+                'tagCreated'
+            );
 
+            tags = tags.filter(tag => tag !== 'other');
             tags.push(newTag);
         }
-
-        const { data } = await this.props.createArticle({
-            variables: {
-                url,
-                article: this.state.editor!.getContent(),
-                tags
+        
+        const { data } = await graphqlErrorNotifier(
+            this.props.createArticle,
+            {
+                variables: {
+                    url,
+                    article: this.state.editor!.getContent(),
+                    tags
+                }
             }
-        });
+        );
 
         const article = data.createArticle;
 
