@@ -29,9 +29,9 @@ export default function Mission(props: Props) {
                 onSubmit={props.onSubmit}
             >
                 <div
-                className="mission"
-                dangerouslySetInnerHTML={{__html: props.content}}
-                onBlur={props.onSave}
+                    className="mission"
+                    dangerouslySetInnerHTML={{__html: props.content}}
+                    onBlur={props.onSave}
                 />
             </EditableContainer>
         </div>

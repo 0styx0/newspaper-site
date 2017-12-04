@@ -3,9 +3,7 @@ import { MissionContainer, Props } from './container';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import * as casual from 'casual';
-
 import { mount } from 'enzyme';
-import { setupComponent } from '../../tests/enzyme.helpers';
 
 document.queryCommandSupported = () => true; // used in Editable component
 
