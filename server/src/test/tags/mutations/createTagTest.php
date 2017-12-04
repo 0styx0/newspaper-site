@@ -25,10 +25,10 @@ class CreateTagTest extends AllTagsTest {
         ], HelpTests::getJwt($user))['createTag'];
     }
 
-    function testGoodCanAddTag() {
+    function testGoodLevelTwoPlusCanAddTag() {
 
         $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
-            return true;
+            return $currentUser['level'] > 1;
         });
 
         $tag = $this->Database->GenerateRows->tag_list()['tag'];
