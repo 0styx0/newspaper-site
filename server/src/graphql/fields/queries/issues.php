@@ -49,7 +49,11 @@ class IssuesField extends AbstractField {
         $sanitized = $this->restrictAccessToPrivateIssues($sanitized, $maxIssue);
         list($sanitized, $limit) = $this->addLimitClause($sanitized);
         $where = Db::setPlaceholders($sanitized);
-        $where = (!!trim($where) ? '' : ' :admin ') . $where;
+
+        if (!trim($where)) {
+            $where = ' :loggedIn ';
+            $sanitized['loggedIn'] = Guard::userIsLoggedIn();
+        }
 
         $sanitized['admin'] = Jwt::getField('level') > 2;
 

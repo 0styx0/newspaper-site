@@ -22,7 +22,7 @@ class IssueType extends AbstractObjectType {
 
         $config->addFields([
             'num' => new NonNullType(new IdType()),
-            'name' => new NonNullType(new StringType()),
+            'name' => new StringType(),
             'public' => [
                 'type' => new NonNullType(new BooleanType()),
                 'resolve' => function (array $issue) {
