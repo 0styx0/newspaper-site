@@ -60,7 +60,7 @@ class IssuesField extends AbstractField {
         return Db::query("SELECT num, name, ispublic AS public, madepub AS datePublished,
            (SELECT SUM(views) FROM pageinfo WHERE issue = num) AS views, (:admin AND ispublic != 1) canEdit
           FROM issues
-          WHERE {$where} {$limit}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
+          WHERE {$where} ORDER BY num DESC {$limit}", $sanitized)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
