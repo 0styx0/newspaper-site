@@ -1,14 +1,22 @@
 # eyeStorm-nodeJS
 
 <h1>Background</h1>
-<p>I created this project for my school's newspaper. It is built using full stack JavaScript
-(with react, express, graphql, and mysql). This project has a twin written
-in php called eyeStorm if anyone is curious (which is no longer actively maintained)</p>
+<p>This is the code behind my school newspaper's site, currently located at <a href="https://tabceots.com">https://tabceots.com</a></p>
 
-<h1>About - Simple Version</h1>
+<h2>Table of Contents</h2>
+<ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#typesOfUsers">Types of users</a></li>
+    <li><a href="#publishing">How to publish</a></li>
+    <li><a href="#commenting">Rules of commenting</a></li>
+    <li>Business Logic</li> // ? signup process, article's tags (publishing process), what happens when user is deleted, how commenting works
+    <li><a href="#build">How to build</a></li>
+</ul>
+
+<h2 id="about">About</h2>
 <p>This is a newspaper site. Simply put, one can create an account, publish articles, and eventually have it world viewable.</p>
 
-<h1>About - In Depth</h1>
+<h2 id="typesOfUsers">About - In Depth</h2>
 
 <h2>Types of users</h2>
 <p>In this site there are 4 types of users. Note that each type of user can do at least that of the user before it.
@@ -31,9 +39,9 @@ in php called eyeStorm if anyone is curious (which is no longer actively maintai
               <li>Delete their own articles</li>
               <li>Edit their own articles <u>until it becomes world-viewable</u></li>
               <li>Delete their own account</li>
-              <li>Manage notification settings</li>
-              <li>Toggle two factor authentication</li>
-              <li>Change their password</li>
+              <li>Manage their own notification settings</li>
+              <li>Toggle their own two factor authentication</li>
+              <li>Change their own password</li>
           </ul>
         </details>
     </li>
@@ -42,7 +50,8 @@ in php called eyeStorm if anyone is curious (which is no longer actively maintai
         <summary>Level 2 users</summary>
           <ul>
               <li>Can delete users less than themselves</li>
-              <li>Create other users of the same level</li>
+              <li>Create other users of the same or lower level</li>
+              <li>Can add to the list of available tags one can give articles when publishing</li>
           </ul>
       </details>
     </li>
@@ -50,23 +59,24 @@ in php called eyeStorm if anyone is curious (which is no longer actively maintai
       <details>
         <summary>Level 3 users</summary>
           <ul>
-              <li>Can make issues world-viewable (more on that in a bit)</li>
+              <li>Can make issues world-viewable</li>
               <li>Give an issue a name (until it becomes world viewable)</li>
               <li>Delete any article</li>
               <li>Change the order articles display on the home page</li>
               <li>Update an article's tags</li>
-              <li>Edit any article even after it becomes world-viewable</li>
+              <li>Edit any article (even after it becomes world-viewable)</li>
               <li>Edit the mission statement</li>
+              <li>Get notified whenever an article is published</li>
           </ul>
       </details>
     </li>
 </ol>
 
-<h2>Publishing - From start to end</h2>
+<h2 id="publishing">Publishing - From start to end</h2>
 <ol>
     <li>
         <details>
-            <summary>Logged in user goes to /publish, fills out the form</summary>
+            <summary>Logged in user goes to <code>/publish</code>, fills out the form</summary>
             <p>
               An email goes out to all level 3 users who have notifications enabled that an article was created <br />
                At this point, even if the user is level 1, they can edit it <br />
@@ -75,83 +85,63 @@ in php called eyeStorm if anyone is curious (which is no longer actively maintai
     </li>
     <li>
         <details>
-            <summary>After a few articles have been uploaded, it's time to make it world viewable, and publish the issue. To do this, a level 3 user goes to /issue, gives the issue a name and toggles the "Published" table cell to "Yes", and submits the form</summary>
-            <p>At this point, only level 3 users can edit the article, although the both the owner and level 3s can still delete articles <br />The issue name is now permanent, and the issue cannot be set to private again</p>
+            <summary>After a few articles have been uploaded, it's time to make it world viewable, and publish the issue. To do this, a level 3 user goes to <code>/issue</code>, gives the issue a name, toggles the "Published" table cell to "Yes", and submits the form</summary>
+            <p>At this point, only level 3 users can edit the article, although both the owner and level 3s can still delete articles <br />The issue name is now permanent, and the issue cannot be set to private again</p>
         </details>
     </li>
-    <li>Done.</li>
+    <li>Done. The next article published will be in a new, private issue</li>
 </ol>
 
+<h2 id="commenting">Commenting</h2>
 <ul>
     <li>Comments must be at least 5 characters long</li>
     <li>Can only comment on public articles </li>
     <li>Views only increment when not logged in, and when viewing public articles</li>
+</ul>
 
-<h1>Build Instructions</h1>
+
+<h2 id="howToBuild">Build Instructions</h2>
 
 <h3>Installation</h3>
 <ol>
-    <li><code>git clone https://github.com/DovidM/eyeStorm-nodeJS.git</code></li>
-    <li><code>cd eyeStorm-nodeJS</code></li>
+    <li>$ <code>git clone https://github.com/DovidM/eyeStorm-nodeJS.git</code></li>
+    <li>$ <code>cd eyeStorm-nodeJS</code></li>
 </ol>
 
 
 <h3 id="configFile">Config File</h3>
 
-<p>Create a file called <code>config.ts</code> in <code>backend/</code></p>
-<pre>
-     export default {
-        "DB": {
-            "HOST": your_server_host,
-            "PORT": port_of_your_mysql_server,
-            "USER": your_sql_server_username,
-            "PASS": your_sql_server_password,
-            "NAME": random_database_name // the actual database will be created in the next step
-        },
-        "EMAIL": {
-            "ADDR": your_email_address,
-            "PASS": your_email_password,
-            "HOST": your_email_host (something like "smtp.gmail.com"),
-            "PORT": your_email_port,
-            "NAME": your_email_display_name (what people might see in addition to your email address, usually in angle brackets)
-        },
-        "JWT": {
-            "SECRET": your_strong_secret
-        },
-        "EMAIL_HOST": "@example.com" // only emails with that host will be allowed to create account. Put "*" to allow all emails
-     }
-</pre>
+<p>Create a file called <code>.env</code> in <code>server/</code></p>
+<p>Before beginning, there is a <code>.env.example</code> file which has all variables needed (so you can copy/paste that into your newly created <code>.env</code></p>
 
 <details>
   <summary>Example file</summary>
   <pre>
-    export default {
-        "DB": {
-            "HOST": "localhost",
-            "PORT": 8889,
-            "USER": "dovidm",
-            "PASS": "lhHioh 6eofhw807 oibf oWsdfgw9e iuf",
-            "NAME": "newspaper"
-        },
-        "EMAIL": {
-            "ADDR": "me@dovidm.com",
-            "PASS": "dsf9nlYsafne h435rpwVab dkls3vbieot h4 lwekbPEfle5afnjklsGdh",
-            "HOST": "smtp.dovidm.com",
-            "PORT": 587,
-            "NAME": "Dovid M"
-        },
-        "JWT": {
-            "SECRET": "dNs;fhdas8FRf093845o sd0eKw034y0 wldkc W sfd"
-        },
-        "EMAIL_HOST": "@dovidm.com"
-    }
+    DB_HOST="name_of_database_host" # likely "localhost"
+    DB_PORT="port_the_db_is_on" # a common one is 3306
+    DB_USER="db_username" # default might be "root"
+    DB_PASS="strong_password" # default might be "root". Strongly suggested to change if in production
+    DB_NAME="name_of_database" # database to use. Does not (and should not) exist before using this project
+
+    EMAIL_ADDR="example@example.org" # used when sending any emails (such as 2 step auth, or after publishing an article)
+    EMAIL_PASS="strong_password"
+    EMAIL_HOST="smtp.gmail.com" # if using gmail. It might be smtp.domain.tld if you're not sure
+    EMAIL_PORT="587" # port for sending secure messages (using ssl)
+    EMAIL_NAME="Newspaper" # whatever you want users to see when looking at who sent them an email
+    USER_EMAIL_HOST="gmail.com" # if you want to restrict users who sign up to a specific email provider. Use "*" to allow all email addresses
+
+    URL_LENGTH="6" # minimum length of article urls (see /publish)
+
+    testing=0 # don't change unless you're contributing and have read <a href="CONTRIBUTING.md#testing">CONTRIBUTING.md</a>
+
+    JWT_SECRET="extremely_secure_random_password" # this is what prevents random people from logging in as others. I recommend using a password generator
   </pre>
 </details>
 
 
 <h3>Firing Up</h3>
-
-<p>You MUST have filled out <code>backend/config.ts</code> before this step</p>
+// TODO: update this
+<p>You MUST have filled out <code>server/.env</code> before this step</p>
 
 <ol>
     <li>
