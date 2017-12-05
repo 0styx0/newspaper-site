@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 
 import LoginContainer from '../../Pages/Login/container';
-import Logout from '../Logout';
+import LogoutContainer from '../Logout/container';
 import SignupContainer from '../../Pages/Signup/container';
 import JournalistTableContainer from '../../Pages/JournalistTable/container';
 import IssueTableContainer from '../../Pages/IssueTable/container';
@@ -45,7 +45,7 @@ export default function Router() {
                     <li><Link to="/issue">Issues</Link></li>
                     {jwt.level ? <li><Link to="/modifyArticles">Articles</Link></li> : ''}
                     {jwt.level ? <li><Link to="/publish">Publish</Link></li> : ''}
-                    {jwt.level ? <li id="logout"><Logout /></li>
+                    {jwt.level ? <li id="logout"><LogoutContainer /></li>
                                 : ''}
                     {jwt.level ? <li className="profile"><Link to={`/u/${jwt.profileLink}`}>Profile</Link></li> : ''}
                 </ul>
