@@ -7,9 +7,9 @@ import './tempPolyfills';
 import RouterContainer from './components/Router/container';
 import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloLink } from 'apollo-link';
+import cache from './apolloCache';
 
 const middlewareLink = new ApolloLink((operation, forward) => {
 
@@ -27,13 +27,10 @@ const link = new HttpLink({
   credentials: 'include'
 });
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: middlewareLink.concat(link),
-  cache: new InMemoryCache({
-    dataIdFromObject: (o: { id: string }) => o.id,
-    addTypename: true
   // tslint:disable-next-line:no-any
-  }) as any,
+  cache: cache as any
 });
 
 ReactDOM.render((

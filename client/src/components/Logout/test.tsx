@@ -1,13 +1,15 @@
 import * as React from 'react';
-import Logout from './';
+import LogoutContainer from './container';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import setFakeJwt from '../../tests/jwt.helper';
 import { mount } from 'enzyme';
+import cache from '../../apolloCache';
+import * as sinon from 'sinon';
 
 setFakeJwt({level: 3});
 
-describe('<Logout>', () => {
+describe('<LogoutContainer />', () => {
 
     describe('snapshots', () => {
 
@@ -15,7 +17,7 @@ describe('<Logout>', () => {
 
             const tree = renderer.create(
                 <MemoryRouter>
-                    <Logout/>
+                    <LogoutContainer />
                 </MemoryRouter>
             ).toJSON();
 
@@ -29,7 +31,7 @@ describe('<Logout>', () => {
 
             const wrapper = mount(
                 <MemoryRouter>
-                    <Logout />
+                    <LogoutContainer />
                 </MemoryRouter>
             );
 
@@ -38,6 +40,23 @@ describe('<Logout>', () => {
             wrapper.find('button').simulate('click');
 
             expect(localStorage.getItem('jwt')).toBeFalsy();
+        });
+
+        it('clears cache', () => {
+
+            const spy = sinon.spy();
+            cache.reset = spy;
+
+            const wrapper = mount(
+                <MemoryRouter>
+                    <LogoutContainer />
+                </MemoryRouter>
+            );
+
+            wrapper.find('button').simulate('click');
+
+            expect(spy.called).toBeTruthy();
+
         });
     });
 });

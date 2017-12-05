@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Logout> snapshots renders correctly 1`] = `
+exports[`<LogoutContainer /> snapshots renders correctly 1`] = `
 <a
   href="/"
   onClick={[Function]}
