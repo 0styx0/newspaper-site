@@ -6,6 +6,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 
+
 /**
 * Singleton to get json web token
 */
@@ -50,8 +51,10 @@ class Jwt {
             try {
                 $parsedToken = (new Parser())->parse($encodedToken);
                 Jwt::verifyToken($parsedToken);
-
             } catch (Exception $e) {
+                $parsedToken = null;
+            } catch (Error $e) {
+                print_r(['mes', $e->getMessage()]);
                 $parsedToken = null;
             }
 
@@ -63,11 +66,12 @@ class Jwt {
         return null;
     }
 
-    private static function verifyToken(string $token) {
+    private static function verifyToken(Lcobucci\JWT\Token $token) {
 
         $signer = new Sha256();
+        $data = new ValidationData();
 
-        if (!$token->verify($signer, $_ENV['JWT_SECRET'])) {
+        if (!$token->validate($data) || !$token->verify($signer, $_ENV['JWT_SECRET'])) {
             throw new Exception('User has invalid token');
         }
     }

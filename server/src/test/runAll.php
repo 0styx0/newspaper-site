@@ -30,6 +30,7 @@ $filesToTest = [
     './users/queries/UserNeutralTest.php',
     './users/queries/UserNotLoggedInTest.php',
     './verifyEmail/mutations/verifyEmailTest.php',
+    './jwt/JwtTest.php'
 ];
 
 echo `clear`;
