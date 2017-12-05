@@ -20,7 +20,9 @@ export default class SelectTagPreview extends React.Component<{}, State> {
     }
 
     shouldComponentUpdate(nextProps: {}, nextState: State) {
-        return nextProps !== this.props || nextState.redirect !== this.state.redirect;
+
+        return (nextState.redirect !== this.state.redirect) &&
+            window.location.pathname !== `/tag/${nextState.redirect}`;
     }
 
     /**
