@@ -14,23 +14,23 @@ class TestDatabase {
     // leaving this and #loadDatabase in, but don't use. For some reason before #loadDatabase finished, tests run and that causes bad password errors
     private static $generateNewDatabase = true; // NOTE: passwords and auth codes will still be changed if true
 
-    public function __construct() {
+    public function __construct($initializingNewProject = false) {
 
-        if (!$_ENV['test']) {
+        if (!$_ENV['test'] && !$initializingNewProject) {
             throw new Error('DO NOT DELETE DATABASE IF NOT IN TEST MODE!!!!!'); // no story behind this :-)
         }
 
         $this->GenerateRows = new GenerateMockRows();
     }
 
-    private function connect() {
+    public function connect() {
 
         $this->DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
         $this->DBH->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    private function create() {
+    public function create() {
 
         $schema = file_get_contents(__DIR__ . '/../../../schema.sql');
 

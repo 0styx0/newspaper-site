@@ -6,7 +6,6 @@ const cp = require('child_process');
 function installModules() {
 
     const commands = [
-        ['npm', ['--prefix', './backend', 'install']],
         ['npm', ['--prefix', './client', 'install']]
     ];
 
@@ -38,7 +37,7 @@ async function initializeDatabase() {
 
     let DB = require('./backend/dist/config');
     DB = DB.default.DB
-    const fs = require.main.require('./backend/node_modules/fs-extra');
+    const fs = require.main.require('./backend/node_modules/fs-extra'); // change to something else
     const mysql = require.main.require('./backend/node_modules/mysql2/promise');
 
     const connection = mysql.createConnection({

@@ -1,0 +1,97 @@
+#!/Applications/MAMP/bin/php/php7.1.1/bin/php
+
+<?php
+
+require_once __DIR__ . '/server/vendor/autoload.php';
+require_once __DIR__ . '/server/src/test/TestDatabase.php';
+
+(function() {
+
+    $options = getopt('h', ['email:', 'password:', 'fill-db::', 'help::']);
+
+    if (!empty($options['h']) || !empty($options['help']) || empty($options)) {
+        return help();
+    }
+
+    validateArgs($options);
+
+    // installNpmPackages();
+    initializeDatabase($options);
+
+})();
+
+function help() {
+    echo "Args should be in the form --arg-name=\"value\"\n";
+    echo "Example call: `./install-all --email=\"example@example.com\" --password=\"strong_password\"`\n";
+    echo "To fill database with mock data, pass in `--fill-db=\"true\"`";
+    echo "To see this message again, run `./install-all --h`\n";
+}
+
+/**
+ * Makes sure options passed into script are in correct format
+ */
+function validateArgs(array $options) {
+
+    if (!filter_var($options['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Invalid email address');
+    }
+
+    if (empty($options['email']) || empty($options['password'])) {
+        help();
+        throw new Exception('Invalid Arguments');
+    }
+}
+
+/**
+ * Installs client/ npm packages
+ */
+function installNpmPackages() {
+    echo "Install npm packages for client/\n";
+    echo `npm --prefix ./client install`;
+    echo "\nCompleted npm installation";
+}
+
+/**
+ * Creates database from schema
+ * If `--fill-db` is passed into shell script, fills database with mock data
+ */
+function initializeDatabase(array $options) {
+
+    echo "Initializing database\n";
+
+    if (!empty($options['fill-db']) && $options['fill-db']) {
+        $Database->init();
+    } else {
+        createEmptyDatabase();
+    }
+
+    echo "Database created\n";
+
+    createAdmin($options);
+}
+
+function createEmptyDatabase() {
+
+    $Database = new TestDatabase(true);
+    $Database->connect();
+    $Database->create();
+}
+
+/**
+ * Creates admin account using email and password that were passed in as shell args
+ */
+function createAdmin(array $options) {
+
+    echo "Creating admin account\n";
+
+    Db::query("REPLACE INTO users (username, email, password, level, f_name, l_name, auth, auth_time)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+    ['admin', $options['email'], password_hash($options['password'], PASSWORD_DEFAULT), 3,
+    'Admin', 'Admin', '', date('Y-m-d H:i:s')]);
+
+    echo "Admin created\n";
+}
+
+
+
+?>
