@@ -1,6 +1,6 @@
 import * as React from 'react';
-// import { TagQuery } from '../../graphql/tags';
-// import { graphql, withApollo } from 'react-apollo';
+import { TagQuery } from '../../graphql/tags';
+import { graphql, withApollo } from 'react-apollo';
 
 const test = false;
 
@@ -17,8 +17,8 @@ function TagSelect(props: Props) {
 
     let dbTags: string[] = [];
 
-    if (!test || props.data!.allTags) { // later, remove `tags` from props since will get all tags from graphql
-        dbTags = !test && ['opinion', 'reaction', 'news', 'other'] || props.data!.allTags;
+    if (test || props.data!.allTags) { // later, remove `tags` from props since will get all tags from graphql
+        dbTags = test && ['opinion', 'reaction', 'news', 'other'] || props.data!.allTags;
     }
 
     const tags = [...new Set((props.tags || []).concat(dbTags))];
@@ -38,8 +38,8 @@ function TagSelect(props: Props) {
 
     return React.cloneElement(select, props.props);
 }
-export default TagSelect;
+// export default TagSelect;
 
-// const TagSelectWithData = graphql(TagQuery)(TagSelect as any);
+const TagSelectWithData = graphql(TagQuery)(TagSelect as any);
 
-// export default withApollo(TagSelectWithData);
+export default withApollo(TagSelectWithData);
