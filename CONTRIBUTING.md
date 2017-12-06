@@ -29,7 +29,7 @@
 
 <h2 id="pullRequests">Pull Requests</h2>
 <ol>
-    <li>See <a href="README.md">README.MD</a> for instructions on setting up</li>
+    <li>See <a href="README.md">README.MD</a> for instructions on setting up. You may want to use the <code>--fill-db=true</code> option on <code>./install-all</code> for some prefilled data</li>
     <li>Create a branch named for the feature you'd like to add</li>
     <li>All pull requests must pass client and server side tests (explained below)</li>
     <li>When possible, follow existing rules (such as tslint)</li>
