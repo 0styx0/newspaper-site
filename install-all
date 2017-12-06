@@ -15,7 +15,7 @@ require_once __DIR__ . '/server/src/test/TestDatabase.php';
 
     validateArgs($options);
 
-    // installNpmPackages();
+    installNpmPackages();
     initializeDatabase($options);
 
 })();
@@ -46,9 +46,9 @@ function validateArgs(array $options) {
  * Installs client/ npm packages
  */
 function installNpmPackages() {
-    echo "Install npm packages for client/\n";
+    echo "Installing npm packages for client/\n";
     echo `npm --prefix ./client install`;
-    echo "\nCompleted npm installation";
+    echo "Completed npm installation\n";
 }
 
 /**
@@ -60,6 +60,8 @@ function initializeDatabase(array $options) {
     echo "Initializing database\n";
 
     if (!empty($options['fill-db']) && $options['fill-db']) {
+
+        echo "Creating a database with prefilled data...\n";
         $Database = new TestDatabase(true);
         $Database->init();
     } else {
@@ -73,6 +75,7 @@ function initializeDatabase(array $options) {
 
 function createEmptyDatabase() {
 
+    echo "Creating an empty database...\n";
     $Database = new TestDatabase(true);
     $Database->connect();
     $Database->create();
