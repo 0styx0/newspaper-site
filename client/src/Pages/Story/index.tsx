@@ -58,7 +58,7 @@ function Story(props: Props) {
 
                 <hr />
 
-                <div id="comments">
+                 <div id="comments">
                     <CommentListContainer
                       artId={props.id}
                       comments={props.comments || []}

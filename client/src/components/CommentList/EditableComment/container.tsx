@@ -32,8 +32,6 @@ export class EditableCommentContainer extends React.Component<Props, State> {
      */
     onSave() {
 
-        this.props.addToList(this.state.content);
-
         graphqlErrorNotifier(
             this.props.createComment,
             {
@@ -43,7 +41,8 @@ export class EditableCommentContainer extends React.Component<Props, State> {
                 }
             },
             'commentCreated'
-        );
+        )
+         .then(() => this.props.addToList(this.state.content));
     }
 
     render() {
