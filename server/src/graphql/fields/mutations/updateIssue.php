@@ -52,6 +52,7 @@ class UpdateIssueField extends AbstractField {
             }
 
             $fieldsToUpdate['ispublic'] = $sanitized['public'];
+            $fieldsToUpdate['madepub'] = date('Y-m-d H:i:s');
         }
 
         if (isset($args['name'])) {
@@ -62,7 +63,7 @@ class UpdateIssueField extends AbstractField {
         $fieldValues = array_values($fieldsToUpdate);
 
         Db::query("UPDATE issues SET {$fieldKeys} WHERE num = ?", array_merge($fieldValues, [$maxIssueNumber]));
-        
+
         return array_merge($sanitized, $issue);
     }
 }

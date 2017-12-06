@@ -76,8 +76,9 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => true]);
 
-        $actualPublicStatus = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
-        $this->assertEquals(1, $actualPublicStatus);
+        $actualPublicStatus = Db::query("SELECT ispublic, madepub FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchAll(PDO::FETCH_ASSOC);
+        $this->assertEquals(1, $actualPublicStatus['ispublic']);
+        $this->assertEquals(date('Y-m-d'), $actualPublicStatus['madepub']);
     }
 
     function testCannotMakeIssuePrivate() {
