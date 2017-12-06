@@ -60,6 +60,7 @@ function initializeDatabase(array $options) {
     echo "Initializing database\n";
 
     if (!empty($options['fill-db']) && $options['fill-db']) {
+        $Database = new TestDatabase(true);
         $Database->init();
     } else {
         createEmptyDatabase();
