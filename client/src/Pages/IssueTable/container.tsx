@@ -12,6 +12,7 @@ export interface State {
         name?: string;
     };
     loaded: boolean;
+    canEdit: boolean;
 }
 
 export interface Props {
@@ -39,7 +40,8 @@ export class IssueTableContainer extends React.Component<Props, State> {
 
         this.state = {
             privateIssue: {},
-            loaded: false
+            loaded: false,
+            canEdit: false
         };
     }
 
@@ -51,11 +53,14 @@ export class IssueTableContainer extends React.Component<Props, State> {
      */
     componentWillReceiveProps(props: Props) {
 
-        if (!props.data.issues || this.props.data.issues) {
+        if (!props.data.issues || !this.props.data.issues) {
             return;
         }
 
-        this.setState({loaded: true});
+        this.setState({
+            loaded: true,
+            canEdit: props.data.issues[0].canEdit
+        });
     }
 
     /**
@@ -95,6 +100,10 @@ export class IssueTableContainer extends React.Component<Props, State> {
             },
             'issueUpdated'
         );
+
+        this.setState({
+            canEdit: !this.state.privateIssue.public
+        });
     }
 
     render() {
@@ -105,10 +114,11 @@ export class IssueTableContainer extends React.Component<Props, State> {
 
         return (
             <IssueTable
-              key={+this.state.loaded}
-              onSubmit={this.onSubmit}
-              onChangeIssueInfo={this.onChangeIssueInfo}
-              issues={this.props.data.issues}
+                key={+this.state.canEdit}
+                onSubmit={this.onSubmit}
+                onChangeIssueInfo={this.onChangeIssueInfo}
+                issues={this.props.data.issues}
+                canEdit={this.state.canEdit}
             />
         );
     }

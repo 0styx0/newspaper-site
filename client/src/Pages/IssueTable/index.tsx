@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 interface Props {
     issues: Issue[];
     onSubmit: Function;
+    canEdit: boolean;
     onChangeIssueInfo: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
@@ -30,7 +31,7 @@ function IssueTable(props: Props) {
             issue.datePublished
     ]);
 
-    if (props.issues[0].canEdit) {
+    if (props.canEdit) {
 
         issueArr[0][1] = (
             <input

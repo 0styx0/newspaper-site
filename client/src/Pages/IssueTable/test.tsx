@@ -7,7 +7,7 @@ import snapData from './__snapshots__/issues.example';
 import setFakeJwt from '../../tests/jwt.helper';
 import { Issue } from './interface.shared';
 import { mount, ReactWrapper } from 'enzyme';
-import { submitForm } from '../../tests/enzyme.helpers';
+import { submitForm, setupComponent } from '../../tests/enzyme.helpers';
 
 setFakeJwt({level: 1});
 
@@ -93,7 +93,7 @@ describe('<IssueTableContainer>', () => {
     test(`if canEdit = true, can change most recent issue's name (state.privateIssue.name)`, () => {
 
         wrapper = setup();
-        const component = wrapper.find(IssueTableContainer).instance();
+        const component = setupComponent(wrapper, IssueTableContainer);
 
         expect(component.state.privateIssue.name).toBeFalsy();
 
@@ -110,7 +110,7 @@ describe('<IssueTableContainer>', () => {
 
         wrapper = setup();
 
-        const component = wrapper.find(IssueTableContainer).instance();
+        const component = setupComponent(wrapper, IssueTableContainer);
 
         expect(component.state.privateIssue.public).toBeFalsy();
 
@@ -135,7 +135,7 @@ describe('<IssueTableContainer>', () => {
             expect(graphql.variables).toEqual(expectedData)
         });
 
-        const component = wrapper.find(IssueTableContainer).instance() as IssueTableContainer;
+        const component = wrapper.find(IssueTableContainer).instance();
 
         component.setState({
             privateIssue: expectedData
