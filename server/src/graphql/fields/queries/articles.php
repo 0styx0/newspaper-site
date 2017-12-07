@@ -62,9 +62,8 @@ class ArticlesField extends AbstractField {
         $userId = Jwt::getField('id');
         $userLevel = +Jwt::getField('level');
 
-        // basic fields, no authentication or filtering needed
         $rows = Db::query("SELECT pageinfo.id AS id, created AS dateCreated, lede, body, url, issue,
-          views, display_order AS displayOrder, authorid AS authorId,
+          views, display_order AS displayOrder, authorid AS authorId, ispublic,
           (((authorid = :userId OR author.level < :level) AND ispublic = 0) OR :admin) AS canEdit
           FROM pageinfo
           JOIN users AS author ON author.id = authorid

@@ -133,16 +133,54 @@ class ArticleHelper {
         Db::query("INSERT INTO images (art_id, url, slide) VALUES ({$placeholders})", $imageInfo);
     }
 
-    function addView($article) {
+    /**
+     * If user hasn't yet viewed the article, add a view to the article
+     */
+    function addView(array $article) {
 
-        $publicIssue = Db::query("SELECT ispublic FROM issues WHERE num = ?", [$article['issue']])->fetchColumn();
+        $userHasViewedArticle = isset($_COOKIE['pagesViewed']) &&
+            in_array($article['issue'] . $article['url'], $this->getArticlesViewed());
 
-        // TODO: make cookie
-        if ($publicIssue) {
+        if (Guard::userIsLoggedIn() ||
+          !$article['ispublic'] ||
+          $userHasViewedArticle) {
+              return false;
+        }
+
+        $this->addCookieView($article);
+    }
+
+    /**
+     * @return array of articles (issue . url) stored in pagesViews
+     *  cookie that the current user has viewed
+     */
+    private function getArticlesViewed() {
+
+        $cookie = $_COOKIE['pagesViewed'];
+        $cookie = stripslashes($cookie);
+        $savedArticleArray = json_decode($cookie, true);
+
+        return $savedArticleArray;
+    }
+
+    /**
+     * If cookie 'pagesViewed' is set, adds current article to it and increases article's view by 1
+     */
+    private function addCookieView(array $article) {
+
+        // if article is public, add cookie that shows you visited page
+        $savedArticleArray = (isset($_COOKIE['pagesViewed'])) ? $this->getArticlesViewed() : [];
+        $articleIdentifier = $article['issue'] . $article['url'];
+
+        if (!in_array($articleIdentifier, $savedArticleArray)) {
+
+            $savedArticleArray[] = $articleIdentifier;
+            $json = json_encode($savedArticleArray);
+            setcookie('pagesViewed', $json, null, '/', '', true, true);
+
             Db::query("UPDATE pageinfo SET views = views + 1 WHERE id = ?", [$article['id']]);
         }
     }
-
 }
 
 ?>
