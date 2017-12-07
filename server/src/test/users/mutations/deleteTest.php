@@ -108,6 +108,32 @@ class DeleteUserTest extends UserTest {
 
         $this->assertUserDoesNotExist($data['userToDelete']);
     }
+
+    function testDeletedUsersArticlesGoToDeletedUser() {
+
+        $data = $this->helpMutate(function (array $currentUser, array $user) {
+
+            $userIsAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $authorId) {
+                return $currentArticle['authorid'] === $authorId;
+            }, $currentUser['id']);
+
+            return $currentUser['level'] < $user['level'] && $userIsAnAuthor;
+        }, true, true, 3);
+
+        $articleOfDeletedUser = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $authorId) {
+            return $currentArticle['authorid'] === $authorId;
+        }, $data['userToDelete']['id']);
+
+        $usernameOfAuthor = Db::query("SELECT username
+            FROM users
+            JOIN pageinfo ON users.id = pageinfo.authorid
+            WHERE pageinfo.id = ?
+            LIMIT 1", [$articleOfDeletedUser['id']])->fetchColumn();
+
+        $this->assertUserDoesNotExist($data['userToDelete']);
+        $this->assertEquals('deleted', $usernameOfAuthor);
+
+    }
 }
 
 ?>
