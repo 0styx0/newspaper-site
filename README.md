@@ -171,7 +171,7 @@
           <li>Note: If the script fails to run, you may need to adjust the shebang (first line in the file)
            to the output of $<code> which php</code>, or the path to whatever php version your webserver is running (possibly #!/usr/local/bin/php)
           </li>
-          <li>To see options that can be passed in, run $ <code>./install-all -h</code>
+          <li>To see options that can be passed in, run $ <code>./install-all -h</code> (in particular, if you want to have some prefilled data, add <code>--fill-db="true"</code>)
           <li>Installs npm modules needed for frontend</li>
           <li>Uploads database schema to the database named in .env#DB_NAME</li>
           <li>Creates an account with the username "admin" with the email and password passed in</li>
