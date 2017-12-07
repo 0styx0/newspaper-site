@@ -78,7 +78,7 @@ describe('<EditableCommentContainer>', () => {
             expect(wrapper.state().content).toBe(content);
         });
 
-        fit('calls commentDelete and addToList when button is clicked', () => {
+        it('calls commentDelete and addToList when button is clicked', () => {
 
             const spyComment = sinon.spy();
             const spyList = sinon.spy();
