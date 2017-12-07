@@ -55,7 +55,7 @@ class SendMail {
 
         $filteredLvl = filter_var($lvl, FILTER_SANITIZE_NUMBER_INT);
 
-        $toEmail = Db::query("SELECT DISTINCT EMAIL FROM USERS WHERE LEVEL = ? AND SUBSTRING(EMAIL, 0, 1) != ? AND NOTIFICATIONS = 1", [$filteredLvl, "."]);
+        $toEmail = Db::query("SELECT DISTINCT email FROM users WHERE LEVEL = ? AND SUBSTRING(email, 0, 1) != ? AND notifications = 1", [$filteredLvl, "."]);
 
         return SendMail::phpMail($toEmail->fetchAll(PDO::FETCH_COLUMN, 0), $subject, $message);
     }
