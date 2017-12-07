@@ -42,7 +42,7 @@ describe('<SelectTagPreview>', () => {
 
             const options = wrapper.find('option');
 
-            const optionToChange = options.at(casual.integer(0, options.length));
+            const optionToChange = options.at(casual.integer(0, options.length - 1));
 
             optionToChange.simulate('input');
 
