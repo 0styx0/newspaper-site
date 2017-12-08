@@ -54,7 +54,6 @@ class Jwt {
             } catch (Exception $e) {
                 $parsedToken = null;
             } catch (Error $e) {
-                print_r(['mes', $e->getMessage()]);
                 $parsedToken = null;
             }
 

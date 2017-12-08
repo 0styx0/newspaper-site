@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class CreateUserTest extends UserTest {
+class CreateUserTest extends UserTestHelper {
 
 
     protected function helpGenerateRequiredUserFields() {
@@ -147,7 +147,7 @@ class CreateUserTest extends UserTest {
         $mappings = $this->helpGenerateKeyMappings($userToCreate);
 
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $userToCreate) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function ($currentUser, $userToCreate) {
            return $currentUser['level'] < $userToCreate['level'];
         }, $userToCreate);
 
@@ -158,7 +158,7 @@ class CreateUserTest extends UserTest {
                             }
                         }",
             'variables' => $userToCreate
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $this->assertNull($data['createUser']['id']);
     }
@@ -171,7 +171,7 @@ class CreateUserTest extends UserTest {
         $types = $this->helpGetGraphqlTypes($userToCreate);
         $mappings = $this->helpGenerateKeyMappings($userToCreate);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userToCreate) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userToCreate) {
            return $currentUser['level'] >= $userToCreate['level'];
         }, $userToCreate);
 
@@ -183,7 +183,7 @@ class CreateUserTest extends UserTest {
                             }
                         }",
             'variables' => $userToCreate
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $newUser = $data['createUser'];
 

@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class NotLoggedInIssueTest extends IssueTest {
+class NotLoggedInIssueTest extends IssueTestHelper {
 
     function testCanOnlyGetPublicIssues() {
 
@@ -44,7 +44,7 @@ class NotLoggedInIssueTest extends IssueTest {
             ]
         ]);
 
-        $publicIssue = HelpTests::searchArray($this->Database->GenerateRows->issues, function (array $issue) {
+        $publicIssue = TestHelper::searchArray($this->Database->GenerateRows->issues, function (array $issue) {
             return $issue['ispublic'];
         });
 

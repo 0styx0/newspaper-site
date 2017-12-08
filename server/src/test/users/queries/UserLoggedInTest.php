@@ -4,11 +4,11 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UserLoggedInTest extends UserTest {
+class UserLoggedInUserTest extends UserTestHelper {
 
     function testCanSeeFullArticleCount() { // both public and private
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $expectedArticleCount = 0;
 
@@ -28,7 +28,7 @@ class UserLoggedInTest extends UserTest {
             'variables' => [
                 'id' => $user['id']
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $this->assertEquals($expectedArticleCount, $data['users'][0]['articleCount']);
     }
@@ -37,7 +37,7 @@ class UserLoggedInTest extends UserTest {
 
         $higherLevel = rand(2, 3);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $higherLevel) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $higherLevel) {
             return $currentUser['level'] == $higherLevel;
         }, $higherLevel);
 
@@ -48,9 +48,9 @@ class UserLoggedInTest extends UserTest {
                                 level
                             }
                         }'
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
-        $lowerLevelUsers = HelpTests::searchArray($data['users'], function (array $currentUser, int $higherLevel) {
+        $lowerLevelUsers = TestHelper::searchArray($data['users'], function (array $currentUser, int $higherLevel) {
             return $currentUser['level'] < $higherLevel;
         }, $higherLevel);
 
@@ -62,7 +62,7 @@ class UserLoggedInTest extends UserTest {
 
         $level = rand(1, 3);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $level) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $level) {
             return $currentUser['level'] == $level;
         }, $level);
 
@@ -76,7 +76,7 @@ class UserLoggedInTest extends UserTest {
                                 id
                             }
                         }'
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $users = [];
 
@@ -93,7 +93,7 @@ class UserLoggedInTest extends UserTest {
     // opposite expectations of #testLevelSameOrLowerThanOtherUserCannotEdit
     function testCanSeeOwnSettings() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->request([
             'query' => 'query users($id: ID) {
@@ -107,7 +107,7 @@ class UserLoggedInTest extends UserTest {
             'variables' => [
                 'id' => $user['id']
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $actualUser = $data['users'][0];
 
@@ -119,7 +119,7 @@ class UserLoggedInTest extends UserTest {
     function testAdminCanEditLowerLevels() {
 
 
-        $loggedInUser = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $loggedInUser = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] > 1;
         });
 
@@ -132,7 +132,7 @@ class UserLoggedInTest extends UserTest {
                             }
                         }',
             'variables' => []
-        ], HelpTests::getJwt($loggedInUser));
+        ], TestHelper::getJwt($loggedInUser));
 
         foreach ($data['users'] as $user) {
 

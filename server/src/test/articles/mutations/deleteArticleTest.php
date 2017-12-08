@@ -3,13 +3,13 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class DeleteArticleTest extends ArticleTest {
+class DeleteArticleTest extends ArticleTestHelper {
 
     function helpTest(bool $author = false, int $level = 3, bool $loggedIn = true, bool $correctPassword = true) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $level) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $level) {
 
-            $isAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $currentUser) {
+            $isAnAuthor = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $currentUser) {
                 return $currentArticle['authorid'] == $currentUser['id'];
             }, $currentUser);
 
@@ -17,7 +17,7 @@ class DeleteArticleTest extends ArticleTest {
 
         }, $level);
 
-        $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $info) {
+        $article = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $info) {
 
             $userIsAuthor = $currentArticle['authorid'] == $info['user']['id'];
             return $info['author'] ? $userIsAuthor : !$userIsAuthor;
@@ -32,9 +32,9 @@ class DeleteArticleTest extends ArticleTest {
                         }',
             'variables' => [
                 'ids' => [$article['id']],
-                'password' => $correctPassword ? $user['password'] : $user['password'] . HelpTests::faker()->text()
+                'password' => $correctPassword ? $user['password'] : $user['password'] . TestHelper::faker()->text()
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : null);
+        ], $loggedIn ? TestHelper::getJwt($user) : null);
 
     }
 

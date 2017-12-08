@@ -3,11 +3,11 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class LoggedInIssueTest extends IssueTest {
+class LoggedInIssueTest extends IssueTestHelper {
 
     protected function helpQuery(int $issueToGet, int $levelOfUser = 1) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $levelToFind) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $levelToFind) {
             return $currentUser['level'] == $levelToFind;
         }, $levelOfUser);
 
@@ -23,7 +23,7 @@ class LoggedInIssueTest extends IssueTest {
             'variables' => [
                 'num' => $issueToGet
             ]
-        ], HelpTests::getJwt($user))['issues'][0];
+        ], TestHelper::getJwt($user))['issues'][0];
     }
 
     function testGetMostRecentIssueIfInvalidNumPassed() {

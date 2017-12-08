@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class RecoverTest extends RecoverPasswordTest {
+class RecoverTest extends RecoverPasswordHelper {
 
     /**
      * Sends graphql query to generate new password
@@ -52,7 +52,7 @@ class RecoverTest extends RecoverPasswordTest {
      */
     protected function helpGetBadData(string $fieldToTest) {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
 
         $user = $faker->randomElement($this->Database->GenerateRows->users);
         $badValue = $user[$fieldToTest] . $faker->word();

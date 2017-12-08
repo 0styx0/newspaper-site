@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UpdateIssueTest extends IssueTest {
+class UpdateIssueTest extends IssueTestHelper {
 
     /**
      * Sends graphql query
@@ -16,11 +16,11 @@ class UpdateIssueTest extends IssueTest {
     protected function helpTestArgs(array $variableTypes, array $variableValues, bool $loggedIn = true,
       int $userLevel = 3, bool $correctPassword = true) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $userLevel) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $userLevel) {
             return $currentUser['level'] == $userLevel;
         }, $userLevel);
 
-        $variablesStrings = HelpTests::convertVariableArrayToGraphql(array_merge($variableTypes, ['$password' => 'String!']));
+        $variablesStrings = TestHelper::convertVariableArrayToGraphql(array_merge($variableTypes, ['$password' => 'String!']));
 
         if (!$correctPassword) {
             $user['password'] .= '.'; // the dot is random char to invalidate password
@@ -34,12 +34,12 @@ class UpdateIssueTest extends IssueTest {
                             }
                         }",
             'variables' => array_merge($variableValues, ['password' => $user['password']])
-        ], $loggedIn ? HelpTests::getJwt($user) : '');
+        ], $loggedIn ? TestHelper::getJwt($user) : '');
     }
 
     function testCannotModifyIfNotLoggedIn() {
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->name()], false);
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => TestHelper::faker()->name()], false);
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
 
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
@@ -47,7 +47,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCannotModifyIfBadPassword() {
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()],
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => TestHelper::faker()->word()],
           true, 3, false);
 
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
@@ -56,7 +56,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCannotModifyIfLevelLessThanThree() {
 
-        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => HelpTests::faker()->word()], true, rand(1, 2));
+        $data = $this->helpTestArgs(['$name' => 'String'], ['name' => TestHelper::faker()->word()], true, rand(1, 2));
 
         $actualName = Db::query("SELECT name FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchColumn();
         $this->assertEquals($this->Database->GenerateRows->issues[0]['name'], $actualName);
@@ -64,7 +64,7 @@ class UpdateIssueTest extends IssueTest {
 
     function testCanModifyName() {
 
-        $newName = HelpTests::faker()->word();
+        $newName = TestHelper::faker()->word();
 
         $data = $this->helpTestArgs(['$name' => 'String'], ['name' => $newName]);
 
@@ -76,7 +76,7 @@ class UpdateIssueTest extends IssueTest {
 
         $data = $this->helpTestArgs(['$public' => 'Boolean'], ['public' => true]);
 
-        $actualPublicStatus = Db::query("SELECT ispublic, madepub FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchAll(PDO::FETCH_ASSOC);
+        $actualPublicStatus = Db::query("SELECT ispublic, madepub FROM issues WHERE num = ?", [$this->Database->GenerateRows->issues[0]['num']])->fetchAll(PDO::FETCH_ASSOC)[0];
         $this->assertEquals(1, $actualPublicStatus['ispublic']);
         $this->assertEquals(date('Y-m-d'), $actualPublicStatus['madepub']);
     }

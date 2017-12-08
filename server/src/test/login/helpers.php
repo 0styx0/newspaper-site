@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class LoginHelperTest extends HelpTests {
+abstract class LoginTestHelper extends TestHelper {
 
     protected $Database;
 
@@ -15,11 +15,11 @@ class LoginHelperTest extends HelpTests {
     }
 
     /**
-      * @param $args - @see HelpTests::createHTTPRequest param $args
+      * @param $args - @see TestHelper::createHTTPRequest param $args
       */
     protected function request(array $args = [], $jwt = '') {
 
-        return HelpTests::createHTTPRequest($args , 'login', $jwt)['data'];
+        return TestHelper::createHTTPRequest($args , 'login', $jwt)['data'];
     }
 
 

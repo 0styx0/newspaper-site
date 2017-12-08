@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UpdateUserTest extends UserTest {
+class UpdateUserTest extends UserTestHelper {
 
     private $mutation = 'mutation updateUsers($password: String, $data: idLevelList) {
                             updateUsers(password: $password, data: $data) {
@@ -14,7 +14,7 @@ class UpdateUserTest extends UserTest {
 
     protected function getUserOfLevel(int $level) {
 
-        return HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $level) {
+        return TestHelper::searchArray($this->Database->GenerateRows->users, function ($currentUser, $level) {
             return $currentUser['level'] > $level;
         }, $level);
     }
@@ -23,7 +23,7 @@ class UpdateUserTest extends UserTest {
      * Does all generic things needed in tests
      *
      * @param $includeJwt - whether or not user should be logged in
-     * @param $getUserBy - which user to update. Passed as arguments to @see HelpTests::$searchArray($user)
+     * @param $getUserBy - which user to update. Passed as arguments to @see TestHelper::$searchArray($user)
      * @param $newLevel - level to update user selected by $getUserBy to
      * @param $password - optional, Default: current user (who is doing the updating)'s password
      *
@@ -33,7 +33,7 @@ class UpdateUserTest extends UserTest {
 
         $user = $this->getUserOfLevel(1);
 
-        $userToUpdate = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
+        $userToUpdate = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
 
             $result = $outsideVars['getUserBy']($currentUser, $outsideVars['user']);
             return $result && $currentUser['id'] != $outsideVars['user']['id'];
@@ -50,7 +50,7 @@ class UpdateUserTest extends UserTest {
                     ]
                 ]
             ]
-        ], ($includeJwt) ? HelpTests::getJwt($user) : null);
+        ], ($includeJwt) ? TestHelper::getJwt($user) : null);
     }
 
     function testBadInvalidPassword() {
@@ -93,7 +93,7 @@ class UpdateUserTest extends UserTest {
 
         $user = $this->getUserOfLevel(1);
 
-        $userToUpdate = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
+        $userToUpdate = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
             return $currentUser['id'] != $user['id'] && $currentUser['level'] < $user['level'];
         }, $user);
 
@@ -110,7 +110,7 @@ class UpdateUserTest extends UserTest {
                     ]
                 ]
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $this->assertEquals($newLevel, $data['updateUsers'][0]['level']);
     }
@@ -141,7 +141,7 @@ class UpdateUserTest extends UserTest {
                     ]
                 ]
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         foreach ($data['updateUsers'] as $userToTest) {
 

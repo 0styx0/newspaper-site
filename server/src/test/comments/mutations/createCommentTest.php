@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class CreateCommentTest extends CommentTest {
+class CreateCommentTest extends CommentTestHelper {
 
     /**
      * Runs all duplicate functionality
@@ -15,7 +15,7 @@ class CreateCommentTest extends CommentTest {
      */
     protected function helpTest(array $article, $content, bool $loggedIn = true) {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->request([
             'query' => 'mutation CommentCreate($artId: ID!, $content: String!) {
@@ -27,7 +27,7 @@ class CreateCommentTest extends CommentTest {
                 'artId' => $article['id'],
                 'content' => $content
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : '');
+        ], $loggedIn ? TestHelper::getJwt($user) : '');
 
         return ['user' => $user, 'data' => $data['createComment']];
     }
@@ -41,7 +41,7 @@ class CreateCommentTest extends CommentTest {
      */
     protected function helpGetArticle(bool $public = false) {
 
-        return HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, bool $public) {
+        return TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, bool $public) {
 
             $privateIssue = $this->Database->GenerateRows->issues[0]['num'];
             $articleIsPrivate = $privateIssue == $currentArticle['issue'];
@@ -95,7 +95,7 @@ class CreateCommentTest extends CommentTest {
 
         $articleToCommentOn = $this->helpGetArticle();
 
-        foreach (HelpTests::$unsafeData as $content) {
+        foreach (TestHelper::$unsafeData as $content) {
 
             $data = $this->helpTest($articleToCommentOn, $content);
 

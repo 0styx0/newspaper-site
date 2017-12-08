@@ -55,7 +55,7 @@
 <ul>
     <li>Set <code>server/.env</code>'s <code>test=1</code></li>
     <li>$ <code>cd server/src/test</code></li>
-    <li>$ <code>php runAll.php</code></li>
+    <li>$ <code>phpunit . --stderr</code></li>
 </ul>
 
 <h2 id="docs">Docs</h2>

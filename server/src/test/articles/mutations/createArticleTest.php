@@ -3,11 +3,11 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class CreateArticleTest extends ArticleTest {
+class CreateArticleTest extends ArticleTestHelper {
 
     protected function helpCreate(bool $loggedIn = true, int $tags = 3, $url = true) {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
         $newArticle = $this->Database->GenerateRows->pageinfo();
         $author = $faker->randomElement($this->Database->GenerateRows->users);
         $tagList = $this->Database->GenerateRows->tag_list;
@@ -26,7 +26,7 @@ class CreateArticleTest extends ArticleTest {
                 'article' => $newArticle['lede'] . $newArticle['body'],
                 'tags' => array_column($faker->randomElements($this->Database->GenerateRows->tag_list, $tagsToGet), 'tag')
             ]
-        ], $loggedIn ? HelpTests::getJwt($author) : null)['createArticle'];
+        ], $loggedIn ? TestHelper::getJwt($author) : null)['createArticle'];
     }
 
     function testNotLoggedInCannotCreate() {
@@ -62,7 +62,7 @@ class CreateArticleTest extends ArticleTest {
     // if all issues are public, then a new issue is created with new article in it
     function testIfNoPrivateIssuePrivateIssueIsCreated() {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
 
         Db::query("UPDATE issues SET ispublic = ?", [1]);
 

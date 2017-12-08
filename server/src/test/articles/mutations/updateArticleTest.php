@@ -3,18 +3,18 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UpdateArticleTest extends ArticleTest {
+class UpdateArticleTest extends ArticleTestHelper {
 
     /**
      *
-     * @param $findArticle - function to filter articles by. @see HelpTests::searchArray param $qualifier
+     * @param $findArticle - function to filter articles by. @see TestHelper::searchArray param $qualifier
      * @param $fieldToChange - what to update
      */
     protected function helpTestUpdate(callable $findArticle, string $fieldToChange, $newValue, bool $loggedIn = true, bool $author = false, int $level = 1, bool $correctPassword = true) {
 
-        $articleToUpdate = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, $findArticle);
+        $articleToUpdate = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, $findArticle);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
 
             $good = true;
 
@@ -56,7 +56,7 @@ class UpdateArticleTest extends ArticleTest {
                 'data' => [$newData],
                 'password' => $correctPassword ? $user['password'] : ''
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : null);
+        ], $loggedIn ? TestHelper::getJwt($user) : null);
 
         return ['data' => $data, 'articleToUpdate' => $articleToUpdate];
     }
@@ -74,7 +74,7 @@ class UpdateArticleTest extends ArticleTest {
 
     function testNotLoggedInCannotEditTags() {
 
-        $newTags = HelpTests::faker()->randomElements($this->Database->GenerateRows->tag_list);
+        $newTags = TestHelper::faker()->randomElements($this->Database->GenerateRows->tag_list);
 
         $data = $this->helpTestUpdate(function () {
             return true;
@@ -100,7 +100,7 @@ class UpdateArticleTest extends ArticleTest {
 
         $data = $this->helpTestUpdate(function (array $currentArticle) {
 
-            return HelpTests::searchArray($this->Database->GenerateRows->users, function ($currentUser, $article) {
+            return TestHelper::searchArray($this->Database->GenerateRows->users, function ($currentUser, $article) {
                 return $currentUser['id'] == $article['authorid'] &&
                  $currentUser['level'] == 2; // this number must be same as level param of helpTestUpdate
             }, $currentArticle);
@@ -125,7 +125,7 @@ class UpdateArticleTest extends ArticleTest {
 
     function testLevelThreeCanModifyTags() {
 
-        $newTags = HelpTests::faker()->randomElements($this->Database->GenerateRows->tag_list());
+        $newTags = TestHelper::faker()->randomElements($this->Database->GenerateRows->tag_list());
 
         $data = $this->helpTestUpdate(function () {
             return true;

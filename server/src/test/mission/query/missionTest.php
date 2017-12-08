@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../helpers.php');
 /**
  * Goal: Everyone can see it, only lvl 3 canEdit
  */
-class MissionQueryTest extends MissionTest {
+class MissionQueryTest extends MissionHelper {
 
     /**
      *
@@ -23,12 +23,12 @@ class MissionQueryTest extends MissionTest {
                                 canEdit
                             }
                         }'
-        ], (isset($user)) ? HelpTests::getJwt($user) : '')['mission'];
+        ], (isset($user)) ? TestHelper::getJwt($user) : '')['mission'];
     }
 
     function testCanSeeMission() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] === 1;
         });
 
@@ -39,7 +39,7 @@ class MissionQueryTest extends MissionTest {
 
     function testNonLevelThreeCannotEdit() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] < 3;
         });
 
@@ -50,7 +50,7 @@ class MissionQueryTest extends MissionTest {
 
     function testLevelThreeCanEdit() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] > 2;
         });
 

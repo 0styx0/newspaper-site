@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class CreateTagTest extends AllTagsTest {
+class CreateTagTest extends AllTagsTestHelper {
 
     /**
      * Sends mutation to server to add tag
@@ -22,12 +22,12 @@ class CreateTagTest extends AllTagsTest {
             'variables' => [
                 'tag' => $tag
             ]
-        ], HelpTests::getJwt($user))['createTag'];
+        ], TestHelper::getJwt($user))['createTag'];
     }
 
     function testGoodLevelTwoPlusCanAddTag() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] > 1;
         });
 
@@ -40,11 +40,11 @@ class CreateTagTest extends AllTagsTest {
 
     function testMaliciousDataNotAccepted() {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] > 2;
         });
 
-        foreach (HelpTests::$unsafeData as $tag) {
+        foreach (TestHelper::$unsafeData as $tag) {
 
             $data = $this->helpTest($tag, $user);
 

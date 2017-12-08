@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class DeleteUserTest extends UserTest {
+class DeleteUserTest extends UserTestHelper {
 
     /**
      * Does all generic things needed in tests
@@ -16,14 +16,14 @@ class DeleteUserTest extends UserTest {
 
         if (!$userLevel) {
 
-            $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+            $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
         } else {
-            $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userLevel) {
+            $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $userLevel) {
                 return $currentUser['level'] == $userLevel;
             }, $userLevel);
         }
 
-        $userToDelete = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
+        $userToDelete = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $outsideVars) {
             return $outsideVars['canDeleteUser']($currentUser, $outsideVars['user']);
         }, ['canDeleteUser' => $canDeleteUser, 'user' => $user]);
 
@@ -37,7 +37,7 @@ class DeleteUserTest extends UserTest {
                 'ids' => [$userToDelete['id']],
                 'password' => $useCorrectPassword ? $user['password'] : $user['password'] . rand()
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : '')['deleteUsers'];
+        ], $loggedIn ? TestHelper::getJwt($user) : '')['deleteUsers'];
 
         return ['data' => $data, 'userToDelete' => $userToDelete];
     }
@@ -113,14 +113,14 @@ class DeleteUserTest extends UserTest {
 
         $data = $this->helpMutate(function (array $currentUser, array $user) {
 
-            $userIsAnAuthor = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $authorId) {
+            $userIsAnAuthor = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $authorId) {
                 return $currentArticle['authorid'] === $authorId;
             }, $currentUser['id']);
 
             return $currentUser['level'] < $user['level'] && $userIsAnAuthor;
         }, true, true, 3);
 
-        $articleOfDeletedUser = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $authorId) {
+        $articleOfDeletedUser = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $authorId) {
             return $currentArticle['authorid'] === $authorId;
         }, $data['userToDelete']['id']);
 

@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class NotLoggedInCommentTest extends CommentTest {
+class NotLoggedInCommentTest extends CommentTestHelper {
 
     /**
      * Sends graphql query
@@ -13,7 +13,7 @@ class NotLoggedInCommentTest extends CommentTest {
      */
     protected function helpTestArgs(array $variableTypes, array $variableValues) {
 
-        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
+        $variableStrings = TestHelper::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
             'query' => "query CommentQuery({$variableStrings['types']}) {
@@ -34,8 +34,7 @@ class NotLoggedInCommentTest extends CommentTest {
         $privateCommentId = $this->helpGetComment()['id'];
 
         $data = $this->helpTestArgs(['$id' => 'ID'], ['id' => $privateCommentId]);
-
-        $this->assertEmpty($data['comments'], $data);
+        $this->assertEmpty($data['comments']);
     }
 
     function testCannotGetCommentsOfPrivateArticlesByAuthor() {

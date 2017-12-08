@@ -10,7 +10,7 @@ use Faker\Provider\Base;
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../../public/graphql.php');
 
-class HelpTests extends TestCase {
+abstract class TestHelper extends TestCase {
 
     public static function faker() {
         return Faker\Factory::create();
@@ -37,6 +37,9 @@ class HelpTests extends TestCase {
         if ($jwt) {
             header("Authorization: Bearer {$jwt}");
             $_POST['jwt'] = "Bearer {$jwt}";
+        } else {
+            header("Authorization: Bearer");
+            unset($_POST['jwt']);
         }
 
         $_POST['graphql'] = json_encode($args);
@@ -58,7 +61,7 @@ class HelpTests extends TestCase {
                                 ->setAudience('https://tabceots.com')
                                 ->setIssuedAt(time())
                                 ->setId($user['id'], true)
-                                ->set('profileLink', HelpTests::getProfileLink($user['email']))
+                                ->set('profileLink', TestHelper::getProfileLink($user['email']))
                                 ->set('level', $user['level'])
                                 ->set('id', $user['id'])
                                 ->sign($signer, $_ENV['JWT_SECRET'])

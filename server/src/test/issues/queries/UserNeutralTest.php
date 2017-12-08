@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class NeutralIssueTest extends IssueTest {
+class NeutralIssueTest extends IssueTestHelper {
 
     /**
      * Sends graphql query
@@ -13,7 +13,7 @@ class NeutralIssueTest extends IssueTest {
      */
     protected function helpTestArgs(array $variableTypes, array $variableValues) {
 
-        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
+        $variableStrings = TestHelper::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
             'query' => "query IssueInfo({$variableStrings['types']}) {

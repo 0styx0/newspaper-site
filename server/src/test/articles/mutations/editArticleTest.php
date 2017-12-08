@@ -3,11 +3,11 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class EditArticleTest extends ArticleTest {
+class EditArticleTest extends ArticleTestHelper {
 
     protected function helpTestUpdate(bool $public = false, string $newArticle, bool $loggedIn = true, bool $author = false, int $level = 1, bool $correctPassword = true) {
 
-        $articleToUpdate = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, array $options) {
+        $articleToUpdate = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, array $options) {
 
             $articleIsPublic = $currentArticle['issue'] != $options['privateIssue'];
 
@@ -15,7 +15,7 @@ class EditArticleTest extends ArticleTest {
 
         }, ['articleShouldBePublic' => $public, 'privateIssue' => $this->Database->GenerateRows->issues[0]['num']]);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $scopedVars) {
 
            if ($scopedVars['author']) {
                return $currentUser['id'] == $scopedVars['articleToUpdate']['authorid'];
@@ -38,9 +38,9 @@ class EditArticleTest extends ArticleTest {
                 'article' => $newArticle,
                 'id' => $articleToUpdate['id']
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : null);
+        ], $loggedIn ? TestHelper::getJwt($user) : null);
     }
-    
+
     function testNotLoggedInCannotEditAnyText() {
 
         $newArticle = $this->Database->GenerateRows->pageinfo();

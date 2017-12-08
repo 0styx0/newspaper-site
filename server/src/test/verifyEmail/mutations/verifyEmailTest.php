@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class VerifyTest extends VerifyEmailTest {
+class VerifyTest extends VerifyEmailTestHelper {
 
     protected function helpSendQuery(array $user, bool $validCode = true) {
 
@@ -14,9 +14,9 @@ class VerifyTest extends VerifyEmailTest {
                             }
                         }',
             'variables' => [
-                'authCode' => $validCode ? $user['auth'] : $user['auth'] . HelpTests::faker()->word()
+                'authCode' => $validCode ? $user['auth'] : $user['auth'] . TestHelper::faker()->word()
             ]
-        ], HelpTests::getJwt($user))['verifyEmail'];
+        ], TestHelper::getJwt($user))['verifyEmail'];
     }
 
     /**
@@ -27,7 +27,7 @@ class VerifyTest extends VerifyEmailTest {
      */
     protected function helpGetUser(bool $emailIsVerified = false) {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         if (!$emailIsVerified) {
 

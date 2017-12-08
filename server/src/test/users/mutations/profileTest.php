@@ -5,7 +5,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class ProfileTest extends UserTest {
+class ProfileTest extends UserTestHelper {
 
     /**
      * Checks if can mutate fields
@@ -18,7 +18,7 @@ class ProfileTest extends UserTest {
      */
     function helpTestMutation($user, array $variableTypes, array $variableValues) {
 
-        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
+        $variableStrings = TestHelper::convertVariableArrayToGraphql($variableTypes);
 
         $fields = str_replace('password', '', implode('', array_keys($variableValues)));
         $fields = str_replace('newPassword', 'id', $fields); // id is given so not an empty return stuff
@@ -30,12 +30,12 @@ class ProfileTest extends UserTest {
                             }
                         }",
             'variables' => $variableValues
-        ], HelpTests::getJwt($user))['updateProfile'];
+        ], TestHelper::getJwt($user))['updateProfile'];
     }
 
     function testCannotModifyNotificationsWithoutPassword() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->helpTestMutation($user, ['$notifications' => 'Boolean'],
           ['notifications' => !$user['notifications']]);
@@ -45,7 +45,7 @@ class ProfileTest extends UserTest {
 
     function testCanModifyOwnNotification() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $changedSetting = !$user['notifications'];
 
@@ -57,7 +57,7 @@ class ProfileTest extends UserTest {
 
     function testCannotModifyTwoFactorWithoutPassword() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $data = $this->helpTestMutation($user, ['$twoFactor' => 'Boolean'],
           ['twoFactor' => $user['two_fa_enabled']]);
@@ -67,7 +67,7 @@ class ProfileTest extends UserTest {
 
     function testCanModifyOwnTwoFactor() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $changedSetting = !$user['two_fa_enabled'];
 
@@ -102,7 +102,7 @@ class ProfileTest extends UserTest {
 
         $newPassword = $this->generateRandomString(7); // 7 = random
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $this->helpTestMutation($user, ['$newPassword' => 'String', '$password' => 'String'],
         ['newPassword' => $newPassword, 'password' => $user['password']]);
@@ -114,7 +114,7 @@ class ProfileTest extends UserTest {
 
         $newPassword = $this->generateRandomString(7);
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $this->helpTestMutation($user, ['$newPassword' => 'String'],
         ['newPassword' => $newPassword]);
@@ -124,7 +124,7 @@ class ProfileTest extends UserTest {
 
     function testCanModifyMultipleAtOnce() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $params = [
             'notifications' => !$user['notifications'],
@@ -141,7 +141,7 @@ class ProfileTest extends UserTest {
                             }
                         }',
             'variables' => $params
-        ], HelpTests::getJwt($user))['updateProfile'];
+        ], TestHelper::getJwt($user))['updateProfile'];
 
         $this->assertEquals($params['notifications'], $data['notifications']);
         $this->assertEquals($params['twoFactor'], $data['twoFactor']);

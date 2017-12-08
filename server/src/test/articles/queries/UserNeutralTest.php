@@ -3,14 +3,14 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UserNeutralTest extends ArticleTest {
+class UserNeutralArticleTest extends ArticleTestHelper {
 
     /**
      * @return a public article
      */
     protected function helpGetPublicArticle() {
 
-        return HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $privateIssue) {
+        return TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, $privateIssue) {
             return $currentArticle['issue'] < $privateIssue;
         }, $this->Database->GenerateRows->issues[0]['num']);
     }
@@ -38,19 +38,19 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
+        TestHelper::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByTag() {
 
-        $tagToGet = HelpTests::faker()->randomElement($this->Database->GenerateRows->tags)['tag'];
+        $tagToGet = TestHelper::faker()->randomElement($this->Database->GenerateRows->tags)['tag'];
         $expected = [];
 
         foreach ($this->Database->GenerateRows->tags as $tag) {
 
             if ($tag['tag'] == $tagToGet) {
 
-                $articleIsPublic = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $idToFind) {
+                $articleIsPublic = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function ($currentArticle, $idToFind) {
                     return $currentArticle['id'] == $idToFind && $currentArticle['issue'] < $this->Database->GenerateRows->issues[0]['num'];
                 }, $tag['art_id']);
 
@@ -71,7 +71,7 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
+        TestHelper::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByAuthor() {
@@ -100,7 +100,7 @@ class UserNeutralTest extends ArticleTest {
             ]
         ]);
 
-        HelpTests::compareArrayContents($expected, array_column($data['articles'], 'id'));
+        TestHelper::compareArrayContents($expected, array_column($data['articles'], 'id'));
     }
 
     function testCanQueryByIssueAndUrl() {

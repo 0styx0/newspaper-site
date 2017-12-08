@@ -15,7 +15,7 @@
 		"classmap": [
 			"src/db/connection.php",
             "src/test/TestDatabase.php",
-            "src/test/HelpTests.php",
+            "src/test/TestHelper.php",
             "src/helpers/Jwt.php",
             "src/helpers/Guard.php",
             "src/helpers/Validate.php",

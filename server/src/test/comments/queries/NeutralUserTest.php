@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class NeutralUserCommentTest extends CommentTest {
+class NeutralUserCommentTest extends CommentTestHelper {
 
     /**
      * Sends graphql query
@@ -13,7 +13,7 @@ class NeutralUserCommentTest extends CommentTest {
      */
     protected function helpTestArgs(array $variableTypes, array $variableValues) {
 
-        $variableStrings = HelpTests::convertVariableArrayToGraphql($variableTypes);
+        $variableStrings = TestHelper::convertVariableArrayToGraphql($variableTypes);
 
         return $this->request([
             'query' => "query CommentQuery({$variableStrings['types']}) {

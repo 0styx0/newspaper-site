@@ -6,7 +6,7 @@ require_once(__DIR__ . '/helpers.php');
 /**
  * Goal: Only users who exist, with proper email and password should be able to sign in
  */
-class LoginTest extends LoginHelperTest {
+class LoginTest extends LoginTestHelper {
 
     protected function helpLogin(string $username, string $password) {
 
@@ -25,7 +25,7 @@ class LoginTest extends LoginHelperTest {
 
     function testBadUsername() {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'] . $faker->word(), $user['password']);
@@ -35,7 +35,7 @@ class LoginTest extends LoginHelperTest {
 
     function testBadPassword() {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'], $user['password'] . $faker->word());
@@ -45,7 +45,7 @@ class LoginTest extends LoginHelperTest {
 
     function testGoodPasswordGoodUsername() {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         $jwt = $this->helpLogin($user['username'], $user['password']);
@@ -55,7 +55,7 @@ class LoginTest extends LoginHelperTest {
 
     function testBadUnverifiedEmail() {
 
-        $faker = HelpTests::faker();
+        $faker = TestHelper::faker();
         $user = $faker->randomElement($this->Database->GenerateRows->users);
 
         Db::query("UPDATE users SET email = CONCAT('.', email) WHERE id = ?", [$user['id']]);
@@ -64,11 +64,11 @@ class LoginTest extends LoginHelperTest {
 
         $unwantedKeys = ['level', 'profileLink'];
 
-        $decodedJwt = (array) HelpTests::decodeJwt($jwt['jwt'])->getClaims();
+        $decodedJwt = (array) TestHelper::decodeJwt($jwt['jwt'])->getClaims();
 
         $jwtDif = array_diff(array_merge(['id'], $unwantedKeys), array_keys($decodedJwt));
 
-        HelpTests::compareArrayContents($unwantedKeys, $jwtDif);
+        TestHelper::compareArrayContents($unwantedKeys, $jwtDif);
     }
 }
 ?>

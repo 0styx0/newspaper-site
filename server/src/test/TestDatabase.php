@@ -59,8 +59,8 @@ class TestDatabase {
         $hashed = [];
         foreach ($this->GenerateRows->users as $i => $user) {
 
-            $this->GenerateRows->users[$i]['password'] = HelpTests::faker()->unique()->password();
-            $this->GenerateRows->users[$i]['auth'] = HelpTests::faker()->unique()->password();
+            $this->GenerateRows->users[$i]['password'] = TestHelper::faker()->unique()->password();
+            $this->GenerateRows->users[$i]['auth'] = TestHelper::faker()->unique()->password();
 
             $hashed[] = $user['id'];
             $hashed[] = password_hash($this->GenerateRows->users[$i]['password'], PASSWORD_DEFAULT);
@@ -159,7 +159,7 @@ class TestDatabase {
      */
     public function getUserOfLevel(int $level) {
 
-        return HelpTests::searchArray($this->GenerateRows->users, function (array $currentUser, int $levelToGet) {
+        return TestHelper::searchArray($this->GenerateRows->users, function (array $currentUser, int $levelToGet) {
             return $currentUser['level'] == $levelToGet;
         }, $level);
     }

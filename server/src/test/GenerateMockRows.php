@@ -87,7 +87,7 @@ class GenerateMockRows extends GenerateMockRow {
 
         $idsNeeded = count($this->issues);
 
-        $randomIds = array_column(HelpTests::faker()->randomElements($this->users, $idsNeeded), 'id');
+        $randomIds = array_column(TestHelper::faker()->randomElements($this->users, $idsNeeded), 'id');
 
         $differentSettings = [
             ['issue' => array_column($this->issues, 'num'), 'authorid' => $randomIds]

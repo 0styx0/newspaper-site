@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class AllTagsQueryTest extends AllTagsTest {
+class AllTagsQueryTest extends AllTagsTestHelper {
 
     function testGetAllTags() {
 

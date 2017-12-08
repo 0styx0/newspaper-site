@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-class AllTagsTest extends HelpTests {
+abstract class AllTagsTestHelper extends TestHelper {
 
     protected $Database;
 
@@ -15,11 +15,11 @@ class AllTagsTest extends HelpTests {
     }
 
     /**
-      * @param $args - @see HelpTests::createHTTPRequest param $args
+      * @param $args - @see TestHelper::createHTTPRequest param $args
       */
     protected function request(array $args = [], $jwt = '') {
 
-        return HelpTests::createHTTPRequest($args , 'allTags', $jwt)['data'];
+        return TestHelper::createHTTPRequest($args , 'allTags', $jwt)['data'];
     }
 }
 ?>

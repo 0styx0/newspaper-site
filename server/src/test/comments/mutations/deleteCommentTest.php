@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../helpers.php');
 /**
  * Goal: Only user who posted the comment, or level 3, can delete
  */
-class DeleteCommentTest extends CommentTest {
+class DeleteCommentTest extends CommentTestHelper {
 
     /**
      * Runs all duplicate functionality
@@ -19,7 +19,7 @@ class DeleteCommentTest extends CommentTest {
      */
     protected function helpTest(array $comment, array $user, bool $loggedIn = true) {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         return $this->request([
             'query' => 'mutation CommentDelete($id: ID!) {
@@ -30,7 +30,7 @@ class DeleteCommentTest extends CommentTest {
             'variables' => [
                 'id' => $comment['id']
             ]
-        ], $loggedIn ? HelpTests::getJwt($user) : '');
+        ], $loggedIn ? TestHelper::getJwt($user) : '');
     }
 
     protected function helpCheckCommentExists(array $comment, bool $assertExists = true) {
@@ -46,7 +46,7 @@ class DeleteCommentTest extends CommentTest {
 
     function testBadNotLoggedIn() {
 
-        $commentToDelete = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
+        $commentToDelete = TestHelper::faker()->randomElement($this->Database->GenerateRows->comments);
 
         $this->helpTest($commentToDelete, [], false);
 
@@ -55,9 +55,9 @@ class DeleteCommentTest extends CommentTest {
 
     function testBadNotAuthorNotLevelThree() {
 
-        $commentToDelete = HelpTests::faker()->randomElement($this->Database->GenerateRows->comments);
+        $commentToDelete = TestHelper::faker()->randomElement($this->Database->GenerateRows->comments);
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $commentToDelete) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, $commentToDelete) {
             return $currentUser['level'] < 3 && $currentUser['id'] !== $commentToDelete['id'];
         }, $commentToDelete);
 
@@ -70,12 +70,12 @@ class DeleteCommentTest extends CommentTest {
 
         $getUserComment = function(array $user) {
 
-            return HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
+            return TestHelper::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
                 return $user['id'] === $currentComment['authorid'];
             }, $user);
         };
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, callable $getUserComment) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, callable $getUserComment) {
 
             if ($currentUser['level'] > 2) {
                 return false;
@@ -100,12 +100,12 @@ class DeleteCommentTest extends CommentTest {
 
         $commentToDelete;
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
 
             return $currentUser['level'] > 2;
         });
 
-        $commentToDelete = HelpTests::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
+        $commentToDelete = TestHelper::searchArray($this->Database->GenerateRows->comments, function (array $currentComment, array $user) {
             return $user['id'] !== $currentComment['authorid'];
         }, $user);
 

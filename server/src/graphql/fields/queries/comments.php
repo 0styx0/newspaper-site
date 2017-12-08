@@ -63,7 +63,7 @@ class CommentsField extends AbstractField {
               'userLoggedIn' => Guard::userIsLoggedIn(),
               'userIsAdmin' => Jwt::getField('level') > 2,
               'userId' => Jwt::getField('id') ? Jwt::getField('id') : ''
-          ]))->fetchAll(PDO::FETCH_ASSOC);
+        ]))->fetchAll(PDO::FETCH_ASSOC);
 
           return $result;
     }

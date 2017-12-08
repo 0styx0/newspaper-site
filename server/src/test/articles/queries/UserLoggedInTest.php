@@ -4,7 +4,7 @@
 require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
-class UserLoggedInTest extends ArticleTest {
+class UserLoggedInArticleTest extends ArticleTestHelper {
 
     function testCanSeeAnyArticle() {
 
@@ -23,7 +23,7 @@ class UserLoggedInTest extends ArticleTest {
                                 id
                             }
                         }'
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $this->compareArrayContents($expectedIds, array_column($data['articles'], 'id'));
     }
@@ -31,13 +31,13 @@ class UserLoggedInTest extends ArticleTest {
     function testCanEditOwnArticles() {
 
         // get user with at least 1 article
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
 
             if ($currentUser['level'] > 2) {
                 return false;
             }
 
-            $article = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $article, array $currentUser) {
+            $article = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $article, array $currentUser) {
 
                 $articleIsPrivate = $article['issue'] == $this->Database->GenerateRows->issues[0]['num'];
 
@@ -58,7 +58,7 @@ class UserLoggedInTest extends ArticleTest {
             'variables' => [
                 'authorid' => $user['id']
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         foreach ($data['articles'] as $article) {
 
@@ -75,18 +75,18 @@ class UserLoggedInTest extends ArticleTest {
         $levelOfUser = 2;
 
         // get user with at least 1 article
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $levelOfUser) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, int $levelOfUser) {
 
             return $currentUser['level'] == $levelOfUser;
         }, $levelOfUser);
 
-        $authorOfArticleToCheck = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
+        $authorOfArticleToCheck = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $user) {
 
             if ($currentUser['level'] < $user['level'] || $currentUser['id'] == $user['id']) {
                 return false;
             }
 
-            $userIsAnAuthor = !!HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $userId) {
+            $userIsAnAuthor = !!TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle, string $userId) {
                 return $userId == $currentArticle['authorid'];
             }, $currentUser['id']);
 
@@ -103,14 +103,14 @@ class UserLoggedInTest extends ArticleTest {
             'variables' => [
                 'authorid' => $authorOfArticleToCheck['id']
             ]
-        ], HelpTests::getJwt($user));
+        ], TestHelper::getJwt($user));
 
         $this->assertFalse($data['articles'][0]['canEdit']);
     }
 
     function testCannotEditOwnPublicArticles() {
 
-        $articleToTest = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
+        $articleToTest = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
 
             $issues = $this->Database->GenerateRows->issues;
 
@@ -120,7 +120,7 @@ class UserLoggedInTest extends ArticleTest {
                 return false;
             }
 
-            $authorLessThanLevelThree = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, string $wantedId) {
+            $authorLessThanLevelThree = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, string $wantedId) {
                 // lvl 3 can edit public articles so don't want to test that here
                 return $currentUser['id'] == $wantedId && $currentUser['level'] < 3;
             }, $currentArticle['authorid']);
@@ -129,7 +129,7 @@ class UserLoggedInTest extends ArticleTest {
             return $authorLessThanLevelThree;
         });
 
-        $author = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $articleToTest) {
+        $author = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser, array $articleToTest) {
            return $currentUser['id'] == $articleToTest['authorid'];
         }, $articleToTest);
 
@@ -143,18 +143,18 @@ class UserLoggedInTest extends ArticleTest {
             'variables' => [
                 'id' => $articleToTest['id']
             ]
-        ], HelpTests::getJwt($author));
+        ], TestHelper::getJwt($author));
 
         $this->assertFalse($data['articles'][0]['canEdit']);
     }
 
     function testCanEditPublicArticlesIfLevelThree() {
 
-        $articleToTest = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
+        $articleToTest = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
             return $currentArticle['issue'] == $this->Database->GenerateRows->issues[0]['num'];
         });
 
-        $levelThreeUser = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $levelThreeUser = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
 
             return $currentUser['level'] > 2;
         });
@@ -169,18 +169,18 @@ class UserLoggedInTest extends ArticleTest {
             'variables' => [
                 'id' => $articleToTest['id']
             ]
-        ], HelpTests::getJwt($levelThreeUser));
+        ], TestHelper::getJwt($levelThreeUser));
 
         $this->assertTrue($data['articles'][0]['canEdit']);
     }
 
     function testViewsStaySameIfReqestPrivateArticle() {
 
-        $articleToTest = HelpTests::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
+        $articleToTest = TestHelper::searchArray($this->Database->GenerateRows->pageinfo, function (array $currentArticle) {
             return $currentArticle['issue'] == $this->Database->GenerateRows->issues[0]['num'];
         });
 
-        $levelThreeUser = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        $levelThreeUser = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
            return $currentUser['level'] > 2;
         });
 
@@ -194,7 +194,7 @@ class UserLoggedInTest extends ArticleTest {
             'variables' => [
                 'id' => $articleToTest['id']
             ]
-        ], HelpTests::getJwt($levelThreeUser));
+        ], TestHelper::getJwt($levelThreeUser));
 
         $this->assertNotNull($data['articles'][0]);
 

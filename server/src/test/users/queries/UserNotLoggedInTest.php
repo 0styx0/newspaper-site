@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../../vendor/autoload.php');
 require_once(__DIR__ . '/../helpers.php');
 
 
-class UserNotLoggedInTest extends UserTest {
+class UserNotLoggedInUserTest extends UserTestHelper {
 
     /**
      * Checks if can get $attribute when not logged in
@@ -14,7 +14,7 @@ class UserNotLoggedInTest extends UserTest {
      */
     private function helperTest(string $attribute) {
 
-        $user = HelpTests::searchArray($this->Database->GenerateRows->users, function (array $user) {
+        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $user) {
             return $user['level'] == 3;
         });
 
@@ -67,7 +67,7 @@ class UserNotLoggedInTest extends UserTest {
 
     function testGetOnlyPublicArticleCount() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $actualPublicArticleCount = 0;
 
@@ -106,7 +106,7 @@ class UserNotLoggedInTest extends UserTest {
 
     function testCanOnlyViewPublicArticles() {
 
-        $user = HelpTests::faker()->randomElement($this->Database->GenerateRows->users);
+        $user = TestHelper::faker()->randomElement($this->Database->GenerateRows->users);
 
         $expectedIds = [];
 
@@ -130,7 +130,7 @@ class UserNotLoggedInTest extends UserTest {
             ]
         ]);
 
-        HelpTests::compareArrayContents($expectedIds, array_column($articles['users'][0]['articles'], 'id'));
+        TestHelper::compareArrayContents($expectedIds, array_column($articles['users'][0]['articles'], 'id'));
     }
 
     function testCannotEditUsers() {
