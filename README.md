@@ -1,6 +1,5 @@
-# eyeStorm-nodeJS
+# eyeStorm
 
-<h1>Background</h1>
 <p>This is the code behind my school newspaper's site, currently <strike>located at <a href="https://tabceots.com">https://tabceots.com</a></strike> not online anymore.</p>
 
 <h2>Table of Contents</h2>
