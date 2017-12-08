@@ -1,4 +1,4 @@
-# eyeStorm
+# newspaper-site
 
 <p>This is the code behind my school newspaper's site, currently <strike>located at <a href="https://tabceots.com">https://tabceots.com</a></strike> not online anymore.</p>
 
@@ -121,8 +121,8 @@
 
 <h3>Installation</h3>
 <ol>
-    <li>$ <code>git clone https://github.com/DovidM/eyeStorm-nodeJS.git</code></li>
-    <li>$ <code>cd eyeStorm-nodeJS</code></li>
+    <li>$ <code>git clone https://github.com/DovidM/newspaper-site.git</code></li>
+    <li>$ <code>cd newspaper-site</code></li>
 </ol>
 
 
