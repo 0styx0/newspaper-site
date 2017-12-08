@@ -2,9 +2,6 @@
 
 <?php
 
-require_once __DIR__ . '/server/vendor/autoload.php';
-require_once __DIR__ . '/server/src/test/TestDatabase.php';
-
 (function() {
 
     $options = getopt('h', ['email:', 'password:', 'fill-db::', 'help::']);
@@ -16,7 +13,13 @@ require_once __DIR__ . '/server/src/test/TestDatabase.php';
     validateArgs($options);
 
     installNpmPackages();
+    installComposerPackages($options);
+
+    require_once __DIR__ . '/server/vendor/autoload.php';
+    require_once __DIR__ . '/server/src/test/TestDatabase.php';
+
     initializeDatabase($options);
+
 
 })();
 
@@ -96,6 +99,13 @@ function createAdmin(array $options) {
     echo "Admin created\n";
 }
 
+function installComposerPackages($options) {
+
+    echo "Installing composer packages...\n";
+    $serverDir = __DIR__ . '/server';
+    echo `composer install -d={$serverDir}`;
+    echo "Packages have been installed successfully";
+}
 
 
 ?>

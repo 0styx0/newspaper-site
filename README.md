@@ -162,6 +162,7 @@
 <p>You MUST have filled out <code>server/.env</code> before this step</p>
 
 <ol>
+    <li>Install <code>composer</code> from <a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a> (to check if you already have it run $ <code>composer -V</code>)
     <li>
       <details>
         <summary>
