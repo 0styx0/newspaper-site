@@ -12,8 +12,8 @@
         "fzaninotto/faker": "^1.7"
     },
     "autoload": {
-		"classmap": [
-			"src/db/connection.php",
+        "classmap": [
+            "src/db/connection.php",
             "src/test/TestDatabase.php",
             "src/test/TestHelper.php",
             "src/helpers/Jwt.php",
@@ -21,6 +21,6 @@
             "src/helpers/Validate.php",
             "src/helpers/SendMail.php",
             "src/helpers/Article.php"
-		]
-	}
+        ]
+    }
 }
