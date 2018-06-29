@@ -77,6 +77,7 @@ class ArticleHelper {
                                             'data'=>true]);
         $config->set('Attr.DefaultImageAlt', '');
         $config->set('HTML.Allowed', 'h1,h2,h3,h4,h5,h6,pre,img,p,a,table,td,tr,th,tbody,thead,tfoot,strong,b,em,i,u,sub,sup,font,strike,ul,ol,li,q,blockquote,br,abbr,div,span');
+        $config->set('HTML.AllowedAttributes', 'src, alt');
         $config->set('AutoFormat.RemoveEmpty', true); // remove empty tag pairs
         $config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true); // remove empty, even if it contains an &nbsp;
         $config->set('AutoFormat.AutoParagraph', true); // remove empty tag pairs
