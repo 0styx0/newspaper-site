@@ -27,6 +27,8 @@ export interface State {
  */
 export class ModifiableUserInfoContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -134,4 +136,4 @@ const ModifiableUserInfoContainerWithData = compose(
     graphql(UserDelete, {name: 'deleteUser'})
 )(ModifiableUserInfoContainer);
 
-export default withApollo(ModifiableUserInfoContainerWithData);
+export default withApollo(ModifiableUserInfoContainerWithData as any) as any;

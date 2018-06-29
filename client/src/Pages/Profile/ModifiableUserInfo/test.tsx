@@ -38,7 +38,7 @@ function setup(
                     ({ data: { users: [customCasual.user(userOptions.twoFactor, userOptions.notifications)] } })
             }}
         />
-    );
+    ) as ReactWrapper<Props, State>;
 
     wrapper.setState({
         privateUserData: {

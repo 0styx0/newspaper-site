@@ -19,6 +19,8 @@ interface State {
  */
 export default class CommentListContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     /**
      * Seed initial state with props.comments
      */

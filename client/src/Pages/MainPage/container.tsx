@@ -26,6 +26,8 @@ export class MainPageContainer extends React.Component<Props, State> {
 
     unlisten: Function;
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -181,4 +183,4 @@ const MainPageContainerWithData = compose((
     graphql(IssueInfoQuery, {name: 'issueInfo'})
 ))(MainPageContainer);
 
-export default withApollo(MainPageContainerWithData);
+export default withApollo(MainPageContainerWithData as any) as any;

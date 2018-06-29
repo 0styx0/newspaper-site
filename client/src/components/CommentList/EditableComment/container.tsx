@@ -17,6 +17,8 @@ export interface State {
 
 export class EditableCommentContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -60,5 +62,5 @@ export class EditableCommentContainer extends React.Component<Props, State> {
 
 export default withApollo(
     // tslint:disable-next-line:no-any
-    graphql(CommentCreate, {name: 'createComment'})(EditableCommentContainer as any)
-);
+    graphql(CommentCreate, {name: 'createComment'})(EditableCommentContainer as any) as any
+) as any;

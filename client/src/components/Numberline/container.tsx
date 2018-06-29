@@ -22,6 +22,8 @@ interface State {
  */
 export default class NumberlineContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 

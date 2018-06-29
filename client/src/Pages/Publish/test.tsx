@@ -234,8 +234,8 @@ describe('<PublishContainer>', () => {
                 tags.add(tagOptions[indexOfTag]);
             }
 
-            (wrapper.find('select[name="tags"]').instance() as {} as HTMLSelectElement)
-                .selectedOptions = tags as {} as HTMLCollectionOf<HTMLOptionElement>;
+            ((wrapper.find('select[name="tags"]').instance() as {} as HTMLSelectElement)
+                .selectedOptions as any) = tags as {} as HTMLCollectionOf<HTMLOptionElement>;
 
             return {
                 tags: [...tags].map(option => option.value),

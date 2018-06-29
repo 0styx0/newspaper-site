@@ -25,7 +25,7 @@ function setup(mockGraphql: {deleteArticle?: Function} = {}) {
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : async (test: {}) => false}
             />
         </MemoryRouter>
-    );
+    ) as ReactWrapper<Props, State>;
 }
 
 describe('<UserArticleTableContainer>', () => {

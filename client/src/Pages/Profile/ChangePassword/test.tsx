@@ -12,7 +12,7 @@ function setup(mockGraphql: {updatePassword?: Function} = {}) {
         <ChangePasswordContainer
             updatePassword={mockGraphql.updatePassword ? mockGraphql.updatePassword : async () => true}
         />
-    );
+    ) as ReactWrapper<Props, {}>;
 }
 
 describe('<ChangePasswordContainer>', () => {

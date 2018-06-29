@@ -19,7 +19,7 @@ function setup(verifyEmail: typeof fakeVerifyEmail = fakeVerifyEmail) {
           history={[]}
           verifyEmail={verifyEmail}
         />
-    );
+    ) as ReactWrapper<Props, {}>;
 }
 
 describe('<TwoFactorContainer>', () => {

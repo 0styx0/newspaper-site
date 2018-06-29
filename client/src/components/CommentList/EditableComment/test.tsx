@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
 import * as casual from 'casual';
-import { EditableCommentContainer, Props } from './container';
+import { EditableCommentContainer, Props, State } from './container';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as mocks from '../../../tests/setup.mocks';
 import { mount } from 'enzyme';
@@ -75,7 +75,7 @@ describe('<EditableCommentContainer>', () => {
 
             (contentEditable.instance() as {} as HTMLDivElement).innerHTML = content;
             contentEditable.simulate('blur');
-            expect(wrapper.state().content).toBe(content);
+            expect((wrapper.state() as State).content).toBe(content);
         });
 
         it('calls commentDelete and addToList when button is clicked', () => {
@@ -110,7 +110,7 @@ describe('<EditableCommentContainer>', () => {
                 addToList: mockFunction
             });
 
-            wrapper.state().content = expected.content;
+            (wrapper.state() as State).content = expected.content;
             wrapper.find('button').last().simulate('click');
         });
 
@@ -123,7 +123,7 @@ describe('<EditableCommentContainer>', () => {
                 addToList: async (content: string) => expect(content).toBe(expectedContent)
             });
 
-            wrapper.state().content = expectedContent;
+            (wrapper.state() as State).content = expectedContent;
             wrapper.find('button').last().simulate('click');
         });
     });

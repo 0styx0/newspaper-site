@@ -51,4 +51,4 @@ export class TwoFactorContainer extends React.Component<Props, {}> {
 // tslint:disable-next-line:no-any
 const TwoFactorContainerWithData = graphql(UserVerifyEmail, { name: 'verifyEmail' })(TwoFactorContainer as any);
 
-export default withApollo(TwoFactorContainerWithData);
+export default withApollo(TwoFactorContainerWithData as any) as any;

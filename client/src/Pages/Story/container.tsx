@@ -25,6 +25,8 @@ interface Props {
 
 export class StoryContainer extends React.Component<Props, ArticleInfo> {
 
+    public state: ArticleInfo;
+
     constructor(props: Props) {
         super(props);
 
@@ -117,4 +119,4 @@ const StoryContainerWithData = compose(
     graphql(EditArticle, {name: 'editArticle'}),
 )(StoryContainer);
 
-export default withApollo(StoryContainerWithData);
+export default withApollo(StoryContainerWithData as any) as any;

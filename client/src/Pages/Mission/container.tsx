@@ -28,6 +28,8 @@ interface State {
 
 export class MissionContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -91,4 +93,4 @@ const MissionContainerWithData = compose(
     graphql(MissionQuery),
 )(MissionContainer);
 
-export default withApollo(MissionContainerWithData);
+export default withApollo(MissionContainerWithData as any) as any;

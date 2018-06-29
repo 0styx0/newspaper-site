@@ -27,6 +27,8 @@ interface State {
  */
 export class CommentContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -92,4 +94,4 @@ export class CommentContainer extends React.Component<Props, State> {
 // tslint:disable-next-line:no-any
 const CommentContainerWithData = graphql(CommentDelete, {name: 'deleteComment'})(CommentContainer as any);
 
-export default withApollo(CommentContainerWithData);
+export default withApollo(CommentContainerWithData as any) as any;

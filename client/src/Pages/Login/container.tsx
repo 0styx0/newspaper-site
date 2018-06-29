@@ -69,4 +69,4 @@ export class LoginFormContainer extends React.Component<Props, {}> {
 // tslint:disable-next-line:no-any
 const LoginFormContainerWithData = graphql(UserLogin, { name: 'loginUser' })(LoginFormContainer as any);
 
-export default withApollo(LoginFormContainerWithData);
+export default withApollo(LoginFormContainerWithData as any) as any;

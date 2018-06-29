@@ -59,7 +59,7 @@ function setup(mockGraphql: {userUpdate?: Function, userDelete?: Function} = {})
                 userDelete={mockGraphql.userDelete ? mockGraphql.userDelete : async (test: {}) => false}
             />
         </MemoryRouter>
-    );
+    ) as ReactWrapper<Props, State>;
 }
 
 describe('<JournalistTableContainer>', () => {
@@ -365,9 +365,11 @@ describe('<JournalistTableContainer>', () => {
                         // puts ids from each level into `expectedFormat`
                         idLevelMap.forEach(mapping => {
 
-                            const elt = expectedFormat.find(elt => elt.level === mapping[1]); // [1] = level
+                            const elt = expectedFormat.find(el => el.level === mapping[1]); // [1] = level
 
-                            elt && elt.ids.push(mapping[0] as string);
+                            if (elt) {
+                                elt.ids.push(mapping[0] as string);
+                            }
                         });
 
                         const uniqueExpectedFormat = expectedFormat

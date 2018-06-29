@@ -17,6 +17,8 @@ export interface State {
  */
 export default class HintContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 

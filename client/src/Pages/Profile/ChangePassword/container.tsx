@@ -52,4 +52,4 @@ const ChangePasswordContainerWithData = compose(
     graphql(UserUpdate, {name: 'updatePassword'})
 )(ChangePasswordContainer);
 
-export default withApollo(ChangePasswordContainerWithData);
+export default withApollo(ChangePasswordContainerWithData as any) as any;

@@ -81,7 +81,7 @@ function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function}
                 deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : filler}
             />
         </MemoryRouter>
-    );
+    ) as ReactWrapper<Props, State>;
 }
 
 describe('<ArticleTableContainer>', () => {
@@ -152,14 +152,14 @@ describe('<ArticleTableContainer>', () => {
 
             return {
                 input: inputInstance,
-                id: component.state.articles[indexOfInput].id,
+                id: ((component.state as State) as State).articles[indexOfInput].id,
                 index: indexOfInput
             };
         }
 
         it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
 
-            let expected: string[][] = [];
+            let expected: React.ReactText[][] = [];
             const { wrapper, component } = setupWithProps();
 
             for (let i = 0; i < casual.integer(0, 100); i++) {
@@ -175,7 +175,7 @@ describe('<ArticleTableContainer>', () => {
                 !arr.some((search, j) => search[0] === elt[0] && i < j)
             );
 
-            expect([...component.state.updates.displayOrder].sort()).toEqual(uniqueExpected.sort());
+            expect([...(component.state as State).updates.displayOrder].sort()).toEqual(uniqueExpected.sort());
         });
 
         it('updates displayOrder when it has been changed more than once to most recent value', () => {
@@ -224,9 +224,9 @@ describe('<ArticleTableContainer>', () => {
 
             oneInput.simulate('change', {target: {name: 'tags', value: newValueArr, selectedOptions}});
 
-            const id = component.state.articles[indexOfInput].id;
+            const id = (component.state as State).articles[indexOfInput].id;
 
-            expect([...component.state.updates.tags]).toContainEqual([id, newValueArr]);
+            expect([...(component.state as State).updates.tags]).toContainEqual([id, newValueArr]);
 
             return {
                 input: oneInput,
@@ -241,7 +241,7 @@ describe('<ArticleTableContainer>', () => {
             const { wrapper, component } = setupWithProps();
             const result = changeOneSelect(wrapper);
 
-            expect([...component.state.updates.tags]).toEqual([[result.id, result.value]]);
+            expect([...(component.state as State).updates.tags]).toEqual([[result.id, result.value]]);
         });
 
         it('removes tags from array if user de-selects', () => {
@@ -264,9 +264,9 @@ describe('<ArticleTableContainer>', () => {
             const deleteCheckbox = wrapper.find('input[name="delete"]');
             const boxInfo = randomCheckboxToggle(deleteCheckbox);
 
-            const id = component.state.articles[boxInfo.index].id;
+            const id = (component.state as State).articles[boxInfo.index].id;
 
-            expect(component.state.updates.idsToDelete).toContain(id);
+            expect((component.state as State).updates.idsToDelete).toContain(id);
 
             return {
               index: boxInfo.index,
@@ -287,7 +287,7 @@ describe('<ArticleTableContainer>', () => {
             (result.input.instance() as {} as HTMLInputElement).checked = false;
             result.input.simulate('change');
 
-            expect(component.state.updates.idsToDelete.size).toBe(0);
+            expect((component.state as State).updates.idsToDelete.size).toBe(0);
         });
     });
 
@@ -363,7 +363,7 @@ describe('<ArticleTableContainer>', () => {
 
                     tags.push({id: article.id, tags: [...tagList]});
 
-                    component.state.updates.tags.set(article.id, [...tagList]);
+                    (component.state as State).updates.tags.set(article.id, [...tagList]);
                 });
 
                 password = setInput(wrapper);
@@ -392,7 +392,7 @@ describe('<ArticleTableContainer>', () => {
                     const newOrder = casual.integer(0, 100);
 
                     orders.push({id: article.id, displayOrder: newOrder});
-                    component.state.updates.displayOrder.set(article.id, newOrder);
+                    (component.state as State).updates.displayOrder.set(article.id, newOrder);
                 });
 
                 password = setInput(wrapper);
@@ -419,10 +419,10 @@ describe('<ArticleTableContainer>', () => {
                 randomArticleLoop(wrapper, data, article => {
 
                     const newOrder = casual.integer(0, 100);
-                    component.state.updates.displayOrder.set(article.id, newOrder);
+                    (component.state as State).updates.displayOrder.set(article.id, newOrder);
 
                     let tagList = getRandomTags();
-                    component.state.updates.tags.set(article.id, [...tagList]);
+                    (component.state as State).updates.tags.set(article.id, [...tagList]);
 
                     allData.push({
                         id: article.id,
@@ -461,7 +461,7 @@ describe('<ArticleTableContainer>', () => {
                     if (casual.coin_flip) {
 
                         const newOrder = casual.integer(0, 100);
-                        component.state.updates.displayOrder.set(article.id, newOrder);
+                        (component.state as State).updates.displayOrder.set(article.id, newOrder);
 
                         allData.push({
                             id: article.id,
@@ -471,7 +471,7 @@ describe('<ArticleTableContainer>', () => {
                     } else {
 
                         let tagList = [...getRandomTags()];
-                        component.state.updates.tags.set(article.id, tagList);
+                        (component.state as State).updates.tags.set(article.id, tagList);
 
                         allData.push({
                             id: article.id,

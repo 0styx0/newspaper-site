@@ -9,6 +9,8 @@ interface State {
 
 export default class SelectTagPreview extends React.Component<{}, State> {
 
+    public state: State;
+
     constructor(props: {}) {
         super(props);
 

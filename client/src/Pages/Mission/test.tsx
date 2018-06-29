@@ -86,7 +86,7 @@ describe('<MissionContainer>', () => {
 
             const spy = sinon.spy();
 
-            const wrapper = setup(function (params) {
+            const wrapper = setup(function (params: any) {
                 spy();
                 return fakeEditMission()(params);
             });

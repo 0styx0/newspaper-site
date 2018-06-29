@@ -13,132 +13,130 @@
  *
  */
 
+// import casual from '../../tests/casual.data';
+// import { Story } from './shared.interfaces';
+// import { Comment } from '../../components/CommentList/shared.interface';
+// import { StoryContainer } from './container';
+// import { ApolloProvider } from 'react-apollo';
 
+// import * as React from 'react';
+// import * as renderer from 'react-test-renderer';
 
-import casual from '../../tests/casual.data';
-import { Story } from './shared.interfaces';
-import { Comment } from '../../components/CommentList/shared.interface';
-import { StoryContainer } from './container';
-import { ApolloProvider } from 'react-apollo';
+// //  import { mount } from 'enzyme';
+// import { MemoryRouter } from 'react-router';
+// import localStorageMock from '../../tests/localstorage.mock';
 
-import * as React from 'react';
-import * as renderer from 'react-test-renderer';
+// //  import snapData from './__snapshots__/articles.example';
 
-// import { mount } from 'enzyme';
-import { MemoryRouter } from 'react-router';
-import localStorageMock from '../../tests/localstorage.mock';
+// localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}]));
 
-// import snapData from './__snapshots__/articles.example';
+// type CustomCasual = typeof casual & {
+//     comments: Comment[],
+//     article: Story
+// };
 
-localStorageMock.setItem('jwt', JSON.stringify([, {level: 3}]));
+// const customCasual = casual as CustomCasual;
 
-type CustomCasual = typeof casual & {
-    comments: Comment[],
-    article: Story
-};
+// customCasual.define('comments', () => {
 
-const customCasual = casual as CustomCasual;
+//     let amount = casual.randomPositive;
+//     const comments = [] as Comment[];
 
-customCasual.define('comments', () => {
+//     while (amount-- > 0) {
 
-    let amount = casual.randomPositive;
-    const comments = [] as Comment[];
+//         comments.push({
+//             id: casual.word + '--' + amount,
+//             content: casual.text,
+//             dateCreated: casual.dateCreated,
+//             canDelete: true,
+//             author: {
+//                 fullName: casual.full_name,
+//                 profileLink: casual.word,
+//                 id: casual.word + '--' + amount
+//             }
+//         });
+//     }
 
-    while (amount-- > 0) {
+//     return comments;
+// });
 
-        comments.push({
-            id: casual.word + '--' + amount,
-            content: casual.text,
-            dateCreated: casual.dateCreated,
-            canDelete: true,
-            author: {
-                fullName: casual.full_name,
-                profileLink: casual.word,
-                id: casual.word + '--' + amount
-            }
-        });
-    }
+// customCasual.define('article', (): Story => {
 
-    return comments;
-});
+//     return {
+//         id: casual.word,
+//         article: `<h1>${casual.title}</h1><h4>${casual.title}</h4>${casual.text}`,
+//         canEdit: true,
+//         comments: customCasual.comments,
+//         tags: casual.tags
+//     };
+// });
 
-customCasual.define('article', (): Story => {
+// describe('<StoryContainer>', () => {
 
-    return {
-        id: casual.word,
-        article: `<h1>${casual.title}</h1><h4>${casual.title}</h4>${casual.text}`,
-        canEdit: true,
-        comments: customCasual.comments,
-        tags: casual.tags
-    };
-});
+//     describe('snapshots', () => {
 
-describe('<StoryContainer>', () => {
+//         function testSnap(article: Story) {
 
-    describe('snapshots', () => {
+//             const tree = renderer.create(
+//                 <ApolloProvider client={{} as any}>
+//                     <MemoryRouter>
+//                         <StoryContainer
+//                             client={{
+//                                 query: async () => ({
+//                                     data: {
+//                                         articles: [article]
+//                                     }
+//                                 } as any)
+//                             }}
+//                             editArticle={() => true as any}
+//                         />
+//                     </MemoryRouter>
+//                 </ApolloProvider>
+//             ).toJSON();
 
-        function testSnap(article: Story) {
+//             expect(tree).toMatchSnapshot();
+//         }
 
-            const tree = renderer.create(
-                <ApolloProvider client={{} as any}>
-                    <MemoryRouter>
-                        <StoryContainer
-                            client={{
-                                query: async () => ({
-                                    data: {
-                                        articles: [article]
-                                    }
-                                } as any)
-                            }}
-                            editArticle={() => true as any}
-                        />
-                    </MemoryRouter>
-                </ApolloProvider>
-            ).toJSON();
+//         it('does not allow edits when props.canEdit is false', () => {
 
-            expect(tree).toMatchSnapshot();
-        }
+//             const article = customCasual.article;
+//             article.canEdit = false;
 
-        it('does not allow edits when props.canEdit is false', () => {
+//             testSnap(article);
+//         });
 
-            const article = customCasual.article;
-            article.canEdit = false;
+//         it('does allow edits when props.canEdit is true', () => {
 
-            testSnap(article);
-        });
+//             const article = customCasual.article;
+//             article.canEdit = true;
 
-        it('does allow edits when props.canEdit is true', () => {
+//             testSnap(article);
+//         });
+//     });
 
-            const article = customCasual.article;
-            article.canEdit = true;
+//     describe('#onSaveEdits', () => {
 
-            testSnap(article);
-        });
-    });
+//        it('saves header to state.header when header is edited', () => {
+//            // 
+//        });
 
-    describe('#onSaveEdits', () => {
+//        it('saves body to state.body when body is edited', () => {
+//            // 
+//        });
+//     });
 
-       it('saves header to state.header when header is edited', () => {
-           //
-       });
+//     describe('#onSubmit', () => {
 
-       it('saves body to state.body when body is edited', () => {
-           //
-       });
-    });
+//         it('does not submit article if article has not changed', () => {
+//             // 
+//         });
 
-    describe('#onSubmit', () => {
+//         it('submits the edited article when submit button is clicked', () => {
+//             // 
+//         });
 
-        it('does not submit article if article has not changed', () => {
-            //
-        });
-
-        it('submits the edited article when submit button is clicked', () => {
-            //
-        });
-
-        it('submits in correct format', () => {
-            //
-        });
-    });
-});
+//         it('submits in correct format', () => {
+//             // 
+//         });
+//     });
+// });

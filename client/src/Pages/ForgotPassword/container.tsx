@@ -50,4 +50,4 @@ const ForgotPasswordContainerWithData =
     // tslint:disable-next-line:no-any
     graphql(RecoverPassword, {name: 'recoverPassword'})(ForgotPasswordContainer as any);
 
-export default withApollo(ForgotPasswordContainerWithData);
+export default withApollo(ForgotPasswordContainerWithData as any) as any;

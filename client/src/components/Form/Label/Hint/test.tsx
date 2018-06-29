@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
-import HintContainer, { Props, State } from './container';
+import HintContainer from './container';
 import { mount, ReactWrapper } from 'enzyme';
 
 import casual from '../../../../tests/casual.data';
@@ -41,7 +41,8 @@ describe('<HintContainer>', () => {
     /**
      * Shows hint
      */
-    function reveal(wrapper: ReactWrapper<Props, State>) {
+    function reveal(
+        wrapper: ReactWrapper<any, Readonly<{}> | null, React.Component<{}, {}, any>>) {
 
         wrapper.find('abbr').first().simulate('click');
 

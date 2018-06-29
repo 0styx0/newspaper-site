@@ -20,7 +20,7 @@ function setup(recoverPassword: typeof mockRecoverPassword = mockRecoverPassword
         <ForgotPasswordContainer
             recoverPassword={async (params) => recoverPassword(params)}
         />
-    );
+    ) as ReactWrapper<Props, {}>;
 }
 
 describe('<ForgotPasswordContainer>', () => {

@@ -20,6 +20,8 @@ export interface State {
  */
 export class UserArticleTableContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -89,4 +91,4 @@ const UserArticleTableContainerWithData = compose(
     graphql(ArticleDelete, {name: 'deleteArticle'})
 )(UserArticleTableContainer);
 
-export default withApollo(UserArticleTableContainerWithData);
+export default withApollo(UserArticleTableContainerWithData as any) as any;

@@ -22,6 +22,8 @@ interface State {
 
 class ProfileContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 
@@ -77,4 +79,4 @@ const ProfileContainerWithData = compose(
     })
 )(ProfileContainer);
 
-export default withApollo(ProfileContainerWithData);
+export default withApollo(ProfileContainerWithData as any) as any;

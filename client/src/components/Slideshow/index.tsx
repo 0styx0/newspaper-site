@@ -19,6 +19,8 @@ interface State {
 
 export class Slideshow extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
         super(props);
 

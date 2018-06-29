@@ -23,7 +23,7 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 });
 
 const link = new HttpLink({
-  uri: 'https://localhost/graphql',
+  uri: `${process.env!.REACT_APP_SERVER_URL!}/graphql`,
   credentials: 'include'
 });
 

@@ -42,4 +42,4 @@ function TagSelect(props: Props) {
 
 const TagSelectWithData = graphql(TagQuery)(TagSelect as any);
 
-export default withApollo(TagSelectWithData);
+export default withApollo(TagSelectWithData as any) as any;

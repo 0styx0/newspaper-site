@@ -43,6 +43,8 @@ export interface State {
 
 export class PublishContainer extends React.Component<Props, State> {
 
+    public state: State;
+
     constructor(props: Props) {
 
         super(props);
@@ -185,4 +187,4 @@ const PublishContainerWithData = compose(
     graphql(TagCreate, {name: 'createTag'}),
 )(PublishContainer);
 
-export default withApollo(PublishContainerWithData);
+export default withApollo(PublishContainerWithData as any) as any;

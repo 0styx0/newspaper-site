@@ -9,6 +9,9 @@ import { mount, ReactWrapper } from 'enzyme';
 import localStorageMock from '../../tests/localstorage.mock';
 import { submitForm } from '../../tests/enzyme.helpers';
 
+type Casual = typeof casual & { jwt: string, data: (jwt: string) => Promise<{ data: { login: { jwt: string }} }> };
+const customCasual = casual as Casual;
+
 casual.define('jwt', () =>
 
     encodeJwt({
@@ -26,9 +29,6 @@ casual.define('data', (jwt: string) => Promise.resolve({
     }
 }));
 
-type Casual = typeof casual & { jwt: string, data: (jwt: string) => Promise<{ data: { login: { jwt: string }} }> };
-const customCasual = casual as Casual;
-
 function setup(loginUser: Function) {
 
     return mount(
@@ -41,7 +41,7 @@ function setup(loginUser: Function) {
                 history={[]}
             />
         </MemoryRouter>
-    );
+    ) as ReactWrapper<Props, {}>;
 }
 
 describe('<LoginFormContainer>', () => {
