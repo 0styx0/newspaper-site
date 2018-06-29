@@ -24,7 +24,8 @@ class Db {
 
             if (!Db::$DBH) {
 
-                Db::$DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'] .";dbname=" . $_ENV['DB_NAME'] ."", $_ENV['DB_USER'], $_ENV['DB_PASS']);
+                // Db::$DBH = new PDO("mysql:unix_socket=/opt/lampp/var/mysql/mysql.sock;dbname=" . $_ENV['DB_NAME'] . "", $_ENV['DB_USER'], $_ENV['DB_PASS']);
+                Db::$DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'] .";port=3306;dbname=" . $_ENV['DB_NAME'] ."", $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
                 Db::$DBH->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
@@ -45,18 +46,29 @@ class Db {
         }
         catch(Exception $e) {
 
-
-            if ($_ENV['test']) {
+            if ($_ENV['dev']) {
 
                 // print_r($params);
 
                 echo explode('?', $cmd)[0];
                 echo $e->getMessage();
-                exit;
+                /* exit; */
             }
 
-            $DBH->rollback();
+	    if ($DBH) {
+                $DBH->rollback();
+	    }
+
             throw new Exception('Error saving data');
+        }
+    }
+
+    static function dbInitialized() {
+
+        try {
+            return !!(!empty($_SERVER['db_initialized']) || Db::query("SELECT * FROM pageinfo")->fetch());
+        } catch (\Exception $e) {
+            return false;
         }
     }
 

@@ -13,6 +13,8 @@ import cache from './apolloCache';
 
 const middlewareLink = new ApolloLink((operation, forward) => {
 
+  console.log('here  ',  `${process.env!.REACT_APP_SERVER_URL!}/graphql`);
+
   operation.setContext({
     headers: {
       authorization: `Bearer ${localStorage.getItem('jwt') || ''}`

@@ -1,4 +1,4 @@
-#!/Applications/MAMP/bin/php/php7.1.1/bin/php
+#!/bin/php
 
 <?php
 
@@ -12,8 +12,8 @@
 
     validateArgs($options);
 
-    installNpmPackages();
-    installComposerPackages($options);
+    /* installNpmPackages(); */
+    /* installComposerPackages($options); */
 
     require_once __DIR__ . '/server/vendor/autoload.php';
     require_once __DIR__ . '/server/src/test/TestDatabase.php';

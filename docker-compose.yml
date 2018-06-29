@@ -1,0 +1,53 @@
+version: "3.2"
+
+networks:
+  newspaper_net:
+    driver: bridge
+
+volumes:
+  newspaper_db: ~
+  newspaper_client: ~
+
+services:
+  client:
+    build: ./client
+    ports:
+      - 3000:3000
+    volumes:
+      - './client:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    networks:
+      - newspaper_net
+    environment:
+      - REACT_APP_SERVER_URL=localhost:8080
+    links:
+      - server
+  newspaper_db:
+    build: ./database
+    networks:
+      - newspaper_net
+    env_file:
+      - database/.env
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    volumes:
+      - "newspaper_db:/var/lib/mysql"
+  server:
+    build:
+      context: ./server
+    networks:
+      - newspaper_net
+    volumes:
+      - './server:/var/www'
+      - '/var/www/vendor'
+    ports:
+      - 8080:80
+    links:
+      - newspaper_db
+    depends_on:
+      - newspaper_db
+    env_file:
+      - server/.env
+    environment:
+      - DB_HOST=newspaper_db
+

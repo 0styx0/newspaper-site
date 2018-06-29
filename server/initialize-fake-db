@@ -1,0 +1,40 @@
+#!/usr/local/bin/php
+
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/test/TestDatabase.php';
+
+initializeDatabase();
+createAdmin();
+
+function initializeDatabase() {
+
+    if (isset($_SERVER['db_initialized'])) {
+        return;
+    }
+    $_SERVER['db_initialized'] = true;
+
+    echo "Initializing database\n";
+
+        echo "Creating a database with prefilled data...\n";
+        $Database = new TestDatabase(true);
+        $Database->init();
+
+    echo "Database created\n";
+}
+
+/**
+ * Creates admin account using email and password that were passed in as shell args
+ */
+function createAdmin() {
+
+    echo "Creating admin account\n";
+
+    Db::query("REPLACE INTO users (username, email, password, level, f_name, l_name, auth, auth_time)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+    ['admin', $_ENV['EMAIL_ADDR'], password_hash($_ENV['EMAIL_PASS'], PASSWORD_DEFAULT), 3,
+    'Admin', 'Admin', '', date('Y-m-d H:i:s')]);
+
+    echo "Admin created\n";
+}

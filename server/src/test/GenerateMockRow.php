@@ -32,8 +32,8 @@ class GenerateMockRow {
             'level' => rand(1, 3),
             'auth' => GenerateMockRow::$faker->password(),
             'auth_time' => GenerateMockRow::$faker->date(),
-            'notifications' => GenerateMockRow::$faker->boolean(),
-            'two_fa_enabled' => GenerateMockRow::$faker->boolean()
+            'notifications' => +GenerateMockRow::$faker->boolean(),
+            'two_fa_enabled' => +GenerateMockRow::$faker->boolean()
         ];
     }
 

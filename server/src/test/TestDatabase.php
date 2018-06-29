@@ -25,14 +25,16 @@ class TestDatabase {
 
     public function connect() {
 
-        $this->DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
+        echo '$this->DBH = new PDO(mysql:host=' . $_ENV['DB_HOST'] . ', ' . $_ENV['DB_USER'] . ', ' . $_ENV['DB_PASS'] . ');';
+        $this->DBH = new PDO("mysql:host=" . $_ENV['DB_HOST'] . ';port=3306', $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
+        /* $this->DBH = new PDO("mysql:unix_socket=/opt/lampp/var/mysql/mysql.sock", $_ENV['DB_USER'], $_ENV['DB_PASS']); */
         $this->DBH->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public function create() {
 
-        $schema = file_get_contents(__DIR__ . '/../../../schema.sql');
+        $schema = file_get_contents(__DIR__ . '/../../../database/schema.sql');
 
         $this->DBH->query("CREATE DATABASE IF NOT EXISTS {$_ENV['DB_NAME']}");
         $this->DBH->query("USE {$_ENV['DB_NAME']}");
