@@ -1,31 +1,31 @@
 import * as React from 'react';
-import { UserArticleTableContainer, Props, State } from './container';
+import UserArticleTableContainerWithGraphql, { UserArticleTableContainer, Props, State } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../casual.data';
 import snapData from './articles.example';
-import { randomCheckboxToggle, setInput, submitForm } from '../../../tests/enzyme.helpers';
+import { randomCheckboxToggle, setInput, submitForm, setupComponent } from '../../../tests/enzyme.helpers';
 import toggler from '../../../helpers/toggler';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as sinon from 'sinon';
 import { mount, ReactWrapper } from 'enzyme';
+import { mountWithGraphql, createMutation } from '../../../tests/graphql.helper';
+import { ArticleDelete } from '../../../graphql/articles';
 
 setFakeJwt({level: 3});
 
 const data = {
-    articles: casual.articles(casual.integer(0, 25)) // if do more than around 25, the test will be really slow
+    articles: casual.articles(casual.integer(0, 5)) // 5 is random
 };
 
-function setup(mockGraphql: {deleteArticle?: Function} = {}) {
+function setup(graphqlMocks: any[] = []) {
 
-    return mount(
-        <MemoryRouter>
-            <UserArticleTableContainer
-                articles={data.articles}
-                deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : async (test: {}) => false}
-            />
-        </MemoryRouter>
-    ) as ReactWrapper<Props, State>;
+    return mountWithGraphql(
+        graphqlMocks,
+        <UserArticleTableContainerWithGraphql
+            articles={data.articles}
+        />
+    );
 }
 
 describe('<UserArticleTableContainer>', () => {
@@ -63,12 +63,12 @@ describe('<UserArticleTableContainer>', () => {
         let component: UserArticleTableContainer;
         let deleteBoxes: ReactWrapper<HTMLInputElement, {}>; // not sure if correct type
 
-        beforeEach(() => {
+        beforeEach(async () => {
 
-            wrapper = setup();
+            wrapper = await setup();
 
             deleteBoxes = wrapper.find('input[name="delArt"]') as {} as ReactWrapper<HTMLInputElement, {}>;
-            component = wrapper.find(UserArticleTableContainer).instance() as UserArticleTableContainer;
+            component = setupComponent(wrapper, UserArticleTableContainer);
         });
 
         it('adds article id to state.idsToDelete when checkbox is clicked', () => {
@@ -114,33 +114,28 @@ describe('<UserArticleTableContainer>', () => {
             expect([...component.state.idsToDelete].sort()).toEqual([...expectedIds].sort());
         });
 
-        it('formats data correctly', () => {
+        it('formats data correctly', async () => {
+
+            const spy = sinon.spy(UserArticleTableContainer.prototype, 'onSubmit');
 
             const expected = {
-                password: '',
-                ids: [...new Set(casual.array_of_words())]
+                ids: [...new Set(casual.array_of_words())],
+                password: casual.password
             };
 
-            const spy = sinon.spy();
+            wrapper = await setup([
+                createMutation(ArticleDelete, expected, { deleteArticles: { id: casual.word }})
+            ]);
 
-            wrapper = setup({
-                deleteArticle: async (params: {variables: { ids: string[], password: string }}) => {
-                    spy();
-
-                    expect(params.variables).toEqual(expected);
-                }
-            });
-
-            component = wrapper.find(UserArticleTableContainer).instance() as UserArticleTableContainer;
+            component = setupComponent(wrapper, UserArticleTableContainer);
             component.setState({
                 idsToDelete: new Set(expected.ids)
             });
 
-            expected.password = setInput(wrapper);
+            setInput(wrapper, expected.password);
 
-            submitForm(wrapper);
-
-            expect(spy.called).toBeTruthy();
+            await submitForm(wrapper);
+            expect(spy.calledOnce).toBeTruthy();
         });
     });
 });

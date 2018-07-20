@@ -47,7 +47,7 @@ exports[`<LoginFormContainer> snapshots renders correctly 1`] = `
     />
     <br />
     <a
-      href="forgotPass"
+      href="/forgotPass"
       onClick={[Function]}
     >
       Forgot your password?

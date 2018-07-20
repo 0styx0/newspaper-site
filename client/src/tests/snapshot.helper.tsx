@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import * as renderer from 'react-test-renderer';
+const wait = require('waait');
 
 /**
  * @description since react-test-renderer doesn't call componentWillReceiveProps, this does.
@@ -14,22 +15,33 @@ import * as renderer from 'react-test-renderer';
  */
 export default function renderWithProps(component: JSX.Element | any) {
 
-        // in case componentWillMount is used in the component save it so can put back when done
-        const mount = component.type.prototype.componentWillMount;
+    // in case componentWillMount is used in the component save it so can put back when done
+    const mount = component.type.prototype.componentWillMount;
 
-        component.type.prototype.componentWillMount = function() {
+    component.type.prototype.componentWillMount = function() {
 
-            this.componentWillReceiveProps(this.props);
-        };
+        this.componentWillReceiveProps(this.props);
+    };
 
-        // MemoryRouter gives component the router context
-        const renderedComponent = renderer.create(
-            <MemoryRouter>
-                {component}
-            </MemoryRouter>
-        ).toJSON();
+    // MemoryRouter gives component the router context
+    const renderedComponent = renderer.create(
+        <MemoryRouter>
+            {component}
+        </MemoryRouter>
+    ).toJSON();
 
-        component.type.prototype.componentWillMount = mount;
+    component.type.prototype.componentWillMount = mount;
 
-        return renderedComponent;
+    return renderedComponent;
+}
+
+export async function renderWithGraphql(mockGraphqlWrapper: JSX.Element, waitTime = 0) {
+
+    const tree = renderer.create(
+        mockGraphqlWrapper
+    );
+
+    await wait(waitTime);
+
+    expect(tree.toJSON()).toMatchSnapshot();
 }

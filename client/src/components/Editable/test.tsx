@@ -7,8 +7,6 @@ import * as sinon from 'sinon';
 import { mount } from 'enzyme';
 import { MouseEvent } from 'react';
 
-document.queryCommandSupported = () => true;
-
 describe('<EditableContainer>', () => {
 
     function setup(onSubmit: (e: MouseEvent<HTMLButtonElement>) => void) {

@@ -19,6 +19,7 @@ export default async function (query: Function, params: Object, successMessage?:
 
             return result;
         })
+        // if debugging, helpful to remove this catch
         .catch((e: Error) => {
 
             Notification({

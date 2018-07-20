@@ -8,8 +8,6 @@ import * as mocks from '../../../tests/setup.mocks';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
 
-document.queryCommandSupported = () => true; // used in Editable component
-
 describe('<EditableCommentContainer>', () => {
 
     const mockFunction = (async () => { return; });

@@ -48,7 +48,7 @@ function Editable(props: Props) {
                 })}
 
                 <br />
-                <button type="button" onClick={props.onSubmit}>Submit</button>
+                <button className="editable-submit" type="button" onClick={props.onSubmit}>Submit</button>
             </div>
         );
     }

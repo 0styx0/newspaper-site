@@ -18,6 +18,7 @@ import { graphql, withApollo, compose } from 'react-apollo';
 import './index.css';
 import { ChangeEvent } from 'react';
 import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
+import toggler from '../../helpers/toggler';
 
 export interface Props { // from react router hoc
     history: string[];
@@ -39,6 +40,7 @@ export interface State {
         content?: string;
     };
     showTagInput: boolean;
+    tags: Set<string>;
 }
 
 export class PublishContainer extends React.Component<Props, State> {
@@ -55,7 +57,8 @@ export class PublishContainer extends React.Component<Props, State> {
 
         this.state = {
             editor: undefined,
-            showTagInput: false
+            showTagInput: false,
+            tags: new Set<string>
         };
     }
 
@@ -95,7 +98,8 @@ export class PublishContainer extends React.Component<Props, State> {
     onTagChange(e: ChangeEvent<HTMLSelectElement>) {
 
         this.setState({
-            showTagInput: e.currentTarget.value === 'other'
+            showTagInput: e.target.value === 'other',
+            tags: toggler(new Set([...this.state.tags]), e.target.value)
         });
     }
 
@@ -105,8 +109,7 @@ export class PublishContainer extends React.Component<Props, State> {
     async onSubmit(target: HTMLFormElement) {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
-        const tagList = target.querySelector('select[name=tags]') as HTMLSelectElement;
-        let tags = Array.from(tagList.selectedOptions || []).map(elt => elt.value);
+        let tags = [...this.state.tags];
 
         if (this.state.showTagInput) {
 
@@ -125,7 +128,7 @@ export class PublishContainer extends React.Component<Props, State> {
             tags = tags.filter(tag => tag !== 'other');
             tags.push(newTag);
         }
-        
+
         const { data } = await graphqlErrorNotifier(
             this.props.createArticle,
             {

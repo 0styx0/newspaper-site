@@ -5,7 +5,7 @@ exports[`<Slideshow> snapshots renders correctly 1`] = `
   id="slideShow"
 >
   <a
-    href="test"
+    href="/test"
     onAnimationIteration={[Function]}
     onClick={[Function]}
   >

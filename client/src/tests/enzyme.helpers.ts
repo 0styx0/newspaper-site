@@ -1,5 +1,7 @@
 import casual from './casual.data';
-import { ReactWrapper } from 'enzyme';
+import { ReactWrapper, HTMLAttributes } from 'enzyme';
+import { Component } from 'react';
+const wait = require('waait');
 
 /**
  * checks a random checkbox
@@ -20,8 +22,9 @@ export function randomCheckboxToggle(checkboxList: ReactWrapper<any, any>, index
     };
 }
 
-export function submitForm(wrapper: ReactWrapper<any, any>) {
+export async function submitForm(wrapper: ReactWrapper<any, any>) {
     wrapper.find('form').first().simulate('submit');
+    await wait(0);
 }
 
 /**
@@ -36,6 +39,25 @@ export function setInput(wrapper: ReactWrapper<any, any>, value: string = casual
     (wrapper.find(`input[name="${name}"]`).instance() as {} as HTMLInputElement).value = value;
 
     return value;
+}
+
+export function setSelectByElt(selectElt: ReactWrapper<any, any>, values: Set<string>) {
+
+    const selectedOptions: ReactWrapper<HTMLAttributes, any, Component<{}, {}, any>>[] = [];
+
+    for (const value of values) {
+        const opt = selectElt.find(`option[value="${value}"]`);
+        opt.simulate('change', { currentTarget: { name, value }, target: { name, value } });
+        selectedOptions.push(opt);
+    }
+
+    return selectedOptions;
+}
+
+export function setSelectByName(wrapper: ReactWrapper<any, any>, name: string, values: Set<string>) {
+
+    const selectElt = wrapper.find(`select[name="${name}"]`);
+    setSelectByElt(selectElt, values);
 }
 
 export function setupComponent(wrapper: ReactWrapper<any, any>, componentToFind: any): typeof componentToFind {

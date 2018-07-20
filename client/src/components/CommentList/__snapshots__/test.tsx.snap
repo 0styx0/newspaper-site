@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CommentListContainer> snapshots renders correctly when can add 1`] = `
+<div
+  id="comments"
+>
+  <article
+    className="comment"
+  >
+    <a
+      className="author"
+      href="/u/quisquam"
+      onClick={[Function]}
+    >
+      Euna Jast
+    </a>
+    <div
+      className="content"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Modi delectus praesentium magnam quo ut itaque autem. Beatae expedita pariatur.
+        Ut accusamus quia non. Et ab est officiis maiores ut molestiae et quae omnis.
+        Quae voluptatibus distinctio ut sed quibusdam laborum.",
+        }
+      }
+    />
+    <button
+      className="deleteReply"
+      onClick={[Function]}
+      type="button"
+    >
+      Delete
+    </button>
+  </article>
+  <article
+    className="comment"
+  >
+    <a
+      className="author"
+      href="/u/quisquam"
+      onClick={[Function]}
+    >
+      Euna Jast
+    </a>
+    <div
+      className="content"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Occaecati eligendi similique aut doloribus aliquam.
+        Eius eos rerum quo possimus consectetur sunt temporibus animi.
+        Consequuntur autem sint quaerat enim provident.
+        Ipsam reprehenderit possimus consequuntur voluptatem quia ut eveniet ipsum modi.",
+        }
+      }
+    />
+    <button
+      className="deleteReply"
+      onClick={[Function]}
+      type="button"
+    >
+      Delete
+    </button>
+  </article>
+  <article
+    className="comment"
+    id="reply"
+  >
+    <div>
+      <div
+        id=""
+      >
+        <button
+          className="bold"
+          onClick={[Function]}
+          type="button"
+        >
+          bold
+        </button>
+        <button
+          className="italic"
+          onClick={[Function]}
+          type="button"
+        >
+          italic
+        </button>
+        <button
+          className="underline"
+          onClick={[Function]}
+          type="button"
+        >
+          underline
+        </button>
+        <button
+          className="strikeThrough"
+          onClick={[Function]}
+          type="button"
+        >
+          strikeThrough
+        </button>
+        <button
+          className="createLink"
+          onClick={[Function]}
+          type="button"
+        >
+          createLink
+        </button>
+        <br />
+        <button
+          className="editable-submit"
+          onClick={[Function]}
+          type="button"
+        >
+          Submit
+        </button>
+      </div>
+      <div
+        className="content"
+        contentEditable={true}
+        onBlur={[Function]}
+      />
+    </div>
+  </article>
+</div>
+`;
+
+exports[`<CommentListContainer> snapshots renders correctly when cannot add 1`] = `
+<div
+  id="comments"
+>
+  <article
+    className="comment"
+  >
+    <a
+      className="author"
+      href="/u/quisquam"
+      onClick={[Function]}
+    >
+      Euna Jast
+    </a>
+    <div
+      className="content"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Modi delectus praesentium magnam quo ut itaque autem. Beatae expedita pariatur.
+        Ut accusamus quia non. Et ab est officiis maiores ut molestiae et quae omnis.
+        Quae voluptatibus distinctio ut sed quibusdam laborum.",
+        }
+      }
+    />
+    
+  </article>
+  <article
+    className="comment"
+  >
+    <a
+      className="author"
+      href="/u/quisquam"
+      onClick={[Function]}
+    >
+      Euna Jast
+    </a>
+    <div
+      className="content"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Occaecati eligendi similique aut doloribus aliquam.
+        Eius eos rerum quo possimus consectetur sunt temporibus animi.
+        Consequuntur autem sint quaerat enim provident.
+        Ipsam reprehenderit possimus consequuntur voluptatem quia ut eveniet ipsum modi.",
+        }
+      }
+    />
+    
+  </article>
+</div>
+`;

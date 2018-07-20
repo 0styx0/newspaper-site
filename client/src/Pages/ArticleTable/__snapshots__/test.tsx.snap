@@ -64,7 +64,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Voluptas%2520laboriosam"
+              href="/issue/12/story/Voluptas%20laboriosam"
               onClick={[Function]}
             >
               Voluptas laboriosam
@@ -388,26 +388,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -433,7 +413,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Et%2520rerum%2520porro"
+              href="/issue/12/story/Et%20rerum%20porro"
               onClick={[Function]}
             >
               Et rerum porro
@@ -758,26 +738,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -803,7 +763,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Consequatur%2520consequatur%2520voluptate"
+              href="/issue/12/story/Consequatur%20consequatur%20voluptate"
               onClick={[Function]}
             >
               Consequatur consequatur voluptate
@@ -1129,26 +1089,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -1174,7 +1114,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Perspiciatis%2520dolores%2520consectetur"
+              href="/issue/12/story/Perspiciatis%20dolores%20consectetur"
               onClick={[Function]}
             >
               Perspiciatis dolores consectetur
@@ -1500,26 +1440,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -1545,7 +1465,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Mollitia%2520consequatur%2520debitis"
+              href="/issue/12/story/Mollitia%20consequatur%20debitis"
               onClick={[Function]}
             >
               Mollitia consequatur debitis
@@ -1869,26 +1789,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -1914,7 +1814,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Placeat%2520unde"
+              href="/issue/12/story/Placeat%20unde"
               onClick={[Function]}
             >
               Placeat unde
@@ -2238,26 +2138,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -2283,7 +2163,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Neque%2520distinctio%2520maxime"
+              href="/issue/12/story/Neque%20distinctio%20maxime"
               onClick={[Function]}
             >
               Neque distinctio maxime
@@ -2608,26 +2488,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -2653,7 +2513,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Qui%2520nesciunt%2520quod"
+              href="/issue/12/story/Qui%20nesciunt%20quod"
               onClick={[Function]}
             >
               Qui nesciunt quod
@@ -2978,26 +2838,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -3023,7 +2863,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Repellendus%2520eum%2520nobis"
+              href="/issue/12/story/Repellendus%20eum%20nobis"
               onClick={[Function]}
             >
               Repellendus eum nobis
@@ -3347,26 +3187,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -3392,7 +3212,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Voluptatem%2520eaque"
+              href="/issue/12/story/Voluptatem%20eaque"
               onClick={[Function]}
             >
               Voluptatem eaque
@@ -3718,26 +3538,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -3763,7 +3563,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Saepe%2520ducimus%2520voluptatem"
+              href="/issue/12/story/Saepe%20ducimus%20voluptatem"
               onClick={[Function]}
             >
               Saepe ducimus voluptatem
@@ -4087,26 +3887,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -4132,7 +3912,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Recusandae%2520eum"
+              href="/issue/12/story/Recusandae%20eum"
               onClick={[Function]}
             >
               Recusandae eum
@@ -4456,26 +4236,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -4501,7 +4261,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Odio%2520illo%2520placeat"
+              href="/issue/12/story/Odio%20illo%20placeat"
               onClick={[Function]}
             >
               Odio illo placeat
@@ -4826,26 +4586,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -4871,7 +4611,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Quam%2520rerum"
+              href="/issue/12/story/Quam%20rerum"
               onClick={[Function]}
             >
               Quam rerum
@@ -5196,26 +4936,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -5241,7 +4961,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Cupiditate%2520porro"
+              href="/issue/12/story/Cupiditate%20porro"
               onClick={[Function]}
             >
               Cupiditate porro
@@ -5566,26 +5286,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -5611,7 +5311,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Esse%2520sunt%2520cum"
+              href="/issue/12/story/Esse%20sunt%20cum"
               onClick={[Function]}
             >
               Esse sunt cum
@@ -5936,26 +5636,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -5981,7 +5661,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Sed%2520iusto"
+              href="/issue/12/story/Sed%20iusto"
               onClick={[Function]}
             >
               Sed iusto
@@ -6305,26 +5985,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -6350,7 +6010,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Totam%2520delectus%2520et"
+              href="/issue/12/story/Totam%20delectus%20et"
               onClick={[Function]}
             >
               Totam delectus et
@@ -6674,26 +6334,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -6719,7 +6359,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Impedit%2520qui"
+              href="/issue/12/story/Impedit%20qui"
               onClick={[Function]}
             >
               Impedit qui
@@ -7043,26 +6683,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -7088,7 +6708,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Nemo%2520omnis%2520commodi"
+              href="/issue/12/story/Nemo%20omnis%20commodi"
               onClick={[Function]}
             >
               Nemo omnis commodi
@@ -7413,26 +7033,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -7458,7 +7058,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Ea%2520odit%2520debitis"
+              href="/issue/12/story/Ea%20odit%20debitis"
               onClick={[Function]}
             >
               Ea odit debitis
@@ -7783,26 +7383,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -7828,7 +7408,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Laudantium%2520molestiae%2520atque"
+              href="/issue/12/story/Laudantium%20molestiae%20atque"
               onClick={[Function]}
             >
               Laudantium molestiae atque
@@ -8154,26 +7734,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -8199,7 +7759,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Deleniti%2520non"
+              href="/issue/12/story/Deleniti%20non"
               onClick={[Function]}
             >
               Deleniti non
@@ -8524,26 +8084,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -8569,7 +8109,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Neque%2520impedit%2520aut"
+              href="/issue/12/story/Neque%20impedit%20aut"
               onClick={[Function]}
             >
               Neque impedit aut
@@ -8894,26 +8434,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -8939,7 +8459,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Qui%2520atque%2520laborum"
+              href="/issue/12/story/Qui%20atque%20laborum"
               onClick={[Function]}
             >
               Qui atque laborum
@@ -9264,26 +8784,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -9309,7 +8809,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Ratione%2520qui"
+              href="/issue/12/story/Ratione%20qui"
               onClick={[Function]}
             >
               Ratione qui
@@ -9634,26 +9134,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -9679,7 +9159,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Est%2520velit"
+              href="/issue/12/story/Est%20velit"
               onClick={[Function]}
             >
               Est velit
@@ -10004,26 +9484,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -10049,7 +9509,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Inventore%2520nobis%2520commodi"
+              href="/issue/12/story/Inventore%20nobis%20commodi"
               onClick={[Function]}
             >
               Inventore nobis commodi
@@ -10374,26 +9834,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -10419,7 +9859,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Consequatur%2520sed%2520rerum"
+              href="/issue/12/story/Consequatur%20sed%20rerum"
               onClick={[Function]}
             >
               Consequatur sed rerum
@@ -10744,26 +10184,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -10789,7 +10209,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Optio%2520ut"
+              href="/issue/12/story/Optio%20ut"
               onClick={[Function]}
             >
               Optio ut
@@ -11113,26 +10533,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -11158,7 +10558,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Explicabo%2520ullam%2520earum"
+              href="/issue/12/story/Explicabo%20ullam%20earum"
               onClick={[Function]}
             >
               Explicabo ullam earum
@@ -11483,26 +10883,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -11528,7 +10908,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Eum%2520architecto%2520esse"
+              href="/issue/12/story/Eum%20architecto%20esse"
               onClick={[Function]}
             >
               Eum architecto esse
@@ -11853,26 +11233,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -11898,7 +11258,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Eaque%2520esse"
+              href="/issue/12/story/Eaque%20esse"
               onClick={[Function]}
             >
               Eaque esse
@@ -12223,26 +11583,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -12268,7 +11608,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Officiis%2520eligendi%2520molestiae"
+              href="/issue/12/story/Officiis%20eligendi%20molestiae"
               onClick={[Function]}
             >
               Officiis eligendi molestiae
@@ -12593,26 +11933,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -12638,7 +11958,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Quae%2520odio%2520maxime"
+              href="/issue/12/story/Quae%20odio%20maxime"
               onClick={[Function]}
             >
               Quae odio maxime
@@ -12962,26 +12282,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -13007,7 +12307,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Quia%2520blanditiis"
+              href="/issue/12/story/Quia%20blanditiis"
               onClick={[Function]}
             >
               Quia blanditiis
@@ -13333,26 +12633,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -13378,7 +12658,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Illum%2520est%2520vero"
+              href="/issue/12/story/Illum%20est%20vero"
               onClick={[Function]}
             >
               Illum est vero
@@ -13703,26 +12983,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -13748,7 +13008,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Exercitationem%2520tenetur%2520doloremque"
+              href="/issue/12/story/Exercitationem%20tenetur%20doloremque"
               onClick={[Function]}
             >
               Exercitationem tenetur doloremque
@@ -14073,26 +13333,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -14118,7 +13358,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/Occaecati%2520ut"
+              href="/issue/12/story/Occaecati%20ut"
               onClick={[Function]}
             >
               Occaecati ut
@@ -14443,26 +13683,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
               >
                 Commodi
               </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
-              </option>
             </select>
           </td>
           <td>
@@ -14488,7 +13708,7 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
         <tr>
           <td>
             <a
-              href="/issue/12/story/At%2520iusto%2520et"
+              href="/issue/12/story/At%20iusto%20et"
               onClick={[Function]}
             >
               At iusto et
@@ -14813,26 +14033,6 @@ exports[`<ArticleTableContainer> snapshots renders correctly 1`] = `
                 value="commodi"
               >
                 Commodi
-              </option>
-              <option
-                value="opinion"
-              >
-                Opinion
-              </option>
-              <option
-                value="reaction"
-              >
-                Reaction
-              </option>
-              <option
-                value="news"
-              >
-                News
-              </option>
-              <option
-                value="other"
-              >
-                Other
               </option>
             </select>
           </td>

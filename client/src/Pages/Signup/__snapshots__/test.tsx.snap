@@ -60,7 +60,7 @@ exports[`<SignupContainer> snapshots gives choice of level when someone creates 
         <abbr
           onClick={[Function]}
           title="Must contain only uppercase, lowercase, or
-                        periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
+                periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
         >
           ?
         </abbr>
@@ -239,7 +239,7 @@ exports[`<SignupContainer> snapshots renders correctly (no choice of level) when
         <abbr
           onClick={[Function]}
           title="Must contain only uppercase, lowercase, or
-                        periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
+                periods and must be at least 2 words (middle name should be left as a 1 letter initial)"
         >
           ?
         </abbr>

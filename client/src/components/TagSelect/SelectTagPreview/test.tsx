@@ -1,41 +1,41 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
-import * as renderer from 'react-test-renderer';
 import SelectTagPreview from './';
 import { mount } from 'enzyme';
 import { setupComponent } from '../../../tests/enzyme.helpers';
 import casual from '../../../tests/casual.data';
+import mockGraphql, { mountWithGraphql } from '../../../tests/graphql.helper';
+import { tagQueryMock } from '../../../tests/graphql.mocks';
+import { renderWithGraphql } from '../../../tests/snapshot.helper';
 
 describe('<SelectTagPreview>', () => {
 
     function setup() {
 
-        return mount(
-            <MemoryRouter>
-                <SelectTagPreview />
-            </MemoryRouter>
+        return mountWithGraphql(
+            [tagQueryMock],
+            <SelectTagPreview />
         );
     }
 
     describe('snapshots', () => {
 
-        it('renders correctly', () => {
+        it('renders correctly', async () => {
 
-            const tree = renderer.create(
-                <MemoryRouter>
+            await renderWithGraphql(
+                mockGraphql(
+                    [tagQueryMock],
                     <SelectTagPreview />
-                </MemoryRouter>
-            ).toJSON();
-
-            expect(tree).toMatchSnapshot();
+                )
+            );
         });
     });
 
     describe('#onChange', () => {
 
-        it('redirects to e.target.value', () => {
+        it('redirects to e.target.value', async () => {
 
-            const wrapper = setup();
+            const wrapper = await setup();
             const component = setupComponent(wrapper, SelectTagPreview);
 
             expect(component.state.redirect).toBe('');

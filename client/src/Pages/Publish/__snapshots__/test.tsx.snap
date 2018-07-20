@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<PublishContainer> snapshots does not render option to add tag in not level 2 1`] = `
+exports[`<PublishContainer> snapshots does not render option to add tag if not level 2 1`] = `
 <section
   className="container "
 >
@@ -19,24 +19,14 @@ exports[`<PublishContainer> snapshots does not render option to add tag in not l
         required={true}
       >
         <option
-          value="opinion"
+          value="random"
         >
-          Opinion
+          Random
         </option>
         <option
-          value="reaction"
+          value="strings"
         >
-          Reaction
-        </option>
-        <option
-          value="news"
-        >
-          News
-        </option>
-        <option
-          value="other"
-        >
-          Other
+          Strings
         </option>
       </select>
       
@@ -66,8 +56,8 @@ exports[`<PublishContainer> snapshots does not render option to add tag in not l
         <abbr
           onClick={[Function]}
           title="This article will be located at tabceots.com/issue/n/story/name_you_enter
-                                    (where n is the issue number). Can be up to 75 characters long
-                                    (some non-word characters such as spaces may count as more)."
+                            (where n is the issue number). Can be up to 75 characters long
+                            (some non-word characters such as spaces may count as more)."
         >
           ?
         </abbr>
@@ -119,19 +109,14 @@ exports[`<PublishContainer> snapshots renders correctly when can add tag 1`] = `
           Other
         </option>
         <option
-          value="opinion"
+          value="random"
         >
-          Opinion
+          Random
         </option>
         <option
-          value="reaction"
+          value="strings"
         >
-          Reaction
-        </option>
-        <option
-          value="news"
-        >
-          News
+          Strings
         </option>
       </select>
       
@@ -161,8 +146,8 @@ exports[`<PublishContainer> snapshots renders correctly when can add tag 1`] = `
         <abbr
           onClick={[Function]}
           title="This article will be located at tabceots.com/issue/n/story/name_you_enter
-                                    (where n is the issue number). Can be up to 75 characters long
-                                    (some non-word characters such as spaces may count as more)."
+                            (where n is the issue number). Can be up to 75 characters long
+                            (some non-word characters such as spaces may count as more)."
         >
           ?
         </abbr>

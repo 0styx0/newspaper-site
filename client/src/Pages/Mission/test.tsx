@@ -5,8 +5,6 @@ import * as sinon from 'sinon';
 import * as casual from 'casual';
 import { mount } from 'enzyme';
 
-document.queryCommandSupported = () => true; // used in Editable component
-
 describe('<MissionContainer>', () => {
 
     /**

@@ -46,6 +46,7 @@ exports[`<EditableCommentContainer> snapshots renders correctly when can edit 1`
       </button>
       <br />
       <button
+        className="editable-submit"
         onClick={[Function]}
         type="button"
       >

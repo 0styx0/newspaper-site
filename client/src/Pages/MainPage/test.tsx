@@ -12,10 +12,7 @@ import issueData from './__snapshots__/issue.example';
 
 const history = createHistory();
 
-Object.defineProperty(window.location, 'pathname', { // so can change path
-    writable: true,
-    value: '/issue/4'
-});
+history.push('/issue/4');
 
 const customCasual = casual as typeof casual & {
     articles: Article[],
@@ -23,12 +20,6 @@ const customCasual = casual as typeof casual & {
     previewIssueData: { data: { issues: { articles: Article[] }[] } },
     previewTagData: { data: { articles: Article[] }}
 };
-
-customCasual.define('issue', (): Issue => ({
-    max: casual.integer(50, 100), // random numbers, just make sure max is greater than num
-    num: casual.integer(1, 100),
-    name: casual.title
-}));
 
 customCasual.define('articles', (): Article[] => {
 
@@ -55,7 +46,7 @@ customCasual.define('articles', (): Article[] => {
 customCasual.define('previewIssueData', () => ({
     data: {
         issues: [
-            Object.assign({ articles: customCasual.articles }, customCasual.issue)
+            Object.assign({ articles: customCasual.articles }, customCasual.issueData)
         ]
     }
 }));
@@ -75,7 +66,7 @@ function getQueryStubs() {
     const issueStub = sinon.stub().returns(customCasual.previewIssueData);
     const numStub = sinon.stub().returns({
         data: {
-            issues: [customCasual.issue]
+            issues: [customCasual.issueData]
         }
     });
 
@@ -105,7 +96,6 @@ function getQueryStubs() {
  */
 function changeHistory(to: string) {
 
-    window.location.pathname = `/${to}`;
     history.push(`/${to}`);
 }
 

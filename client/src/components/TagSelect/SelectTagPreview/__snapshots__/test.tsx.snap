@@ -12,24 +12,14 @@ exports[`<SelectTagPreview> snapshots renders correctly 1`] = `
       Current Issue
     </option>
     <option
-      value="opinion"
+      value="random"
     >
-      Opinion
+      Random
     </option>
     <option
-      value="reaction"
+      value="strings"
     >
-      Reaction
-    </option>
-    <option
-      value="news"
-    >
-      News
-    </option>
-    <option
-      value="other"
-    >
-      Other
+      Strings
     </option>
   </select>
   

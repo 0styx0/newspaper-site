@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { ArticleTableContainer, Article, Issue, Props, State } from './container';
-import { MemoryRouter } from 'react-router';
-import { mount, ReactWrapper } from 'enzyme';
-import renderWithProps from '../../tests/snapshot.helper';
+import ArticleApolloContainer, { ArticleTableContainer, Article, Issue, State } from './container';
+import { ReactWrapper } from 'enzyme';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
-import { randomCheckboxToggle, submitForm, setInput, setupComponent } from '../../tests/enzyme.helpers';
+import { randomCheckboxToggle, submitForm, setInput, setupComponent, setSelect, setSelectByElt } from '../../tests/enzyme.helpers';
 import setFakeJwt from '../../tests/jwt.helper';
-import { ArticleQuery } from '../../graphql/articles';
-
+import { ArticleQuery, ArticleUpdate, ArticleDelete } from '../../graphql/articles';
+import mockGraphql, { createMutation, mountWithGraphql } from '../../tests/graphql.helper';
+import { renderWithGraphql } from '../../tests/snapshot.helper';
+import { createQuery } from '../../tests/graphql.helper';
+import { tagQueryMock } from '../../tests/graphql.mocks';
+const wait = require('waait');
 type Issues = (Issue & { articles: Article[] })[];
 
 setFakeJwt({level: 3}); // only lvl 3 can access this page
@@ -62,36 +64,23 @@ function generateData(issue?: number) {
 
 casual.define('data', generateData);
 
-const filler = async () => (true) as {};
+async function setup(graphql = [
+        createQuery(ArticleUpdate, customCasual.data(0)),
+        createQuery(ArticleDelete, customCasual.data(0))
+        createMutation(ArticleQuery, { issue: 0 }, customCasual.data(0) ),
+    ]) {
 
-function setup(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
-
-    return mount(
-        <MemoryRouter>
-            <ArticleTableContainer
-                data={customCasual.data()}
-                client={{
-                    query: async (params: { query: typeof ArticleQuery, variables: { issue: number | null } } ) => (
-                        {
-                          data: customCasual.data(params.query.variables.issue)
-                        }
-                    )
-                }}
-                updateArticle={mockGraphql.updateArticle ? mockGraphql.updateArticle : filler}
-                deleteArticle={mockGraphql.deleteArticle ? mockGraphql.deleteArticle : filler}
-            />
-        </MemoryRouter>
-    ) as ReactWrapper<Props, State>;
+    return await mountWithGraphql(graphql, <ArticleApolloContainer />) as ReactWrapper<any, Readonly<{}>>;
 }
 
-describe('<ArticleTableContainer>', () => {
+describe('<ArticleTableContainer>', async () => {
 
     /**
      * Does the basic setup; gets new versions of wrapper, component and gives component new props
      */
-    function setupWithProps(mockGraphql: {updateArticle?: Function, deleteArticle?: Function} = {}) {
+    async function setupWithProps(graphql) {
 
-        const wrapper = setup(mockGraphql);
+        const wrapper = await setup(graphql);
 
         const component = setupComponent(wrapper, ArticleTableContainer);
 
@@ -102,36 +91,33 @@ describe('<ArticleTableContainer>', () => {
         };
     }
 
-    describe('snapshots', () => {
+    describe('snapshots', async () => {
 
-        it('renders correctly', () => {
+        it('renders correctly', async () => {
 
-            const tree = renderWithProps(
-
-                <ArticleTableContainer
-                    data={{
-                        loading: false,
-                        issues: snapData
-                    }}
-                    updateArticle={filler}
-                    deleteArticle={filler}
-                    client={{
-                        query: filler
-                    } as {} as Props['client']}
-                />
+            await renderWithGraphql(
+                mockGraphql(
+                    [
+                        createMutation(ArticleQuery, { issue: 0 }, { issues: snapData }),
+                        createQuery(ArticleUpdate, customCasual.data(0)),
+                        createQuery(ArticleDelete, customCasual.data(0))
+                    ],
+                    <ArticleApolloContainer />
+                )
             );
-
-            expect(tree).toMatchSnapshot();
         });
     });
 
-    describe('displayOrder', () => {
+    describe('displayOrder', async () => {
 
         /**
          * @param inputIndex - if given, the displayOrder input at that index will be the one changed.
          * If not passed, a random input will be chosen
          */
-        function changeOneInput(wrapper: ReactWrapper<Props, State>, inputIndex?: number) {
+        function changeOneOrderInput(
+            wrapper: ReactWrapper<any, Readonly<{}>>,
+            inputIndex?: number
+        ) {
 
             const displayOrderInputs = wrapper.find('input[name="displayOrder"]');
 
@@ -157,13 +143,13 @@ describe('<ArticleTableContainer>', () => {
             };
         }
 
-        it('adds article id and displayOrder to state.updates.displayOrder when changes', () => {
+        it('adds article id and displayOrder to state.updates.displayOrder when changes', async () => {
 
             let expected: React.ReactText[][] = [];
-            const { wrapper, component } = setupWithProps();
+            const { wrapper, component } = await setupWithProps();
 
             for (let i = 0; i < casual.integer(0, 100); i++) {
-                const result = changeOneInput(wrapper);
+                const result = changeOneOrderInput(wrapper);
 
                 expected.push([result.id, +result.input.value]);
             }
@@ -178,15 +164,15 @@ describe('<ArticleTableContainer>', () => {
             expect([...(component.state as State).updates.displayOrder].sort()).toEqual(uniqueExpected.sort());
         });
 
-        it('updates displayOrder when it has been changed more than once to most recent value', () => {
+        it('updates displayOrder when it has been changed more than once to most recent value', async () => {
 
-            const { wrapper } = setupWithProps();
-            const input = changeOneInput(wrapper);
-            changeOneInput(wrapper, input.index); // changeOneInput has the assertions
+            const { wrapper } = await setupWithProps();
+            const input = changeOneOrderInput(wrapper);
+            changeOneOrderInput(wrapper, input.index); // changeOneInput has the assertions
         });
     });
 
-    describe('tags', () => {
+    describe('tags', async () => {
 
         /**
          * @param inputIndex - if given, the `select` at that index will be the one changed.
@@ -194,7 +180,11 @@ describe('<ArticleTableContainer>', () => {
          *
          * If either param is not passed, it will be random
          */
-        function changeOneSelect(wrapper: ReactWrapper<Props, State>, inputIndex?: number, numberOfTags?: number) {
+        function changeOneSelect(
+            wrapper: ReactWrapper<any, Readonly<{}>>,
+            inputIndex?: number,
+            numberOfTags?: number
+        ) {
 
             const tagSelects = wrapper.find('select[name="tags"]');
             const indexOfInput = (inputIndex === undefined) ?
@@ -211,6 +201,12 @@ describe('<ArticleTableContainer>', () => {
             }
 
             const newValueArr = [...newValueSet].sort();
+
+            const opts = new Set(
+                [...oneInput.find(
+                    'option'
+                )].reduce((vals, cur) => vals.concat([cur.props.value]), [])
+            );
 
             // there must be a better way to select multiple options, but haven't found it
             const selectedOptions = oneInput.find('option')
@@ -236,29 +232,29 @@ describe('<ArticleTableContainer>', () => {
             };
         }
 
-        it('saves updated tags in state.updates.tags, with article id as the key', () => {
+        it('saves updated tags in state.updates.tags, with article id as the key', async () => {
 
-            const { wrapper, component } = setupWithProps();
+            const { wrapper, component } = await setupWithProps();
             const result = changeOneSelect(wrapper);
 
             expect([...(component.state as State).updates.tags]).toEqual([[result.id, result.value]]);
         });
 
-        it('removes tags from array if user de-selects', () => {
+        it('removes tags from array if user de-selects', async () => {
 
-            const { wrapper } = setupWithProps();
+            const { wrapper } = await setupWithProps();
             const result = changeOneSelect(wrapper, undefined, 3);
 
             changeOneSelect(wrapper, result.index, 2); // changeOneSelect does the assertion
         });
     });
 
-    describe('delete', () => {
+    describe('delete', async () => {
 
         /**
          * checks a random `checkbox[name=delete]`
          */
-        function changeOneCheckbox(wrapper: ReactWrapper<Props, State>) {
+        function changeOneCheckbox(wrapper: ReactWrapper<any, Readonly<{}>>) {
 
             const component = wrapper.find(ArticleTableContainer).instance();
             const deleteCheckbox = wrapper.find('input[name="delete"]');
@@ -275,14 +271,14 @@ describe('<ArticleTableContainer>', () => {
             };
         }
 
-        it('allows users to check the delete checkbox', () => {
-            const { wrapper } = setupWithProps();
+        it('allows users to check the delete checkbox', async () => {
+            const { wrapper } = await setupWithProps();
             changeOneCheckbox(wrapper); // assertion handled in function
         });
 
-        it('removes id from state.updates.idsToDelete if user unchecks the box', () => {
+        it('removes id from state.updates.idsToDelete if user unchecks the box', async () => {
 
-            const { wrapper, component } = setupWithProps();
+            const { wrapper, component } = await setupWithProps();
             const result = changeOneCheckbox(wrapper);
             (result.input.instance() as {} as HTMLInputElement).checked = false;
             result.input.simulate('change');
@@ -293,36 +289,26 @@ describe('<ArticleTableContainer>', () => {
 
     describe('#onSubmit', () => {
 
-        /**
-         * Loops through a random number of articles and calls @param func on every unique one
-         *
-         * @param data - casual.data
-         * @param func - to be called on every unique article
-         */
-        function randomArticleLoop(
-            wrapper: ReactWrapper<Props, State>, data: { issues: Issues }, func: (article: Article) => void
-        ) {
+        describe('formats updates correctly when', async () => {
 
-            const numberOfArticles = casual.integer(1, wrapper.find('select[name="tags"]').length);
-            const usedIds: string[] = [];
+            async function setupUpdate(data: updateData[]) {
 
-            // put random tags on random articles
-            for (let i = 0; i < numberOfArticles; i++) {
+                const password = casual.password;
 
-                const article: Article = casual.random_element([...data.issues[0].articles]);
+                const setupData = await setupWithProps([
+                    createMutation(
+                        ArticleUpdate,
+                        { data, password },
+                        { updateArticles: customCasual.data(0).issues[0].articles }
+                    ),
+                    createQuery(ArticleDelete, customCasual.data(0)),
+                    createMutation(ArticleQuery, { issue: 0 }, customCasual.data(0))
+                ]);
 
-                if (usedIds.indexOf(article.id) !== -1) {
-                    i--;
-                    continue;
-                }
+                setInput(setupData.wrapper, password);
 
-                usedIds.push(article.id);
-
-                func(article);
+                return setupData;
             }
-        }
-
-        describe('formats updates correctly when', () => {
 
             /**
              * @return random amount of tags (between 1 and 3) from @see allTags
@@ -341,174 +327,90 @@ describe('<ArticleTableContainer>', () => {
 
             type updateData = {displayOrder?: number, tags?: string[], id: string};
 
-            test('only tags have changed', () => {
+            // no assertion, but if graphql doesn't match what's in setupWithProps, error thrown
+            test('only tags have changed', async() => {
 
-                const tags: updateData[] = [];
-                let password = '';
+                const tags: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                    .articles.map(article => (
+                        { id: article.id, tags: article.tags }
+                    )
+                );
 
-                const { wrapper, component, data} = setupWithProps({
-                    // called after submit event (at very bottom of this test)
-                    updateArticle: async (info: {variables: {data: typeof tags} }) => {
+                const { component, wrapper } = await setupUpdate(tags);
 
-                         expect(info.variables).toEqual({
-                             data: tags,
-                             password
-                         });
-                    }
-                });
+                tags.forEach(tag => (component.state as State).updates.tags.set(tag.id, tag.tags!));
 
-                randomArticleLoop(wrapper, data, article => {
-
-                    let tagList = getRandomTags();
-
-                    tags.push({id: article.id, tags: [...tagList]});
-
-                    (component.state as State).updates.tags.set(article.id, [...tagList]);
-                });
-
-                password = setInput(wrapper);
-
-                submitForm(wrapper);
+                await submitForm(wrapper);
             });
 
-            test('when only order has changed', () => {
+            test('when only order has changed', async () => {
 
-                const orders: updateData[] = [];
-                let password = '';
+                const data: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                    .articles.map(article => (
+                        { id: article.id, displayOrder: article.displayOrder }
+                    )
+                    );
 
-                const { wrapper, component, data } = setupWithProps({
-                    // called after submit event (at very bottom of this test)
-                    updateArticle: async (info: {variables: {data: typeof orders }}) => {
+                const { component, wrapper } = await setupUpdate(data);
 
-                         expect(info.variables).toEqual({
-                             data: orders,
-                             password
-                         });
-                    }
-                });
-
-                randomArticleLoop(wrapper, data, article => {
-
-                    const newOrder = casual.integer(0, 100);
-
-                    orders.push({id: article.id, displayOrder: newOrder});
-                    (component.state as State).updates.displayOrder.set(article.id, newOrder);
-                });
-
-                password = setInput(wrapper);
-
-                submitForm(wrapper);
+                data.forEach(dit =>
+                    (component.state as State).updates.displayOrder.set(dit.id, dit.displayOrder!));
+                await submitForm(wrapper);
             });
 
-            test('displayOrder and tags both refer to same article', () => {
+            test('displayOrder and tags both refer to same article', async () => {
 
-                const allData: updateData[] = [];
-                let password = '';
+                const data: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                    .articles.map(article => (
+                        { id: article.id, displayOrder: article.displayOrder, tags: article.tags }
+                    )
+                );
 
-                const { wrapper, component, data } = setupWithProps({
+                const { wrapper } = await setupUpdate(data);
 
-                    updateArticle: async (info: {variables: {data: typeof allData} }) => {
-
-                         expect(info.variables).toEqual({
-                             data: allData,
-                             password
-                         });
-                    }
-                });
-
-                randomArticleLoop(wrapper, data, article => {
-
-                    const newOrder = casual.integer(0, 100);
-                    (component.state as State).updates.displayOrder.set(article.id, newOrder);
-
-                    let tagList = getRandomTags();
-                    (component.state as State).updates.tags.set(article.id, [...tagList]);
-
-                    allData.push({
-                        id: article.id,
-                        tags: [...tagList],
-                        displayOrder: newOrder
-                    });
-                });
-
-                password = setInput(wrapper);
-
-                submitForm(wrapper);
+                await submitForm(wrapper);
             });
 
-            test('displayOrder and tags refer to different articles', () => {
+            test('displayOrder and tags refer to different articles', async () => {
 
-                const allData: updateData[] = [];
-                let password = '';
+                const data: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                    .articles.map(article => (
+                        casual.coin_flip ?
+                          { id: article.id, displayOrder: article.displayOrder } :
+                          { id: article.id, tags: article.tags }
+                    )
+                );
 
-                const { wrapper, component, data } = setupWithProps({
+                const { wrapper } = await setupUpdate(data);
 
-                    updateArticle: async (info: {variables: {data: typeof allData} }) => {
-
-                        const sortFunc = (a: updateData, b: updateData) => 'tags' in a ? 1 : -1;
-                        info.variables.data.sort(sortFunc);
-                        allData.sort(sortFunc);
-
-                        expect(info.variables).toEqual({
-                            data: allData,
-                            password
-                        });
-                    }
-                });
-
-                randomArticleLoop(wrapper, data, article => {
-
-                    if (casual.coin_flip) {
-
-                        const newOrder = casual.integer(0, 100);
-                        (component.state as State).updates.displayOrder.set(article.id, newOrder);
-
-                        allData.push({
-                            id: article.id,
-                            displayOrder: newOrder
-                        });
-
-                    } else {
-
-                        let tagList = [...getRandomTags()];
-                        (component.state as State).updates.tags.set(article.id, tagList);
-
-                        allData.push({
-                            id: article.id,
-                            tags: tagList
-                        });
-                    }
-                });
-
-                password = setInput(wrapper);
-
-                submitForm(wrapper);
+                await submitForm(wrapper);
             });
         });
 
-        it('sends idsToDelete in correct format', () => {
+        describe(`deletion`, () => {
 
-            const idsToDelete: string[] = [];
-            let password = '';
+            async function setupDeletion(data: updateData[]) {
 
-            const { wrapper, data } = setupWithProps({
+                const password = casual.password;
 
-                deleteArticle: async (info: {variables: {data: typeof idsToDelete} }) => {
+                const setupData = await setupWithProps([
+                    createQuery(ArticleDelete, customCasual.data(0)),
+                    createMutation(ArticleQuery, { issue: 0 }, customCasual.data(0))
+                ]);
 
-                    expect(info.variables).toEqual({
-                        data: idsToDelete,
-                        password
-                    });
-                }
+                setInput(setupData.wrapper, password);
+
+                return setupData;
+            }
+
+            it('sends idsToDelete in correct format', async () => {
+
+                const data: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                    .articles.map(article => article.id);
+
+                const { wrapper } = await setupDeletion(data);
+                await submitForm(wrapper);
             });
-
-            randomArticleLoop(wrapper, data, article => {
-                idsToDelete.push(article.id);
-            });
-
-            password = setInput(wrapper);
-
-            submitForm(wrapper);
-        });
+        })
     });
 });

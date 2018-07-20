@@ -4,6 +4,7 @@ import './tempPolyfills';
 import * as mocks from './tests/setup.mocks';
 
 mocks.localStorage.clear(); // must use some part of mocks to get them to define their properties
+mocks.document();
 
 import { configure } from 'enzyme';
 

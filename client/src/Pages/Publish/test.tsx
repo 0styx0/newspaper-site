@@ -1,61 +1,47 @@
 import * as React from 'react';
 import '../../tests/setup.mocks';
-import { PublishContainer, Props, State } from './container';
+import PublishContainerWithApollo, { PublishContainer, Props, State } from './container';
 import * as renderer from 'react-test-renderer';
 import * as sinon from 'sinon';
 import casual from '../../tests/casual.data';
-import { submitForm, setupComponent } from '../../tests/enzyme.helpers';
-import {  mount, ReactWrapper } from 'enzyme';
+import { submitForm, setupComponent, setInput, setSelectByName } from '../../tests/enzyme.helpers'
+import { ReactWrapper } from 'enzyme';
 import setFakeJwt from '../../tests/jwt.helper';
+import { getJWT } from '../../helpers/jwt/index';
+import { ApolloProvider } from 'react-apollo';
+const wait = require('waait');
+
+import mockGraphql, { createQuery, createMutation, mountWithGraphql } from '../../tests/graphql.helper';
+import { ArticleCreate } from '../../graphql/article';
+import { TagCreate, TagQuery } from '../../graphql/tags';
+import { tagQueryMock } from '../../tests/graphql.mocks';
+import { renderWithGraphql } from '../../tests/snapshot.helper';
 
 setFakeJwt({ level: 3 });
 
-// import { TagQuery } from '../../graphql/tags';
-
-// import mockGraphql from '../../tests/graphql.helper';
-
-const createTagMock = (params: { variables: { tag: string; }; }) => { return; };
 
 describe('<PublishContainer>', () => {
 
-    type createArticleParams = {
-            variables: {
-                article: string,
-                tags: string[],
-                url: string
-            }
-        };
+    function mockCreateArticle() {
 
-    async function mockCreateArticle(params?: createArticleParams) {
-
-        return Promise.resolve({
-            data: {
+        return createQuery(
+            ArticleCreate,
+            {
                 createArticle: {
-                    url: casual.url,
-                    issue: casual.randomPositive
+                    url: casual.articleUrl,
+                    issue: casual.issue
                 }
             }
-        });
+        );
     }
 
-    function setup(
-        createArticle: typeof mockCreateArticle = mockCreateArticle,
-        createTag: typeof createTagMock = createTagMock
-     ) {
+    async function setup(graphql = []
+    ) {
 
-        // return mockGraphql(
-        //     TagQuery,
-        //     {tags: ['hi', 'bye', 'go'] },
-        //     <PublishContainer history={[]} createArticle={createArticle || mockCreateArticle}/>
-        // ).wrapper;
-
-        return mount(
-            <PublishContainer
-              history={[]}
-              createArticle={createArticle as Props['createArticle']}
-              createTag={createTag as Props['createTag']}
-            />
-        ) as ReactWrapper<Props, State>;
+        return mountWithGraphql(
+            graphql,
+            <PublishContainerWithApollo history={[]} />
+        );
     }
 
     /**
@@ -77,38 +63,64 @@ describe('<PublishContainer>', () => {
         });
     }
 
+    interface FormData {
+        url: string;
+        tags: Set<string>;
+        article: string;
+    }
+
+    function generateFormData(): FormData {
+
+        return {
+            url: casual.articleUrl,
+            article: casual.article,
+            tags: casual.tags
+        };
+    }
+
+    /**
+     * Fills out form with random data
+     */
+    function fillOutForm(wrapper: ReactWrapper<Props, State>, formData: FormData) {
+
+        const { url, tags, article } = formData;
+
+        const component = setupComponent(wrapper, PublishContainer);
+        setFakeEditor(component, article);
+
+        setInput(wrapper, url, 'name');
+
+        setSelectByName(wrapper, 'tags', tags);
+
+        return {
+            url,
+            article,
+            tags: [...tags]
+        };
+    }
     describe('snapshots', () => {
 
-        it('renders correctly when can add tag', () => {
+        async function snap(level: number) {
 
-            const tree = renderer.create(
+            const oldLevel = getJWT().level;
+            setFakeJwt({ level });
 
-                <PublishContainer
-                    history={[]}
-                    createArticle={mockCreateArticle as Props['createArticle']}
-                    createTag={createTagMock as Props['createTag']}
-                />
-            ).toJSON();
+            await renderWithGraphql(
+                mockGraphql(
+                    [tagQueryMock],
+                    <PublishContainerWithApollo />
+                )
+            )
 
-            expect(tree).toMatchSnapshot();
+            setFakeJwt({ level: oldLevel });
+        }
+
+        it('renders correctly when can add tag', async () => {
+            await snap(3);
         });
 
-        it('does not render option to add tag in not level 2', () => {
-
-            setFakeJwt({ level: 1 });
-
-            const tree = renderer.create(
-
-                <PublishContainer
-                    history={[]}
-                    createArticle={mockCreateArticle as Props['createArticle']}
-                    createTag={createTagMock as Props['createTag']}
-                />
-            ).toJSON();
-
-            expect(tree).toMatchSnapshot();
-
-            setFakeJwt({ level: 3 });
+        it('does not render option to add tag if not level 2', async () => {
+            await snap(1);
         });
     });
 
@@ -120,24 +132,23 @@ describe('<PublishContainer>', () => {
          * @param content - original, badly formatted content
          * @param expected - properly formatted version of content
          */
-        function testAutoFormat(content: string, expected: string) {
+        async function testAutoFormat(content: string, expected: string) {
 
-            const wrapper = setup();
-            const component = setupComponent(wrapper, PublishContainer) as PublishContainer;
+            const wrapper = await setup();
+            const component = setupComponent(wrapper, PublishContainer);
             setFakeEditor(component, content);
-
             component.autoFormat();
             const newEditorContents = component.state.editor!.getContent();
 
             expect(newEditorContents).toBe(expected);
         }
 
-        it(`adds an <h1> if none exists and there's text`, () => {
+        it(`adds an <h0> if none exists and there's text`, async () => {
 
             const author = casual.full_name;
             const title = casual.title;
 
-            testAutoFormat(`<h4>${title}</h4><p>${author}</p>`, `<h1>${title}</h1><h4>${author}</h4>`);
+            await testAutoFormat(`<h4>${title}</h4><p>${author}</p>`, `<h1>${title}</h1><h4>${author}</h4>`);
         });
 
         it('adds an <h4> if none exists', () => {
@@ -170,108 +181,65 @@ describe('<PublishContainer>', () => {
 
     describe('#onTagChange', () => {
 
-        it(`toggles addTag input when 'other' is selected`, () => {
+        it(`toggles addTag input when 'other' is selected`, async () => {
 
-            const wrapper = setup();
+            const wrapper = await setup();
             setupComponent(wrapper, PublishContainer);
 
             expect(wrapper.find('input[name="addTag"]').length).toBe(0);
 
-            wrapper.find('option[value="other"]').simulate('change');
+            setSelectByName(wrapper, 'tags', ['other']);
 
             expect(wrapper.find('input[name="addTag"]').length).toBe(1);
         });
 
-        it('submits new tag to createTag', () => {
+        it('submits new tag to createTag', async () => {
 
             let newTag = casual.word;
-            const spy = sinon.spy();
 
-            const wrapper = setup(mockCreateArticle, async (params: { variables: { tag: string} }) => {
-                spy();
-                expect(params.variables.tag).toBe(newTag);
-                return;
-            });
+            const formData = generateFormData();
+            formData.tags = [newTag];
+
+            const wrapper = await setup([
+                createMutation(
+                    ArticleCreate,
+                    formData,
+                    { createArticle: { issue: casual.randomPositive, url: casual.string}}
+                ),
+                createMutation(
+                    TagCreate,
+                    { tag: newTag },
+                    { createTag: { tag: newTag }}
+                )
+                ]);
 
             const component = setupComponent(wrapper, PublishContainer);
-            setFakeEditor(component, '');
+            formData.tags = ['other'];
+            fillOutForm(wrapper, formData);
 
-            wrapper.find('option[value="other"]').simulate('change');
-            (wrapper.find('input[name="addTag"]').instance() as {} as HTMLInputElement).value = newTag;
+            setInput(wrapper, newTag, 'addTag');
 
-            submitForm(wrapper);
-
-            expect(spy.called).toBeTruthy(); // make sure that createTag was called
+            await submitForm(wrapper);
         });
     });
 
     describe('#onSubmit', () => {
 
-        /**
-         * Fills out form with random data
-         */
-        function fillOutForm(wrapper: ReactWrapper<Props, State>) {
+        it('calls props.createArticle when submit button is clicked', async () => {
 
-            const url: string = casual.url;
-            const tags = new Set<HTMLOptionElement>();
-            const content: string = casual.sentences(casual.randomPositive);
+            const formData = generateFormData();
+            const wrapper = await setup([
+                createMutation(
+                    ArticleCreate,
+                    formData,
+                    { createArticle: { issue: casual.randomPositive, url: casual.string}}
+                ),
+                createQuery(TagQuery, { allTags: Array.from(formData.tags)})
+            ]);
 
-            const component = setupComponent(wrapper, PublishContainer);
-            setFakeEditor(component, content);
+            fillOutForm(wrapper, formData);
 
-            (wrapper.find('input[name="name"]').instance() as {} as HTMLInputElement).value = url;
-
-            const tagSelect = wrapper.find('select[name="tags"]');
-            const tagOptions = Array.from((tagSelect.instance() as {} as HTMLSelectElement).options);
-
-            while (tags.size < casual.integer(1, 3)) {
-
-                const indexOfTag = casual.integer(1, tagOptions.length - 1);
-                // console.log('====================================');
-                // console.log(tagOptions);
-                // console.log('====================================');
-                tagOptions[indexOfTag].selected = true;
-                tags.add(tagOptions[indexOfTag]);
-            }
-
-            ((wrapper.find('select[name="tags"]').instance() as {} as HTMLSelectElement)
-                .selectedOptions as any) = tags as {} as HTMLCollectionOf<HTMLOptionElement>;
-
-            return {
-                tags: [...tags].map(option => option.value),
-                url,
-                article: content
-            };
-        }
-
-        it('calls props.createArticle when submit button is clicked', () => {
-
-            const spy = sinon.stub()
-            .returns(mockCreateArticle());
-
-            const wrapper = setup(async () => spy());
-
-            fillOutForm(wrapper);
-
-            submitForm(wrapper);
-
-            expect(spy.called).toBeTruthy();
-        });
-
-        it('gives createArticle proper data', () => {
-
-            let expected = {};
-
-            const wrapper = setup(async (params: {variables: {url: string, tags: string[], article: string}}) => {
-
-                expect(params.variables).toEqual(expected);
-
-                return mockCreateArticle();
-            });
-
-            expected = fillOutForm(wrapper);
-
-            submitForm(wrapper);
+            await submitForm(wrapper);
         });
     });
 });

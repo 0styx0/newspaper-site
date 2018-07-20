@@ -23,14 +23,16 @@ interface Props {
     }) => void; // not really void
 }
 
-export class StoryContainer extends React.Component<Props, ArticleInfo> {
+type State = ArticleInfo & { originalArticle: string };
 
-    public state: ArticleInfo;
+export class StoryContainer extends React.Component<Props, State> {
+
+    public state: State;
 
     constructor(props: Props) {
         super(props);
 
-        this.state = {} as ArticleInfo;
+        this.state = {} as State;
 
         this.onSaveEdits = this.onSaveEdits.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -71,6 +73,7 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
         const body = article.article.replace(heading, '');
 
         this.setState({
+            originalArticle: article.article,
             issue,
             url,
             heading,
@@ -87,12 +90,18 @@ export class StoryContainer extends React.Component<Props, ArticleInfo> {
      */
     onSubmit() {
 
+        const article = this.state.heading + this.state.body;
+
+        if (this.state.originalArticle === article) {
+            return;
+        }
+
         graphqlErrorNotifier(
             this.props.editArticle,
             {
                 variables: {
                     id: this.state.id,
-                    article: this.state.heading + this.state.body
+                    article
                 }
             },
             'articleEdited'
