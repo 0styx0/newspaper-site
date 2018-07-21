@@ -1,31 +1,33 @@
 import * as React from 'react';
 import * as sinon from 'sinon';
-import { MemoryRouter } from 'react-router';
-import * as renderer from 'react-test-renderer';
 import CommentListContainer from './container';
 import customCasual from '../../tests/casual.data';
 import setFakeJwt from '../../tests/jwt.helper';
 import localStorageMock from '../../tests/localstorage.mock';
-import { mount } from 'enzyme';
-// import * as sinon from 'sinon';
-import { Comment } from './shared.interface';
 import { renderWithGraphql } from '../../tests/snapshot.helper';
 import mockGraphql, { mountWithGraphql, createMutation } from '../../tests/graphql.helper';
 import snapData from './__snapshots__/comments.example';
 import { CommentCreate } from '../../graphql/comment';
+import { Comment } from './shared.interface';
 const wait = require('waait');
 
 
 describe('<CommentListContainer>', () => {
 
-    function setup(graphql: any[] = [], artId = customCasual.word, comments = customCasual.comments) {
+    function setup(
+        graphql: any[] = [],
+        artId: string = customCasual.word,
+        comments: Comment[] = customCasual.comments
+    ) {
 
         return mountWithGraphql(
             graphql,
-            <CommentListContainer
-                comments={comments}
-                artId={artId}
-            />
+            (
+                <CommentListContainer
+                  comments={comments}
+                  artId={artId}
+                />
+            )
         );
     }
 
@@ -39,12 +41,14 @@ describe('<CommentListContainer>', () => {
             await renderWithGraphql(
                 mockGraphql(
                     [],
-                    <CommentListContainer
-                        comments={snapData}
-                        artId={'random-id'}
-                    />
+                    (
+                        <CommentListContainer
+                          comments={snapData}
+                          artId={'random-id'}
+                        />
+                    )
                 )
-            )
+            );
         }
 
         it('renders correctly when can add', async () => {

@@ -58,7 +58,7 @@ export class PublishContainer extends React.Component<Props, State> {
         this.state = {
             editor: undefined,
             showTagInput: false,
-            tags: new Set<string>
+            tags: new Set<string>()
         };
     }
 

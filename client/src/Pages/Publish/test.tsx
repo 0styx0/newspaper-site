@@ -1,15 +1,11 @@
 import * as React from 'react';
 import '../../tests/setup.mocks';
-import PublishContainerWithApollo, { PublishContainer, Props, State } from './container';
-import * as renderer from 'react-test-renderer';
-import * as sinon from 'sinon';
+import PublishContainerWithApollo, { PublishContainer } from './container';
 import casual from '../../tests/casual.data';
-import { submitForm, setupComponent, setInput, setSelectByName } from '../../tests/enzyme.helpers'
+import { submitForm, setupComponent, setInput, setSelectByName } from '../../tests/enzyme.helpers';
 import { ReactWrapper } from 'enzyme';
 import setFakeJwt from '../../tests/jwt.helper';
 import { getJWT } from '../../helpers/jwt/index';
-import { ApolloProvider } from 'react-apollo';
-const wait = require('waait');
 
 import mockGraphql, { createQuery, createMutation, mountWithGraphql } from '../../tests/graphql.helper';
 import { ArticleCreate } from '../../graphql/article';
@@ -22,20 +18,7 @@ setFakeJwt({ level: 3 });
 
 describe('<PublishContainer>', () => {
 
-    function mockCreateArticle() {
-
-        return createQuery(
-            ArticleCreate,
-            {
-                createArticle: {
-                    url: casual.articleUrl,
-                    issue: casual.issue
-                }
-            }
-        );
-    }
-
-    async function setup(graphql = []
+    async function setup(graphql: any[] = []
     ) {
 
         return mountWithGraphql(
@@ -65,7 +48,7 @@ describe('<PublishContainer>', () => {
 
     interface FormData {
         url: string;
-        tags: Set<string>;
+        tags: string[];
         article: string;
     }
 
@@ -81,7 +64,10 @@ describe('<PublishContainer>', () => {
     /**
      * Fills out form with random data
      */
-    function fillOutForm(wrapper: ReactWrapper<Props, State>, formData: FormData) {
+    function fillOutForm(
+        wrapper: ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>,
+        formData: FormData
+    ) {
 
         const { url, tags, article } = formData;
 
@@ -110,7 +96,7 @@ describe('<PublishContainer>', () => {
                     [tagQueryMock],
                     <PublishContainerWithApollo />
                 )
-            )
+            );
 
             setFakeJwt({ level: oldLevel });
         }
@@ -213,7 +199,6 @@ describe('<PublishContainer>', () => {
                 )
                 ]);
 
-            const component = setupComponent(wrapper, PublishContainer);
             formData.tags = ['other'];
             fillOutForm(wrapper, formData);
 

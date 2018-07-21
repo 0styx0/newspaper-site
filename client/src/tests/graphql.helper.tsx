@@ -17,7 +17,7 @@ const wait = require('waait');
 //     };
 // }
 
-export function createQuery(query, data) {
+export function createQuery(query: any, data: object) {
 
         return {
             request: {
@@ -30,7 +30,7 @@ export function createQuery(query, data) {
         };
 }
 
-export function createMutation(query, variables, data) {
+export function createMutation(query: any, variables: object, data: object) {
 
         return {
             request: {
@@ -43,7 +43,11 @@ export function createMutation(query, variables, data) {
         };
 }
 
-export async function mountWithGraphql(graphqlMocks: any[], component: JSX.Element | any, waitTime = 0) {
+export async function mountWithGraphql(
+    graphqlMocks: any[],
+    component: JSX.Element | any,
+    waitTime: number = 0
+) {
 
     const mounted = mount(
         mockGraphql(
@@ -60,7 +64,7 @@ export async function mountWithGraphql(graphqlMocks: any[], component: JSX.Eleme
 export default function mockGraphql(graphqlMocks: any[], component: JSX.Element | any) {
 
     const wrapper = (
-        <MockedProvider mocks={graphqlMocks} removeTypename={true} addTypename={false}>
+        <MockedProvider mocks={graphqlMocks} addTypename={false}>
             <MemoryRouter>
                 {component}
             </MemoryRouter>

@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router';
-import * as renderer from 'react-test-renderer';
 import RouterContainer from './container';
 import localStorageMock from '../../tests/localstorage.mock';
 import { renderWithGraphql } from '../../tests/snapshot.helper';
-import mockGraphql, { createMutation, mountWithGraphql } from '../../tests/graphql.helper'; 
+import mockGraphql, { createMutation, mountWithGraphql } from '../../tests/graphql.helper';
 import mainPageSnapData from '../../Pages/MainPage/__snapshots__/issue.example';
-import { ArticlePreviewIssueQuery, ArticlePreviewTagQuery } from '../../graphql/articles';
+import { ArticlePreviewIssueQuery } from '../../graphql/articles';
 import { IssueInfoQuery } from '../../graphql/issues';
 import issueData from '../../Pages/MainPage/__snapshots__/issue.example';
-import customCasual from '../../tests/casual.data';
 import setFakeJwt from '../../tests/jwt.helper';
 
 describe('<RouterContainer>', () => {

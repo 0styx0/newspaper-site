@@ -35,7 +35,7 @@ export default function renderWithProps(component: JSX.Element | any) {
     return renderedComponent;
 }
 
-export async function renderWithGraphql(mockGraphqlWrapper: JSX.Element, waitTime = 0) {
+export async function renderWithGraphql(mockGraphqlWrapper: JSX.Element, waitTime: number = 0) {
 
     const tree = renderer.create(
         mockGraphqlWrapper

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import UserArticleTableContainerWithGraphql, { UserArticleTableContainer, Props, State } from './container';
+import UserArticleTableContainerWithGraphql, { UserArticleTableContainer } from './container';
 import * as renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router';
 import casual from '../casual.data';
@@ -8,7 +8,7 @@ import { randomCheckboxToggle, setInput, submitForm, setupComponent } from '../.
 import toggler from '../../../helpers/toggler';
 import setFakeJwt from '../../../tests/jwt.helper';
 import * as sinon from 'sinon';
-import { mount, ReactWrapper } from 'enzyme';
+import { ReactWrapper } from 'enzyme';
 import { mountWithGraphql, createMutation } from '../../../tests/graphql.helper';
 import { ArticleDelete } from '../../../graphql/articles';
 
@@ -22,9 +22,11 @@ function setup(graphqlMocks: any[] = []) {
 
     return mountWithGraphql(
         graphqlMocks,
-        <UserArticleTableContainerWithGraphql
-            articles={data.articles}
-        />
+        (
+            <UserArticleTableContainerWithGraphql
+              articles={data.articles}
+            />
+        )
     );
 }
 
@@ -59,7 +61,7 @@ describe('<UserArticleTableContainer>', () => {
 
     describe('onDelete', () => {
 
-        let wrapper: ReactWrapper<Props, State>;
+        let wrapper: ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
         let component: UserArticleTableContainer;
         let deleteBoxes: ReactWrapper<HTMLInputElement, {}>; // not sure if correct type
 

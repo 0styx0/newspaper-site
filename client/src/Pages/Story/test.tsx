@@ -2,15 +2,10 @@ import casual from '../../tests/casual.data';
 import { Story } from './shared.interfaces';
 import { Comment } from '../../components/CommentList/shared.interface';
 import StoryContainerWithGraphql, { StoryContainer } from './container';
-import { ApolloProvider } from 'react-apollo';
 
 import * as React from 'react';
-import * as renderer from 'react-test-renderer';
 
-//  import { mount } from 'enzyme';
-import { MemoryRouter } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
-import localStorageMock from '../../tests/localstorage.mock';
 import { renderWithGraphql } from '../../tests/snapshot.helper';
 import mockGraphql, { createMutation, mountWithGraphql } from '../../tests/graphql.helper';
 import { ArticleQuery } from '../../graphql/article';
@@ -49,7 +44,7 @@ function setHistory() {
 
 setHistory();
 
-customCasual.define('story', (): Story => {
+customCasual.define('story', (): Story & { displayOrder: number } => {
 
     return {
         id: casual.word,
@@ -63,8 +58,8 @@ customCasual.define('story', (): Story => {
 
 customCasual.define('data', () => {
     return {
-        articles: [customCasual.story];
-    }
+        articles: [customCasual.story]
+    };
 });
 
 const waitTime = 4;
@@ -80,10 +75,10 @@ describe('<StoryContainer>', () => {
             data,
             issue,
             url
-        }
+        };
     }
 
-    async function setup(graphql = []
+    async function setup(graphql: any[] = []
     ) {
 
         const wrapper = await mountWithGraphql(
@@ -95,7 +90,11 @@ describe('<StoryContainer>', () => {
         return wrapper;
     }
 
-    function edit(wrapper: ReactWrapper, selector, content: string) {
+    function edit(
+        wrapper: ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>,
+        selector: string,
+        content: string
+    ) {
 
         const elt = wrapper.find(selector);
         elt.simulate('blur', { target: { innerHTML: content } });
@@ -121,7 +120,7 @@ describe('<StoryContainer>', () => {
                     <StoryContainerWithGraphql />
                     ),
                 waitTime
-            )
+            );
         }
 
         it('does not allow edits when props.canEdit is false', async () => {
@@ -139,11 +138,12 @@ describe('<StoryContainer>', () => {
 
         async function setupEditTests(selector: string, content: string, stateKey: string) {
 
+            setFakeJwt( { level: 3 } );
             const wrapper = await setup([
                 setupQuery().query
             ]);
 
-            const content = casual.articleHeader;
+            // const content = casual.articleHeader;
             const component = edit(wrapper, selector, content);
             expect(component.state[stateKey]).toBe(content);
         }
@@ -203,7 +203,7 @@ describe('<StoryContainer>', () => {
             await wait(waitTime);
 
             expect(spy.calledOnce).toBeTruthy();
-            StoryContainer.prototype.onSubmit.restore();
+            (StoryContainer.prototype.onSubmit as any).restore();
         });
     });
 });

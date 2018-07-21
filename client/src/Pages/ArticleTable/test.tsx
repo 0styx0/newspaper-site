@@ -3,14 +3,13 @@ import ArticleApolloContainer, { ArticleTableContainer, Article, Issue, State } 
 import { ReactWrapper } from 'enzyme';
 import casual from '../../tests/casual.data';
 import snapData from './__snapshots__/articles.example';
-import { randomCheckboxToggle, submitForm, setInput, setupComponent, setSelect, setSelectByElt } from '../../tests/enzyme.helpers';
+import { randomCheckboxToggle, submitForm, setInput, setupComponent } from '../../tests/enzyme.helpers';
 import setFakeJwt from '../../tests/jwt.helper';
 import { ArticleQuery, ArticleUpdate, ArticleDelete } from '../../graphql/articles';
 import mockGraphql, { createMutation, mountWithGraphql } from '../../tests/graphql.helper';
 import { renderWithGraphql } from '../../tests/snapshot.helper';
 import { createQuery } from '../../tests/graphql.helper';
-import { tagQueryMock } from '../../tests/graphql.mocks';
-const wait = require('waait');
+import * as sinon from 'sinon';
 type Issues = (Issue & { articles: Article[] })[];
 
 setFakeJwt({level: 3}); // only lvl 3 can access this page
@@ -64,9 +63,9 @@ function generateData(issue?: number) {
 
 casual.define('data', generateData);
 
-async function setup(graphql = [
+async function setup(graphql: any[] = [
         createQuery(ArticleUpdate, customCasual.data(0)),
-        createQuery(ArticleDelete, customCasual.data(0))
+        createQuery(ArticleDelete, customCasual.data(0)),
         createMutation(ArticleQuery, { issue: 0 }, customCasual.data(0) ),
     ]) {
 
@@ -78,7 +77,7 @@ describe('<ArticleTableContainer>', async () => {
     /**
      * Does the basic setup; gets new versions of wrapper, component and gives component new props
      */
-    async function setupWithProps(graphql) {
+    async function setupWithProps(graphql?: any[]) {
 
         const wrapper = await setup(graphql);
 
@@ -202,12 +201,6 @@ describe('<ArticleTableContainer>', async () => {
 
             const newValueArr = [...newValueSet].sort();
 
-            const opts = new Set(
-                [...oneInput.find(
-                    'option'
-                )].reduce((vals, cur) => vals.concat([cur.props.value]), [])
-            );
-
             // there must be a better way to select multiple options, but haven't found it
             const selectedOptions = oneInput.find('option')
                 .reduce((accum, option) => {
@@ -291,6 +284,8 @@ describe('<ArticleTableContainer>', async () => {
 
         describe('formats updates correctly when', async () => {
 
+            type updateData = {displayOrder?: number, tags?: string[], id: string};
+
             async function setupUpdate(data: updateData[]) {
 
                 const password = casual.password;
@@ -309,23 +304,6 @@ describe('<ArticleTableContainer>', async () => {
 
                 return setupData;
             }
-
-            /**
-             * @return random amount of tags (between 1 and 3) from @see allTags
-             */
-            function getRandomTags() {
-
-                let tagList = new Set<string>();
-                const allTagsArr = [...allTags];
-
-                for (let j = 0; tagList.size < casual.integer(1, 3); j++) {
-                    tagList.add(casual.random_element(allTagsArr));
-                }
-
-                return tagList;
-            }
-
-            type updateData = {displayOrder?: number, tags?: string[], id: string};
 
             // no assertion, but if graphql doesn't match what's in setupWithProps, error thrown
             test('only tags have changed', async() => {
@@ -389,12 +367,12 @@ describe('<ArticleTableContainer>', async () => {
 
         describe(`deletion`, () => {
 
-            async function setupDeletion(data: updateData[]) {
+            async function setupDeletion(data: string[]) {
 
                 const password = casual.password;
 
                 const setupData = await setupWithProps([
-                    createQuery(ArticleDelete, customCasual.data(0)),
+                    createQuery(ArticleDelete, data),
                     createMutation(ArticleQuery, { issue: 0 }, customCasual.data(0))
                 ]);
 
@@ -405,12 +383,15 @@ describe('<ArticleTableContainer>', async () => {
 
             it('sends idsToDelete in correct format', async () => {
 
-                const data: updateData[] = customCasual.articles(customCasual.randomPositive)[0]
+                const spy = sinon.spy(ArticleTableContainer.prototype, 'onSubmit');
+                const data = customCasual.articles(customCasual.randomPositive)[0]
                     .articles.map(article => article.id);
 
                 const { wrapper } = await setupDeletion(data);
                 await submitForm(wrapper);
+                expect(spy.calledOnce).toBeTruthy();
+                (ArticleTableContainer.prototype.onSubmit as any).restore();
             });
-        })
+        });
     });
 });

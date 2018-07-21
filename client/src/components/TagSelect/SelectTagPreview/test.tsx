@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router';
 import SelectTagPreview from './';
-import { mount } from 'enzyme';
 import { setupComponent } from '../../../tests/enzyme.helpers';
 import casual from '../../../tests/casual.data';
 import mockGraphql, { mountWithGraphql } from '../../../tests/graphql.helper';

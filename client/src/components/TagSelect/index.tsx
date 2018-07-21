@@ -2,8 +2,6 @@ import * as React from 'react';
 import { TagQuery } from '../../graphql/tags';
 import { graphql, withApollo } from 'react-apollo';
 
-const test = false;
-
 interface Props {
     data?: {
         loading: boolean,

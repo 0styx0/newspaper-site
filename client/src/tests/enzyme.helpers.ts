@@ -41,7 +41,7 @@ export function setInput(wrapper: ReactWrapper<any, any>, value: string = casual
     return value;
 }
 
-export function setSelectByElt(selectElt: ReactWrapper<any, any>, values: Set<string>) {
+export function setSelectByElt(selectElt: ReactWrapper<any, any>, values: string[]  | Set<string>) {
 
     const selectedOptions: ReactWrapper<HTMLAttributes, any, Component<{}, {}, any>>[] = [];
 
@@ -54,7 +54,7 @@ export function setSelectByElt(selectElt: ReactWrapper<any, any>, values: Set<st
     return selectedOptions;
 }
 
-export function setSelectByName(wrapper: ReactWrapper<any, any>, name: string, values: Set<string>) {
+export function setSelectByName(wrapper: ReactWrapper<any, any>, name: string, values: string[] | Set<string>) {
 
     const selectElt = wrapper.find(`select[name="${name}"]`);
     setSelectByElt(selectElt, values);
