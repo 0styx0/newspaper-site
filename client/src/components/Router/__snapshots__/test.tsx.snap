@@ -133,7 +133,7 @@ exports[`<RouterContainer> snapshots when logged in, renders all paths 1`] = `
           Eye Of The Storm
         </h1>
         <q>
-          A Clearer View Of TABC
+          School Tagline
         </q>
         <h2>
           Aperiam nulla
@@ -367,7 +367,7 @@ exports[`<RouterContainer> snapshots when not logged in, renders only public pat
           Eye Of The Storm
         </h1>
         <q>
-          A Clearer View Of TABC
+          School Tagline
         </q>
         <h2>
           Aperiam nulla

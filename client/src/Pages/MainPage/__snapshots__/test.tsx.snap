@@ -14,7 +14,7 @@ exports[`<MainPageContainer> snapshots renders correctly for issue 1`] = `
         Eye Of The Storm
       </h1>
       <q>
-        A Clearer View Of TABC
+        School Tagline
       </q>
       <h2>
         Aperiam nulla
@@ -158,7 +158,7 @@ exports[`<MainPageContainer> snapshots renders correctly for tags 1`] = `
         Eye Of The Storm
       </h1>
       <q>
-        A Clearer View Of TABC
+        School Tagline
       </q>
       <h2>
         Tag

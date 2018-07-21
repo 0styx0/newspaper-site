@@ -9,6 +9,7 @@ mocks.document();
 import { configure } from 'enzyme';
 
 process.env.REACT_APP_LOGO_PATH = '/test-logo-url';
+process.env.REACT_APP_TAGLINE = 'School Tagline';
 
 import * as Adapter from 'enzyme-adapter-react-16';
 

@@ -49,7 +49,7 @@ function MainPage(props: Props) {
                             <img src={process.env.REACT_APP_LOGO_PATH} alt="Logo" />
                             Eye Of The Storm
                         </h1>
-                        <q>A Clearer View Of TABC</q>
+                        <q>{process.env.REACT_APP_TAGLINE}</q>
                         <h2>{articlesAreFromTag ? props.title : props.issue.name}</h2>
                     </header>
                     <div id="mainContent">
