@@ -62,7 +62,7 @@ export class Slideshow extends React.Component<Props, State> {
 
         const defaultImg = (
             <Link to="/">
-                <img alt="Default, TABC logo" className="slideshowPic" src="../images/tabc_logo.png" />
+                <img alt="Default, logo" className="slideshowPic" src={process.env.REACT_APP_LOGO_PATH} />
             </Link>
         );
 

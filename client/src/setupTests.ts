@@ -8,6 +8,8 @@ mocks.document();
 
 import { configure } from 'enzyme';
 
+process.env.REACT_APP_LOGO_PATH = '/test-logo-url';
+
 import * as Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });

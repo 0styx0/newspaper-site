@@ -127,8 +127,8 @@ exports[`<RouterContainer> snapshots when logged in, renders all paths 1`] = `
       <header>
         <h1>
           <img
-            alt="TABC Logo"
-            src="/images/tabc_logo.png"
+            alt="Logo"
+            src="/test-logo-url"
           />
           Eye Of The Storm
         </h1>
@@ -151,9 +151,9 @@ exports[`<RouterContainer> snapshots when logged in, renders all paths 1`] = `
             onClick={[Function]}
           >
             <img
-              alt="Default, TABC logo"
+              alt="Default, logo"
               className="slideshowPic activePic"
-              src="../images/tabc_logo.png"
+              src="/test-logo-url"
             />
           </a>
         </div>
@@ -254,14 +254,12 @@ exports[`<RouterContainer> snapshots when logged in, renders all paths 1`] = `
       >
         Created by 
         <a
-          href="https://dovidm.com"
+          href="https://davidm.me"
         >
-          Dovid Meiseles
+          David Meiseles
         </a>
-         ('18)
       </footer>
     </div>
-    )
   </div>
 </div>
 `;
@@ -363,8 +361,8 @@ exports[`<RouterContainer> snapshots when not logged in, renders only public pat
       <header>
         <h1>
           <img
-            alt="TABC Logo"
-            src="/images/tabc_logo.png"
+            alt="Logo"
+            src="/test-logo-url"
           />
           Eye Of The Storm
         </h1>
@@ -387,9 +385,9 @@ exports[`<RouterContainer> snapshots when not logged in, renders only public pat
             onClick={[Function]}
           >
             <img
-              alt="Default, TABC logo"
+              alt="Default, logo"
               className="slideshowPic activePic"
-              src="../images/tabc_logo.png"
+              src="/test-logo-url"
             />
           </a>
         </div>
@@ -490,14 +488,12 @@ exports[`<RouterContainer> snapshots when not logged in, renders only public pat
       >
         Created by 
         <a
-          href="https://dovidm.com"
+          href="https://davidm.me"
         >
-          Dovid Meiseles
+          David Meiseles
         </a>
-         ('18)
       </footer>
     </div>
-    )
   </div>
 </div>
 `;

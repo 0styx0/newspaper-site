@@ -46,7 +46,7 @@ function MainPage(props: Props) {
                 <div key={props.title + 'random'}>
                     <header>
                         <h1>
-                            <img src="/images/tabc_logo.png" alt="TABC Logo" />
+                            <img src={process.env.REACT_APP_LOGO_PATH} alt="Logo" />
                             Eye Of The Storm
                         </h1>
                         <q>A Clearer View Of TABC</q>
@@ -65,10 +65,9 @@ function MainPage(props: Props) {
                     </div>
                     <NumberlineContainer max={props.issue.max} current={props.issue.num} />
                     <footer id="credits" className="small">
-                        Created by <a href="https://dovidm.com">Dovid Meiseles</a> ('18)
+                        Created by <a href="https://davidm.me">David Meiseles</a>
                     </footer>
                 </div>
-            )
         </div>
     );
 
