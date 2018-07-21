@@ -55,7 +55,7 @@ exports[`<PublishContainer> snapshots does not render option to add tag if not l
       <span>
         <abbr
           onClick={[Function]}
-          title="This article will be located at tabceots.com/issue/n/story/name_you_enter
+          title="This article will be located at /issue/n/story/name_you_enter
                             (where n is the issue number). Can be up to 75 characters long
                             (some non-word characters such as spaces may count as more)."
         >
@@ -145,7 +145,7 @@ exports[`<PublishContainer> snapshots renders correctly when can add tag 1`] = `
       <span>
         <abbr
           onClick={[Function]}
-          title="This article will be located at tabceots.com/issue/n/story/name_you_enter
+          title="This article will be located at /issue/n/story/name_you_enter
                             (where n is the issue number). Can be up to 75 characters long
                             (some non-word characters such as spaces may count as more)."
         >

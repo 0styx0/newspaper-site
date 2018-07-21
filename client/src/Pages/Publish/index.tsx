@@ -63,7 +63,7 @@ function Publish(props: Props) {
                 <Input
                     key="url"
                     label="Page Name"
-                    abbr={`This article will be located at tabceots.com/issue/n/story/name_you_enter
+                    abbr={`This article will be located at /issue/n/story/name_you_enter
                             (where n is the issue number). Can be up to 75 characters long
                             (some non-word characters such as spaces may count as more).`}
                     props={{

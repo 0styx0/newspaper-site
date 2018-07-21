@@ -1,7 +1,7 @@
 {
-  "short_name": "TABC EOTS",
-  "name": "TABC Eye of the Storm Newspaper",
-  "description": "Latest news from Torah Academy of Bergen County - By students, for students",
+  "short_name": "School Paper",
+  "name": "School Newspaper",
+  "description": "Newspaper",
   "dir": "ltr",
   "lang": "en-US",
   "scope": "/",
