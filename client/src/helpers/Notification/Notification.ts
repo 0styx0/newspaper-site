@@ -10,8 +10,8 @@ function Notification(options: {icon?: string, body: string}) {
 
     window.Notification.requestPermission().then(() => {
 
-        options.icon = '/images/favicons/favicon.ico';
-        return new window.Notification('TABC Eye of the Storm', options);
+        options.icon = process.env.REACT_APP_LOGO_PATH;
+        return new window.Notification(process.env.REACT_APP_FULL_NAME, options);
     });
 }
 

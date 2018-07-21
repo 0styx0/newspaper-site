@@ -138,7 +138,6 @@ describe('<StoryContainer>', () => {
 
         async function setupEditTests(selector: string, content: string, stateKey: string) {
 
-            setFakeJwt( { level: 3 } );
             const wrapper = await setup([
                 setupQuery().query
             ]);
