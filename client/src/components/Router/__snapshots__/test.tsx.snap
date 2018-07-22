@@ -130,7 +130,7 @@ exports[`<RouterContainer> snapshots when logged in, renders all paths 1`] = `
             alt="Logo"
             src="/test-logo-url"
           />
-          Eye Of The Storm
+          Newspaper Name
         </h1>
         <q>
           School Tagline
@@ -364,7 +364,7 @@ exports[`<RouterContainer> snapshots when not logged in, renders only public pat
             alt="Logo"
             src="/test-logo-url"
           />
-          Eye Of The Storm
+          Newspaper Name
         </h1>
         <q>
           School Tagline

@@ -10,6 +10,7 @@ import { configure } from 'enzyme';
 
 process.env.REACT_APP_LOGO_PATH = '/test-logo-url';
 process.env.REACT_APP_TAGLINE = 'School Tagline';
+process.env.REACT_APP_FULL_NAME = 'Newspaper Name';
 
 import * as Adapter from 'enzyme-adapter-react-16';
 

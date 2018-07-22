@@ -11,7 +11,7 @@ exports[`<MainPageContainer> snapshots renders correctly for issue 1`] = `
           alt="Logo"
           src="/test-logo-url"
         />
-        Eye Of The Storm
+        Newspaper Name
       </h1>
       <q>
         School Tagline
@@ -155,7 +155,7 @@ exports[`<MainPageContainer> snapshots renders correctly for tags 1`] = `
           alt="Logo"
           src="/test-logo-url"
         />
-        Eye Of The Storm
+        Newspaper Name
       </h1>
       <q>
         School Tagline
