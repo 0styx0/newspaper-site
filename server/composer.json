@@ -1,5 +1,5 @@
 {
-    "name": "dovidm/eyestorm-server",
+    "name": "davidm/eyestorm-server",
     "require": {
         "youshido/graphql": "^1.5",
         "vlucas/phpdotenv": "^2.4",

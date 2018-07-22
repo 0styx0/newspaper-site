@@ -86,8 +86,8 @@ class Jwt {
 
         $signer = new Sha256();
 
-        $token = (new Builder())->setIssuer('https://tabceots.com')
-                                ->setAudience('https://tabceots.com')
+        $token = (new Builder())->setIssuer($_ENV['APP_URL'])
+                                ->setAudience($_ENV['APP_URL'])
                                 ->setIssuedAt(time())
                                 ->setExpiration(time() + 3600)
                                 ->setId($user['id'], true)

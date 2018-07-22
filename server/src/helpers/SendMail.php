@@ -35,9 +35,9 @@ class SendMail {
 
         $message = "A user
             has published a {$tags} article for issue {$issueNum} called
-            <a href='https://tabceots.com/issue/{$issueNum}/story/{$name}'>".rawurldecode($name) . "</a>
+            <a href='{$_ENV['APP_URL']}/issue/{$issueNum}/story/{$name}'>".rawurldecode($name) . "</a>
             <br />
-            View details <a href='https://tabceots.com/modifyArticles'>here</a>";
+            View details <a href='{$_ENV['APP_URL']}/modifyArticles'>here</a>";
 
         return SendMail::toLevel(3, $subject, $message);
     }
@@ -72,7 +72,7 @@ class SendMail {
 
         $message = "Your code is <br />" . $emailVerifyCode . "<br/>This code is valid for 10 minutes.";
 
-        return SendMail::phpMail([$email], "Auth code for Eye Of The Storm", $message);
+        return SendMail::phpMail([$email], "Auth code for {$_ENV['APP_URL']}", $message);
     }
 
     /**
@@ -88,7 +88,7 @@ class SendMail {
 
         $message = "Your code is <br />{$code}<br/>This code is valid for 1 day.
                     Your account may be deleted if this is not
-                    <a href='https://tabceots.com/login}'>verified</a>.";
+                    <a href='{$_ENV['APP_URL']}'>verified</a>.";
 
         return SendMail::phpMail([$email], "Verify Your EOTS Account", $message);
     }
@@ -107,12 +107,12 @@ class SendMail {
 
         $message = "Your new password is <br />".
                       $newPassword
-                      ."<br /> You are strongly advised to <a href='https://tabceots.com/u/{$profileLink}'>change</a>
+                      ."<br /> You are strongly advised to <a href='{$_ENV['APP_URL']}/u/{$profileLink}'>change</a>
                       it as soon as possible.
                       <br />To prevent passwords from being forgotten, consider using a password manager such as
                       1Password or LastPass";
 
-        return SendMail::phpMail([$email], "Recovery Code for Eye Of The Storm", $message);
+        return SendMail::phpMail([$email], "Recovery Code for {$_ENV['APP_URL']}", $message);
     }
 
     /**

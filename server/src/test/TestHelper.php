@@ -57,8 +57,8 @@ abstract class TestHelper extends TestCase {
 
         $signer = new Sha256();
 
-        return (new Builder())->setIssuer('https://tabceots.com')
-                                ->setAudience('https://tabceots.com')
+        return (new Builder())->setIssuer($_ENV['APP_URL'])
+                                ->setAudience($_ENV['APP_URL'])
                                 ->setIssuedAt(time())
                                 ->setId($user['id'], true)
                                 ->set('profileLink', TestHelper::getProfileLink($user['email']))
