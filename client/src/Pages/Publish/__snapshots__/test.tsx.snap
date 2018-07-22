@@ -13,6 +13,7 @@ exports[`<PublishContainer> snapshots does not render option to add tag if not l
     <label>
       Tags: 
       <select
+        defaultValue={Array []}
         multiple={true}
         name="tags"
         onChange={[Function]}
@@ -98,16 +99,12 @@ exports[`<PublishContainer> snapshots renders correctly when can add tag 1`] = `
     <label>
       Tags: 
       <select
+        defaultValue={Array []}
         multiple={true}
         name="tags"
         onChange={[Function]}
         required={true}
       >
-        <option
-          value="other"
-        >
-          Other
-        </option>
         <option
           value="random"
         >
@@ -117,6 +114,11 @@ exports[`<PublishContainer> snapshots renders correctly when can add tag 1`] = `
           value="strings"
         >
           Strings
+        </option>
+        <option
+          value="other"
+        >
+          Other
         </option>
       </select>
       

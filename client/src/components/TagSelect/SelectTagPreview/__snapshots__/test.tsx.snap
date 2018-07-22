@@ -7,11 +7,6 @@ exports[`<SelectTagPreview> snapshots renders correctly 1`] = `
     onInput={[Function]}
   >
     <option
-      value="Current Issue"
-    >
-      Current Issue
-    </option>
-    <option
       value="random"
     >
       Random
@@ -20,6 +15,11 @@ exports[`<SelectTagPreview> snapshots renders correctly 1`] = `
       value="strings"
     >
       Strings
+    </option>
+    <option
+      value="Current Issue"
+    >
+      Current Issue
     </option>
   </select>
   

@@ -19,15 +19,16 @@ function TagSelect(props: Props) {
         dbTags = props.data!.allTags;
     }
 
-    const tags = [...new Set((props.tags || []).concat(dbTags))];
+    const tags = [...new Set(dbTags.concat(props.tags || []))];
 
     const options = tags.map((val =>
-            <option key={val} value={val}>{val[0].toUpperCase() + val.slice(1)}</option>
+            <option key={val} value={val}>{val[0].toUpperCase() + val.padEnd(2).slice(1)}</option>
         ));
 
     const select = (
         <select
             children={options}
+            defaultValue={[]}
         />
     );
 

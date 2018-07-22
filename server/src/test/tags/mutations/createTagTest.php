@@ -25,17 +25,34 @@ class CreateTagTest extends AllTagsTestHelper {
         ], TestHelper::getJwt($user))['createTag'];
     }
 
-    function testGoodLevelTwoPlusCanAddTag() {
+    private function getUserWhoCanAddTag() {
 
-        $user = TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
+        return TestHelper::searchArray($this->Database->GenerateRows->users, function (array $currentUser) {
             return $currentUser['level'] > 1;
         });
+    }
+
+    function testGoodLevelTwoPlusCanAddTag() {
+
+        $user = $this->getUserWhoCanAddTag();
 
         $tag = $this->Database->GenerateRows->tag_list()['tag'];
 
         $data = $this->helpTest($tag, $user);
 
         $this->assertEquals($tag, strtolower($data['tag']));
+    }
+
+    function testCannotCreateEmptyTag() {
+
+        $user = $this->getUserWhoCanAddTag();
+
+        $tag = '';
+        $data = $this->helpTest($tag, $user);
+
+        $dbTag = Db::query("SELECT tag FROM tag_list WHERE tag = ?", [$tag])->fetchColumn();
+
+        $this->assertFalse($dbTag);
     }
 
     function testMaliciousDataNotAccepted() {

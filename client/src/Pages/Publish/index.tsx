@@ -52,7 +52,8 @@ function Publish(props: Props) {
                           label="Custom Tag"
                           props={{
                               name: 'addTag',
-                              type: 'text'
+                              type: 'text',
+                              minLength: 2
                           }}
                         />
                     )

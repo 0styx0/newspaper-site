@@ -35,7 +35,7 @@ class CreateTagField extends AbstractField {
 
         $sanitized = filter_var_array($args, FILTER_SANITIZE_STRING);
 
-        if ($args['tag'] !== $sanitized['tag']) {
+        if (len($sanitized['tag']) < 2 || $args['tag'] !== $sanitized['tag']) {
             throw new Exception('Invalid tag');
         }
 
