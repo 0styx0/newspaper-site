@@ -131,7 +131,7 @@ class ArticleHelper {
             array_push($imageInfo, $articleId, $image['url'], $image['slide']);
         }
 
-        Db::query("INSERT INTO images (art_id, url, slide) VALUES ({$placeholders})", $imageInfo);
+        Db::query("INSERT INTO images (art_id, url, slide) VALUES {$placeholders}", $imageInfo);
     }
 
     /**

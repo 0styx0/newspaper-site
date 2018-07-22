@@ -61,15 +61,16 @@ class CreateArticleField extends AbstractField {
 
         Db::query("INSERT INTO pageinfo (lede, body, issue, authorid, url, created) VALUES(?, ?, ?, ?, ?, CURDATE())",
          [$lede, $body, $issue, Jwt::getField('id'), $modifiedUrl]);
+        $artId = Db::$lastInsertId;
 
         if ($imageInfo) {
-            $ArticleHelper->addImages(Db::$lastInsertId, $imageInfo);
+            $ArticleHelper->addImages($artId, $imageInfo);
         }
 
         try {
-            $ArticleHelper->addTags(Db::$lastInsertId, $sanitized['tags']);
+            $ArticleHelper->addTags($artId, $sanitized['tags']);
         } catch (Exception $e) {
-            (new DeleteArticlesField())->deleteArticles(['ids' => [Db::$lastInsertId]]);
+            (new DeleteArticlesField())->deleteArticles(['ids' => [$artId]]);
             throw new Exception('Failure: Invalid tag(s)');
         }
 

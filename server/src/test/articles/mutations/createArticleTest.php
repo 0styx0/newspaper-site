@@ -5,10 +5,11 @@ require_once(__DIR__ . '/../helpers.php');
 
 class CreateArticleTest extends ArticleTestHelper {
 
-    protected function helpCreate(bool $loggedIn = true, int $tags = 3, $url = true) {
+    protected function helpCreate(bool $loggedIn = true, int $tags = 3, $url = true, $extraBody = '') {
 
         $faker = TestHelper::faker();
         $newArticle = $this->Database->GenerateRows->pageinfo();
+        $newArticle['body'] .= $extraBody;
         $author = $faker->randomElement($this->Database->GenerateRows->users);
         $tagList = $this->Database->GenerateRows->tag_list;
 
@@ -41,6 +42,11 @@ class CreateArticleTest extends ArticleTestHelper {
         $this->assertNull($data);
     }
 
+    function testCanHaveTagsAndImageInSameArticle() {
+
+        $data = $this->helpCreate(true, 3, true, '<img src="https://random.jpg" />');
+        $this->assertNotNull($data);
+    }
 
     function testArticleMustHaveUrl() {
 
