@@ -18,7 +18,6 @@ import { graphql, withApollo, compose } from 'react-apollo';
 import './index.css';
 import { ChangeEvent } from 'react';
 import graphqlErrorNotifier from '../../helpers/graphqlErrorNotifier';
-import toggler from '../../helpers/toggler';
 
 export interface Props { // from react router hoc
     history: string[];
@@ -99,7 +98,6 @@ export class PublishContainer extends React.Component<Props, State> {
 
         this.setState({
             showTagInput: e.target.value === 'other',
-            tags: toggler(new Set([...this.state.tags]), e.target.value)
         });
     }
 
@@ -109,7 +107,10 @@ export class PublishContainer extends React.Component<Props, State> {
     async onSubmit(target: HTMLFormElement) {
 
         const url = (target.querySelector('[name=name]') as HTMLInputElement).value;
-        let tags = [...this.state.tags];
+        let tags = [
+            ...((target.querySelector('[name=tags]') as HTMLSelectElement)
+                .selectedOptions as {} as  HTMLOptionElement[])
+        ].map(opt => opt.value);
 
         if (this.state.showTagInput) {
 

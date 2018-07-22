@@ -55,7 +55,7 @@ export class IssueTableContainer extends React.Component<Props, State> {
      */
     componentWillReceiveProps(props: Props) {
 
-        if (!props.data.issues || !this.props.data.issues) {
+        if (!props.data.issues) {
             return;
         }
 

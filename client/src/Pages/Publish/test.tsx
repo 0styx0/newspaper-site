@@ -77,6 +77,12 @@ describe('<PublishContainer>', () => {
         setInput(wrapper, url, 'name');
 
         setSelectByName(wrapper, 'tags', tags);
+        [
+            ...(wrapper.find('select[name="tags"]').instance() as {} as HTMLSelectElement)
+            .options as {} as HTMLOptionElement[]
+        ].map(opt =>
+            opt.selected = tags.includes(opt.value)
+        );
 
         return {
             url,
