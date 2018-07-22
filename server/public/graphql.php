@@ -10,7 +10,7 @@ if ($_ENV['dev']) {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    if (!Db::dbInitialized()) {
+    if (!$_ENV['test'] && !Db::dbInitialized()) {
         system(__DIR__ . '/../initialize-fake-db');
     }
 }

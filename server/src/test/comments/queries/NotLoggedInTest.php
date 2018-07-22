@@ -46,7 +46,7 @@ class NotLoggedInCommentTest extends CommentTestHelper {
         // so no risky test if all comments by $privateComment['authorid'] are private
         if (empty($data['comments'])) {
 
-            $this->assertEmpty($data['comments'], $data);
+            $this->assertEmpty($data['comments'], json_encode($data));
         }
 
         // if the author did make public comments, $data won't be empty

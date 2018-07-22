@@ -81,7 +81,7 @@ class CreateUserTest extends UserTestHelper {
             ])['createUser'];
 
             $fieldsPassed = array_keys($fieldsMinusOne);
-            $this->assertEmpty($data, ['Missing ', array_diff(array_keys($requiredFields), $fieldsPassed)]);
+            $this->assertEmpty($data, json_encode(['Missing ', array_diff(array_keys($requiredFields), $fieldsPassed)]));
         }
     }
 
