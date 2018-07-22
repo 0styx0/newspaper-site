@@ -1,6 +1,8 @@
 # newspaper-site
 
 This is the code behind my school newspaper\'s site.
+![Home Page](./docs/level-3/images/Home Page.png)
+For more pictures, see `docs/level-3/images/`
 
 ## Table of Contents
 
@@ -154,7 +156,7 @@ If you plan on using Docker (recommended) read that section before continuing
     DB_NAME="name_of_database" # database to use. Does not (and should not) exist before using this project
 
     EMAIL_ADDR="example@example.org" # used when sending any emails (such as 2 step auth, or after publishing an article)
-    EMAIL_PASS="strong_password"
+    EMAIL_PASS="strong_password" # this will also be the default admin password, to change, log in and go to profile
     EMAIL_HOST="smtp.gmail.com" # if using gmail. It might be smtp.domain.tld if you\'re not sure
     EMAIL_PORT="587" # port for sending secure messages (using ssl)
     EMAIL_NAME="Newspaper" # whatever you want users to see when looking at who sent them an email
